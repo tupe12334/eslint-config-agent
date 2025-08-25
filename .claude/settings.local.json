@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(pnpm init:*)",
-      "Bash(pnpm add:*)"
+      "Bash(pnpm add:*)",
+      "Bash(pnpm validate:*)"
     ],
     "deny": [],
     "ask": []
