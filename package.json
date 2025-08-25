@@ -42,7 +42,7 @@
     "@release-it/conventional-changelog": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^8.40.0",
     "@typescript-eslint/parser": "^8.40.0",
-    "dotenv": "^17.2.1",
+    "dotenv-cli": "^10.0.0",
     "eslint": "^9.34.0",
     "eslint-plugin-preact": "^0.1.0",
     "eslint-plugin-react": "^7.37.5",

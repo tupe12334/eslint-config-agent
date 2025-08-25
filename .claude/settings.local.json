@@ -12,7 +12,8 @@
       "Bash(npm config get:*)",
       "Bash(pnpm release:patch:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(pnpm remove:*)"
     ],
     "deny": [],
     "ask": []
