@@ -3,7 +3,12 @@
     "allow": [
       "Bash(pnpm init:*)",
       "Bash(pnpm add:*)",
-      "Bash(pnpm validate:*)"
+      "Bash(pnpm validate:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm eslint:*)",
+      "Bash(cat:*)",
+      "WebSearch",
+      "Bash(pnpm test:*)"
     ],
     "deny": [],
     "ask": []

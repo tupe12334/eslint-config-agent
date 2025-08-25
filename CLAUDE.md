@@ -13,7 +13,9 @@ The project uses pnpm as the package manager. Dependencies are already installed
 ## Common Commands
 
 - `pnpm lint` - Run ESLint on the entire project
-- `pnpm test` - Run ESLint with zero warnings allowed (used for CI)
+- `pnpm test` - Run validation tests for valid and invalid code samples
+- `pnpm test:ci` - Run ESLint with zero warnings allowed (used for CI)
+- `pnpm validate` - Run comprehensive configuration validation
 - `pnpm install` - Install dependencies
 
 ## Architecture
@@ -21,12 +23,22 @@ The project uses pnpm as the package manager. Dependencies are already installed
 The project follows the modern ESLint flat configuration format:
 
 - `index.js` - Main configuration export that other projects will consume
-- `eslint.config.js` - Local ESLint configuration for this project itself
-- Both configurations use ES modules and TypeScript ESLint integration
+- `eslint.config.js` - Local ESLint configuration for this project itself  
+- `test/` - Test files that validate the ESLint rules are working correctly
+- `scripts/validate-config.js` - Validation script that tests the configuration
 
-The main export combines:
-- `@eslint/js` recommended rules
-- `typescript-eslint` recommended configuration
-- Custom rules for enhanced code quality
+The main export provides separate configurations for:
+- TypeScript/TSX files with React/Preact support
+- JavaScript/JSX files with React/Preact support  
+- Node.js scripts with appropriate globals
 
-Other projects can consume this configuration by installing the package and importing it in their ESLint config.
+Key features:
+- Disallows optional chaining (`?.`) and nullish coalescing (`??`)
+- Enforces JSX only in `.tsx`/`.jsx` files
+- Limits function length to 100 lines
+- Warns about trailing spaces
+- Supports both React and Preact
+
+## Testing
+
+The package includes comprehensive testing via test files that should trigger specific ESLint rules. Run `pnpm validate` to ensure all rules are working correctly.

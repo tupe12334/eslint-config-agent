@@ -6,7 +6,12 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "eslint . --max-warnings 0"
+    "lint:test": "eslint test/",
+    "test": "npm run test:valid && npm run test:invalid",
+    "test:valid": "eslint test/valid.tsx test/preact-test.tsx",
+    "test:invalid": "eslint test/invalid.tsx test/long-function.tsx test/jsx-extension-test.js",
+    "test:ci": "eslint . --max-warnings 0",
+    "validate": "node scripts/validate-config.js"
   },
   "keywords": [
     "eslint",
@@ -29,6 +34,7 @@
     "eslint-plugin-preact": "^0.1.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.3.0",
     "typescript-eslint": "^8.40.0"
   }
 }
