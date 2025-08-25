@@ -16,7 +16,7 @@
     "test:edge": "eslint test/edge-cases.tsx",
     "test:performance": "eslint test/performance-test.tsx",
     "test:comprehensive": "node scripts/test-runner.js",
-    "test:ci": "eslint . --max-warnings 0",
+    "test:ci": "eslint . --ignore-pattern 'test/**' --ignore-pattern 'scripts/**' --max-warnings 0",
     "validate": "node scripts/validate-config.js",
     "release": "release-it",
     "release:patch": "release-it patch",

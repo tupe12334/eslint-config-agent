@@ -10,7 +10,9 @@
       "WebSearch",
       "Bash(pnpm test:*)",
       "Bash(npm config get:*)",
-      "Bash(pnpm release:patch:*)"
+      "Bash(pnpm release:patch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

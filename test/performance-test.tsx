@@ -76,7 +76,7 @@ function PerformanceTestComponent({
         processed: true,
         timestamp: Date.now(),
       }));
-      
+
       setLocalState(prevState => ({
         ...prevState,
         processedData,
@@ -90,14 +90,14 @@ function PerformanceTestComponent({
     if (!data || data.length === 0) return [];
 
     let filtered = data;
-    
+
     // Apply filters
     if (filters.length > 0) {
-      filtered = data.filter(item => 
-        filters.some(filter => 
+      filtered = data.filter(item =>
+        filters.some(filter =>
           item.name.toLowerCase().includes(filter.toLowerCase()) ||
           item.id.includes(filter) ||
-          Object.values(item.metadata).some(value => 
+          Object.values(item.metadata).some(value =>
             String(value).toLowerCase().includes(filter.toLowerCase())
           )
         )
@@ -108,9 +108,9 @@ function PerformanceTestComponent({
     return filtered.sort((a, b) => {
       const aValue = a[sortBy as keyof typeof a];
       const bValue = b[sortBy as keyof typeof b];
-      
+
       if (aValue === bValue) return 0;
-      
+
       const comparison = aValue < bValue ? -1 : 1;
       return sortOrder === 'asc' ? comparison : -comparison;
     });
@@ -160,21 +160,21 @@ function PerformanceTestComponent({
         };
         onUpdate({ data: [...data, duplicated] } as any);
         break;
-        
+
       case 'delete':
         const filtered = data.filter(d => d.id !== itemId);
         onUpdate({ data: filtered } as any);
         break;
-        
+
       case 'archive':
-        const archived = data.map(d => 
-          d.id === itemId 
+        const archived = data.map(d =>
+          d.id === itemId
             ? { ...d, metadata: { ...d.metadata, archived: true } }
             : d
         );
         onUpdate({ data: archived } as any);
         break;
-        
+
       default:
         onError(new Error(`Unknown operation: ${operation}`));
     }
@@ -258,7 +258,7 @@ function PerformanceTestComponent({
                 onChange={(e) => handleConfigUpdate('timeout', parseInt(e.target.value, 10))}
               />
             </div>
-            
+
             <div className="section">
               <h3>Features</h3>
               {Object.entries(config.features).map(([key, value]) => (
@@ -272,7 +272,7 @@ function PerformanceTestComponent({
                 </label>
               ))}
             </div>
-            
+
             <div className="section">
               <h3>Endpoints</h3>
               {Object.entries(config.endpoints).map(([key, value]) => (

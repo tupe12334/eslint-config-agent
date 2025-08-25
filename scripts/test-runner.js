@@ -61,14 +61,14 @@ const testCategories = {
 async function findTestFiles() {
   const testDir = join(projectRoot, 'test');
   const files = [];
-  
+
   try {
     const entries = await readdir(testDir);
-    
+
     for (const entry of entries) {
       const fullPath = join(testDir, entry);
       const stats = await stat(fullPath);
-      
+
       if (stats.isFile() && /\.(ts|tsx|js|jsx)$/.test(entry)) {
         files.push(`test/${entry}`);
       }
@@ -76,14 +76,14 @@ async function findTestFiles() {
   } catch (error) {
     console.warn('⚠️  Could not read test directory:', error.message);
   }
-  
+
   return files.sort();
 }
 
 async function runTestCategory(eslint, category, config) {
   console.log(`\n📁 Testing category: ${category}`);
   console.log(`   ${config.description}`);
-  
+
   let categoryPassed = true;
   const categoryResults = {
     totalErrors: 0,
@@ -94,15 +94,15 @@ async function runTestCategory(eslint, category, config) {
 
   for (const file of config.files) {
     const filePath = join(projectRoot, file);
-    
+
     try {
       const results = await eslint.lintFiles([filePath]);
       const result = results[0];
-      
+
       if (result) {
         const errorCount = result.errorCount;
         const warningCount = result.warningCount;
-        
+
         categoryResults.totalErrors += errorCount;
         categoryResults.totalWarnings += warningCount;
         categoryResults.fileResults.push({
@@ -111,16 +111,16 @@ async function runTestCategory(eslint, category, config) {
           warnings: warningCount,
           messages: result.messages,
         });
-        
+
         // Collect rules that were triggered
         result.messages.forEach(msg => {
           if (msg.ruleId) {
             categoryResults.rulesCovered.add(msg.ruleId);
           }
         });
-        
+
         console.log(`   📄 ${file}: ${errorCount} errors, ${warningCount} warnings`);
-        
+
         // Show top errors/warnings for debugging
         if (result.messages.length > 0) {
           const topMessages = result.messages.slice(0, 3);
@@ -128,7 +128,7 @@ async function runTestCategory(eslint, category, config) {
             const level = msg.severity === 2 ? '❌' : '⚠️ ';
             console.log(`      ${level} Line ${msg.line}: ${msg.message} (${msg.ruleId || 'unknown'})`);
           });
-          
+
           if (result.messages.length > 3) {
             console.log(`      ... and ${result.messages.length - 3} more issues`);
           }
@@ -139,36 +139,36 @@ async function runTestCategory(eslint, category, config) {
       categoryPassed = false;
     }
   }
-  
+
   // Validate category expectations
   if (categoryResults.totalErrors > config.maxErrors) {
     console.log(`   ❌ Too many errors: ${categoryResults.totalErrors} > ${config.maxErrors}`);
     categoryPassed = false;
   }
-  
+
   if (categoryResults.totalWarnings > config.maxWarnings) {
     console.log(`   ❌ Too many warnings: ${categoryResults.totalWarnings} > ${config.maxWarnings}`);
     categoryPassed = false;
   }
-  
+
   // Check for expected rules
   if (config.expectedRules) {
-    const missingRules = config.expectedRules.filter(rule => 
+    const missingRules = config.expectedRules.filter(rule =>
       !categoryResults.rulesCovered.has(rule)
     );
-    
+
     if (missingRules.length > 0) {
       console.log(`   ⚠️  Expected rules not found: ${missingRules.join(', ')}`);
     }
-    
+
     if (categoryResults.rulesCovered.size > 0) {
       console.log(`   ✅ Rules covered: ${Array.from(categoryResults.rulesCovered).join(', ')}`);
     }
   }
-  
+
   const status = categoryPassed ? '✅' : '❌';
   console.log(`   ${status} Category result: ${categoryResults.totalErrors} errors, ${categoryResults.totalWarnings} warnings`);
-  
+
   return { passed: categoryPassed, results: categoryResults };
 }
 
@@ -176,38 +176,38 @@ async function generateTestReport(allResults) {
   console.log('\n' + '='.repeat(80));
   console.log('📊 TEST REPORT SUMMARY');
   console.log('='.repeat(80));
-  
+
   let overallPassed = true;
   let totalErrors = 0;
   let totalWarnings = 0;
   const allRulesCovered = new Set();
-  
+
   for (const [category, { passed, results }] of Object.entries(allResults)) {
     const status = passed ? '✅' : '❌';
     console.log(`${status} ${category}: ${results.totalErrors} errors, ${results.totalWarnings} warnings`);
-    
+
     if (!passed) overallPassed = false;
     totalErrors += results.totalErrors;
     totalWarnings += results.totalWarnings;
-    
+
     results.rulesCovered.forEach(rule => allRulesCovered.add(rule));
   }
-  
+
   console.log('\n📋 Overall Statistics:');
   console.log(`   Total Errors: ${totalErrors}`);
   console.log(`   Total Warnings: ${totalWarnings}`);
   console.log(`   Rules Covered: ${allRulesCovered.size}`);
   console.log(`   Categories Tested: ${Object.keys(allResults).length}`);
-  
+
   console.log('\n🔧 Rules Coverage:');
   const sortedRules = Array.from(allRulesCovered).sort();
   for (let i = 0; i < sortedRules.length; i += 3) {
     const chunk = sortedRules.slice(i, i + 3);
     console.log(`   ${chunk.join(', ')}`);
   }
-  
+
   console.log('\n' + '='.repeat(80));
-  
+
   if (overallPassed) {
     console.log('🎉 ALL TESTS PASSED!');
     return true;
@@ -220,46 +220,46 @@ async function generateTestReport(allResults) {
 async function runComprehensiveTests() {
   console.log('🚀 Starting Comprehensive ESLint Configuration Tests');
   console.log('='.repeat(60));
-  
+
   try {
     // Initialize ESLint
     const eslint = new ESLint({
       overrideConfigFile: join(projectRoot, 'eslint.config.js'),
     });
-    
+
     // Discover all test files
     const allTestFiles = await findTestFiles();
     console.log(`📁 Discovered ${allTestFiles.length} test files:`);
     allTestFiles.forEach(file => console.log(`   - ${file}`));
-    
+
     // Run tests by category
     const allResults = {};
-    
+
     for (const [category, config] of Object.entries(testCategories)) {
       // Filter files that exist
-      const existingFiles = config.files.filter(file => 
+      const existingFiles = config.files.filter(file =>
         allTestFiles.includes(file)
       );
-      
+
       if (existingFiles.length === 0) {
         console.log(`\n⚠️  Skipping category '${category}' - no files found`);
         continue;
       }
-      
+
       const categoryConfig = { ...config, files: existingFiles };
       const result = await runTestCategory(eslint, category, categoryConfig);
       allResults[category] = result;
     }
-    
+
     // Generate final report
     const overallPassed = await generateTestReport(allResults);
-    
+
     if (overallPassed) {
       process.exit(0);
     } else {
       process.exit(1);
     }
-    
+
   } catch (error) {
     console.error('💥 Test runner failed:', error);
     process.exit(1);

@@ -67,10 +67,10 @@ function InvalidHooksComponent() {
 // Custom hook testing
 function useCustomHook(initialValue: number) {
   const [value, setValue] = useState(initialValue);
-  
+
   // Valid custom hook with proper dependencies
   const doubleValue = useMemo(() => value * 2, [value]);
-  
+
   const increment = useCallback(() => {
     setValue(prev => prev + 1);
   }, []);
@@ -81,7 +81,7 @@ function useCustomHook(initialValue: number) {
 // Component using custom hook
 function ComponentWithCustomHook() {
   const { value, doubleValue, increment } = useCustomHook(0);
-  
+
   return (
     <div>
       <p>Value: {value}</p>

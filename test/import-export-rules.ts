@@ -59,11 +59,11 @@ export function identity<T>(arg: T): T {
 // Class export
 export class TestService {
   private config: TestConfig;
-  
+
   constructor(config: TestConfig) {
     this.config = config;
   }
-  
+
   getStatus(): Status {
     return this.config.enabled ? 'active' : 'inactive';
   }
@@ -78,7 +78,7 @@ export { helper1, helper2 };
 // Test that these work with the disabled import rules
 // These should NOT cause errors since the rules are turned off:
 // - import/extensions
-// - import/no-extraneous-dependencies  
+// - import/no-extraneous-dependencies
 // - import/no-unresolved
 // - import/no-absolute-path
 // - import/order

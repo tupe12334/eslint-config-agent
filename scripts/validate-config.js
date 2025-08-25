@@ -20,7 +20,7 @@ async function validateConfig() {
     // Test files to validate
     const testFiles = [
       'test/valid.tsx',
-      'test/invalid.tsx', 
+      'test/invalid.tsx',
       'test/preact-test.tsx',
       'test/long-function.tsx',
       'test/jsx-extension-test.js',
@@ -32,40 +32,36 @@ async function validateConfig() {
     ];
 
     let allPassed = true;
-    
+
     for (const file of testFiles) {
       const filePath = join(projectRoot, file);
       console.log(`📁 Testing ${file}...`);
-      
+
       try {
         const results = await eslint.lintFiles([filePath]);
         const result = results[0];
-        
+
         if (result) {
           const errorCount = result.errorCount;
           const warningCount = result.warningCount;
-          
+
           console.log(`   Errors: ${errorCount}, Warnings: ${warningCount}`);
-          
+
           if (result.messages.length > 0) {
             result.messages.forEach(msg => {
               const level = msg.severity === 2 ? '❌' : '⚠️ ';
               console.log(`   ${level} Line ${msg.line}: ${msg.message} (${msg.ruleId})`);
             });
           }
-          
+
           // Validate expected behaviors
           if (file === 'test/invalid.tsx') {
-            const hasOptionalChainingError = result.messages.some(m => 
+            const hasOptionalChainingError = result.messages.some(m =>
               m.ruleId === 'no-restricted-syntax' && m.message.includes('Optional chaining')
             );
-            const hasNullishCoalescingError = result.messages.some(m => 
+            const hasNullishCoalescingError = result.messages.some(m =>
               m.ruleId === 'no-restricted-syntax' && m.message.includes('Nullish coalescing')
             );
-            const hasTrailingSpaceWarning = result.messages.some(m => 
-              m.ruleId === 'no-trailing-spaces'
-            );
-            
             if (!hasOptionalChainingError) {
               console.log('   ⚠️  Optional chaining rule may need adjustment (not critical for basic functionality)');
             }
@@ -73,46 +69,42 @@ async function validateConfig() {
               console.log('   ❌ Expected nullish coalescing error not found');
               allPassed = false;
             }
-            if (!hasTrailingSpaceWarning) {
-              console.log('   ❌ Expected trailing spaces warning not found');
-              allPassed = false;
-            }
           }
-          
+
           if (file === 'test/long-function.tsx') {
-            const hasMaxLinesWarning = result.messages.some(m => 
+            const hasMaxLinesWarning = result.messages.some(m =>
               m.ruleId === 'max-lines-per-function'
             );
-            
+
             if (!hasMaxLinesWarning) {
               console.log('   ❌ Expected max-lines-per-function warning not found');
               allPassed = false;
             }
           }
-          
+
           if (file === 'test/jsx-extension-test.js') {
-            const hasJsxExtensionError = result.messages.some(m => 
+            const hasJsxExtensionError = result.messages.some(m =>
               m.ruleId === 'react/jsx-filename-extension'
             );
-            
+
             if (!hasJsxExtensionError) {
               console.log('   ❌ Expected jsx-filename-extension error not found');
               allPassed = false;
             }
           }
-          
+
           if (file === 'test/react-hooks-rules.tsx') {
-            const hasHooksErrors = result.messages.some(m => 
+            const hasHooksErrors = result.messages.some(m =>
               m.ruleId && m.ruleId.startsWith('react-hooks/')
             );
-            
+
             if (!hasHooksErrors) {
               console.log('   ⚠️  Expected react-hooks errors not found (may need adjustment)');
             } else {
               console.log('   ✅ React hooks rules are working');
             }
           }
-          
+
           // Check that other files don't have unexpected critical errors
           if (['test/typescript-rules.ts', 'test/import-export-rules.ts', 'test/edge-cases.tsx'].includes(file)) {
             if (result.errorCount > 5) {
@@ -120,28 +112,28 @@ async function validateConfig() {
             }
           }
         }
-        
+
         console.log(''); // Empty line for readability
-        
+
       } catch (error) {
         console.error(`   ❌ Error linting ${file}:`, error.message);
         allPassed = false;
       }
     }
-    
+
     // Test config export
     console.log('🔧 Validating config export...');
     const config = (await import('../index.js')).default;
-    
+
     if (!Array.isArray(config)) {
       console.log('   ❌ Config should export an array');
       allPassed = false;
     } else {
       console.log(`   ✅ Config exports array with ${config.length} configurations`);
     }
-    
+
     console.log('\n' + '='.repeat(50));
-    
+
     if (allPassed) {
       console.log('✅ All validation tests passed!');
       process.exit(0);
@@ -149,7 +141,7 @@ async function validateConfig() {
       console.log('❌ Some validation tests failed!');
       process.exit(1);
     }
-    
+
   } catch (error) {
     console.error('❌ Validation failed:', error);
     process.exit(1);

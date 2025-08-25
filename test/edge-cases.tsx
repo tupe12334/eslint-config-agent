@@ -5,40 +5,40 @@ import React from 'react';
 // Test complex JSX structures
 function ComplexJSXComponent() {
   const items = ['a', 'b', 'c'];
-  
+
   return (
     <div>
       {/* Self-closing components (react/self-closing-comp is off) */}
       <input type="text"></input>
       <br></br>
-      
+
       {/* Object curly newline (object-curly-newline is off) */}
       <div style={{
         color: 'red', background: 'blue', fontSize: '14px', margin: '10px'
       }}>
         Multi-prop div
       </div>
-      
+
       {/* JSX props spreading (react/jsx-props-no-spreading is off) */}
       <SomeComponent {...{ name: 'test', value: 123 }} />
-      
+
       {/* Button without type (react/button-has-type is off) */}
       <button onClick={() => console.log('clicked')}>Click me</button>
-      
+
       {/* Multiple expressions per line (react/jsx-one-expression-per-line is off) */}
       <div>{items[0]} {items[1]} {items[2]}</div>
-      
+
       {/* Unknown props (react/no-unknown-property is off) */}
       <div customProp="value" nonStandard={true}>Custom props</div>
-      
+
       {/* Target blank without rel (react/jsx-no-target-blank is off) */}
       <a href="https://example.com" target="_blank">External link</a>
-      
+
       {/* Fragments (react/jsx-no-useless-fragment is off) */}
       <React.Fragment>
         <span>Fragment content</span>
       </React.Fragment>
-      
+
       {/* No React in scope (react/react-in-jsx-scope is off) */}
       <div>This works without explicit React import in modern setups</div>
     </div>
@@ -97,26 +97,26 @@ function NoDestructuring(props: { user: { name: string; email: string } }) {
 // Test shadow variables (no-shadow is off)
 function ShadowTest() {
   const name = 'outer';
-  
+
   function inner() {
     const name = 'inner'; // This shadows the outer name
     return name;
   }
-  
+
   return { outer: name, inner: inner() };
 }
 
-// Test continue statement (no-continue is off)  
+// Test continue statement (no-continue is off)
 function ContinueTest() {
   const results = [];
-  
+
   for (let i = 0; i < 10; i++) {
     if (i % 2 === 0) {
       continue; // This should be allowed
     }
     results.push(i);
   }
-  
+
   return results;
 }
 
