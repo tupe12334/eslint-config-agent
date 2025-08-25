@@ -1,6 +1,6 @@
 {
   "name": "@tupe12334/eslint-config",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ESLint configuration package with TypeScript support",
   "main": "index.js",
   "type": "module",

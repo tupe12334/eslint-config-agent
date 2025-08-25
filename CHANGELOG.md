@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.2](https://github.com/tupe12334/eslint-config/compare/v1.0.1...v1.0.2) (2025-08-25)
+
+### Features
+
+* enhance ESLint configuration with optional preact plugin and update peer dependencies ([09f63d5](https://github.com/tupe12334/eslint-config/commit/09f63d5249c8c6f6832668b926b5c1b81d6d8144))
+
 ## 1.0.1 (2025-08-25)
 
 ### Features
