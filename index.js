@@ -2,10 +2,17 @@ import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import preactPlugin from 'eslint-plugin-preact';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactPlugin from 'eslint-plugin-react';
 import globals from 'globals';
+
+// Conditionally import preact plugin if available
+let preactPlugin = null;
+try {
+  preactPlugin = (await import('eslint-plugin-preact')).default;
+} catch (error) {
+  // eslint-plugin-preact is not available
+}
 
 const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
@@ -57,8 +64,8 @@ const config = [
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
-      preact: preactPlugin,
       react: reactPlugin,
+      ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
       'import/resolver': {
@@ -152,8 +159,8 @@ const config = [
       },
     },
     plugins: {
-      preact: preactPlugin,
       react: reactPlugin,
+      ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
       react: {
