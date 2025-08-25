@@ -13,9 +13,15 @@ The project uses pnpm as the package manager. Dependencies are already installed
 ## Common Commands
 
 - `pnpm lint` - Run ESLint on the entire project
-- `pnpm test` - Run validation tests for valid and invalid code samples
+- `pnpm test` - Run comprehensive test suite with categorized validation  
+- `pnpm test:valid` - Test valid code samples
+- `pnpm test:invalid` - Test invalid code samples that should trigger errors
+- `pnpm test:hooks` - Test React hooks rules
+- `pnpm test:imports` - Test import/export patterns  
+- `pnpm test:edge` - Test edge cases and boundary conditions
+- `pnpm test:performance` - Test large files and complex scenarios
 - `pnpm test:ci` - Run ESLint with zero warnings allowed (used for CI)
-- `pnpm validate` - Run comprehensive configuration validation
+- `pnpm validate` - Run legacy configuration validation
 - `pnpm install` - Install dependencies
 
 ## Architecture
@@ -41,4 +47,27 @@ Key features:
 
 ## Testing
 
-The package includes comprehensive testing via test files that should trigger specific ESLint rules. Run `pnpm validate` to ensure all rules are working correctly.
+The package includes extensive testing infrastructure with 12+ test files covering different scenarios:
+
+**Test Categories:**
+- **Valid Code**: Files that should pass with minimal warnings
+- **Invalid Code**: Files that intentionally trigger specific errors  
+- **React Hooks**: Tests for hooks rules (exhaustive-deps, rules-of-hooks)
+- **Import/Export**: Tests for module patterns and import rules
+- **Edge Cases**: Boundary conditions and complex JSX structures
+- **Performance**: Large files and complex components for performance testing
+
+**Test Tools:**
+- `scripts/test-runner.js` - Main test runner with categorized validation and statistics
+- `scripts/validate-config.js` - Legacy validator for basic functionality checks
+
+**Key Rules Tested:**
+- Nullish coalescing operator (`??`) restriction
+- Optional chaining (`?.`) restriction (in development)  
+- JSX filename extension enforcement
+- Function length limits
+- Trailing spaces detection
+- React hooks dependency validation
+- Conditional hook usage detection
+
+Run `pnpm test` for comprehensive testing or `pnpm validate` for basic validation.

@@ -1,0 +1,35 @@
+{
+  "git": {
+    "commit": true,
+    "commitMessage": "Release v${version}",
+    "tag": true,
+    "tagName": "v${version}",
+    "push": true,
+    "requireCleanWorkingDir": true,
+    "requireUpstream": false
+  },
+  "npm": {
+    "publish": true,
+    "publishPath": ".",
+    "access": "public"
+  },
+  "github": {
+    "release": true
+  },
+  "hooks": {
+    "before:init": ["pnpm validate", "pnpm test:ci"],
+    "after:bump": "echo 'Version bumped to ${version}'"
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "conventionalcommits",
+      "infile": "CHANGELOG.md",
+      "header": "# Changelog\n\nAll notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.\n\n"
+    }
+  },
+  "prompt": {
+    "ghRelease": false,
+    "glRelease": false,
+    "publish": true
+  }
+}

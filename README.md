@@ -61,29 +61,53 @@ This configuration disables many common ESLint and React rules to provide a more
 
 ### Testing
 
-The package includes comprehensive testing to validate the configuration:
+The package includes comprehensive testing to validate the configuration works correctly across various scenarios:
 
 ```bash
-# Run all tests
+# Run comprehensive test suite
 pnpm test
 
-# Run validation script
+# Run specific test categories
+pnpm test:valid          # Valid code samples
+pnpm test:invalid        # Invalid code samples  
+pnpm test:hooks          # React hooks rules
+pnpm test:imports        # Import/export patterns
+pnpm test:edge           # Edge cases
+pnpm test:performance    # Large files and complex code
+
+# Legacy validation script
 pnpm validate
 
-# Lint the project
+# Lint the entire project
 pnpm lint
 
 # CI-ready linting (zero warnings allowed)
 pnpm test:ci
 ```
 
-### Test Files
+### Test Coverage
 
+The test suite covers 8+ categories with detailed validation:
+
+**Core Rules Testing:**
 - `test/valid.tsx` - Valid TypeScript React code
-- `test/invalid.tsx` - Code that should trigger errors and warnings
-- `test/preact-test.tsx` - Preact component testing
-- `test/long-function.tsx` - Function length limit testing
+- `test/invalid.tsx` - Code that should trigger specific errors
 - `test/jsx-extension-test.js` - JSX in JS file testing (should error)
+- `test/long-function.tsx` - Function length limit testing
+
+**Framework-Specific Testing:**
+- `test/preact-test.tsx` - Preact component validation
+- `test/react-hooks-rules.tsx` - React hooks rules validation
+- `test/typescript-rules.ts` - TypeScript-specific features
+
+**Advanced Testing:**
+- `test/import-export-rules.ts` - Import/export patterns
+- `test/edge-cases.tsx` - Edge cases and boundary conditions
+- `test/performance-test.tsx` - Large files and complex scenarios
+
+**Automated Validation:**
+- `scripts/test-runner.js` - Comprehensive test runner with categorized validation
+- `scripts/validate-config.js` - Legacy configuration validator
 
 ## Supported File Types
 

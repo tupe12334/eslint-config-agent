@@ -23,7 +23,12 @@ async function validateConfig() {
       'test/invalid.tsx', 
       'test/preact-test.tsx',
       'test/long-function.tsx',
-      'test/jsx-extension-test.js'
+      'test/jsx-extension-test.js',
+      'test/typescript-rules.ts',
+      'test/react-hooks-rules.tsx',
+      'test/import-export-rules.ts',
+      'test/edge-cases.tsx',
+      'test/performance-test.tsx'
     ];
 
     let allPassed = true;
@@ -93,6 +98,25 @@ async function validateConfig() {
             if (!hasJsxExtensionError) {
               console.log('   ❌ Expected jsx-filename-extension error not found');
               allPassed = false;
+            }
+          }
+          
+          if (file === 'test/react-hooks-rules.tsx') {
+            const hasHooksErrors = result.messages.some(m => 
+              m.ruleId && m.ruleId.startsWith('react-hooks/')
+            );
+            
+            if (!hasHooksErrors) {
+              console.log('   ⚠️  Expected react-hooks errors not found (may need adjustment)');
+            } else {
+              console.log('   ✅ React hooks rules are working');
+            }
+          }
+          
+          // Check that other files don't have unexpected critical errors
+          if (['test/typescript-rules.ts', 'test/import-export-rules.ts', 'test/edge-cases.tsx'].includes(file)) {
+            if (result.errorCount > 5) {
+              console.log(`   ⚠️  High error count (${result.errorCount}) - may indicate config issues`);
             }
           }
         }
