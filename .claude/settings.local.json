@@ -8,7 +8,8 @@
       "Bash(pnpm eslint:*)",
       "Bash(cat:*)",
       "WebSearch",
-      "Bash(pnpm test:*)"
+      "Bash(pnpm test:*)",
+      "Bash(npm config get:*)"
     ],
     "deny": [],
     "ask": []
