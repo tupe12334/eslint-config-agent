@@ -11,7 +11,8 @@ To publish this package, you need to set up environment variables for authentica
 
 2. Get your NPM authentication token:
    - Go to https://www.npmjs.com/settings/tokens
-   - Create a new "Automation" token (or "Publish" token)
+   - Create a new "Automation" token (this bypasses OTP requirements)
+   - Make sure to select "Automation" type, not "Publish" 
    - Copy the token value
 
 3. Edit the `.env` file and replace `your_npm_token_here` with your actual NPM token:

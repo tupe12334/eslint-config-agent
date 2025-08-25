@@ -12,13 +12,16 @@
     "publish": true,
     "publishPath": ".",
     "access": "public",
-    "token": "${NPM_TOKEN}"
+    "token": "${NPM_TOKEN}",
+    "otp": false
   },
   "github": {
     "release": true
   },
   "hooks": {
     "before:init": ["pnpm validate", "pnpm test:ci"],
+    "before:npm:publish": "echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc",
+    "after:npm:publish": "rm -f .npmrc",
     "after:bump": "echo 'Version bumped to ${version}'"
   },
   "plugins": {
