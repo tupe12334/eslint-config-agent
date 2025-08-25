@@ -1,0 +1,20 @@
+{
+  "name": "@tupe12334/eslint-config",
+  "version": "1.0.0",
+  "description": "ESLint configuration package with TypeScript support",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "eslint . --max-warnings 0"
+  },
+  "keywords": ["eslint", "eslint-config", "typescript", "javascript"],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.1",
+  "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "eslint": "^9.34.0",
+    "typescript-eslint": "^8.40.0"
+  }
+}
