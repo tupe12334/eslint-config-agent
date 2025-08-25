@@ -18,11 +18,11 @@
     "test:comprehensive": "node scripts/test-runner.js",
     "test:ci": "eslint . --ignore-pattern 'test/**' --ignore-pattern 'scripts/**' --max-warnings 0",
     "validate": "node scripts/validate-config.js",
-    "release": "release-it",
-    "release:patch": "release-it patch",
-    "release:minor": "release-it minor",
-    "release:major": "release-it major",
-    "release:dry": "release-it --dry-run"
+    "release": "dotenv -e .env -- release-it",
+    "release:patch": "dotenv -e .env -- release-it patch",
+    "release:minor": "dotenv -e .env -- release-it minor",
+    "release:major": "dotenv -e .env -- release-it major",
+    "release:dry": "dotenv -e .env -- release-it --dry-run"
   },
   "keywords": [
     "eslint",
@@ -42,6 +42,7 @@
     "@release-it/conventional-changelog": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^8.40.0",
     "@typescript-eslint/parser": "^8.40.0",
+    "dotenv": "^17.2.1",
     "eslint": "^9.34.0",
     "eslint-plugin-preact": "^0.1.0",
     "eslint-plugin-react": "^7.37.5",
