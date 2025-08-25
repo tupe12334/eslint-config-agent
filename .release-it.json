@@ -20,7 +20,7 @@
   },
   "hooks": {
     "before:init": ["pnpm validate", "pnpm test:ci"],
-    "before:npm:publish": "echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc",
+    "before:npm:publish": "echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc && npm config set access public",
     "after:npm:publish": "rm -f .npmrc",
     "after:bump": "echo 'Version bumped to ${version}'"
   },

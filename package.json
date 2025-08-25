@@ -35,6 +35,9 @@
   ],
   "author": "",
   "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
   "packageManager": "pnpm@10.12.1",
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
