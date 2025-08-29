@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm init:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm validate:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm eslint:*)",
+      "Bash(cat:*)",
+      "WebSearch",
+      "Bash(pnpm test:*)",
+      "Bash(npm config get:*)",
+      "Bash(pnpm release:patch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(pnpm remove:*)",
+      "Bash(node:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx @typescript-eslint/parser:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
