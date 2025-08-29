@@ -100,11 +100,11 @@ const config = [
       "no-restricted-syntax": [
         "error",
         {
-          selector: "OptionalMemberExpression",
+          selector: "MemberExpression[optional=true]",
           message: "Optional chaining is not allowed.",
         },
         {
-          selector: "OptionalCallExpression",
+          selector: "CallExpression[optional=true]",
           message: "Optional chaining is not allowed.",
         },
         {
@@ -245,11 +245,11 @@ const config = [
       "no-restricted-syntax": [
         "error",
         {
-          selector: "OptionalMemberExpression",
+          selector: "MemberExpression[optional=true]",
           message: "Optional chaining is not allowed.",
         },
         {
-          selector: "OptionalCallExpression",
+          selector: "CallExpression[optional=true]",
           message: "Optional chaining is not allowed.",
         },
         {
