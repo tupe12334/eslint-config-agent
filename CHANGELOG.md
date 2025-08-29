@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.5](https://github.com/tupe12334/eslint-config/compare/v1.0.4...v1.0.5) (2025-08-29)
+
+### Features
+
+* enhance documentation with additional commands for release management and testing guidelines ([4cc298d](https://github.com/tupe12334/eslint-config/commit/4cc298d195edfee31dfd3ec2dc2e5343707dae35))
+* update ESLint rules for type assertions and enhance test coverage for invalid usage ([f53b9d6](https://github.com/tupe12334/eslint-config/commit/f53b9d6ca40f949e073d6eb08e70ec6ad0117518))
+* update ESLint rules to disallow optional chaining syntax in member and call expressions ([6b9ab7b](https://github.com/tupe12334/eslint-config/commit/6b9ab7bdae7b8608a19e2f888c72af18382f66da))
+
 ## [1.0.4](https://github.com/tupe12334/eslint-config/compare/v1.0.3...v1.0.4) (2025-08-29)
 
 ### Features
