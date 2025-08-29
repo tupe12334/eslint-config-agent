@@ -15,7 +15,8 @@
       "Bash(git commit:*)",
       "Bash(pnpm remove:*)",
       "Bash(node:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(npx @typescript-eslint/parser:*)"
     ],
     "deny": [],
     "ask": []
