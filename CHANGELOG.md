@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.4](https://github.com/tupe12334/eslint-config/compare/v1.0.3...v1.0.4) (2025-08-29)
+
+### Features
+
+* add ESLint rules to disallow Record with string literal keys and create corresponding test cases ([98189f2](https://github.com/tupe12334/eslint-config/commit/98189f26ef78a1cf0fc89bcf47848d8761b8a5e9))
+* add tests for new union type rule to validate correct usage and trigger errors ([7936470](https://github.com/tupe12334/eslint-config/commit/7936470d10003dab6353650038e5b02e9e79b657))
+
 ## [1.0.3](https://github.com/tupe12334/eslint-config/compare/v1.0.2...v1.0.3) (2025-08-29)
 
 ### Features
