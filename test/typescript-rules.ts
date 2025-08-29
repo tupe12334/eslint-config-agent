@@ -18,9 +18,9 @@ function processUser(user: TestInterface): string {
   return `User: ${user.name}`;
 }
 
-// Test type assertion
+// Test proper type checking instead of assertions
 const someValue: unknown = 'test';
-const strLength = (someValue as string).length;
+const strLength = typeof someValue === 'string' ? someValue.length : 0;
 
 // Test arrow function with type annotation
 const calculateSum = (a: number, b: number): number => a + b;
@@ -35,7 +35,8 @@ type Status = 'loading' | 'success' | 'error';
 const currentStatus: Status = 'loading';
 
 // Test optional properties access (should be explicit)
-function getUserAge(user: TestInterface): number | undefined {
+type UserAge = number | undefined;
+function getUserAge(user: TestInterface): UserAge {
   // This is the preferred way instead of user.age?.toString()
   if (user.age !== undefined) {
     return user.age;

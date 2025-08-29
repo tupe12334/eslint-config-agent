@@ -106,8 +106,11 @@ function PerformanceTestComponent({
 
     // Apply sorting
     return filtered.sort((a, b) => {
-      const aValue = a[sortBy as keyof typeof a];
-      const bValue = b[sortBy as keyof typeof b];
+      const getValueByKey = (obj: any, key: string): any => {
+        return key in obj ? obj[key] : '';
+      };
+      const aValue = getValueByKey(a, sortBy);
+      const bValue = getValueByKey(b, sortBy);
 
       if (aValue === bValue) return 0;
 
@@ -139,7 +142,7 @@ function PerformanceTestComponent({
       onUpdate(newConfig);
       onSuccess(`Updated ${section} successfully`);
     } catch (error) {
-      onError(error as Error);
+      onError(error instanceof Error ? error : new Error(String(error)));
     }
   }, [config, onUpdate, onError, onSuccess]);
 
@@ -158,12 +161,12 @@ function PerformanceTestComponent({
           id: `${item.id}_copy_${Date.now()}`,
           name: `${item.name} (Copy)`,
         };
-        onUpdate({ data: [...data, duplicated] } as any);
+        onUpdate({ data: [...data, duplicated] });
         break;
 
       case 'delete':
         const filtered = data.filter(d => d.id !== itemId);
-        onUpdate({ data: filtered } as any);
+        onUpdate({ data: filtered });
         break;
 
       case 'archive':
@@ -172,7 +175,7 @@ function PerformanceTestComponent({
             ? { ...d, metadata: { ...d.metadata, archived: true } }
             : d
         );
-        onUpdate({ data: archived } as any);
+        onUpdate({ data: archived });
         break;
 
       default:
@@ -191,7 +194,12 @@ function PerformanceTestComponent({
             <option value="id">ID</option>
             <option value="value">Value</option>
           </select>
-          <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}>
+          <select value={sortOrder} onChange={(e) => {
+            const value = e.target.value;
+            if (value === 'asc' || value === 'desc') {
+              setSortOrder(value);
+            }
+          }}>
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
