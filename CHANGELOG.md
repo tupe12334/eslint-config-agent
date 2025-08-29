@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.3](https://github.com/tupe12334/eslint-config/compare/v1.0.2...v1.0.3) (2025-08-29)
+
+### Features
+
+* add initial ESLint configuration with permissions for various commands ([d7613aa](https://github.com/tupe12334/eslint-config/commit/d7613aa115b04e3aa45e6707dea350f9ec8b1678))
+* add permission for npx @typescript-eslint/parser command in settings ([1b87420](https://github.com/tupe12334/eslint-config/commit/1b87420bddd5fd3894fe34b38a41059b03eb2f5b))
+* add permission for npx eslint command in settings ([77ae39a](https://github.com/tupe12334/eslint-config/commit/77ae39ae84c5d0a186a88acef2cd5aa1e68153bc))
+* enhance TypeScript rules by enforcing no-explicit-any and consistent type assertions ([d2677c6](https://github.com/tupe12334/eslint-config/commit/d2677c6359ea956d36d9e02abcf173131c49f437))
+* remove settings.local.json and add it to .gitignore ([553a861](https://github.com/tupe12334/eslint-config/commit/553a861644ce81689400920892ea7eb64822703d))
+
 ## [1.0.2](https://github.com/tupe12334/eslint-config/compare/v1.0.1...v1.0.2) (2025-08-25)
 
 ### Features
