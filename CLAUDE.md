@@ -12,6 +12,7 @@ The project uses pnpm as the package manager. Dependencies are already installed
 
 ## Common Commands
 
+### Development & Testing
 - `pnpm lint` - Run ESLint on the entire project
 - `pnpm test` - Run comprehensive test suite with categorized validation  
 - `pnpm test:valid` - Test valid code samples
@@ -22,7 +23,13 @@ The project uses pnpm as the package manager. Dependencies are already installed
 - `pnpm test:performance` - Test large files and complex scenarios
 - `pnpm test:ci` - Run ESLint with zero warnings allowed (used for CI)
 - `pnpm validate` - Run legacy configuration validation
-- `pnpm install` - Install dependencies
+
+### Release Management
+- `pnpm release` - Interactive release process (recommended)
+- `pnpm release:patch` - Patch version release (1.0.0 → 1.0.1)
+- `pnpm release:minor` - Minor version release (1.0.0 → 1.1.0) 
+- `pnpm release:major` - Major version release (1.0.0 → 2.0.0)
+- `pnpm release:dry` - Test release process without publishing
 
 ## Architecture
 
@@ -63,11 +70,24 @@ The package includes extensive testing infrastructure with 12+ test files coveri
 
 **Key Rules Tested:**
 - Nullish coalescing operator (`??`) restriction
-- Optional chaining (`?.`) restriction (in development)  
+- Optional chaining (`?.`) restriction  
 - JSX filename extension enforcement
 - Function length limits
 - Trailing spaces detection
 - React hooks dependency validation
 - Conditional hook usage detection
+- TypeScript type assertion rules (`no-explicit-any`, consistent type assertions)
+- Record type restrictions with string literal keys
+- Union type validation
 
 Run `pnpm test` for comprehensive testing or `pnpm validate` for basic validation.
+
+## Release Process
+
+This package uses `release-it` with automated version management and changelog generation. Before any release:
+
+1. Ensure all tests pass: `pnpm test:ci` and `pnpm validate` 
+2. Working directory must be clean (all changes committed)
+3. Use conventional commit messages for better changelog generation
+
+The release process automatically handles version bumping, changelog generation, git tagging, and npm publishing. See RELEASING.md for detailed instructions.
