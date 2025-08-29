@@ -89,6 +89,14 @@ const config = [
       'function-paren-newline': 'off',
       quotes: 'off',
       'no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/consistent-type-assertions': [
+        'error',
+        {
+          assertionStyle: 'as',
+          objectLiteralTypeAssertions: 'allow',
+        },
+      ],
       'import/newline-after-import': 'off',
       'import/first': 'off',
       'import/prefer-default-export': 'off',

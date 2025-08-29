@@ -8,8 +8,8 @@ interface TestInterface {
 // Test unused variables (should not error since no-unused-vars is off)
 const unusedVar = 'test';
 
-// Test any type usage (should be allowed since @typescript-eslint/no-explicit-any is not enabled)
-function testAny(param: any): any {
+// Test proper typing without using 'any'
+function testProperTyping<T>(param: T): T {
   return param;
 }
 
@@ -43,4 +43,4 @@ function getUserAge(user: TestInterface): number | undefined {
   return undefined;
 }
 
-export { testAny, processUser, calculateSum, identity, currentStatus, getUserAge };
+export { testProperTyping, processUser, calculateSum, identity, currentStatus, getUserAge };
