@@ -134,6 +134,14 @@ const config = [
           selector: 'LogicalExpression[operator="??"]',
           message: 'Nullish coalescing operator (??) is not allowed. Use explicit null/undefined checks instead.',
         },
+        {
+          selector: 'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > .params:first-child TSLiteralType',
+          message: 'Avoid using Record with string literal keys. Use a more specific interface or type instead.',
+        },
+        {
+          selector: 'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > TSLiteralType:first-child',
+          message: 'Avoid using Record with string literal keys. Use a more specific interface or type instead.',
+        },
       ],
       'jsx-a11y/label-has-associated-control': 'off',
       'react/jsx-no-useless-fragment': 'off',
@@ -227,6 +235,14 @@ const config = [
         {
           selector: 'LogicalExpression[operator="??"]',
           message: 'Nullish coalescing operator (??) is not allowed. Use explicit null/undefined checks instead.',
+        },
+        {
+          selector: 'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > .params:first-child TSLiteralType',
+          message: 'Avoid using Record with string literal keys. Use a more specific interface or type instead.',
+        },
+        {
+          selector: 'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > TSLiteralType:first-child',
+          message: 'Avoid using Record with string literal keys. Use a more specific interface or type instead.',
         },
       ],
       'jsx-a11y/label-has-associated-control': 'off',
