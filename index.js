@@ -312,6 +312,20 @@ const config = [
       ],
     },
   },
+
+  // Disable function size limits for test and spec files
+  {
+    files: [
+      "**/*.test.{js,jsx,ts,tsx}",
+      "**/*.spec.{js,jsx,ts,tsx}",
+      "**/test/**/*.{js,jsx,ts,tsx}",
+      "**/tests/**/*.{js,jsx,ts,tsx}",
+      "**/__tests__/**/*.{js,jsx,ts,tsx}",
+    ],
+    rules: {
+      "max-lines-per-function": "off",
+    },
+  },
 ];
 
 export default config;
