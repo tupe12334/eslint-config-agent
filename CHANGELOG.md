@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.8](https://github.com/tupe12334/eslint-config/compare/v1.0.7...v1.0.8) (2025-08-30)
+
+### Features
+
+* enhance TypeScript union type validation with new test cases for interface properties ([4e1ebe7](https://github.com/tupe12334/eslint-config/commit/4e1ebe737049aa1e61c6daac66032f2bb70f34d6))
+
 ## [1.0.7](https://github.com/tupe12334/eslint-config/compare/v1.0.6...v1.0.7) (2025-08-30)
 
 ### Features
