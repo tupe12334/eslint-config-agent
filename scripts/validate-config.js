@@ -28,7 +28,9 @@ async function validateConfig() {
       'test/react-hooks-rules.tsx',
       'test/import-export-rules.ts',
       'test/edge-cases.tsx',
-      'test/performance-test.tsx'
+      'test/performance-test.tsx',
+      'test/valid-interface-unions.tsx',
+      'test/invalid-interface-unions.tsx'
     ];
 
     let allPassed = true;

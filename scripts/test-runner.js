@@ -13,15 +13,15 @@ const projectRoot = join(__dirname, '..');
 const testCategories = {
   'valid': {
     description: 'Files that should have minimal or no errors',
-    files: ['test/valid.tsx', 'test/preact-test.tsx', 'test/typescript-rules.ts', 'test/type-assertions.ts'],
+    files: ['test/valid.tsx', 'test/preact-test.tsx', 'test/typescript-rules.ts', 'test/type-assertions.ts', 'test/valid-interface-unions.tsx'],
     maxErrors: 0,
     maxWarnings: 10,
   },
   'invalid': {
     description: 'Files that should trigger specific errors',
-    files: ['test/invalid.tsx', 'test/jsx-extension-test.js', 'test/type-assertions-invalid.ts'],
+    files: ['test/invalid.tsx', 'test/jsx-extension-test.js', 'test/type-assertions-invalid.ts', 'test/invalid-interface-unions.tsx'],
     maxErrors: 20,
-    maxWarnings: 25,
+    maxWarnings: 30,
     expectedRules: ['no-restricted-syntax', 'react/jsx-filename-extension'],
   },
   'warnings': {

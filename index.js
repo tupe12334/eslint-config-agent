@@ -99,9 +99,19 @@ const tsOnlyRestrictedSyntax = [
       "Avoid using Record with string literal keys. Use a more specific interface or type instead.",
   },
   {
-    selector: "TSTypeAnnotation > TSUnionType:not(PropertyDefinition > .typeAnnotation > .typeAnnotation)",
+    selector: "TSTypeAnnotation > TSUnionType:not(PropertyDefinition > .typeAnnotation > .typeAnnotation):not(TSPropertySignature > .typeAnnotation > .typeAnnotation)",
     message:
       "Use a named type declaration instead of inline union types.",
+  },
+  {
+    selector: "TSPropertySignature > TSTypeAnnotation > TSUnionType:has(TSLiteralType)",
+    message:
+      "Interface properties with literal unions should use a named type declaration.",
+  },
+  {
+    selector: "PropertyDefinition > TSTypeAnnotation > TSUnionType:has(TSLiteralType)",
+    message:
+      "Class properties with literal unions should use a named type declaration.",
   },
   {
     selector: 'TSAsExpression:not(:has(TSTypeReference[typeName.name="const"]))',
