@@ -26,7 +26,7 @@ const testCategories = {
   },
   'warnings': {
     description: 'Files that should trigger warnings',
-    files: ['test/long-function.tsx'],
+    files: ['long-function-test.tsx'],
     maxErrors: 2,
     maxWarnings: 5,
     expectedRules: ['max-lines-per-function'],
@@ -59,9 +59,10 @@ const testCategories = {
 };
 
 async function findTestFiles() {
-  const testDir = join(projectRoot, 'test');
   const files = [];
 
+  // Check test/ directory
+  const testDir = join(projectRoot, 'test');
   try {
     const entries = await readdir(testDir);
 
@@ -75,6 +76,20 @@ async function findTestFiles() {
     }
   } catch (error) {
     console.warn('⚠️  Could not read test directory:', error.message);
+  }
+
+  // Check for specific test files in root directory
+  const rootTestFiles = ['long-function-test.tsx'];
+  for (const testFile of rootTestFiles) {
+    const fullPath = join(projectRoot, testFile);
+    try {
+      const stats = await stat(fullPath);
+      if (stats.isFile()) {
+        files.push(testFile);
+      }
+    } catch (error) {
+      // File doesn't exist, skip
+    }
   }
 
   return files.sort();
