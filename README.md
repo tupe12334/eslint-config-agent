@@ -619,6 +619,10 @@ For detailed changelog information, see the [releases page](https://github.com/t
 - **🔄 [Releases & Changelog](https://github.com/tupe12334/eslint-config/releases)**
 - **📖 [ESLint Flat Config Documentation](https://eslint.org/docs/latest/use/configure/configuration-files)**
 
+## Support
+
+This project stands in solidarity with the people of Ukraine 🇺🇦 and Israel 🇮🇱.
+
 ---
 
 Made with ❤️ by the eslint-config-agent team. Contributions welcome!
