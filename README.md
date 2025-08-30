@@ -520,33 +520,6 @@ pnpm test:ci            # CI-ready linting (zero warnings allowed)
 - **`scripts/validate-config.js`**: Legacy configuration validator for basic functionality
 - **Automated CI/CD**: GitHub Actions integration for continuous testing
 
-### Release Process
-
-#### **Release Commands**
-```bash
-# 🚀 Interactive release (recommended)
-pnpm release
-
-# 📋 Specific version releases
-pnpm release:patch      # 1.0.0 → 1.0.1  
-pnpm release:minor      # 1.0.0 → 1.1.0
-pnpm release:major      # 1.0.0 → 2.0.0
-
-# 🧪 Test release process
-pnpm release:dry        # Dry run without publishing
-```
-
-#### **Release Requirements**
-- All tests must pass: `pnpm test:ci && pnpm validate`
-- Working directory must be clean (no uncommitted changes)
-- Use conventional commit messages for better changelog generation
-
-The release process uses `release-it` with automated:
-- Version bumping
-- Changelog generation  
-- Git tagging
-- NPM publishing
-
 ### Contributing
 
 #### **Contribution Guidelines**
