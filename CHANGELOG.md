@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.6](https://github.com/tupe12334/eslint-config/compare/v1.0.5...v1.0.6) (2025-08-30)
+
+### Features
+
+* add eslint-plugin-import and configure import/group-exports rule ([36d6192](https://github.com/tupe12334/eslint-config/commit/36d6192b5a85031a96e46cfaccb0e7ad62b41726))
+* rename package to eslint-config-agent ([3f9f387](https://github.com/tupe12334/eslint-config/commit/3f9f387650fd74317663142db5801a04e5ff2158))
+
 ## [1.0.5](https://github.com/tupe12334/eslint-config/compare/v1.0.4...v1.0.5) (2025-08-29)
 
 ### Features
