@@ -1,10 +1,10 @@
 # Release Guide
 
-This document describes how to release new versions of `@tupe12334/eslint-config`.
+This document describes how to release new versions of `eslint-config-agent`.
 
 ## Prerequisites
 
-1. **NPM Access**: Ensure you have publish access to the `@tupe12334/eslint-config` package on npm
+1. **NPM Access**: Ensure you have publish access to the `eslint-config-agent` package on npm
 2. **Authentication**: Configure your npm authentication token in `.npmrc`:
    ```
    //registry.npmjs.org/:_authToken=your-token-here
@@ -22,6 +22,7 @@ pnpm release
 ```
 
 This will:
+
 1. Run validation tests (`pnpm validate` and `pnpm test:ci`)
 2. Prompt you to select the version bump (patch, minor, major, or custom)
 3. Generate a changelog based on conventional commits
@@ -90,6 +91,7 @@ Types:
 ```
 
 Examples:
+
 - `feat: add support for new ESLint rule`
 - `fix: resolve TypeScript configuration conflict`
 - `docs: update installation instructions`
@@ -97,19 +99,23 @@ Examples:
 ## Troubleshooting
 
 ### Authentication Issues
+
 - Ensure your `.npmrc` file contains a valid authentication token
 - Verify you have publish access to the package
 
 ### Test Failures
+
 - All tests must pass before release
 - Run `pnpm validate` and `pnpm test:ci` to identify issues
 
 ### Git Issues
+
 - Ensure your working directory is clean
 - Make sure you're on the correct branch
 - Verify remote repository access
 
 ### Publishing Issues
+
 - Check network connectivity
 - Verify npm registry access
 - Ensure package name is not already taken (for major versions)
@@ -118,7 +124,7 @@ Examples:
 
 After a successful release:
 
-1. Verify the package is available on [npmjs.com](https://npmjs.com/package/@tupe12334/eslint-config)
+1. Verify the package is available on [npmjs.com](https://npmjs.com/package/eslint-config-agent)
 2. Test installation in a separate project
 3. Update any dependent projects that use this configuration
 4. Announce the release if significant changes were made
