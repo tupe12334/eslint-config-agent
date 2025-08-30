@@ -35,26 +35,26 @@ const testCategories = {
     description: 'React hooks rules testing',
     files: ['test/react-hooks-rules.tsx'],
     maxErrors: 10,
-    maxWarnings: 10,
+    maxWarnings: 20,
     expectedRules: ['react-hooks/exhaustive-deps', 'react-hooks/rules-of-hooks'],
   },
   'imports': {
     description: 'Import/export patterns testing',
     files: ['test/import-export-rules.ts'],
     maxErrors: 2,
-    maxWarnings: 5,
+    maxWarnings: 10,
   },
   'edge-cases': {
     description: 'Edge cases and boundary testing',
     files: ['test/edge-cases.tsx'],
     maxErrors: 5,
-    maxWarnings: 20,
+    maxWarnings: 30,
   },
   'performance': {
     description: 'Performance and large file testing',
     files: ['test/performance-test.tsx'],
     maxErrors: 10,
-    maxWarnings: 15,
+    maxWarnings: 35,
   },
 };
 

@@ -99,7 +99,7 @@ const tsOnlyRestrictedSyntax = [
       "Avoid using Record with string literal keys. Use a more specific interface or type instead.",
   },
   {
-    selector: "TSTypeAnnotation > TSUnionType",
+    selector: "TSTypeAnnotation > TSUnionType:not(PropertyDefinition > .typeAnnotation > .typeAnnotation)",
     message:
       "Use a named type declaration instead of inline union types.",
   },
@@ -183,12 +183,16 @@ const config = [
     },
   },
 
-  // UI ClassName Warning Rule for TypeScript/TSX
+  // TypeScript/TSX Rules - Note: All restricted-syntax rules are warnings to accommodate className check
   {
     files: ["**/*.tsx"],
     rules: {
       "no-restricted-syntax": [
         "warn",
+        // Include all shared and TypeScript-specific rules
+        ...sharedRestrictedSyntax,
+        ...tsOnlyRestrictedSyntax,
+        // Add className warning rule
         {
           selector: 'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
           message: "UI elements should have a className attribute for styling.",

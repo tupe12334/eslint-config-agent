@@ -28,4 +28,15 @@ function InvalidComponent({ name, age }: Props) {
   return <div>{greeting} Age: {displayAge} Result: {result} Nested: {nested} Any: {anyValue} Cast: {castToAny}</div>;
 }
 
+// Test union types - class properties should be allowed, function parameters should not
+class TestClass {
+  // This should be allowed now (union types in class properties)
+  value: string | number = 'test';
+}
+
+// This should still trigger the union type restriction error
+function badFunction(param: string | number) {
+  return param;
+}
+
 export default InvalidComponent;
