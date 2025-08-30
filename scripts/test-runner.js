@@ -26,7 +26,7 @@ const testCategories = {
   },
   'warnings': {
     description: 'Files that should trigger warnings',
-    files: ['long-function-test.tsx'],
+    files: ['test/long-function-test.tsx'],
     maxErrors: 2,
     maxWarnings: 5,
     expectedRules: ['max-lines-per-function'],
@@ -79,7 +79,7 @@ async function findTestFiles() {
   }
 
   // Check for specific test files in root directory
-  const rootTestFiles = ['long-function-test.tsx'];
+  const rootTestFiles = [];
   for (const testFile of rootTestFiles) {
     const fullPath = join(projectRoot, testFile);
     try {

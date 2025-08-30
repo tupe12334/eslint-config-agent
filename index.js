@@ -187,6 +187,8 @@ const config = [
   {
     files: ["**/*.tsx"],
     rules: {
+      // Include all shared rules (like max-lines-per-function)
+      ...sharedRules,
       "no-restricted-syntax": [
         "warn",
         // Include all shared and TypeScript-specific rules
@@ -268,6 +270,9 @@ const config = [
       "**/test/**/*.{js,jsx,ts,tsx}",
       "**/tests/**/*.{js,jsx,ts,tsx}",
       "**/__tests__/**/*.{js,jsx,ts,tsx}",
+    ],
+    ignores: [
+      "**/long-function-test.tsx", // Exception: this file tests the max-lines rule itself
     ],
     rules: {
       "max-lines-per-function": "off",
