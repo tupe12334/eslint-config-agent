@@ -168,6 +168,20 @@ const config = [
     },
   },
 
+  // UI ClassName Warning Rule for TypeScript/TSX
+  {
+    files: ["**/*.tsx"],
+    rules: {
+      "no-restricted-syntax": [
+        "warn",
+        {
+          selector: 'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
+          message: "UI elements should have a className attribute for styling.",
+        },
+      ],
+    },
+  },
+
   // JavaScript and JSX files
   {
     files: ["**/*.js", "**/*.jsx"],
@@ -282,6 +296,20 @@ const config = [
       "jsx-a11y/label-has-associated-control": "off",
       "react/jsx-no-useless-fragment": "off",
       "import/group-exports": "warn",
+    },
+  },
+
+  // UI ClassName Warning Rule for JavaScript/JSX
+  {
+    files: ["**/*.jsx"],
+    rules: {
+      "no-restricted-syntax": [
+        "warn",
+        {
+          selector: 'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
+          message: "UI elements should have a className attribute for styling.",
+        },
+      ],
     },
   },
 ];
