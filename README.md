@@ -1,4 +1,4 @@
-# @tupe12334/eslint-config
+# eslint-config-agent
 
 A comprehensive ESLint configuration package that provides TypeScript, React, and Preact linting rules with strict coding standards.
 
@@ -13,11 +13,11 @@ A comprehensive ESLint configuration package that provides TypeScript, React, an
 ## Installation
 
 ```bash
-npm install --save-dev @tupe12334/eslint-config
+npm install --save-dev eslint-config-agent
 # or
-pnpm add -D @tupe12334/eslint-config
+pnpm add -D eslint-config-agent
 # or
-yarn add -D @tupe12334/eslint-config
+yarn add -D eslint-config-agent
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ yarn add -D @tupe12334/eslint-config
 Create an `eslint.config.js` file in your project root:
 
 ```javascript
-import config from '@tupe12334/eslint-config';
+import config from 'eslint-config-agent';
 
 export default config;
 ```
@@ -33,7 +33,7 @@ export default config;
 Or extend it with your own rules:
 
 ```javascript
-import baseConfig from '@tupe12334/eslint-config';
+import baseConfig from 'eslint-config-agent';
 
 export default [
   ...baseConfig,
