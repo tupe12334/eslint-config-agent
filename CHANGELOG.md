@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.7](https://github.com/tupe12334/eslint-config/compare/v1.0.6...v1.0.7) (2025-08-30)
+
+### Features
+
+* add className warning rules for JavaScript/JSX and TypeScript/TSX with corresponding test files ([6002cee](https://github.com/tupe12334/eslint-config/commit/6002ceeca6e5e083ef29918af4898ec791ef194e))
+* add shared ESLint rules and test for max-lines-per-function ([500980b](https://github.com/tupe12334/eslint-config/commit/500980bcca349595dbef06d8c7524fc9ab3bb244))
+* disable max-lines-per-function rule for test and spec files with corresponding test cases ([be28440](https://github.com/tupe12334/eslint-config/commit/be284403c1066449b5b21b7df55cf3de0e4bdf7e))
+* update test runner and validation scripts to reference new long-function-test file ([0a13f07](https://github.com/tupe12334/eslint-config/commit/0a13f07709dc4d508adee035cc5924de670a1e78))
+* update TypeScript union type restrictions and enhance test cases for class properties ([c71b19d](https://github.com/tupe12334/eslint-config/commit/c71b19dcaffbbf5a2ba37e0f65853c78fd0ca5f7))
+
 ## [1.0.6](https://github.com/tupe12334/eslint-config/compare/v1.0.5...v1.0.6) (2025-08-30)
 
 ### Features
