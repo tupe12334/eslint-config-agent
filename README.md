@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/eslint-config-agent.svg)](https://badge.fury.io/js/eslint-config-agent)
 [![npm downloads](https://img.shields.io/npm/dm/eslint-config-agent.svg)](https://www.npmjs.com/package/eslint-config-agent)
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A comprehensive ESLint configuration package that provides TypeScript, React, and Preact linting rules with strict coding standards designed for enterprise-grade applications and AI-assisted development.
 
@@ -609,7 +609,7 @@ For detailed changelog information, see the [releases page](https://github.com/t
 
 ## License
 
-**ISC License** - See [LICENSE](LICENSE) file for details.
+**MIT License** - See [LICENSE](LICENSE) file for details.
 
 ## Links & Resources
 
