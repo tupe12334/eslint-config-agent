@@ -4,6 +4,7 @@ import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactPlugin from "eslint-plugin-react";
+import importPlugin from "eslint-plugin-import";
 import globals from "globals";
 
 // Conditionally import preact plugin if available
@@ -65,6 +66,7 @@ const config = [
     plugins: {
       "@typescript-eslint": tsPlugin,
       react: reactPlugin,
+      import: importPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -162,6 +164,7 @@ const config = [
       "no-continue": "off",
       "jsx-a11y/label-has-associated-control": "off",
       "react/jsx-no-useless-fragment": "off",
+      "import/group-exports": "warn",
     },
   },
 
@@ -193,6 +196,7 @@ const config = [
     },
     plugins: {
       react: reactPlugin,
+      import: importPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -277,6 +281,7 @@ const config = [
       ],
       "jsx-a11y/label-has-associated-control": "off",
       "react/jsx-no-useless-fragment": "off",
+      "import/group-exports": "warn",
     },
   },
 ];
