@@ -4,6 +4,16 @@
   "description": "ESLint configuration package with TypeScript support",
   "main": "index.js",
   "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "lint": "eslint .",
     "lint:test": "eslint test/",
@@ -33,7 +43,15 @@
     "preact",
     "tsx"
   ],
-  "author": "",
+  "author": "tupe12334",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tupe12334/eslint-config.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tupe12334/eslint-config/issues"
+  },
+  "homepage": "https://github.com/tupe12334/eslint-config#readme",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
