@@ -16,7 +16,8 @@
     "otp": false
   },
   "github": {
-    "release": true
+    "release": true,
+    "tokenRef": "GITHUB_TOKEN"
   },
   "hooks": {
     "before:init": ["pnpm validate", "pnpm test:ci"],
@@ -35,5 +36,6 @@
     "ghRelease": false,
     "glRelease": false,
     "publish": true
-  }
+  },
+  "ci": true
 }
