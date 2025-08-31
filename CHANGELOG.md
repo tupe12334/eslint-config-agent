@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.9](https://github.com/tupe12334/eslint-config/compare/v1.0.8...v1.0.9) (2025-08-31)
+
+### Features
+
+* add TODOs for lint rule updates regarding export syntax ([a74863c](https://github.com/tupe12334/eslint-config/commit/a74863ccb97850147d8773a9dae3b537cc5c1971))
+* update export rules and add tests for valid/invalid export patterns ([87a53c6](https://github.com/tupe12334/eslint-config/commit/87a53c6470360b2f8ed03dc58be28404027e6955))
+
 ## [1.0.8](https://github.com/tupe12334/eslint-config/compare/v1.0.7...v1.0.8) (2025-08-30)
 
 ### Features
