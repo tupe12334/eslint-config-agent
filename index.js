@@ -350,7 +350,7 @@ const config = [
     },
   },
 
-  // JSX Warning Rules - Lower priority restricted syntax rules as warnings  
+  // JSX Warning Rules - Lower priority restricted syntax rules as warnings
   {
     files: ["**/*.jsx"],
     ignores: [
