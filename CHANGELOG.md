@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.12](https://github.com/tupe12334/eslint-config/compare/v1.0.11...v1.0.12) (2025-08-31)
+
+### Features
+
+* add required export rules and corresponding tests for classes and enums ([cb90ea7](https://github.com/tupe12334/eslint-config/commit/cb90ea75f34b7afd6f0b09c2aa36193fecdca5e1))
+* adjust TypeScript/TSX rules to treat restricted syntax as warnings and include required export rules ([e24ec33](https://github.com/tupe12334/eslint-config/commit/e24ec33b959dd0c7c83a1df63dfaa2a4abb667bb))
+* enforce named exports for classes and enums, add tests for invalid default exports ([af5effb](https://github.com/tupe12334/eslint-config/commit/af5effb9e9504ac95969f25132c43e0457c95b95))
+
 ## [1.0.11](https://github.com/tupe12334/eslint-config/compare/v1.0.10...v1.0.11) (2025-08-31)
 
 ### Features
