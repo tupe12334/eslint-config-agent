@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.11](https://github.com/tupe12334/eslint-config/compare/v1.0.10...v1.0.11) (2025-08-31)
+
+### Features
+
+* add .npmrc for automated npm publishing ([25a6225](https://github.com/tupe12334/eslint-config/commit/25a62259f25e92584ac4ba97f64fdc783feebe88))
+* configure .npmrc to automatically use token from .env file ([9186662](https://github.com/tupe12334/eslint-config/commit/9186662fe5786309146ae02fc90a73247d4a42bb))
+* enhance ESLint rules and add tests for multiple export statements ([77bc1ab](https://github.com/tupe12334/eslint-config/commit/77bc1ab68d08a8e56872a589e407fc4314dc940b))
+
 ## [1.0.9](https://github.com/tupe12334/eslint-config/compare/v1.0.8...v1.0.9) (2025-08-31)
 
 ### Features
