@@ -13,7 +13,8 @@
     "publishPath": ".",
     "access": "public",
     "token": "${NPM_TOKEN}",
-    "otp": false
+    "otp": false,
+    "skipChecks": true
   },
   "github": {
     "release": true,
