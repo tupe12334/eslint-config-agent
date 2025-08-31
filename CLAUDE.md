@@ -60,19 +60,24 @@ You must test any changes to the ESLint configuration. Run `pnpm test` for compr
 This package uses `release-it` with automated version management and changelog generation.
 
 ### Local Releases
+
 Before any local release:
+
 1. Copy `.env.example` to `.env` and add your NPM_TOKEN
-2. Ensure all tests pass: `pnpm test:ci` and `pnpm validate` 
+2. Ensure all tests pass: `pnpm test:ci` and `pnpm validate`
 3. Working directory must be clean (all changes committed)
 4. Use conventional commit messages for better changelog generation
 
 ### CI Releases
+
 The project includes GitHub Actions for automated releases:
+
 - **Automatic**: Push to main branch triggers a patch release
 - **Manual**: Use "Actions" > "Release" workflow with choice of patch/minor/major
 - **Requirements**: NPM_TOKEN secret must be configured in GitHub repository settings
 
 Required GitHub Secrets:
+
 - `NPM_TOKEN`: Token from npmjs.com for publishing packages
 - `GITHUB_TOKEN`: Automatically provided by GitHub Actions
 
