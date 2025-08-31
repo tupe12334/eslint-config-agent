@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.14](https://github.com/tupe12334/eslint-config/compare/v1.0.13...v1.0.14) (2025-08-31)
+
+### Features
+
+* add export validation rules and corresponding test cases for external libraries and scoped packages ([9ba8093](https://github.com/tupe12334/eslint-config/commit/9ba8093c6fb7c93c8363518bb879ecf94f405e1e))
+
 ## [1.0.13](https://github.com/tupe12334/eslint-config/compare/v1.0.12...v1.0.13) (2025-08-31)
 
 ### Features
