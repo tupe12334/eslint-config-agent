@@ -97,6 +97,18 @@ const sharedRestrictedSyntax = [
   },
 ];
 
+// Required export rules (always errors)
+const requiredExportRules = [
+  {
+    selector: "ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration):not(ExportDefaultDeclaration > ClassDeclaration)",
+    message: "Classes must be exported. Add 'export' before the class declaration.",
+  },
+  {
+    selector: "TSEnumDeclaration:not(ExportNamedDeclaration > TSEnumDeclaration):not(ExportDefaultDeclaration > TSEnumDeclaration)",
+    message: "Enums must be exported. Add 'export' before the enum declaration.",
+  },
+];
+
 // TypeScript-specific no-restricted-syntax rules
 const tsOnlyRestrictedSyntax = [
   {
@@ -202,16 +214,29 @@ const config = [
         "error",
         ...sharedRestrictedSyntax,
         ...tsOnlyRestrictedSyntax,
+        ...requiredExportRules,
       ],
     },
   },
 
-  // TypeScript/TSX Rules - Note: All restricted-syntax rules are warnings to accommodate className check
+  // TypeScript/TSX Rules - Note: Most restricted-syntax rules are warnings, but export rules are errors
   {
     files: ["**/*.tsx"],
     rules: {
       // Include all shared rules (like max-lines-per-function)
       ...sharedRules,
+      "no-restricted-syntax": [
+        "error",
+        // Required export rules as errors
+        ...requiredExportRules,
+      ],
+    },
+  },
+  
+  // TypeScript/TSX Warning Rules - Lower priority restricted syntax rules as warnings
+  {
+    files: ["**/*.tsx"],
+    rules: {
       "no-restricted-syntax": [
         "warn",
         // Include shared rules but remove the multiple exports restriction for TSX
@@ -269,6 +294,11 @@ const config = [
       "no-restricted-syntax": [
         "error",
         ...sharedRestrictedSyntax,
+        // Only class rules apply to JS files (no enums in JS)
+        {
+          selector: "ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration):not(ExportDefaultDeclaration > ClassDeclaration)",
+          message: "Classes must be exported. Add 'export' before the class declaration.",
+        },
       ],
     },
   },
@@ -312,6 +342,54 @@ const config = [
       ...sharedRules,
       "no-undef": "off", // TypeScript handles this
       "no-restricted-syntax": [
+        "error",
+        // Required export rules as errors (class rule only for JSX)
+        {
+          selector: "ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration):not(ExportDefaultDeclaration > ClassDeclaration)",
+          message: "Classes must be exported. Add 'export' before the class declaration.",
+        },
+      ],
+    },
+  },
+
+  // JSX Warning Rules - Lower priority restricted syntax rules as warnings  
+  {
+    files: ["**/*.jsx"],
+    ignores: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
+      "pnpm-lock.yaml",
+      "packages/auth-service-sdk/**",
+    ],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+      },
+    },
+    plugins: {
+      "@typescript-eslint": tsPlugin,
+      react: reactPlugin,
+      import: importPlugin,
+      ...(preactPlugin && { preact: preactPlugin }),
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+    rules: {
+      "no-undef": "off", // TypeScript handles this
+      "no-restricted-syntax": [
         "warn",
         // Include shared rules but remove the multiple exports restriction for JSX
         ...sharedRestrictedSyntax.filter(rule =>
@@ -340,6 +418,7 @@ const config = [
     ignores: [
       "**/long-function-test.tsx", // Exception: this file tests the max-lines rule itself
       "**/test/export/**", // Export tests should follow strict export rules
+      "**/test/required-exports/**", // Required export tests should follow strict export rules
     ],
     rules: {
       "max-lines-per-function": "off",
@@ -351,6 +430,29 @@ const config = [
           rule.selector !== "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))"
         ),
         ...tsOnlyRestrictedSyntax,
+      ],
+    },
+  },
+
+  // Required export rules as errors for test files (separate configuration)
+  {
+    files: [
+      "**/*.test.{js,jsx,ts,tsx}",
+      "**/*.spec.{js,jsx,ts,tsx}",
+      "**/test/**/*.{js,jsx,ts,tsx}",
+      "**/tests/**/*.{js,jsx,ts,tsx}",
+      "**/__tests__/**/*.{js,jsx,ts,tsx}",
+    ],
+    ignores: [
+      "**/long-function-test.tsx", // Exception: this file tests the max-lines rule itself
+      "**/test/export/**", // Export tests should follow strict export rules
+      "**/test/required-exports/**", // Required export tests should follow strict export rules
+    ],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        // Required export rules as errors in test files
+        ...requiredExportRules,
       ],
     },
   },

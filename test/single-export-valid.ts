@@ -17,9 +17,7 @@ type MyType = {
   name: string;
 };
 
-class MyClass {
-  constructor() {}
-}
+
 
 // Single export declaration - this is the preferred style
 export {
@@ -27,5 +25,4 @@ export {
   secondFunction,
   MyInterface,
   MyType,
-  MyClass,
 };

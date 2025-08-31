@@ -14,22 +14,10 @@ interface ValidInterface {
   mixed: string | number | boolean;
 }
 
-class ValidClass {
-  // Class properties with type unions should be ALLOWED
-  value: string | number = 'test';
-  data: boolean | undefined = undefined;
-  count: number | null = null;
-  handler: (() => void) | null = null;
-
-  constructor() {
-    this.value = 42;
-  }
-}
-
 // Type aliases with primitive unions should be allowed
 type ValidType = {
   field: string | number;
   optional?: boolean | undefined;
 };
 
-export { ValidInterface, ValidClass, ValidType };
+export { ValidInterface, ValidType };

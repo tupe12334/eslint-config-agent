@@ -8,7 +8,7 @@ interface InvalidInterface {
   theme: 'default' | 'minimal' | 'colorful';
 }
 
-class InvalidClass {
+export class InvalidClass {
   // Class properties with literal unions should be RESTRICTED
   status: 'active' | 'inactive' | 'pending' = 'active';
   visibility: 'public' | 'private' = 'public';
@@ -34,4 +34,4 @@ function invalidLiteralFunction(mode: 'light' | 'dark') {
 type InvalidType = (param: string | number) => void;
 type InvalidLiteralType = (mode: 'on' | 'off') => boolean;
 
-export { InvalidInterface, InvalidClass };
+export { InvalidInterface };
