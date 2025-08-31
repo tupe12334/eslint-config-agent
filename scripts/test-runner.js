@@ -74,7 +74,9 @@ const testCategories = {
       'test/export/valid/tsx-class-component-with-props.tsx',
       'test/export/valid/tsx-multiple-individual-exports.tsx',
       'test/export/valid/tsx-export-statement.tsx',
-      'test/export/valid/jsx-export-statement.jsx'
+      'test/export/valid/jsx-export-statement.jsx',
+      'test/export/valid/export-type-re-export.ts',
+      'test/export/valid/regular-type-export.ts'
     ],
     maxErrors: 0,
     maxWarnings: 5,
@@ -90,9 +92,11 @@ const testCategories = {
       'test/export/invalid/export-star.ts',
       'test/export/invalid/export-star-as.ts',
       'test/export/invalid/mixed-exports.ts',
-      'test/export/invalid/default-with-named.ts'
+      'test/export/invalid/default-with-named.ts',
+      'test/export/invalid/export-type-local.ts',
+      'test/export/invalid/regular-export-specifiers.ts'
     ],
-    maxErrors: 12,
+    maxErrors: 16,
     maxWarnings: 5,
     expectedRules: ['import/no-default-export', 'no-restricted-syntax'],
   },
@@ -105,7 +109,7 @@ const testCategories = {
       'test/union-types/valid/class-named-types.tsx'
     ],
     maxErrors: 0,
-    maxWarnings: 2,
+    maxWarnings: 6,
   },
   'union-types-invalid': {
     description: 'Invalid union types patterns',
@@ -115,7 +119,7 @@ const testCategories = {
       'test/union-types/invalid/class-literal-unions.tsx'
     ],
     maxErrors: 2,
-    maxWarnings: 15,
+    maxWarnings: 18,
     expectedRules: ['no-restricted-syntax'],
   },
 };

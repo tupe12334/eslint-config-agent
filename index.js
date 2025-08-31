@@ -95,6 +95,14 @@ const sharedRestrictedSyntax = [
     selector: "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))",
     message: "Multiple export statements are not allowed. Use only one export statement per file.",
   },
+  {
+    selector: "ExportNamedDeclaration[exportKind=type]:not([source]):has(ExportSpecifier)",
+    message: "Type-only exports are not allowed. Use regular export or re-export with 'from' clause.",
+  },
+  {
+    selector: "ExportNamedDeclaration:not([source]):not([exportKind=type]):has(ExportSpecifier)",
+    message: "Export specifiers without re-export are not allowed. Use direct export or re-export with 'from' clause.",
+  },
 ];
 
 // Required export rules (always errors)
