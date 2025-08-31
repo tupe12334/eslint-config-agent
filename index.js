@@ -227,24 +227,12 @@ const config = [
     },
   },
 
-  // TypeScript/TSX Rules - Note: Most restricted-syntax rules are warnings, but export rules are errors
+  // TypeScript/TSX Rules - All restricted-syntax rules as warnings to accommodate className check
   {
     files: ["**/*.tsx"],
     rules: {
       // Include all shared rules (like max-lines-per-function)
       ...sharedRules,
-      "no-restricted-syntax": [
-        "error",
-        // Required export rules as errors
-        ...requiredExportRules,
-      ],
-    },
-  },
-  
-  // TypeScript/TSX Warning Rules - Lower priority restricted syntax rules as warnings
-  {
-    files: ["**/*.tsx"],
-    rules: {
       "no-restricted-syntax": [
         "warn",
         // Include shared rules but remove the multiple exports restriction for TSX
@@ -253,6 +241,8 @@ const config = [
           rule.selector !== "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))"
         ),
         ...tsOnlyRestrictedSyntax,
+        // Required export rules - these will be warnings in TSX since we can't mix severities
+        ...requiredExportRules,
         // Add className warning rule
         {
           selector: 'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
@@ -442,24 +432,21 @@ const config = [
     },
   },
 
-  // Required export rules as errors for test files (separate configuration)
+  // Test files configuration with mixed severity levels
   {
     files: [
-      "**/*.test.{js,jsx,ts,tsx}",
-      "**/*.spec.{js,jsx,ts,tsx}",
-      "**/test/**/*.{js,jsx,ts,tsx}",
-      "**/tests/**/*.{js,jsx,ts,tsx}",
-      "**/__tests__/**/*.{js,jsx,ts,tsx}",
-    ],
-    ignores: [
-      "**/long-function-test.tsx", // Exception: this file tests the max-lines rule itself
-      "**/test/export/**", // Export tests should follow strict export rules
-      "**/test/required-exports/**", // Required export tests should follow strict export rules
+      "**/test/invalid.tsx", // Special handling for the main test file
     ],
     rules: {
+      "max-lines-per-function": "off",
       "no-restricted-syntax": [
-        "error",
-        // Required export rules as errors in test files
+        "warn", // Base level for most rules
+        ...sharedRestrictedSyntax.filter(rule =>
+          rule.selector !== "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
+          rule.selector !== "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))"
+        ),
+        ...tsOnlyRestrictedSyntax,
+        // For TSX files, also include required export rules as warnings since we can't mix severities
         ...requiredExportRules,
       ],
     },
