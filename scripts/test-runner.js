@@ -85,12 +85,14 @@ const testCategories = {
       'test/export/invalid/default-export.ts',
       'test/export/invalid/default-class-export.ts',
       'test/export/invalid/multiple-named-exports.ts',
+      'test/export/invalid/multiple-export-statements.ts',
+      'test/export/invalid/two-export-statements.ts',
       'test/export/invalid/export-star.ts',
       'test/export/invalid/export-star-as.ts',
       'test/export/invalid/mixed-exports.ts',
       'test/export/invalid/default-with-named.ts'
     ],
-    maxErrors: 10,
+    maxErrors: 12,
     maxWarnings: 5,
     expectedRules: ['import/no-default-export', 'no-restricted-syntax'],
   },
@@ -276,6 +278,85 @@ async function generateTestReport(allResults) {
   }
 }
 
+function autoCategorizeFiles(allTestFiles) {
+  const autoCategories = {};
+  const uncategorizedFiles = [];
+
+  // First, assign files to predefined categories
+  for (const [category, config] of Object.entries(testCategories)) {
+    const existingFiles = config.files.filter(file => allTestFiles.includes(file));
+    if (existingFiles.length > 0) {
+      autoCategories[category] = { ...config, files: existingFiles };
+    }
+  }
+
+  // Find files that aren't in any predefined category
+  const categorizedFiles = new Set();
+  for (const category of Object.values(autoCategories)) {
+    category.files.forEach(file => categorizedFiles.add(file));
+  }
+
+  for (const file of allTestFiles) {
+    if (!categorizedFiles.has(file)) {
+      uncategorizedFiles.push(file);
+    }
+  }
+
+  // Auto-categorize uncategorized files based on path patterns
+  if (uncategorizedFiles.length > 0) {
+    const pathCategories = {
+      'auto-export-tests': {
+        description: 'Auto-discovered export-related tests',
+        files: uncategorizedFiles.filter(file => 
+          file.includes('/export/') || file.includes('export') || file.includes('Export')
+        ),
+        maxErrors: 20,
+        maxWarnings: 10,
+        expectedRules: ['no-restricted-syntax'],
+      },
+      'auto-component-tests': {
+        description: 'Auto-discovered component tests',
+        files: uncategorizedFiles.filter(file => 
+          (file.includes('component') || file.includes('Component')) &&
+          !file.includes('/export/')
+        ),
+        maxErrors: 5,
+        maxWarnings: 15,
+      },
+      'auto-type-tests': {
+        description: 'Auto-discovered type-related tests',
+        files: uncategorizedFiles.filter(file => 
+          (file.includes('type') || file.includes('Type') || file.includes('interface') || file.includes('Interface')) &&
+          !file.includes('/export/') && !file.includes('component')
+        ),
+        maxErrors: 10,
+        maxWarnings: 20,
+        expectedRules: ['no-restricted-syntax', '@typescript-eslint/no-explicit-any'],
+      },
+      'auto-misc-tests': {
+        description: 'Auto-discovered miscellaneous tests',
+        files: uncategorizedFiles.filter(file => 
+          !file.includes('/export/') && !file.includes('export') && !file.includes('Export') &&
+          !file.includes('component') && !file.includes('Component') &&
+          !file.includes('type') && !file.includes('Type') &&
+          !file.includes('interface') && !file.includes('Interface')
+        ),
+        maxErrors: 15,
+        maxWarnings: 25,
+      },
+    };
+
+    // Add non-empty auto-categories
+    for (const [category, config] of Object.entries(pathCategories)) {
+      if (config.files.length > 0) {
+        autoCategories[category] = config;
+      }
+    }
+  }
+
+  return autoCategories;
+}
+
 async function runComprehensiveTests() {
   console.log('🚀 Starting Comprehensive ESLint Configuration Tests');
   console.log('='.repeat(60));
@@ -291,22 +372,20 @@ async function runComprehensiveTests() {
     console.log(`📁 Discovered ${allTestFiles.length} test files:`);
     allTestFiles.forEach(file => console.log(`   - ${file}`));
 
+    // Auto-categorize all files (predefined + auto-discovered)
+    const allCategories = autoCategorizeFiles(allTestFiles);
+    
+    console.log(`\n📊 Test categories (${Object.keys(allCategories).length} total):`);
+    for (const [category, config] of Object.entries(allCategories)) {
+      const autoPrefix = category.startsWith('auto-') ? '🔍 ' : '📋 ';
+      console.log(`   ${autoPrefix}${category}: ${config.files.length} files - ${config.description}`);
+    }
+
     // Run tests by category
     const allResults = {};
 
-    for (const [category, config] of Object.entries(testCategories)) {
-      // Filter files that exist
-      const existingFiles = config.files.filter(file =>
-        allTestFiles.includes(file)
-      );
-
-      if (existingFiles.length === 0) {
-        console.log(`\n⚠️  Skipping category '${category}' - no files found`);
-        continue;
-      }
-
-      const categoryConfig = { ...config, files: existingFiles };
-      const result = await runTestCategory(eslint, category, categoryConfig);
+    for (const [category, config] of Object.entries(allCategories)) {
+      const result = await runTestCategory(eslint, category, config);
       allResults[category] = result;
     }
 

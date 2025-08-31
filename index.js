@@ -91,6 +91,10 @@ const sharedRestrictedSyntax = [
     selector: "ExportNamedDeclaration[specifiers.length>1]:not([source])",
     message: "Multiple exports in a single statement are not allowed. Use only one export per file.",
   },
+  {
+    selector: "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))",
+    message: "Multiple export statements are not allowed. Use only one export statement per file.",
+  },
 ];
 
 // TypeScript-specific no-restricted-syntax rules
@@ -212,7 +216,8 @@ const config = [
         "warn",
         // Include shared rules but remove the multiple exports restriction for TSX
         ...sharedRestrictedSyntax.filter(rule =>
-          rule.selector !== "ExportNamedDeclaration[specifiers.length>1]:not([source])"
+          rule.selector !== "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
+          rule.selector !== "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))"
         ),
         ...tsOnlyRestrictedSyntax,
         // Add className warning rule
@@ -310,7 +315,8 @@ const config = [
         "warn",
         // Include shared rules but remove the multiple exports restriction for JSX
         ...sharedRestrictedSyntax.filter(rule =>
-          rule.selector !== "ExportNamedDeclaration[specifiers.length>1]:not([source])"
+          rule.selector !== "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
+          rule.selector !== "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))"
         ),
         // Add className warning rule for JSX
         {
@@ -341,7 +347,8 @@ const config = [
       "no-restricted-syntax": [
         "warn",
         ...sharedRestrictedSyntax.filter(rule =>
-          rule.selector !== "ExportNamedDeclaration[specifiers.length>1]"
+          rule.selector !== "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
+          rule.selector !== "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))"
         ),
         ...tsOnlyRestrictedSyntax,
       ],
