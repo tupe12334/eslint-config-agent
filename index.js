@@ -103,6 +103,14 @@ const sharedRestrictedSyntax = [
     selector: "ExportNamedDeclaration:not([source]):not([exportKind=type]):has(ExportSpecifier)",
     message: "Export specifiers without re-export are not allowed. Use direct export or re-export with 'from' clause.",
   },
+  {
+    selector: "ExportSpecifier[local.name=default][exported.name!=default]",
+    message: "Re-exporting default as named export is not allowed. Use explicit export declaration instead.",
+  },
+  {
+    selector: "Program:has(ImportDeclaration) ExportNamedDeclaration:has(VariableDeclaration > VariableDeclarator[init.type=Identifier])",
+    message: "Exporting imported variables is not allowed. Use direct re-export with 'from' clause or define new values.",
+  },
 ];
 
 // Required export rules (always errors)
