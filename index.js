@@ -65,7 +65,7 @@ const sharedRules = {
   "jsx-a11y/label-has-associated-control": "off",
   "react/jsx-no-useless-fragment": "off",
   "import/group-exports": "off",
-  "import/no-default-export": "error",
+  "import/no-default-export": "off",
 };
 
 // Shared no-restricted-syntax rules for both JS and TS
