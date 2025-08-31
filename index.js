@@ -111,6 +111,10 @@ const sharedRestrictedSyntax = [
     selector: "Program:has(ImportDeclaration) ExportNamedDeclaration:has(VariableDeclaration > VariableDeclarator[init.type=Identifier])",
     message: "Exporting imported variables is not allowed. Use direct re-export with 'from' clause or define new values.",
   },
+  {
+    selector: "ExportNamedDeclaration[source.value=/^[a-z]/]:not([source.value=/^@/])",
+    message: "Exporting from external libraries is not allowed. Only re-export from relative paths or scoped packages.",
+  },
 ];
 
 // Required export rules (always errors)

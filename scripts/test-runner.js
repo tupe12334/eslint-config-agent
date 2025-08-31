@@ -77,7 +77,8 @@ const testCategories = {
       'test/export/valid/jsx-export-statement.jsx',
       'test/export/valid/export-type-re-export.ts',
       'test/export/valid/regular-type-export.ts',
-      'test/export/valid/explicit-export-declaration.ts'
+      'test/export/valid/explicit-export-declaration.ts',
+      'test/export/valid/export-from-scoped.ts'
     ],
     maxErrors: 0,
     maxWarnings: 5,
@@ -97,9 +98,10 @@ const testCategories = {
       'test/export/invalid/export-type-local.ts',
       'test/export/invalid/regular-export-specifiers.ts',
       'test/export/invalid/default-as-export.ts',
-      'test/export/invalid/export-of-import.ts'
+      'test/export/invalid/export-of-import.ts',
+      'test/export/invalid/export-from-lib.ts'
     ],
-    maxErrors: 19,
+    maxErrors: 22,
     maxWarnings: 5,
     expectedRules: ['import/no-default-export', 'no-restricted-syntax'],
   },
