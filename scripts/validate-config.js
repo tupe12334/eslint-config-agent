@@ -29,8 +29,8 @@ async function validateConfig() {
       'test/import-export-rules.ts',
       'test/edge-cases.tsx',
       'test/performance-test.tsx',
-      'test/valid-interface-unions.tsx',
-      'test/invalid-interface-unions.tsx'
+      'test/union-types/valid/named-type-declarations.tsx',
+      'test/union-types/invalid/interface-literal-unions.tsx'
     ];
 
     let allPassed = true;
