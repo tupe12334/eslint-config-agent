@@ -22,7 +22,7 @@ async function validateConfig() {
       'test/valid.tsx',
       'test/invalid.tsx',
       'test/preact-test.tsx',
-      'test/long-function-test.tsx',
+      'test/lines/function-lines/long-function-test.tsx',
       'test/jsx-extension-test.js',
       'test/typescript-rules.ts',
       'test/react-hooks-rules.tsx',

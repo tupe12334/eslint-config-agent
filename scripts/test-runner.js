@@ -26,7 +26,7 @@ const testCategories = {
   },
   'warnings': {
     description: 'Files that should trigger warnings',
-    files: ['test/long-function-test.tsx'],
+    files: ['test/lines/function-lines/long-function-test.tsx'],
     maxErrors: 2,
     maxWarnings: 5,
     expectedRules: ['max-lines-per-function'],
