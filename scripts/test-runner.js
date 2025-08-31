@@ -129,7 +129,7 @@ const testCategories = {
     description: 'Valid index file patterns',
     files: [
       'test/index-files/valid/index.ts',
-      'test/index-files/valid/index-re-exports.js'
+      'test/index-files/valid/index-re-exports.ts'
     ],
     maxErrors: 0,
     maxWarnings: 2,

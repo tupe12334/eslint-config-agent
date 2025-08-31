@@ -1,4 +1,4 @@
-// Valid: Index file with multiple re-exports
+// Invalid: Index file with default re-export as named
 
 export { Component1 } from './component1';
 export { Component2 } from './component2';

@@ -468,13 +468,34 @@ const config = [
     },
   },
 
+  // Index files configuration - allow specific export patterns
+  {
+    files: [
+      "**/index.{js,ts,tsx,jsx}",
+      "**/test/index-files/**/*.{js,ts,tsx,jsx}",
+    ],
+    rules: {
+      "import/no-default-export": "off",
+      // Allow multiple re-exports in index files but keep other restrictions
+      "no-restricted-syntax": [
+        "error",
+        // Keep most rules but allow multiple exports and export statements for index files
+        ...sharedRestrictedSyntax.filter(rule =>
+          rule.selector !== "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
+          rule.selector !== "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
+          rule.selector !== "ExportNamedDeclaration:not([source]):not([exportKind=type]):has(ExportSpecifier)" &&
+          rule.selector !== "ExportNamedDeclaration[exportKind=type]:not([source]):has(ExportSpecifier)"
+        ),
+        ...tsOnlyRestrictedSyntax,
+      ],
+    },
+  },
+
   // Allow default exports in configuration files (must be last to override)
   {
     files: [
       "*.config.js",
       "*.config.ts",
-      "index.js",
-      "index.ts",
       "eslint.config.js",
       "eslint.config.ts",
     ],
