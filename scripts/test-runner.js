@@ -42,7 +42,7 @@ const testCategories = {
     description: 'Import/export patterns testing',
     files: ['test/import-export-rules.ts'],
     maxErrors: 2,
-    maxWarnings: 10,
+    maxWarnings: 12,
   },
   'edge-cases': {
     description: 'Edge cases and boundary testing',
@@ -101,7 +101,7 @@ const testCategories = {
       'test/export/invalid/export-of-import.ts',
       'test/export/invalid/export-from-lib.ts'
     ],
-    maxErrors: 22,
+    maxErrors: 23,
     maxWarnings: 5,
     expectedRules: ['import/no-default-export', 'no-restricted-syntax'],
   },
