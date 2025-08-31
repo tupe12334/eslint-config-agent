@@ -21,8 +21,6 @@
   },
   "hooks": {
     "before:init": ["pnpm validate", "pnpm test:ci"],
-    "before:npm:publish": "source .env && echo '//registry.npmjs.org/:_authToken='$NPM_TOKEN > .npmrc",
-    "after:npm:publish": "rm -f .npmrc",
     "after:bump": "echo 'Version bumped to ${version}'"
   },
   "plugins": {
