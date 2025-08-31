@@ -125,6 +125,26 @@ const testCategories = {
     maxWarnings: 18,
     expectedRules: ['no-restricted-syntax'],
   },
+  'index-files-valid': {
+    description: 'Valid index file patterns',
+    files: [
+      'test/index-files/valid/index.ts',
+      'test/index-files/valid/index-re-exports.js'
+    ],
+    maxErrors: 0,
+    maxWarnings: 2,
+  },
+  'index-files-invalid': {
+    description: 'Invalid index file patterns',
+    files: [
+      'test/index-files/invalid/index.ts',
+      'test/index-files/invalid/index-multiple-statements.ts',
+      'test/index-files/invalid/index-export-specifiers.js'
+    ],
+    maxErrors: 4,
+    maxWarnings: 2,
+    expectedRules: ['no-restricted-syntax'],
+  },
 };
 
 async function findTestFiles() {
