@@ -63,8 +63,7 @@ pids
 .env.test
 .env.production
 
-# NPM authentication
-.npmrc
+# NPM authentication (keeping .npmrc for automation)
 
 # parcel-bundler cache (https://parceljs.logs)
 .cache
