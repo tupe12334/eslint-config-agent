@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.13](https://github.com/tupe12334/eslint-config/compare/v1.0.12...v1.0.13) (2025-08-31)
+
+### Features
+
+* add new export validation rules and corresponding test cases ([583289a](https://github.com/tupe12334/eslint-config/commit/583289a6bf432033e4162dbe0494cfc396908e07))
+* add new rules for type-only exports and update test cases for export validations ([ea00bed](https://github.com/tupe12334/eslint-config/commit/ea00bedb344274f925ea4363cd3fc90e8e6e2d07))
+* add tests for union types validation, including valid and invalid patterns ([1412ce6](https://github.com/tupe12334/eslint-config/commit/1412ce61970e984fc4e5dab7fe0776b72f82a1e5))
+* add validation test cases for index file patterns, including valid and invalid scenarios ([3d0d8dd](https://github.com/tupe12334/eslint-config/commit/3d0d8ddfcd75463c696a60b551deb1330aeb9f16))
+* update test files for union types validation in ESLint config ([6ca185e](https://github.com/tupe12334/eslint-config/commit/6ca185ef0b98d46c7eaf21cc445f725652cad974))
+* update test files to validate max-lines-per-function rule in ESLint ([cb557f4](https://github.com/tupe12334/eslint-config/commit/cb557f45b7561ad849dc16a749097b88bfe57a48))
+
+### Bug Fixes
+
+* correct comment to indicate invalid index file with default re-export as named ([e942309](https://github.com/tupe12334/eslint-config/commit/e94230962083371f42d547650fb146c304e0651a))
+
 ## [1.0.12](https://github.com/tupe12334/eslint-config/compare/v1.0.11...v1.0.12) (2025-08-31)
 
 ### Features
