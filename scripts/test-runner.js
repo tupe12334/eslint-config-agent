@@ -13,13 +13,13 @@ const projectRoot = join(__dirname, '..');
 const testCategories = {
   'valid': {
     description: 'Files that should have minimal or no errors',
-    files: ['test/valid.tsx', 'test/preact-test.tsx', 'test/typescript-rules.ts', 'test/type-assertions.ts', 'test/valid-interface-unions.tsx'],
+    files: ['test/valid.tsx', 'test/preact-test.tsx', 'test/typescript-rules.ts', 'test/type-assertions.ts'],
     maxErrors: 0,
     maxWarnings: 10,
   },
   'invalid': {
     description: 'Files that should trigger specific errors',
-    files: ['test/invalid.tsx', 'test/jsx-extension-test.js', 'test/type-assertions-invalid.ts', 'test/invalid-interface-unions.tsx'],
+    files: ['test/invalid.tsx', 'test/jsx-extension-test.js', 'test/type-assertions-invalid.ts'],
     maxErrors: 20,
     maxWarnings: 40,
     expectedRules: ['no-restricted-syntax', 'react/jsx-filename-extension'],
@@ -95,6 +95,28 @@ const testCategories = {
     maxErrors: 12,
     maxWarnings: 5,
     expectedRules: ['import/no-default-export', 'no-restricted-syntax'],
+  },
+  'union-types-valid': {
+    description: 'Valid union types patterns',
+    files: [
+      'test/union-types/valid/named-type-declarations.tsx',
+      'test/union-types/valid/primitive-unions.tsx',
+      'test/union-types/valid/function-named-types.tsx',
+      'test/union-types/valid/class-named-types.tsx'
+    ],
+    maxErrors: 0,
+    maxWarnings: 2,
+  },
+  'union-types-invalid': {
+    description: 'Invalid union types patterns',
+    files: [
+      'test/union-types/invalid/interface-literal-unions.tsx',
+      'test/union-types/invalid/function-inline-unions.tsx',
+      'test/union-types/invalid/class-literal-unions.tsx'
+    ],
+    maxErrors: 2,
+    maxWarnings: 15,
+    expectedRules: ['no-restricted-syntax'],
   },
 };
 
