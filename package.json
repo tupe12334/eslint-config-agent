@@ -34,10 +34,10 @@
     "release:minor": "dotenv -e .env -- release-it minor",
     "release:major": "dotenv -e .env -- release-it major",
     "release:dry": "dotenv -e .env -- release-it --dry-run",
-    "release:ci": "release-it --ci",
-    "release:ci:patch": "release-it patch --ci",
-    "release:ci:minor": "release-it minor --ci",
-    "release:ci:major": "release-it major --ci"
+    "release:ci": "dotenv -e .env -- release-it --ci",
+    "release:ci:patch": "dotenv -e .env -- release-it patch --ci",
+    "release:ci:minor": "dotenv -e .env -- release-it minor --ci",
+    "release:ci:major": "dotenv -e .env -- release-it major --ci"
   },
   "keywords": [
     "eslint",
