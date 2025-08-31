@@ -24,4 +24,4 @@ class PreactCounter extends Component<{}, State> {
   }
 }
 
-export default PreactCounter;
+export { PreactCounter };

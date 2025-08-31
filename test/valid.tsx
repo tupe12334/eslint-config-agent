@@ -15,4 +15,4 @@ function ValidComponent({ name, age }: Props) {
   return <div>{greeting}</div>;
 }
 
-export default ValidComponent;
+export { ValidComponent };

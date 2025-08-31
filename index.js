@@ -64,7 +64,8 @@ const sharedRules = {
   "no-continue": "off",
   "jsx-a11y/label-has-associated-control": "off",
   "react/jsx-no-useless-fragment": "off",
-  "import/group-exports": "warn",
+  "import/group-exports": "off",
+  "import/no-default-export": "error",
 };
 
 // Shared no-restricted-syntax rules for both JS and TS
@@ -81,6 +82,14 @@ const sharedRestrictedSyntax = [
     selector: 'LogicalExpression[operator="??"]',
     message:
       "Nullish coalescing operator (??) is not allowed. Use explicit null/undefined checks instead.",
+  },
+  {
+    selector: "ExportAllDeclaration",
+    message: "Re-exports using 'export *' syntax are not allowed.",
+  },
+  {
+    selector: "ExportNamedDeclaration[specifiers.length>1]:not([source])",
+    message: "Multiple exports in a single statement are not allowed. Use only one export per file.",
   },
 ];
 
@@ -201,8 +210,10 @@ const config = [
       ...sharedRules,
       "no-restricted-syntax": [
         "warn",
-        // Include all shared and TypeScript-specific rules
-        ...sharedRestrictedSyntax,
+        // Include shared rules but remove the multiple exports restriction for TSX
+        ...sharedRestrictedSyntax.filter(rule =>
+          rule.selector !== "ExportNamedDeclaration[specifiers.length>1]:not([source])"
+        ),
         ...tsOnlyRestrictedSyntax,
         // Add className warning rule
         {
@@ -213,9 +224,9 @@ const config = [
     },
   },
 
-  // JavaScript and JSX files
+  // JavaScript files (not JSX)
   {
-    files: ["**/*.js", "**/*.jsx"],
+    files: ["**/*.js"],
     ignores: [
       "**/node_modules/**",
       "**/dist/**",
@@ -240,9 +251,8 @@ const config = [
       },
     },
     plugins: {
-      react: reactPlugin,
       import: importPlugin,
-      ...(preactPlugin && { preact: preactPlugin }),
+      react: reactPlugin,
     },
     settings: {
       react: {
@@ -258,12 +268,51 @@ const config = [
     },
   },
 
-  // UI ClassName Warning Rule for JavaScript/JSX
+  // JSX files with TypeScript support
   {
     files: ["**/*.jsx"],
+    ignores: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
+      "pnpm-lock.yaml",
+      "packages/auth-service-sdk/**",
+    ],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+      },
+    },
+    plugins: {
+      "@typescript-eslint": tsPlugin,
+      react: reactPlugin,
+      import: importPlugin,
+      ...(preactPlugin && { preact: preactPlugin }),
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
     rules: {
+      ...sharedRules,
+      "no-undef": "off", // TypeScript handles this
       "no-restricted-syntax": [
         "warn",
+        // Include shared rules but remove the multiple exports restriction for JSX
+        ...sharedRestrictedSyntax.filter(rule =>
+          rule.selector !== "ExportNamedDeclaration[specifiers.length>1]:not([source])"
+        ),
+        // Add className warning rule for JSX
         {
           selector: 'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
           message: "UI elements should have a className attribute for styling.",
@@ -271,6 +320,7 @@ const config = [
       ],
     },
   },
+
 
   // Disable function size limits for test and spec files
   {
@@ -283,9 +333,33 @@ const config = [
     ],
     ignores: [
       "**/long-function-test.tsx", // Exception: this file tests the max-lines rule itself
+      "**/test/export/**", // Export tests should follow strict export rules
     ],
     rules: {
       "max-lines-per-function": "off",
+      // Allow multiple exports in test files for testing import/export patterns
+      "no-restricted-syntax": [
+        "warn",
+        ...sharedRestrictedSyntax.filter(rule =>
+          rule.selector !== "ExportNamedDeclaration[specifiers.length>1]"
+        ),
+        ...tsOnlyRestrictedSyntax,
+      ],
+    },
+  },
+
+  // Allow default exports in configuration files (must be last to override)
+  {
+    files: [
+      "*.config.js",
+      "*.config.ts",
+      "index.js",
+      "index.ts",
+      "eslint.config.js",
+      "eslint.config.ts",
+    ],
+    rules: {
+      "import/no-default-export": "off",
     },
   },
 ];

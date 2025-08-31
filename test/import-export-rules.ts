@@ -14,16 +14,16 @@ import type { ReactNode } from 'react';
 import fs from 'fs';
 import path from 'path';
 
-// Re-exports
-export { useState, useEffect } from 'react';
-export type { ReactNode } from 'react';
-
 // Named exports (should be allowed)
 export const utilityFunction = () => 'test';
 export const anotherFunction = () => 'test2';
 
-// Default export (should be allowed)
-export default function MainFunction() {
+// Re-exports are now allowed (single named re-exports)
+export { useState } from 'react';
+export type { ReactNode } from 'react';
+
+// Main function as named export (no default exports allowed)
+export function MainFunction() {
   return 'main';
 }
 
@@ -33,7 +33,7 @@ import * as utils from './typescript-rules';
 // Dynamic import in async function
 async function loadModule() {
   const module = await import('./valid');
-  return module.default;
+  return module.ValidComponent;
 }
 
 // Interface export

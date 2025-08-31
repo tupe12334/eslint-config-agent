@@ -24,3 +24,12 @@ export class MyClass {
 // These should also be flagged
 export { firstFunction as first };
 export { secondFunction as second };
+
+// Re-exports are now allowed (single named re-exports only)
+export { useState } from 'react';
+export type { ReactNode } from 'react';
+
+// Default export that should be flagged
+export default function DefaultFunction() {
+  return 'default';
+}

@@ -21,7 +21,7 @@ const testCategories = {
     description: 'Files that should trigger specific errors',
     files: ['test/invalid.tsx', 'test/jsx-extension-test.js', 'test/type-assertions-invalid.ts', 'test/invalid-interface-unions.tsx'],
     maxErrors: 20,
-    maxWarnings: 30,
+    maxWarnings: 40,
     expectedRules: ['no-restricted-syntax', 'react/jsx-filename-extension'],
   },
   'warnings': {
@@ -56,27 +56,71 @@ const testCategories = {
     maxErrors: 10,
     maxWarnings: 35,
   },
+  'export-valid': {
+    description: 'Valid export patterns',
+    files: [
+      'test/export/valid/single-named-export.ts',
+      'test/export/valid/single-function-export.ts',
+      'test/export/valid/single-class-export.ts',
+      'test/export/valid/single-interface-export.ts',
+      'test/export/valid/single-type-export.ts',
+      'test/export/valid/single-re-export.ts',
+      'test/export/valid/single-type-re-export.ts',
+      'test/export/valid/single-as-const-export.ts',
+      'test/export/valid/multiple-re-exports.ts',
+      'test/export/valid/jsx-component-with-props.jsx',
+      'test/export/valid/tsx-component-with-props.tsx',
+      'test/export/valid/tsx-component-with-type.tsx',
+      'test/export/valid/tsx-class-component-with-props.tsx',
+      'test/export/valid/tsx-multiple-individual-exports.tsx',
+      'test/export/valid/tsx-export-statement.tsx',
+      'test/export/valid/jsx-export-statement.jsx'
+    ],
+    maxErrors: 0,
+    maxWarnings: 5,
+  },
+  'export-invalid': {
+    description: 'Invalid export patterns',
+    files: [
+      'test/export/invalid/default-export.ts',
+      'test/export/invalid/default-class-export.ts',
+      'test/export/invalid/multiple-named-exports.ts',
+      'test/export/invalid/export-star.ts',
+      'test/export/invalid/export-star-as.ts',
+      'test/export/invalid/mixed-exports.ts',
+      'test/export/invalid/default-with-named.ts'
+    ],
+    maxErrors: 10,
+    maxWarnings: 5,
+    expectedRules: ['import/no-default-export', 'no-restricted-syntax'],
+  },
 };
 
 async function findTestFiles() {
   const files = [];
 
-  // Check test/ directory
-  const testDir = join(projectRoot, 'test');
-  try {
-    const entries = await readdir(testDir);
+  // Recursively check test/ directory
+  async function scanDirectory(dirPath, relativePath) {
+    try {
+      const entries = await readdir(dirPath);
 
-    for (const entry of entries) {
-      const fullPath = join(testDir, entry);
-      const stats = await stat(fullPath);
+      for (const entry of entries) {
+        const fullPath = join(dirPath, entry);
+        const stats = await stat(fullPath);
+        const relativeFilePath = join(relativePath, entry);
 
-      if (stats.isFile() && /\.(ts|tsx|js|jsx)$/.test(entry)) {
-        files.push(`test/${entry}`);
+        if (stats.isFile() && /\.(ts|tsx|js|jsx)$/.test(entry)) {
+          files.push(relativeFilePath);
+        } else if (stats.isDirectory()) {
+          await scanDirectory(fullPath, relativeFilePath);
+        }
       }
+    } catch (error) {
+      console.warn(`⚠️  Could not read directory ${relativePath}:`, error.message);
     }
-  } catch (error) {
-    console.warn('⚠️  Could not read test directory:', error.message);
   }
+
+  await scanDirectory(join(projectRoot, 'test'), 'test');
 
   // Check for specific test files in root directory
   const rootTestFiles = [];
