@@ -100,12 +100,20 @@ const sharedRestrictedSyntax = [
 // Required export rules (always errors)
 const requiredExportRules = [
   {
-    selector: "ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration):not(ExportDefaultDeclaration > ClassDeclaration)",
-    message: "Classes must be exported. Add 'export' before the class declaration.",
+    selector: "ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration)",
+    message: "Classes must be exported with named export. Use 'export class' instead of 'export default class'.",
   },
   {
-    selector: "TSEnumDeclaration:not(ExportNamedDeclaration > TSEnumDeclaration):not(ExportDefaultDeclaration > TSEnumDeclaration)",
-    message: "Enums must be exported. Add 'export' before the enum declaration.",
+    selector: "TSEnumDeclaration:not(ExportNamedDeclaration > TSEnumDeclaration)",
+    message: "Enums must be exported with named export. Use 'export enum' instead of 'export default enum'.",
+  },
+  {
+    selector: "ExportDefaultDeclaration > ClassDeclaration",
+    message: "Default export of classes is not allowed. Use 'export class' instead of 'export default class'.",
+  },
+  {
+    selector: "ExportDefaultDeclaration > TSEnumDeclaration",
+    message: "Default export of enums is not allowed. Use 'export enum' instead of 'export default enum'.",
   },
 ];
 
