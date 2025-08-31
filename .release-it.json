@@ -12,7 +12,6 @@
     "publish": true,
     "publishPath": ".",
     "access": "public",
-    "token": "${NPM_TOKEN}",
     "otp": false,
     "skipChecks": true
   },
@@ -22,7 +21,7 @@
   },
   "hooks": {
     "before:init": ["pnpm validate", "pnpm test:ci"],
-    "before:npm:publish": "echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc && npm config set access public",
+    "before:npm:publish": "source .env && echo '//registry.npmjs.org/:_authToken='$NPM_TOKEN > .npmrc",
     "after:npm:publish": "rm -f .npmrc",
     "after:bump": "echo 'Version bumped to ${version}'"
   },
