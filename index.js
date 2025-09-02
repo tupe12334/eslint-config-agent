@@ -108,7 +108,7 @@ const sharedRestrictedSyntax = [
     message: "Re-exporting default as named export is not allowed. Use explicit export declaration instead.",
   },
   {
-    selector: "Program:has(ImportDeclaration) ExportNamedDeclaration:has(VariableDeclaration > VariableDeclarator[init.type=Identifier])",
+    selector: "Program:has(ImportDeclaration) ExportNamedDeclaration:has(VariableDeclaration > VariableDeclarator[init.type=Identifier]):not(:has(ClassDeclaration))",
     message: "Exporting imported variables is not allowed. Use direct re-export with 'from' clause or define new values.",
   },
   {
