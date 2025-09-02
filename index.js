@@ -89,11 +89,11 @@ const sharedRestrictedSyntax = [
   },
   {
     selector: "ExportNamedDeclaration[specifiers.length>1]:not([source])",
-    message: "Multiple exports in a single statement are not allowed. Use only one export per file.",
+    message: "Multiple exports in a single statement suggest this file contains too much logic. Consider splitting logic units into separate files for better maintainability.",
   },
   {
     selector: "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))",
-    message: "Multiple export statements are not allowed. Use only one export statement per file.",
+    message: "Multiple export statements suggest this file contains too much logic. Consider splitting logic units into separate files with single responsibilities.",
   },
   {
     selector: "ExportNamedDeclaration[exportKind=type]:not([source]):has(ExportSpecifier)",
