@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.15](https://github.com/tupe12334/eslint-config/compare/v1.0.14...v1.0.15) (2025-09-02)
+
+### Features
+
+* add validation for re-exporting imported variables and include corresponding test cases ([0bbeea4](https://github.com/tupe12334/eslint-config/commit/0bbeea48b77afe53eeed3e32b177c1fc170a2371))
+
+### Bug Fixes
+
+* update import paths in export test files to use local modules ([1f34161](https://github.com/tupe12334/eslint-config/commit/1f341614b313419b071f860ab762ff96596c32a6))
+
 ## [1.0.14](https://github.com/tupe12334/eslint-config/compare/v1.0.13...v1.0.14) (2025-08-31)
 
 ### Features
