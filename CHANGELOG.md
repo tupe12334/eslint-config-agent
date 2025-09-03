@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.17](https://github.com/tupe12334/eslint-config/compare/v1.0.16...v1.0.17) (2025-09-03)
+
+### Features
+
+* add rules for switch case syntax restrictions and corresponding test cases ([7d9c3a4](https://github.com/tupe12334/eslint-config/commit/7d9c3a41d759ea9e9bd60b7fd8247b70d45687d2))
+* add switch case rules and critical error messages for optional chaining and nullish coalescing ([5c7f6c6](https://github.com/tupe12334/eslint-config/commit/5c7f6c6f33af9899533f33b32c162327322fc6f3))
+
 ## [1.0.16](https://github.com/tupe12334/eslint-config/compare/v1.0.15...v1.0.16) (2025-09-02)
 
 ## [1.0.15](https://github.com/tupe12334/eslint-config/compare/v1.0.14...v1.0.15) (2025-09-02)
