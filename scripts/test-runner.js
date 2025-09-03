@@ -53,7 +53,7 @@ const testCategories = {
   'performance': {
     description: 'Performance and large file testing',
     files: ['test/performance-test.tsx'],
-    maxErrors: 10,
+    maxErrors: 20,
     maxWarnings: 35,
   },
   'export-valid': {
@@ -380,7 +380,7 @@ function autoCategorizeFiles(allTestFiles) {
           (file.includes('type') || file.includes('Type') || file.includes('interface') || file.includes('Interface')) &&
           !file.includes('/export/') && !file.includes('component')
         ),
-        maxErrors: 10,
+        maxErrors: 25,
         maxWarnings: 20,
         expectedRules: ['no-restricted-syntax', '@typescript-eslint/no-explicit-any'],
       },

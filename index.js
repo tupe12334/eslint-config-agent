@@ -112,6 +112,18 @@ const sharedRestrictedSyntax = [
     message: "Exporting imported variables is not allowed. Use direct re-export with 'from' clause or define new values.",
   },
   {
+    selector: "SwitchStatement > SwitchCase > ReturnStatement[argument=null]",
+    message: "Switch case functions must provide an explicit return value. Default return values are not allowed.",
+  },
+  {
+    selector: "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]",
+    message: "Switch case functions must provide an explicit return value. Default return values are not allowed.",
+  },
+  {
+    selector: "SwitchStatement > SwitchCase[test=null]",
+    message: "Default cases are not allowed in switch statements. Handle all possible cases explicitly.",
+  },
+  {
     selector: "ExportNamedDeclaration[source.value=/^[a-z]/]:not([source.value=/^@/])",
     message: "Exporting from external libraries is not allowed. Only re-export from relative paths or scoped packages.",
   },
@@ -169,6 +181,34 @@ const tsOnlyRestrictedSyntax = [
   {
     selector: 'TSAsExpression:not(:has(TSTypeReference[typeName.name="const"]))',
     message: 'Type assertions with "as" are not allowed except for "as const".',
+  },
+  {
+    selector: "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])",
+    message: "Switch case arrow functions must have explicit return type annotations.",
+  },
+  {
+    selector: "SwitchStatement > SwitchCase FunctionExpression:not([returnType])",
+    message: "Switch case function expressions must have explicit return type annotations.",
+  },
+  {
+    selector: "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])",
+    message: "Switch case arrow functions must have explicit return type annotations.",
+  },
+  {
+    selector: "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])",
+    message: "Switch case function expressions must have explicit return type annotations.",
+  },
+  {
+    selector: "FunctionDeclaration:has(SwitchStatement):not([returnType])",
+    message: "Functions containing switch statements must have explicit return type annotations.",
+  },
+  {
+    selector: "ArrowFunctionExpression:has(SwitchStatement):not([returnType])",
+    message: "Arrow functions containing switch statements must have explicit return type annotations.",
+  },
+  {
+    selector: "FunctionExpression:has(SwitchStatement):not([returnType])",
+    message: "Function expressions containing switch statements must have explicit return type annotations.",
   },
 ];
 
@@ -247,20 +287,82 @@ const config = [
     },
   },
 
-  // TypeScript/TSX Rules - All restricted-syntax rules as warnings to accommodate className check
+  // TypeScript/TSX Rules - Switch case rules as errors, other rules as warnings
   {
     files: ["**/*.tsx"],
     rules: {
       // Include all shared rules (like max-lines-per-function)
       ...sharedRules,
       "no-restricted-syntax": [
+        "error",
+        // Switch case rules as errors
+        {
+          selector: "SwitchStatement > SwitchCase > ReturnStatement[argument=null]",
+          message: "Switch case functions must provide an explicit return value. Default return values are not allowed.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]",
+          message: "Switch case functions must provide an explicit return value. Default return values are not allowed.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase[test=null]",
+          message: "Default cases are not allowed in switch statements. Handle all possible cases explicitly.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])",
+          message: "Switch case arrow functions must have explicit return type annotations.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase FunctionExpression:not([returnType])",
+          message: "Switch case function expressions must have explicit return type annotations.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])",
+          message: "Switch case arrow functions must have explicit return type annotations.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])",
+          message: "Switch case function expressions must have explicit return type annotations.",
+        },
+        {
+          selector: "FunctionDeclaration:has(SwitchStatement):not([returnType])",
+          message: "Functions containing switch statements must have explicit return type annotations.",
+        },
+        {
+          selector: "ArrowFunctionExpression:has(SwitchStatement):not([returnType])",
+          message: "Arrow functions containing switch statements must have explicit return type annotations.",
+        },
+        {
+          selector: "FunctionExpression:has(SwitchStatement):not([returnType])",
+          message: "Function expressions containing switch statements must have explicit return type annotations.",
+        },
+      ],
+    },
+  },
+
+  // TypeScript/TSX Rules - Other rules as warnings to accommodate className check  
+  {
+    files: ["**/*.tsx"],
+    rules: {
+      "no-restricted-syntax": [
         "warn",
-        // Include shared rules but remove the multiple exports restriction for TSX
+        // Include shared rules but remove the multiple exports restriction and switch case rules for TSX
         ...sharedRestrictedSyntax.filter(rule =>
           rule.selector !== "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
-          rule.selector !== "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))"
+          rule.selector !== "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
+          rule.selector !== "SwitchStatement > SwitchCase > ReturnStatement[argument=null]" &&
+          rule.selector !== "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]" &&
+          rule.selector !== "SwitchStatement > SwitchCase[test=null]"
         ),
-        ...tsOnlyRestrictedSyntax,
+        ...tsOnlyRestrictedSyntax.filter(rule =>
+          rule.selector !== "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])" &&
+          rule.selector !== "SwitchStatement > SwitchCase FunctionExpression:not([returnType])" &&
+          rule.selector !== "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])" &&
+          rule.selector !== "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])" &&
+          rule.selector !== "FunctionDeclaration:has(SwitchStatement):not([returnType])" &&
+          rule.selector !== "ArrowFunctionExpression:has(SwitchStatement):not([returnType])" &&
+          rule.selector !== "FunctionExpression:has(SwitchStatement):not([returnType])"
+        ),
         // Required export rules - these will be warnings in TSX since we can't mix severities
         ...requiredExportRules,
         // Add className warning rule
@@ -361,6 +463,47 @@ const config = [
       "no-undef": "off", // TypeScript handles this
       "no-restricted-syntax": [
         "error",
+        // Switch case rules as errors
+        {
+          selector: "SwitchStatement > SwitchCase > ReturnStatement[argument=null]",
+          message: "Switch case functions must provide an explicit return value. Default return values are not allowed.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]",
+          message: "Switch case functions must provide an explicit return value. Default return values are not allowed.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase[test=null]",
+          message: "Default cases are not allowed in switch statements. Handle all possible cases explicitly.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])",
+          message: "Switch case arrow functions must have explicit return type annotations.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase FunctionExpression:not([returnType])",
+          message: "Switch case function expressions must have explicit return type annotations.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])",
+          message: "Switch case arrow functions must have explicit return type annotations.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])",
+          message: "Switch case function expressions must have explicit return type annotations.",
+        },
+        {
+          selector: "FunctionDeclaration:has(SwitchStatement):not([returnType])",
+          message: "Functions containing switch statements must have explicit return type annotations.",
+        },
+        {
+          selector: "ArrowFunctionExpression:has(SwitchStatement):not([returnType])",
+          message: "Arrow functions containing switch statements must have explicit return type annotations.",
+        },
+        {
+          selector: "FunctionExpression:has(SwitchStatement):not([returnType])",
+          message: "Function expressions containing switch statements must have explicit return type annotations.",
+        },
         // Required export rules as errors (class rule only for JSX)
         {
           selector: "ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration):not(ExportDefaultDeclaration > ClassDeclaration)",
@@ -409,10 +552,13 @@ const config = [
       "no-undef": "off", // TypeScript handles this
       "no-restricted-syntax": [
         "warn",
-        // Include shared rules but remove the multiple exports restriction for JSX
+        // Include shared rules but remove the multiple exports restriction and switch case rules for JSX
         ...sharedRestrictedSyntax.filter(rule =>
           rule.selector !== "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
-          rule.selector !== "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))"
+          rule.selector !== "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
+          rule.selector !== "SwitchStatement > SwitchCase > ReturnStatement[argument=null]" &&
+          rule.selector !== "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]" &&
+          rule.selector !== "SwitchStatement > SwitchCase[test=null]"
         ),
         // Add className warning rule for JSX
         {
@@ -491,6 +637,56 @@ const config = [
           rule.selector !== "ExportNamedDeclaration[exportKind=type]:not([source]):has(ExportSpecifier)"
         ),
         ...tsOnlyRestrictedSyntax,
+      ],
+    },
+  },
+
+  // Switch case rules as errors for all TypeScript/JSX files (must come last to override)
+  {
+    files: ["**/*.{ts,tsx,js,jsx}"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "SwitchStatement > SwitchCase > ReturnStatement[argument=null]",
+          message: "Switch case functions must provide an explicit return value. Default return values are not allowed.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]",
+          message: "Switch case functions must provide an explicit return value. Default return values are not allowed.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase[test=null]",
+          message: "Default cases are not allowed in switch statements. Handle all possible cases explicitly.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])",
+          message: "Switch case arrow functions must have explicit return type annotations.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase FunctionExpression:not([returnType])",
+          message: "Switch case function expressions must have explicit return type annotations.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])",
+          message: "Switch case arrow functions must have explicit return type annotations.",
+        },
+        {
+          selector: "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])",
+          message: "Switch case function expressions must have explicit return type annotations.",
+        },
+        {
+          selector: "FunctionDeclaration:has(SwitchStatement):not([returnType])",
+          message: "Functions containing switch statements must have explicit return type annotations.",
+        },
+        {
+          selector: "ArrowFunctionExpression:has(SwitchStatement):not([returnType])",
+          message: "Arrow functions containing switch statements must have explicit return type annotations.",
+        },
+        {
+          selector: "FunctionExpression:has(SwitchStatement):not([returnType])",
+          message: "Function expressions containing switch statements must have explicit return type annotations.",
+        },
       ],
     },
   },
