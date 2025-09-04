@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.19](https://github.com/tupe12334/eslint-config/compare/v1.0.18...v1.0.19) (2025-09-04)
+
+### Features
+
+* add no-process-env rule with tests and enhance test runner for standalone tests ([7999e1a](https://github.com/tupe12334/eslint-config/commit/7999e1a2bac745c5da0cb29e5b0d08fe4b5ec321))
+* add no-trailing-spaces rule with tests and update test runner configurations ([c474d49](https://github.com/tupe12334/eslint-config/commit/c474d491461593e05d31a7c33da49e6c6116f207))
+
 ## [1.0.18](https://github.com/tupe12334/eslint-config/compare/v1.0.17...v1.0.18) (2025-09-04)
 
 ### Features
