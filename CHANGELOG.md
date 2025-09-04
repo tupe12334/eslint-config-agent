@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.18](https://github.com/tupe12334/eslint-config/compare/v1.0.17...v1.0.18) (2025-09-04)
+
+### Features
+
+* add editor command for enhanced project interaction ([5513889](https://github.com/tupe12334/eslint-config/commit/55138896794e64b5a47667508f7339028fca578f))
+* add rules for indexed access type assertions and corresponding test cases ([5bcf50c](https://github.com/tupe12334/eslint-config/commit/5bcf50c32c4ea4fe777eed49f09bc1270a60a6d7))
+
 ## [1.0.17](https://github.com/tupe12334/eslint-config/compare/v1.0.16...v1.0.17) (2025-09-03)
 
 ### Features
