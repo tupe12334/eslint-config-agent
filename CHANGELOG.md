@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.22](https://github.com/tupe12334/eslint-config/compare/v1.0.21...v1.0.22) (2025-09-04)
+
+### Features
+
+* add max-lines and max-lines-per-function rules with configurations and tests ([218f29c](https://github.com/tupe12334/eslint-config/commit/218f29ca497ca1b49e027f3e33f87cf836e7ff02))
+
+### Bug Fixes
+
+* resolve linting issues for release ([3c812cd](https://github.com/tupe12334/eslint-config/commit/3c812cd223f169360cb0d1520e401a17a6a9b960))
+
 ## [1.0.21](https://github.com/tupe12334/eslint-config/compare/v1.0.19...v1.0.21) (2025-09-04)
 
 ### Bug Fixes
