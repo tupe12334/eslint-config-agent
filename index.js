@@ -7,6 +7,8 @@ import reactPlugin from "eslint-plugin-react";
 import importPlugin from "eslint-plugin-import";
 import globals from "globals";
 import noTrailingSpacesConfig from "./rules/no-trailing-spaces/index.js";
+import { maxFunctionLinesWarning, maxFunctionLinesError } from "./rules/max-function-lines/index.js";
+import { maxFileLinesWarning, maxFileLinesError } from "./rules/max-file-lines/index.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -41,10 +43,8 @@ const sharedRules = {
   "import/first": "off",
   "import/prefer-default-export": "off",
   "react/react-in-jsx-scope": "off",
-  "max-lines-per-function": [
-    "warn",
-    { max: 100, skipBlankLines: true, skipComments: true },
-  ],
+  "max-lines-per-function": maxFunctionLinesWarning,
+  "max-lines": maxFileLinesWarning,
   "react/jsx-filename-extension": ["error", { extensions: [".tsx", ".jsx"] }],
   semi: "off",
   "react/function-component-definition": "off",
@@ -73,8 +73,10 @@ const sharedRestrictedSyntax = [
     message: "Optional chaining is not allowed.",
   },
   {
-    selector: "MemberExpression[object.type='MemberExpression'][object.object.name='process'][object.property.name='env']",
-    message: "Direct access to process.env properties is not allowed. Use a configuration object or environment validation instead.",
+    selector:
+      "MemberExpression[object.type='MemberExpression'][object.object.name='process'][object.property.name='env']",
+    message:
+      "Direct access to process.env properties is not allowed. Use a configuration object or environment validation instead.",
   },
   {
     selector: "CallExpression[optional=true]",
@@ -260,7 +262,6 @@ const config = [
     ignores: ["packages/auth-service-sdk/**"],
   },
   js.configs.recommended,
-
 
   // TypeScript and TSX files
   {
@@ -500,10 +501,7 @@ const config = [
     },
     rules: {
       ...sharedRules,
-      "no-restricted-syntax": [
-        "error",
-        ...sharedRestrictedSyntax,
-      ],
+      "no-restricted-syntax": ["error", ...sharedRestrictedSyntax],
     },
   },
 
@@ -769,8 +767,10 @@ const config = [
         "error",
         // Process.env rule (applies to all file types)
         {
-          selector: "MemberExpression[object.type='MemberExpression'][object.object.name='process'][object.property.name='env']",
-          message: "Direct access to process.env properties is not allowed. Use a configuration object or environment validation instead.",
+          selector:
+            "MemberExpression[object.type='MemberExpression'][object.object.name='process'][object.property.name='env']",
+          message:
+            "Direct access to process.env properties is not allowed. Use a configuration object or environment validation instead.",
         },
         // Switch case rules as errors
         {
@@ -850,6 +850,17 @@ const config = [
             'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
         },
       ],
+    },
+  },
+
+  // Function and file length rules - strict error thresholds
+  {
+    files: ["**/*.{ts,tsx,js,jsx}"],
+    rules: {
+      // Function length: error at 70+ lines
+      "max-lines-per-function": maxFunctionLinesError,
+      // File length: error at 100+ lines
+      "max-lines": maxFileLinesError,
     },
   },
 

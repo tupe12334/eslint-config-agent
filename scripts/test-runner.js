@@ -212,9 +212,9 @@ const testCategories = {
       "test/lines/file-lines/max-lines-test-files.test.tsx",
       "test/lines/file-lines/max-lines-spec-files.spec.js",
     ],
-    maxErrors: 4,
+    maxErrors: 8,
     maxWarnings: 0,
-    expectedRules: ["no-undef"],
+    expectedRules: ["no-undef", "max-lines-per-function", "max-lines"],
   },
   "record-literals": {
     description: "Record literal type tests",
