@@ -10,7 +10,8 @@
   "files": [
     "index.js",
     "README.md",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "rules/"
   ],
   "engines": {
     "node": ">=18.0.0"
