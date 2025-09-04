@@ -1,7 +1,8 @@
-import { 
-  warningRule, 
-  warningOptions, 
-  errorRule, 
+/* global process */
+import {
+  warningRule,
+  warningOptions,
+  errorRule,
   errorOptions,
   maxFunctionLinesWarning,
   maxFunctionLinesError
@@ -16,9 +17,9 @@ console.log("Options:", warningOptions);
 console.log("Complete config:", maxFunctionLinesWarning);
 
 // Validate warning configuration
-if (warningRule === "warn" && 
-    warningOptions.max === 50 && 
-    warningOptions.skipBlankLines === true && 
+if (warningRule === "warn" &&
+    warningOptions.max === 50 &&
+    warningOptions.skipBlankLines === true &&
     warningOptions.skipComments === true) {
   console.log("✅ Warning configuration is correct");
 } else {
@@ -26,16 +27,16 @@ if (warningRule === "warn" &&
   process.exit(1);
 }
 
-// Test error configuration  
+// Test error configuration
 console.log("\n📋 Error Configuration:");
 console.log("Rule level:", errorRule);
 console.log("Options:", errorOptions);
 console.log("Complete config:", maxFunctionLinesError);
 
 // Validate error configuration
-if (errorRule === "error" && 
-    errorOptions.max === 70 && 
-    errorOptions.skipBlankLines === true && 
+if (errorRule === "error" &&
+    errorOptions.max === 70 &&
+    errorOptions.skipBlankLines === true &&
     errorOptions.skipComments === true) {
   console.log("✅ Error configuration is correct");
 } else {
@@ -51,7 +52,7 @@ console.log("Warning format:", JSON.stringify(maxFunctionLinesWarning));
 console.log("Error format:", JSON.stringify(maxFunctionLinesError));
 
 // Validate ESLint format
-if (Array.isArray(maxFunctionLinesWarning) && 
+if (Array.isArray(maxFunctionLinesWarning) &&
     maxFunctionLinesWarning.length === 2 &&
     maxFunctionLinesWarning[0] === "warn" &&
     typeof maxFunctionLinesWarning[1] === "object") {
@@ -61,7 +62,7 @@ if (Array.isArray(maxFunctionLinesWarning) &&
   process.exit(1);
 }
 
-if (Array.isArray(maxFunctionLinesError) && 
+if (Array.isArray(maxFunctionLinesError) &&
     maxFunctionLinesError.length === 2 &&
     maxFunctionLinesError[0] === "error" &&
     typeof maxFunctionLinesError[1] === "object") {

@@ -864,6 +864,19 @@ const config = [
     },
   },
 
+  // Disable file length rules for configuration and spec files
+  {
+    files: [
+      "index.js", // Main configuration file
+      "**/rules/**/*.spec.js", // Spec files in rules directory
+      "**/scripts/**/*.js", // Script files
+    ],
+    rules: {
+      "max-lines": "off",
+      "max-lines-per-function": "off",
+    },
+  },
+
   // Allow default exports in configuration files (must be last to override)
   {
     files: [
