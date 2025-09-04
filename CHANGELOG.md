@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.21](https://github.com/tupe12334/eslint-config/compare/v1.0.19...v1.0.21) (2025-09-04)
+
+### Bug Fixes
+
+* add rules directory to published package files ([85f6a8b](https://github.com/tupe12334/eslint-config/commit/85f6a8b30f84d8239703a0040cb087be4b7cfb24))
+
 ## [1.0.19](https://github.com/tupe12334/eslint-config/compare/v1.0.18...v1.0.19) (2025-09-04)
 
 ### Features
