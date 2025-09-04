@@ -6,6 +6,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactPlugin from "eslint-plugin-react";
 import importPlugin from "eslint-plugin-import";
 import globals from "globals";
+import noTrailingSpacesConfig from "./rules/no-trailing-spaces/index.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -52,7 +53,7 @@ const sharedRules = {
   "react/jsx-no-target-blank": "off",
   "react/require-default-props": "off",
   complexity: "off",
-  "no-trailing-spaces": "warn",
+  "no-trailing-spaces": noTrailingSpacesConfig,
   "operator-linebreak": "off",
   "implicit-arrow-linebreak": "off",
   "react/jsx-wrap-multilines": "off",

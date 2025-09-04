@@ -30,8 +30,8 @@ const testCategories = {
       "test/jsx-extension-test.js",
       "test/type-assertions-invalid.ts",
     ],
-    maxErrors: 20,
-    maxWarnings: 40,
+    maxErrors: 16,
+    maxWarnings: 0,
     expectedRules: ["no-restricted-syntax", "react/jsx-filename-extension"],
   },
   "type-assertions-indexed": {
@@ -466,8 +466,8 @@ function autoCategorizeFiles(allTestFiles) {
             file.includes("export") ||
             file.includes("Export")
         ),
-        maxErrors: 20,
-        maxWarnings: 10,
+        maxErrors: 21,
+        maxWarnings: 0,
         expectedRules: ["no-restricted-syntax"],
       },
       "auto-component-tests": {

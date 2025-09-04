@@ -28,6 +28,7 @@
     "test:performance": "eslint test/performance-test.tsx",
     "test:comprehensive": "node scripts/test-runner.js",
     "test:ci": "eslint . --ignore-pattern 'test/**' --ignore-pattern 'scripts/**' --max-warnings 0",
+    "test:rules": "node rules/no-trailing-spaces/no-trailing-spaces.spec.js",
     "validate": "node scripts/validate-config.js",
     "release": "dotenv -e .env -- release-it",
     "release:patch": "dotenv -e .env -- release-it patch",
