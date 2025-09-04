@@ -4,6 +4,7 @@ import { ESLint } from "eslint";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { readdir, stat } from "fs/promises";
+import { spawn } from "child_process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -382,7 +383,77 @@ async function runTestCategory(eslint, category, config) {
   return { passed: categoryPassed, results: categoryResults };
 }
 
-async function generateTestReport(allResults) {
+async function runStandaloneTest(testFile) {
+  console.log(`🧪 Running standalone test: ${testFile}`);
+
+  return new Promise((resolve) => {
+    const child = spawn("node", [join(projectRoot, testFile)], {
+      stdio: "pipe",
+      cwd: projectRoot,
+    });
+
+    let stdout = "";
+    let stderr = "";
+
+    child.stdout.on("data", (data) => {
+      stdout += data.toString();
+    });
+
+    child.stderr.on("data", (data) => {
+      stderr += data.toString();
+    });
+
+    child.on("close", (code) => {
+      const passed = code === 0;
+
+      if (passed) {
+        console.log(`   ✅ Test passed: ${testFile}`);
+        // Show last line of stdout (usually success message)
+        const lines = stdout.trim().split('\n');
+        if (lines.length > 0) {
+          console.log(`   📝 ${lines[lines.length - 1]}`);
+        }
+      } else {
+        console.log(`   ❌ Test failed: ${testFile} (exit code: ${code})`);
+        if (stderr) {
+          console.log(`   📝 Error: ${stderr.trim()}`);
+        }
+        if (stdout) {
+          console.log(`   📝 Output: ${stdout.trim()}`);
+        }
+      }
+
+      resolve({ passed, file: testFile });
+    });
+
+    child.on("error", (error) => {
+      console.log(`   ❌ Failed to run test: ${testFile}`);
+      console.log(`   📝 Error: ${error.message}`);
+      resolve({ passed: false, file: testFile });
+    });
+  });
+}
+
+async function runStandaloneTests(testFiles) {
+  if (testFiles.length === 0) return { passed: true, results: [] };
+
+  console.log(`\n📁 Running ${testFiles.length} standalone test(s):`);
+  const results = [];
+
+  for (const testFile of testFiles) {
+    const result = await runStandaloneTest(testFile);
+    results.push(result);
+  }
+
+  const allPassed = results.every(r => r.passed);
+  const passedCount = results.filter(r => r.passed).length;
+
+  console.log(`   📊 Results: ${passedCount}/${results.length} tests passed`);
+
+  return { passed: allPassed, results };
+}
+
+async function generateTestReport(allResults, standaloneResult = null) {
   console.log("\n" + "=".repeat(80));
   console.log("📊 TEST REPORT SUMMARY");
   console.log("=".repeat(80));
@@ -392,6 +463,7 @@ async function generateTestReport(allResults) {
   let totalWarnings = 0;
   const allRulesCovered = new Set();
 
+  // Report ESLint category results
   for (const [category, { passed, results }] of Object.entries(allResults)) {
     const status = passed ? "✅" : "❌";
     console.log(
@@ -403,6 +475,17 @@ async function generateTestReport(allResults) {
     totalWarnings += results.totalWarnings;
 
     results.rulesCovered.forEach((rule) => allRulesCovered.add(rule));
+  }
+
+  // Report standalone test results
+  if (standaloneResult && standaloneResult.results.length > 0) {
+    const status = standaloneResult.passed ? "✅" : "❌";
+    const passedCount = standaloneResult.results.filter(r => r.passed).length;
+    console.log(`${status} standalone-tests: ${passedCount}/${standaloneResult.results.length} tests passed`);
+
+    if (!standaloneResult.passed) {
+      overallPassed = false;
+    }
   }
 
   console.log("\n📋 Overall Statistics:");
@@ -543,8 +626,12 @@ async function runComprehensiveTests() {
     console.log(`📁 Discovered ${allTestFiles.length} test files:`);
     allTestFiles.forEach((file) => console.log(`   - ${file}`));
 
-    // Auto-categorize all files (predefined + auto-discovered)
-    const allCategories = autoCategorizeFiles(allTestFiles);
+    // Separate standalone test files from lint test files
+    const standaloneTestFiles = allTestFiles.filter(file => file.endsWith('.test.js'));
+    const lintTestFiles = allTestFiles.filter(file => !file.endsWith('.test.js'));
+
+    // Auto-categorize lint test files only (predefined + auto-discovered)
+    const allCategories = autoCategorizeFiles(lintTestFiles);
 
     console.log(
       `\n📊 Test categories (${Object.keys(allCategories).length} total):`
@@ -559,13 +646,17 @@ async function runComprehensiveTests() {
     // Run tests by category
     const allResults = {};
 
+    // Run ESLint categories
     for (const [category, config] of Object.entries(allCategories)) {
       const result = await runTestCategory(eslint, category, config);
       allResults[category] = result;
     }
 
+    // Run standalone test files
+    const standaloneResult = await runStandaloneTests(standaloneTestFiles);
+
     // Generate final report
-    const overallPassed = await generateTestReport(allResults);
+    const overallPassed = await generateTestReport(allResults, standaloneResult);
 
     if (overallPassed) {
       process.exit(0);

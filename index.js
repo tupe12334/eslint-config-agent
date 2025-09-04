@@ -73,6 +73,10 @@ const sharedRestrictedSyntax = [
     message: "Optional chaining is not allowed.",
   },
   {
+    selector: "MemberExpression[object.type='MemberExpression'][object.object.name='process'][object.property.name='env']",
+    message: "Direct access to process.env properties is not allowed. Use a configuration object or environment validation instead.",
+  },
+  {
     selector: "CallExpression[optional=true]",
     message: "Optional chaining is not allowed.",
   },
@@ -257,15 +261,6 @@ const config = [
   },
   js.configs.recommended,
 
-  // Node.js files
-  {
-    files: ["scripts/**/*.js"],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-    },
-  },
 
   // TypeScript and TSX files
   {
@@ -491,6 +486,23 @@ const config = [
           message:
             "Classes must be exported. Add 'export' before the class declaration.",
         },
+      ],
+    },
+  },
+
+  // Node.js files (must come after general JS config to override)
+  {
+    files: ["scripts/**/*.js"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      ...sharedRules,
+      "no-restricted-syntax": [
+        "error",
+        ...sharedRestrictedSyntax,
       ],
     },
   },
@@ -755,6 +767,11 @@ const config = [
     rules: {
       "no-restricted-syntax": [
         "error",
+        // Process.env rule (applies to all file types)
+        {
+          selector: "MemberExpression[object.type='MemberExpression'][object.object.name='process'][object.property.name='env']",
+          message: "Direct access to process.env properties is not allowed. Use a configuration object or environment validation instead.",
+        },
         // Switch case rules as errors
         {
           selector:
