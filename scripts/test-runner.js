@@ -1,151 +1,226 @@
 #!/usr/bin/env node
 
-import { ESLint } from 'eslint';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import { readdir, stat } from 'fs/promises';
+import { ESLint } from "eslint";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import { readdir, stat } from "fs/promises";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const projectRoot = join(__dirname, '..');
+const projectRoot = join(__dirname, "..");
 
 // Test categories and their expected behaviors
 const testCategories = {
-  'valid': {
-    description: 'Files that should have minimal or no errors',
-    files: ['test/valid.tsx', 'test/preact-test.tsx', 'test/typescript-rules.ts', 'test/type-assertions.ts'],
+  valid: {
+    description: "Files that should have minimal or no errors",
+    files: [
+      "test/valid.tsx",
+      "test/preact-test.tsx",
+      "test/typescript-rules.ts",
+      "test/type-assertions.ts",
+      "test/type-assertions/indexed-access-valid.ts",
+    ],
     maxErrors: 0,
     maxWarnings: 10,
   },
-  'invalid': {
-    description: 'Files that should trigger specific errors',
-    files: ['test/invalid.tsx', 'test/jsx-extension-test.js', 'test/type-assertions-invalid.ts'],
+  invalid: {
+    description: "Files that should trigger specific errors",
+    files: [
+      "test/invalid.tsx",
+      "test/jsx-extension-test.js",
+      "test/type-assertions-invalid.ts",
+    ],
     maxErrors: 20,
     maxWarnings: 40,
-    expectedRules: ['no-restricted-syntax', 'react/jsx-filename-extension'],
+    expectedRules: ["no-restricted-syntax", "react/jsx-filename-extension"],
   },
-  'warnings': {
-    description: 'Files that should trigger warnings',
-    files: ['test/lines/function-lines/long-function-test.tsx'],
+  "type-assertions-indexed": {
+    description: "Indexed access type assertion restrictions",
+    files: ["test/type-assertions/indexed-access-invalid.ts"],
+    maxErrors: 4,
+    maxWarnings: 0,
+    expectedRules: ["no-restricted-syntax"],
+  },
+  warnings: {
+    description: "Files that should trigger warnings",
+    files: ["test/lines/function-lines/long-function-test.tsx"],
     maxErrors: 2,
     maxWarnings: 5,
-    expectedRules: ['max-lines-per-function'],
+    expectedRules: ["max-lines-per-function"],
   },
-  'hooks': {
-    description: 'React hooks rules testing',
-    files: ['test/react-hooks-rules.tsx'],
+  hooks: {
+    description: "React hooks rules testing",
+    files: ["test/react-hooks-rules.tsx"],
     maxErrors: 10,
     maxWarnings: 20,
-    expectedRules: ['react-hooks/exhaustive-deps', 'react-hooks/rules-of-hooks'],
+    expectedRules: [
+      "react-hooks/exhaustive-deps",
+      "react-hooks/rules-of-hooks",
+    ],
   },
-  'imports': {
-    description: 'Import/export patterns testing',
-    files: ['test/import-export-rules.ts'],
+  imports: {
+    description: "Import/export patterns testing",
+    files: ["test/import-export-rules.ts"],
     maxErrors: 2,
     maxWarnings: 12,
   },
-  'edge-cases': {
-    description: 'Edge cases and boundary testing',
-    files: ['test/edge-cases.tsx'],
+  "edge-cases": {
+    description: "Edge cases and boundary testing",
+    files: ["test/edge-cases.tsx"],
     maxErrors: 5,
     maxWarnings: 30,
   },
-  'performance': {
-    description: 'Performance and large file testing',
-    files: ['test/performance-test.tsx'],
+  performance: {
+    description: "Performance and large file testing",
+    files: ["test/performance-test.tsx"],
     maxErrors: 20,
     maxWarnings: 35,
   },
-  'export-valid': {
-    description: 'Valid export patterns',
+  "export-valid": {
+    description: "Valid export patterns",
     files: [
-      'test/export/valid/single-named-export.ts',
-      'test/export/valid/single-function-export.ts',
-      'test/export/valid/single-class-export.ts',
-      'test/export/valid/single-interface-export.ts',
-      'test/export/valid/single-type-export.ts',
-      'test/export/valid/single-re-export.ts',
-      'test/export/valid/single-type-re-export.ts',
-      'test/export/valid/single-as-const-export.ts',
-      'test/export/valid/multiple-re-exports.ts',
-      'test/export/valid/jsx-component-with-props.jsx',
-      'test/export/valid/tsx-component-with-props.tsx',
-      'test/export/valid/tsx-component-with-type.tsx',
-      'test/export/valid/tsx-class-component-with-props.tsx',
-      'test/export/valid/tsx-multiple-individual-exports.tsx',
-      'test/export/valid/tsx-export-statement.tsx',
-      'test/export/valid/jsx-export-statement.jsx',
-      'test/export/valid/export-type-re-export.ts',
-      'test/export/valid/regular-type-export.ts',
-      'test/export/valid/explicit-export-declaration.ts',
-      'test/export/valid/export-from-scoped.ts'
+      "test/export/valid/single-named-export.ts",
+      "test/export/valid/single-function-export.ts",
+      "test/export/valid/single-class-export.ts",
+      "test/export/valid/single-interface-export.ts",
+      "test/export/valid/single-type-export.ts",
+      "test/export/valid/single-re-export.ts",
+      "test/export/valid/single-type-re-export.ts",
+      "test/export/valid/single-as-const-export.ts",
+      "test/export/valid/multiple-re-exports.ts",
+      "test/export/valid/jsx-component-with-props.jsx",
+      "test/export/valid/tsx-component-with-props.tsx",
+      "test/export/valid/tsx-component-with-type.tsx",
+      "test/export/valid/tsx-class-component-with-props.tsx",
+      "test/export/valid/tsx-multiple-individual-exports.tsx",
+      "test/export/valid/tsx-export-statement.tsx",
+      "test/export/valid/jsx-export-statement.jsx",
+      "test/export/valid/export-type-re-export.ts",
+      "test/export/valid/regular-type-export.ts",
+      "test/export/valid/explicit-export-declaration.ts",
+      "test/export/valid/export-from-scoped.ts",
     ],
     maxErrors: 0,
     maxWarnings: 5,
   },
-  'export-invalid': {
-    description: 'Invalid export patterns',
+  "export-invalid": {
+    description: "Invalid export patterns",
     files: [
-      'test/export/invalid/default-export.ts',
-      'test/export/invalid/default-class-export.ts',
-      'test/export/invalid/multiple-named-exports.ts',
-      'test/export/invalid/multiple-export-statements.ts',
-      'test/export/invalid/two-export-statements.ts',
-      'test/export/invalid/export-star.ts',
-      'test/export/invalid/export-star-as.ts',
-      'test/export/invalid/mixed-exports.ts',
-      'test/export/invalid/default-with-named.ts',
-      'test/export/invalid/export-type-local.ts',
-      'test/export/invalid/regular-export-specifiers.ts',
-      'test/export/invalid/default-as-export.ts',
-      'test/export/invalid/export-of-import.ts',
-      'test/export/invalid/export-from-lib.ts'
+      "test/export/invalid/default-export.ts",
+      "test/export/invalid/default-class-export.ts",
+      "test/export/invalid/multiple-named-exports.ts",
+      "test/export/invalid/multiple-export-statements.ts",
+      "test/export/invalid/two-export-statements.ts",
+      "test/export/invalid/export-star.ts",
+      "test/export/invalid/export-star-as.ts",
+      "test/export/invalid/mixed-exports.ts",
+      "test/export/invalid/default-with-named.ts",
+      "test/export/invalid/export-type-local.ts",
+      "test/export/invalid/regular-export-specifiers.ts",
+      "test/export/invalid/default-as-export.ts",
+      "test/export/invalid/export-of-import.ts",
+      "test/export/invalid/export-from-lib.ts",
     ],
     maxErrors: 23,
     maxWarnings: 5,
-    expectedRules: ['import/no-default-export', 'no-restricted-syntax'],
+    expectedRules: ["import/no-default-export", "no-restricted-syntax"],
   },
-  'union-types-valid': {
-    description: 'Valid union types patterns',
+  "union-types-valid": {
+    description: "Valid union types patterns",
     files: [
-      'test/union-types/valid/named-type-declarations.tsx',
-      'test/union-types/valid/primitive-unions.tsx',
-      'test/union-types/valid/function-named-types.tsx',
-      'test/union-types/valid/class-named-types.tsx'
+      "test/union-types/valid/named-type-declarations.tsx",
+      "test/union-types/valid/primitive-unions.tsx",
+      "test/union-types/valid/function-named-types.tsx",
+      "test/union-types/valid/class-named-types.tsx",
     ],
     maxErrors: 0,
     maxWarnings: 6,
   },
-  'union-types-invalid': {
-    description: 'Invalid union types patterns',
+  "union-types-invalid": {
+    description: "Invalid union types patterns",
     files: [
-      'test/union-types/invalid/interface-literal-unions.tsx',
-      'test/union-types/invalid/function-inline-unions.tsx',
-      'test/union-types/invalid/class-literal-unions.tsx'
+      "test/union-types/invalid/interface-literal-unions.tsx",
+      "test/union-types/invalid/function-inline-unions.tsx",
+      "test/union-types/invalid/class-literal-unions.tsx",
     ],
     maxErrors: 2,
     maxWarnings: 18,
-    expectedRules: ['no-restricted-syntax'],
+    expectedRules: ["no-restricted-syntax"],
   },
-  'index-files-valid': {
-    description: 'Valid index file patterns',
+  "index-files-valid": {
+    description: "Valid index file patterns",
     files: [
-      'test/index-files/valid/index.ts',
-      'test/index-files/valid/index-re-exports.ts'
+      "test/index-files/valid/index.ts",
+      "test/index-files/valid/index-re-exports.ts",
     ],
     maxErrors: 0,
     maxWarnings: 2,
   },
-  'index-files-invalid': {
-    description: 'Invalid index file patterns',
+  "index-files-invalid": {
+    description: "Invalid index file patterns",
     files: [
-      'test/index-files/invalid/index.ts',
-      'test/index-files/invalid/index-multiple-statements.ts',
-      'test/index-files/invalid/index-export-specifiers.js'
+      "test/index-files/invalid/index.ts",
+      "test/index-files/invalid/index-multiple-statements.ts",
+      "test/index-files/invalid/index-export-specifiers.js",
     ],
     maxErrors: 4,
     maxWarnings: 2,
-    expectedRules: ['no-restricted-syntax'],
+    expectedRules: ["no-restricted-syntax"],
+  },
+  "switch-case-valid": {
+    description: "Valid switch case patterns",
+    files: [
+      "test/switch-case/valid/explicit-returns.tsx",
+      "test/switch-case/valid/typed-functions.tsx",
+      "test/switch-case/valid/function-return-types.tsx",
+    ],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  "switch-case-invalid": {
+    description: "Invalid switch case patterns",
+    files: [
+      "test/switch-case/invalid/default-cases.tsx",
+      "test/switch-case/invalid/empty-returns.tsx",
+      "test/switch-case/invalid/missing-function-return-types.tsx",
+      "test/switch-case/invalid/untyped-functions.tsx",
+    ],
+    maxErrors: 30,
+    maxWarnings: 0,
+    expectedRules: ["no-restricted-syntax"],
+  },
+  "optional-chaining": {
+    description: "Optional chaining and nullish coalescing tests",
+    files: ["test/test-optional.ts", "test/test-js-optional.js"],
+    maxErrors: 7,
+    maxWarnings: 0,
+    expectedRules: ["no-restricted-syntax"],
+  },
+  "classname-tests": {
+    description: "className attribute tests",
+    files: [
+      "test/classname-warning-test.tsx",
+      "test/classname-warning-test.jsx",
+    ],
+    maxErrors: 0,
+    maxWarnings: 10,
+  },
+  "spec-test-files": {
+    description: "Test and spec file patterns",
+    files: [
+      "test/lines/file-lines/max-lines-test-files.test.tsx",
+      "test/lines/file-lines/max-lines-spec-files.spec.js",
+    ],
+    maxErrors: 4,
+    maxWarnings: 0,
+    expectedRules: ["no-undef"],
+  },
+  "record-literals": {
+    description: "Record literal type tests",
+    files: ["test/test-record-literals.ts"],
+    maxErrors: 2,
+    maxWarnings: 0,
+    expectedRules: ["@typescript-eslint/no-explicit-any"],
   },
 };
 
@@ -169,11 +244,14 @@ async function findTestFiles() {
         }
       }
     } catch (error) {
-      console.warn(`⚠️  Could not read directory ${relativePath}:`, error.message);
+      console.warn(
+        `⚠️  Could not read directory ${relativePath}:`,
+        error.message
+      );
     }
   }
 
-  await scanDirectory(join(projectRoot, 'test'), 'test');
+  await scanDirectory(join(projectRoot, "test"), "test");
 
   // Check for specific test files in root directory
   const rootTestFiles = [];
@@ -225,24 +303,32 @@ async function runTestCategory(eslint, category, config) {
         });
 
         // Collect rules that were triggered
-        result.messages.forEach(msg => {
+        result.messages.forEach((msg) => {
           if (msg.ruleId) {
             categoryResults.rulesCovered.add(msg.ruleId);
           }
         });
 
-        console.log(`   📄 ${file}: ${errorCount} errors, ${warningCount} warnings`);
+        console.log(
+          `   📄 ${file}: ${errorCount} errors, ${warningCount} warnings`
+        );
 
         // Show top errors/warnings for debugging
         if (result.messages.length > 0) {
           const topMessages = result.messages.slice(0, 3);
-          topMessages.forEach(msg => {
-            const level = msg.severity === 2 ? '❌' : '⚠️ ';
-            console.log(`      ${level} Line ${msg.line}: ${msg.message} (${msg.ruleId || 'unknown'})`);
+          topMessages.forEach((msg) => {
+            const level = msg.severity === 2 ? "❌" : "⚠️ ";
+            console.log(
+              `      ${level} Line ${msg.line}: ${msg.message} (${
+                msg.ruleId || "unknown"
+              })`
+            );
           });
 
           if (result.messages.length > 3) {
-            console.log(`      ... and ${result.messages.length - 3} more issues`);
+            console.log(
+              `      ... and ${result.messages.length - 3} more issues`
+            );
           }
         }
       }
@@ -254,40 +340,52 @@ async function runTestCategory(eslint, category, config) {
 
   // Validate category expectations
   if (categoryResults.totalErrors > config.maxErrors) {
-    console.log(`   ❌ Too many errors: ${categoryResults.totalErrors} > ${config.maxErrors}`);
+    console.log(
+      `   ❌ Too many errors: ${categoryResults.totalErrors} > ${config.maxErrors}`
+    );
     categoryPassed = false;
   }
 
   if (categoryResults.totalWarnings > config.maxWarnings) {
-    console.log(`   ❌ Too many warnings: ${categoryResults.totalWarnings} > ${config.maxWarnings}`);
+    console.log(
+      `   ❌ Too many warnings: ${categoryResults.totalWarnings} > ${config.maxWarnings}`
+    );
     categoryPassed = false;
   }
 
   // Check for expected rules
   if (config.expectedRules) {
-    const missingRules = config.expectedRules.filter(rule =>
-      !categoryResults.rulesCovered.has(rule)
+    const missingRules = config.expectedRules.filter(
+      (rule) => !categoryResults.rulesCovered.has(rule)
     );
 
     if (missingRules.length > 0) {
-      console.log(`   ⚠️  Expected rules not found: ${missingRules.join(', ')}`);
+      console.log(
+        `   ⚠️  Expected rules not found: ${missingRules.join(", ")}`
+      );
     }
 
     if (categoryResults.rulesCovered.size > 0) {
-      console.log(`   ✅ Rules covered: ${Array.from(categoryResults.rulesCovered).join(', ')}`);
+      console.log(
+        `   ✅ Rules covered: ${Array.from(categoryResults.rulesCovered).join(
+          ", "
+        )}`
+      );
     }
   }
 
-  const status = categoryPassed ? '✅' : '❌';
-  console.log(`   ${status} Category result: ${categoryResults.totalErrors} errors, ${categoryResults.totalWarnings} warnings`);
+  const status = categoryPassed ? "✅" : "❌";
+  console.log(
+    `   ${status} Category result: ${categoryResults.totalErrors} errors, ${categoryResults.totalWarnings} warnings`
+  );
 
   return { passed: categoryPassed, results: categoryResults };
 }
 
 async function generateTestReport(allResults) {
-  console.log('\n' + '='.repeat(80));
-  console.log('📊 TEST REPORT SUMMARY');
-  console.log('='.repeat(80));
+  console.log("\n" + "=".repeat(80));
+  console.log("📊 TEST REPORT SUMMARY");
+  console.log("=".repeat(80));
 
   let overallPassed = true;
   let totalErrors = 0;
@@ -295,36 +393,38 @@ async function generateTestReport(allResults) {
   const allRulesCovered = new Set();
 
   for (const [category, { passed, results }] of Object.entries(allResults)) {
-    const status = passed ? '✅' : '❌';
-    console.log(`${status} ${category}: ${results.totalErrors} errors, ${results.totalWarnings} warnings`);
+    const status = passed ? "✅" : "❌";
+    console.log(
+      `${status} ${category}: ${results.totalErrors} errors, ${results.totalWarnings} warnings`
+    );
 
     if (!passed) overallPassed = false;
     totalErrors += results.totalErrors;
     totalWarnings += results.totalWarnings;
 
-    results.rulesCovered.forEach(rule => allRulesCovered.add(rule));
+    results.rulesCovered.forEach((rule) => allRulesCovered.add(rule));
   }
 
-  console.log('\n📋 Overall Statistics:');
+  console.log("\n📋 Overall Statistics:");
   console.log(`   Total Errors: ${totalErrors}`);
   console.log(`   Total Warnings: ${totalWarnings}`);
   console.log(`   Rules Covered: ${allRulesCovered.size}`);
   console.log(`   Categories Tested: ${Object.keys(allResults).length}`);
 
-  console.log('\n🔧 Rules Coverage:');
+  console.log("\n🔧 Rules Coverage:");
   const sortedRules = Array.from(allRulesCovered).sort();
   for (let i = 0; i < sortedRules.length; i += 3) {
     const chunk = sortedRules.slice(i, i + 3);
-    console.log(`   ${chunk.join(', ')}`);
+    console.log(`   ${chunk.join(", ")}`);
   }
 
-  console.log('\n' + '='.repeat(80));
+  console.log("\n" + "=".repeat(80));
 
   if (overallPassed) {
-    console.log('🎉 ALL TESTS PASSED!');
+    console.log("🎉 ALL TESTS PASSED!");
     return true;
   } else {
-    console.log('💥 SOME TESTS FAILED!');
+    console.log("💥 SOME TESTS FAILED!");
     return false;
   }
 }
@@ -335,7 +435,9 @@ function autoCategorizeFiles(allTestFiles) {
 
   // First, assign files to predefined categories
   for (const [category, config] of Object.entries(testCategories)) {
-    const existingFiles = config.files.filter(file => allTestFiles.includes(file));
+    const existingFiles = config.files.filter((file) =>
+      allTestFiles.includes(file)
+    );
     if (existingFiles.length > 0) {
       autoCategories[category] = { ...config, files: existingFiles };
     }
@@ -344,7 +446,7 @@ function autoCategorizeFiles(allTestFiles) {
   // Find files that aren't in any predefined category
   const categorizedFiles = new Set();
   for (const category of Object.values(autoCategories)) {
-    category.files.forEach(file => categorizedFiles.add(file));
+    category.files.forEach((file) => categorizedFiles.add(file));
   }
 
   for (const file of allTestFiles) {
@@ -356,44 +458,62 @@ function autoCategorizeFiles(allTestFiles) {
   // Auto-categorize uncategorized files based on path patterns
   if (uncategorizedFiles.length > 0) {
     const pathCategories = {
-      'auto-export-tests': {
-        description: 'Auto-discovered export-related tests',
-        files: uncategorizedFiles.filter(file => 
-          file.includes('/export/') || file.includes('export') || file.includes('Export')
+      "auto-export-tests": {
+        description: "Auto-discovered export-related tests",
+        files: uncategorizedFiles.filter(
+          (file) =>
+            file.includes("/export/") ||
+            file.includes("export") ||
+            file.includes("Export")
         ),
         maxErrors: 20,
         maxWarnings: 10,
-        expectedRules: ['no-restricted-syntax'],
+        expectedRules: ["no-restricted-syntax"],
       },
-      'auto-component-tests': {
-        description: 'Auto-discovered component tests',
-        files: uncategorizedFiles.filter(file => 
-          (file.includes('component') || file.includes('Component')) &&
-          !file.includes('/export/')
+      "auto-component-tests": {
+        description: "Auto-discovered component tests",
+        files: uncategorizedFiles.filter(
+          (file) =>
+            (file.includes("component") || file.includes("Component")) &&
+            !file.includes("/export/")
         ),
         maxErrors: 5,
         maxWarnings: 15,
       },
-      'auto-type-tests': {
-        description: 'Auto-discovered type-related tests',
-        files: uncategorizedFiles.filter(file => 
-          (file.includes('type') || file.includes('Type') || file.includes('interface') || file.includes('Interface')) &&
-          !file.includes('/export/') && !file.includes('component')
+      "auto-type-tests": {
+        description: "Auto-discovered type-related tests",
+        files: uncategorizedFiles.filter(
+          (file) =>
+            (file.includes("type") ||
+              file.includes("Type") ||
+              file.includes("interface") ||
+              file.includes("Interface")) &&
+            !file.includes("/export/") &&
+            !file.includes("component")
         ),
         maxErrors: 25,
         maxWarnings: 20,
-        expectedRules: ['no-restricted-syntax', '@typescript-eslint/no-explicit-any'],
+        expectedRules: [
+          "no-restricted-syntax",
+          "@typescript-eslint/no-explicit-any",
+        ],
       },
-      'auto-misc-tests': {
-        description: 'Auto-discovered miscellaneous tests',
-        files: uncategorizedFiles.filter(file => 
-          !file.includes('/export/') && !file.includes('export') && !file.includes('Export') &&
-          !file.includes('component') && !file.includes('Component') &&
-          !file.includes('type') && !file.includes('Type') &&
-          !file.includes('interface') && !file.includes('Interface')
+      "auto-misc-tests": {
+        description: "Auto-discovered miscellaneous tests",
+        files: uncategorizedFiles.filter(
+          (file) =>
+            !file.includes("/export/") &&
+            !file.includes("export") &&
+            !file.includes("Export") &&
+            !file.includes("component") &&
+            !file.includes("Component") &&
+            !file.includes("type") &&
+            !file.includes("Type") &&
+            !file.includes("interface") &&
+            !file.includes("Interface")
         ),
-        maxErrors: 15,
-        maxWarnings: 25,
+        maxErrors: 0,
+        maxWarnings: 0,
       },
     };
 
@@ -409,27 +529,31 @@ function autoCategorizeFiles(allTestFiles) {
 }
 
 async function runComprehensiveTests() {
-  console.log('🚀 Starting Comprehensive ESLint Configuration Tests');
-  console.log('='.repeat(60));
+  console.log("🚀 Starting Comprehensive ESLint Configuration Tests");
+  console.log("=".repeat(60));
 
   try {
     // Initialize ESLint
     const eslint = new ESLint({
-      overrideConfigFile: join(projectRoot, 'eslint.config.js'),
+      overrideConfigFile: join(projectRoot, "eslint.config.js"),
     });
 
     // Discover all test files
     const allTestFiles = await findTestFiles();
     console.log(`📁 Discovered ${allTestFiles.length} test files:`);
-    allTestFiles.forEach(file => console.log(`   - ${file}`));
+    allTestFiles.forEach((file) => console.log(`   - ${file}`));
 
     // Auto-categorize all files (predefined + auto-discovered)
     const allCategories = autoCategorizeFiles(allTestFiles);
-    
-    console.log(`\n📊 Test categories (${Object.keys(allCategories).length} total):`);
+
+    console.log(
+      `\n📊 Test categories (${Object.keys(allCategories).length} total):`
+    );
     for (const [category, config] of Object.entries(allCategories)) {
-      const autoPrefix = category.startsWith('auto-') ? '🔍 ' : '📋 ';
-      console.log(`   ${autoPrefix}${category}: ${config.files.length} files - ${config.description}`);
+      const autoPrefix = category.startsWith("auto-") ? "🔍 " : "📋 ";
+      console.log(
+        `   ${autoPrefix}${category}: ${config.files.length} files - ${config.description}`
+      );
     }
 
     // Run tests by category
@@ -448,16 +572,15 @@ async function runComprehensiveTests() {
     } else {
       process.exit(1);
     }
-
   } catch (error) {
-    console.error('💥 Test runner failed:', error);
+    console.error("💥 Test runner failed:", error);
     process.exit(1);
   }
 }
 
 // Handle CLI arguments
 const args = process.argv.slice(2);
-const showHelp = args.includes('--help') || args.includes('-h');
+const showHelp = args.includes("--help") || args.includes("-h");
 
 if (showHelp) {
   console.log(`

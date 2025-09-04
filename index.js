@@ -204,6 +204,11 @@ const tsOnlyRestrictedSyntax = [
     message: 'Type assertions with "as" are not allowed except for "as const".',
   },
   {
+    selector: "TSAsExpression:has(> TSIndexedAccessType > TSTypeQuery)",
+    message:
+      'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
+  },
+  {
     selector:
       "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])",
     message:
@@ -820,6 +825,11 @@ const config = [
           selector: 'LogicalExpression[operator="??"]',
           message:
             "Nullish coalescing operator (??) is not allowed. Use explicit null/undefined checks instead.",
+        },
+        {
+          selector: 'TSAsExpression[typeAnnotation.type="TSIndexedAccessType"]',
+          message:
+            'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
         },
       ],
     },
