@@ -98,7 +98,7 @@ const sharedRestrictedSyntax = [
     selector:
       "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))",
     message:
-      "Multiple export statements suggest this file contains too much logic. Consider splitting logic units into separate files with single responsibilities.",
+      "Only one export per file is allowed. Consider splitting logic units into separate files for better maintainability.",
   },
   {
     selector:
@@ -425,6 +425,43 @@ const config = [
               "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]" &&
             rule.selector !== "SwitchStatement > SwitchCase[test=null]"
         ),
+        // TSX files: Allow max one type/interface export + one component export
+        {
+          selector:
+            "Program:has(ExportNamedDeclaration:not([source]):not([exportKind=type]):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)) ~ ExportNamedDeclaration:not([source]):not([exportKind=type]):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)))",
+          message:
+            "Only one component export per TSX file is allowed (plus optionally one type/interface export).",
+        },
+        {
+          selector:
+            "Program:has(ExportNamedDeclaration[exportKind=type]:not([source]) ~ ExportNamedDeclaration[exportKind=type]:not([source]))",
+          message:
+            "Only one type export per TSX file is allowed (plus optionally one component export).",
+        },
+        {
+          selector:
+            "Program:has(ExportNamedDeclaration:not([source]):has(TSInterfaceDeclaration) ~ ExportNamedDeclaration:not([source]):has(TSInterfaceDeclaration))",
+          message:
+            "Only one interface export per TSX file is allowed (plus optionally one component export).",
+        },
+        {
+          selector:
+            "Program:has(ExportNamedDeclaration:not([source]):has(TSTypeAliasDeclaration) ~ ExportNamedDeclaration:not([source]):has(TSTypeAliasDeclaration))",
+          message:
+            "Only one type alias export per TSX file is allowed (plus optionally one component export).",
+        },
+        {
+          selector:
+            "Program:has(ExportNamedDeclaration:not([source]):has(TSInterfaceDeclaration) ~ ExportNamedDeclaration[exportKind=type]:not([source]))",
+          message:
+            "Cannot have both interface export and type-only export in the same TSX file.",
+        },
+        {
+          selector:
+            "Program:has(ExportNamedDeclaration:not([source]):has(TSTypeAliasDeclaration) ~ ExportNamedDeclaration[exportKind=type]:not([source]))",
+          message:
+            "Cannot have both type alias export and type-only export in the same TSX file.",
+        },
         ...tsOnlyRestrictedSyntax.filter(
           (rule) =>
             rule.selector !==
@@ -681,6 +718,31 @@ const config = [
               "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]" &&
             rule.selector !== "SwitchStatement > SwitchCase[test=null]"
         ),
+        // JSX files: Allow max one type/interface export + one component export
+        {
+          selector:
+            "Program:has(ExportNamedDeclaration:not([source]):not([exportKind=type]):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)) ~ ExportNamedDeclaration:not([source]):not([exportKind=type]):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)))",
+          message:
+            "Only one component export per JSX file is allowed (plus optionally one type/interface export).",
+        },
+        {
+          selector:
+            "Program:has(ExportNamedDeclaration[exportKind=type]:not([source]) ~ ExportNamedDeclaration[exportKind=type]:not([source]))",
+          message:
+            "Only one type export per JSX file is allowed (plus optionally one component export).",
+        },
+        {
+          selector:
+            "Program:has(ExportNamedDeclaration:not([source]):has(TSInterfaceDeclaration) ~ ExportNamedDeclaration:not([source]):has(TSInterfaceDeclaration))",
+          message:
+            "Only one interface export per JSX file is allowed (plus optionally one component export).",
+        },
+        {
+          selector:
+            "Program:has(ExportNamedDeclaration:not([source]):has(TSTypeAliasDeclaration) ~ ExportNamedDeclaration:not([source]):has(TSTypeAliasDeclaration))",
+          message:
+            "Only one type alias export per JSX file is allowed (plus optionally one component export).",
+        },
       ],
     },
   },
@@ -857,6 +919,20 @@ const config = [
           message:
             'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
         },
+        // Export restriction rules  
+        {
+          selector:
+            "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))",
+          message:
+            "Only one export per file is allowed. Consider splitting logic units into separate files for better maintainability.",
+        },
+        {
+          selector: "ExportNamedDeclaration[specifiers.length>1]:not([source])",
+          message:
+            "Multiple exports in a single statement suggest this file contains too much logic. Consider splitting logic units into separate files for better maintainability.",
+        },
+        // Required export rules
+        ...requiredExportRules,
       ],
     },
   },
