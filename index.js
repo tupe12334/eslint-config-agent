@@ -1,4 +1,3 @@
-import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
@@ -9,6 +8,7 @@ import globals from "globals";
 import noTrailingSpacesConfig from "./rules/no-trailing-spaces/index.js";
 import { maxFunctionLinesWarning, maxFunctionLinesError } from "./rules/max-function-lines/index.js";
 import { maxFileLinesWarning, maxFileLinesError } from "./rules/max-file-lines/index.js";
+import noEnvAccessRule from "./rules/no-env-access/index.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -18,9 +18,6 @@ try {
   // eslint-plugin-preact is not available
 }
 
-const compat = new FlatCompat({
-  recommendedConfig: js.configs.recommended,
-});
 
 // Shared rules for both JS and TS files
 const sharedRules = {
@@ -64,6 +61,7 @@ const sharedRules = {
   "react/jsx-no-useless-fragment": "off",
   "import/group-exports": "off",
   "import/no-default-export": "off",
+  "custom-rules/no-env-access": "error",
 };
 
 // Shared no-restricted-syntax rules for both JS and TS
@@ -257,6 +255,16 @@ const tsOnlyRestrictedSyntax = [
 ];
 
 const config = [
+  // Global plugin definitions
+  {
+    plugins: {
+      "custom-rules": {
+        rules: {
+          "no-env-access": noEnvAccessRule,
+        }
+      },
+    },
+  },
   reactHooks.configs["recommended-latest"],
   {
     ignores: ["packages/auth-service-sdk/**"],

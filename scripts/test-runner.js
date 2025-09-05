@@ -223,6 +223,13 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ["@typescript-eslint/no-explicit-any"],
   },
+  "no-env-access": {
+    description: "Custom no-env-access rule tests",
+    files: ["test/no-env-access-test.ts"],
+    maxErrors: 3,
+    maxWarnings: 0,
+    expectedRules: ["custom-rules/no-env-access"],
+  },
 };
 
 async function findTestFiles() {
