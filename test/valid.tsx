@@ -9,10 +9,10 @@ function ValidComponent({ name, age }: Props) {
   const greeting = `Hello, ${name}!`;
 
   if (age !== undefined && age !== null) {
-    return <div>{greeting} You are {age} years old.</div>;
+    return <div className="greeting">{greeting} You are {age} years old.</div>;
   }
 
-  return <div>{greeting}</div>;
+  return <div className="greeting">{greeting}</div>;
 }
 
 export { ValidComponent };

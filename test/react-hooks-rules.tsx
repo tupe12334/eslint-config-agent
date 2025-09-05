@@ -56,10 +56,10 @@ function InvalidHooksComponent() {
   }, [count]); // Missing items dependency
 
   return (
-    <div>
-      <p>{count}</p>
-      <button onClick={handleClick}>Click</button>
-      <p>{derivedValue}</p>
+    <div className="test-component">
+      <p className="count">{count}</p>
+      <button className="click-button" onClick={handleClick}>Click</button>
+      <p className="derived-value">{derivedValue}</p>
     </div>
   );
 }

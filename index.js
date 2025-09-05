@@ -396,6 +396,12 @@ const config = [
           message:
             "Function expressions containing switch statements must have explicit return type annotations.",
         },
+        // className requirement for HTML elements
+        {
+          selector:
+            'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
+          message: "HTML elements must have a className attribute.",
+        },
       ],
     },
   },
@@ -438,12 +444,6 @@ const config = [
         ),
         // Required export rules - these will be warnings in TSX since we can't mix severities
         ...requiredExportRules,
-        // Add className warning rule
-        {
-          selector:
-            'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
-          message: "UI elements should have a className attribute for styling.",
-        },
       ],
     },
   },
@@ -612,6 +612,12 @@ const config = [
           message:
             "Function expressions containing switch statements must have explicit return type annotations.",
         },
+        // className requirement for HTML elements
+        {
+          selector:
+            'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
+          message: "HTML elements must have a className attribute.",
+        },
         // Required export rules as errors (class rule only for JSX)
         {
           selector:
@@ -675,12 +681,6 @@ const config = [
               "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]" &&
             rule.selector !== "SwitchStatement > SwitchCase[test=null]"
         ),
-        // Add className warning rule for JSX
-        {
-          selector:
-            'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
-          message: "UI elements should have a className attribute for styling.",
-        },
       ],
     },
   },
@@ -856,6 +856,21 @@ const config = [
           selector: 'TSAsExpression[typeAnnotation.type="TSIndexedAccessType"]',
           message:
             'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
+        },
+      ],
+    },
+  },
+
+  // className requirement for JSX files
+  {
+    files: ["**/*.{tsx,jsx}"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
+          message: "HTML elements must have a className attribute.",
         },
       ],
     },

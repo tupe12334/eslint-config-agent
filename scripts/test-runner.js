@@ -45,9 +45,9 @@ const testCategories = {
   warnings: {
     description: "Files that should trigger warnings",
     files: ["test/lines/function-lines/long-function-test.tsx"],
-    maxErrors: 2,
+    maxErrors: 6,
     maxWarnings: 5,
-    expectedRules: ["max-lines-per-function"],
+    expectedRules: ["max-lines-per-function", "no-restricted-syntax"],
   },
   hooks: {
     description: "React hooks rules testing",
@@ -68,14 +68,16 @@ const testCategories = {
   "edge-cases": {
     description: "Edge cases and boundary testing",
     files: ["test/edge-cases.tsx"],
-    maxErrors: 5,
+    maxErrors: 30,
     maxWarnings: 30,
+    expectedRules: ["no-restricted-syntax", "max-lines", "@typescript-eslint/no-explicit-any"],
   },
   performance: {
     description: "Performance and large file testing",
     files: ["test/performance-test.tsx"],
-    maxErrors: 20,
+    maxErrors: 45,
     maxWarnings: 35,
+    expectedRules: ["max-lines-per-function", "max-lines", "no-restricted-syntax", "@typescript-eslint/no-explicit-any"],
   },
   "export-valid": {
     description: "Valid export patterns",
@@ -203,8 +205,32 @@ const testCategories = {
       "test/classname-warning-test.tsx",
       "test/classname-warning-test.jsx",
     ],
+    maxErrors: 50,
+    maxWarnings: 0,
+    expectedRules: ["no-restricted-syntax"],
+  },
+  "classname-valid": {
+    description: "Valid className usage - should have no errors",
+    files: [
+      "test/classname/valid/valid-classname.tsx",
+      "test/classname/valid/valid-classname.jsx",
+      "test/classname/valid/edge-cases-valid.tsx",
+      "test/classname/valid/forms-fragments-valid.tsx",
+    ],
     maxErrors: 0,
-    maxWarnings: 10,
+    maxWarnings: 0,
+  },
+  "classname-invalid": {
+    description: "Invalid className usage - should trigger errors",
+    files: [
+      "test/classname/invalid/invalid-classname.tsx",
+      "test/classname/invalid/invalid-classname.jsx",
+      "test/classname/invalid/edge-cases-invalid.tsx",
+      "test/classname/invalid/forms-fragments-invalid.tsx",
+    ],
+    maxErrors: 140,
+    maxWarnings: 0,
+    expectedRules: ["no-restricted-syntax"],
   },
   "spec-test-files": {
     description: "Test and spec file patterns",
@@ -212,9 +238,9 @@ const testCategories = {
       "test/lines/file-lines/max-lines-test-files.test.tsx",
       "test/lines/file-lines/max-lines-spec-files.spec.js",
     ],
-    maxErrors: 8,
+    maxErrors: 12,
     maxWarnings: 0,
-    expectedRules: ["no-undef", "max-lines-per-function", "max-lines"],
+    expectedRules: ["no-undef", "max-lines-per-function", "max-lines", "no-restricted-syntax"],
   },
   "record-literals": {
     description: "Record literal type tests",
