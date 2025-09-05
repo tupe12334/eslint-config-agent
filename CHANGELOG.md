@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.23](https://github.com/tupe12334/eslint-config/compare/v1.0.22...v1.0.23) (2025-09-05)
+
+### Features
+
+* add custom no-env-access rule with tests and update test runner ([b4f4fc5](https://github.com/tupe12334/eslint-config/commit/b4f4fc5fdecfdc8fa6f1524403d2f6df8afb3a40))
+
 ## [1.0.22](https://github.com/tupe12334/eslint-config/compare/v1.0.21...v1.0.22) (2025-09-04)
 
 ### Features
