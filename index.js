@@ -6,6 +6,7 @@ import reactPlugin from "eslint-plugin-react";
 import importPlugin from "eslint-plugin-import";
 import securityPlugin from "eslint-plugin-security";
 import nPlugin from "eslint-plugin-n";
+import classExportPlugin from "eslint-plugin-class-export";
 import globals from "globals";
 import noTrailingSpacesConfig from "./rules/no-trailing-spaces/index.js";
 import { maxFunctionLinesWarning, maxFunctionLinesError } from "./rules/max-function-lines/index.js";
@@ -200,6 +201,7 @@ const config = [
   {
     plugins: {
       n: nPlugin,
+      "class-export": classExportPlugin,
     },
   },
   reactHooks.configs["recommended-latest"],
@@ -241,6 +243,7 @@ const config = [
       import: importPlugin,
       security: securityPlugin,
       n: nPlugin,
+      "class-export": classExportPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -448,6 +451,7 @@ const config = [
       react: reactPlugin,
       security: securityPlugin,
       n: nPlugin,
+      "class-export": classExportPlugin,
     },
     settings: {
       react: {
@@ -514,6 +518,7 @@ const config = [
       import: importPlugin,
       security: securityPlugin,
       n: nPlugin,
+      "class-export": classExportPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -632,6 +637,7 @@ const config = [
       import: importPlugin,
       security: securityPlugin,
       n: nPlugin,
+      "class-export": classExportPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {

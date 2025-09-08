@@ -125,9 +125,9 @@ const testCategories = {
       "test/export/invalid/export-of-import.ts",
       "test/export/invalid/export-from-lib.ts",
     ],
-    maxErrors: 5, // Reduced since default exports are now allowed
+    maxErrors: 8, // class-export/class-export + remaining no-restricted-syntax
     maxWarnings: 0,
-    expectedRules: ["no-restricted-syntax"],
+    expectedRules: ["no-restricted-syntax", "class-export/class-export"],
   },
   "union-types-valid": {
     description: "Valid union types patterns",
