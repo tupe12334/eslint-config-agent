@@ -5,11 +5,11 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactPlugin from "eslint-plugin-react";
 import importPlugin from "eslint-plugin-import";
 import securityPlugin from "eslint-plugin-security";
+import nPlugin from "eslint-plugin-n";
 import globals from "globals";
 import noTrailingSpacesConfig from "./rules/no-trailing-spaces/index.js";
 import { maxFunctionLinesWarning, maxFunctionLinesError } from "./rules/max-function-lines/index.js";
 import { maxFileLinesWarning, maxFileLinesError } from "./rules/max-file-lines/index.js";
-import noEnvAccessRule from "./rules/no-env-access/index.js";
 import { pluginRules } from "./rules/plugin/index.js";
 import { typescriptEslintRules } from "./rules/plugin/typescript-eslint/index.js";
 
@@ -40,7 +40,6 @@ const sharedRules = {
   "implicit-arrow-linebreak": "off",
   "arrow-body-style": "off",
   "no-continue": "off",
-  "custom-rules/no-env-access": "error",
 };
 
 // Shared no-restricted-syntax rules for both JS and TS
@@ -48,12 +47,6 @@ const sharedRestrictedSyntax = [
   {
     selector: "MemberExpression[optional=true]",
     message: "Optional chaining is not allowed.",
-  },
-  {
-    selector:
-      "MemberExpression[object.type='MemberExpression'][object.object.name='process'][object.property.name='env']",
-    message:
-      "Direct access to process.env properties is not allowed. Use a configuration object or environment validation instead.",
   },
   {
     selector: "CallExpression[optional=true]",
@@ -216,11 +209,7 @@ const config = [
   // Global plugin definitions
   {
     plugins: {
-      "custom-rules": {
-        rules: {
-          "no-env-access": noEnvAccessRule,
-        }
-      },
+      n: nPlugin,
     },
   },
   reactHooks.configs["recommended-latest"],
@@ -261,6 +250,7 @@ const config = [
       react: reactPlugin,
       import: importPlugin,
       security: securityPlugin,
+      n: nPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -467,6 +457,7 @@ const config = [
       import: importPlugin,
       react: reactPlugin,
       security: securityPlugin,
+      n: nPlugin,
     },
     settings: {
       react: {
@@ -532,6 +523,7 @@ const config = [
       react: reactPlugin,
       import: importPlugin,
       security: securityPlugin,
+      n: nPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -649,6 +641,7 @@ const config = [
       react: reactPlugin,
       import: importPlugin,
       security: securityPlugin,
+      n: nPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -790,13 +783,6 @@ const config = [
     rules: {
       "no-restricted-syntax": [
         "error",
-        // Process.env rule (applies to all file types)
-        {
-          selector:
-            "MemberExpression[object.type='MemberExpression'][object.object.name='process'][object.property.name='env']",
-          message:
-            "Direct access to process.env properties is not allowed. Use a configuration object or environment validation instead.",
-        },
         // Switch case rules as errors
         {
           selector:

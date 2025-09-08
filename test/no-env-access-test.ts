@@ -1,10 +1,10 @@
-// Test file to demonstrate the no-env-access custom rule
-// This file should trigger errors for direct env property access
+// Test file to demonstrate the n/no-process-env rule
+// This file should trigger errors for process.env usage
 
-// ❌ These should trigger the new custom rule
-const nodeEnv = env.NODE_ENV;
-const apiUrl = env.API_URL;
-const port = env.PORT;
+// ❌ These should trigger the n/no-process-env rule
+const nodeEnv = process.env.NODE_ENV;
+const apiUrl = process.env.API_URL;
+const port = process.env.PORT;
 
 // ✅ These should be allowed
 const config = getEnvironmentConfig();
