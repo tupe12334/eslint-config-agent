@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.25](https://github.com/tupe12334/eslint-config/compare/v1.0.24...v1.0.25) (2025-09-08)
+
+### Features
+
+* integrate eslint-plugin-n and replace no-env-access rule with n/no-process-env rule ([b4b66bb](https://github.com/tupe12334/eslint-config/commit/b4b66bb52987c65ff0b6f8e505550e150e23d22c))
+
 ## [1.0.24](https://github.com/tupe12334/eslint-config/compare/v1.0.23...v1.0.24) (2025-09-08)
 
 ### Features
