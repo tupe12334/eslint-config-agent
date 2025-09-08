@@ -62,9 +62,9 @@ const testCategories = {
   imports: {
     description: "Import/export patterns testing",
     files: ["test/import-export-rules.ts"],
-    maxErrors: 10, // import/group-exports + import/no-namespace errors
+    maxErrors: 11, // import/group-exports + import/no-namespace + import/first errors
     maxWarnings: 0,
-    expectedRules: ["import/group-exports", "import/no-namespace"],
+    expectedRules: ["import/group-exports", "import/no-namespace", "import/first"],
   },
   "edge-cases": {
     description: "Edge cases and boundary testing",

@@ -10,6 +10,6 @@ export const importRules = {
   "import/no-absolute-path": "off",
   "import/order": "off",
   "import/newline-after-import": "off",
-  "import/first": "off",
+  "import/first": "error",
   "import/prefer-default-export": "off",
 };
