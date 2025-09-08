@@ -10,16 +10,16 @@
  */
 
 // Warning configuration (50 lines)
-export const warningRule = "warn";
-export const warningOptions = {
+const warningRule = "warn";
+const warningOptions = {
   max: 50,
   skipBlankLines: true,
   skipComments: true,
 };
 
 // Error configuration (70 lines)
-export const errorRule = "error";
-export const errorOptions = {
+const errorRule = "error";
+const errorOptions = {
   max: 70,
   skipBlankLines: true,
   skipComments: true,
@@ -30,14 +30,24 @@ export const errorOptions = {
  * Can be used in ESLint config as:
  * "max-lines-per-function": maxFunctionLinesWarning
  */
-export const maxFunctionLinesWarning = [warningRule, warningOptions];
+const maxFunctionLinesWarning = [warningRule, warningOptions];
 
 /**
  * Export the error rule configuration (applied later to override)
  * Can be used in ESLint config as:
  * "max-lines-per-function": maxFunctionLinesError
  */
-export const maxFunctionLinesError = [errorRule, errorOptions];
+const maxFunctionLinesError = [errorRule, errorOptions];
+
+// Consolidated exports
+export {
+  warningRule,
+  warningOptions,
+  errorRule,
+  errorOptions,
+  maxFunctionLinesWarning,
+  maxFunctionLinesError,
+};
 
 // Default export is the warning configuration
 export default maxFunctionLinesWarning;
