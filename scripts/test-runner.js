@@ -62,8 +62,9 @@ const testCategories = {
   imports: {
     description: "Import/export patterns testing",
     files: ["test/import-export-rules.ts"],
-    maxErrors: 2,
-    maxWarnings: 12,
+    maxErrors: 10, // import/group-exports + import/no-namespace errors
+    maxWarnings: 0,
+    expectedRules: ["import/group-exports", "import/no-namespace"],
   },
   "edge-cases": {
     description: "Edge cases and boundary testing",
@@ -124,9 +125,9 @@ const testCategories = {
       "test/export/invalid/export-of-import.ts",
       "test/export/invalid/export-from-lib.ts",
     ],
-    maxErrors: 23,
-    maxWarnings: 5,
-    expectedRules: ["import/no-default-export", "no-restricted-syntax"],
+    maxErrors: 5, // Reduced since default exports are now allowed
+    maxWarnings: 0,
+    expectedRules: ["no-restricted-syntax"],
   },
   "union-types-valid": {
     description: "Valid union types patterns",

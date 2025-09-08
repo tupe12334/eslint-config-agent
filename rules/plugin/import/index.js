@@ -1,7 +1,7 @@
 export const importRules = {
   // Import/export organization and restrictions
-  "import/group-exports": "error",
-  "import/no-default-export": "error",
+  "import/group-exports": "error", // Enforce consolidating exports into single statements
+  "import/no-default-export": "off", // Allow default exports
   "import/no-namespace": "error",
   // Disabled import rules (keep existing behavior)
   "import/extensions": ["off"],
