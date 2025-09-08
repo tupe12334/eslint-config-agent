@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.26](https://github.com/tupe12334/eslint-config/compare/v1.0.25...v1.0.26) (2025-09-08)
+
+### Features
+
+* add eslint-plugin-class-export and integrate class export rules ([c5ba7a8](https://github.com/tupe12334/eslint-config/commit/c5ba7a89ebcfa8413ddcc3e9cef7ed3bbe0ea3c4))
+
+### Bug Fixes
+
+* update export rules to allow default exports and adjust test configurations ([e802a95](https://github.com/tupe12334/eslint-config/commit/e802a952e5c7dfab82391dac11a551906daaa968))
+* update import rules to enforce 'import/first' and adjust test runner error counts ([f1da56d](https://github.com/tupe12334/eslint-config/commit/f1da56d4f343af181d6cd1bbd22d10b4efe637a6))
+
 ## [1.0.25](https://github.com/tupe12334/eslint-config/compare/v1.0.24...v1.0.25) (2025-09-08)
 
 ### Features
