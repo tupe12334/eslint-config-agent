@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.1.1](https://github.com/tupe12334/eslint-config/compare/v1.1.0...v1.1.1) (2025-09-08)
+
 ## [1.1.0](https://github.com/tupe12334/eslint-config/compare/v1.0.27...v1.1.0) (2025-09-08)
 
 ## [1.0.26](https://github.com/tupe12334/eslint-config/compare/v1.0.25...v1.0.26) (2025-09-08)
