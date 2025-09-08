@@ -10,7 +10,7 @@ import noTrailingSpacesConfig from "./rules/no-trailing-spaces/index.js";
 import { maxFunctionLinesWarning, maxFunctionLinesError } from "./rules/max-function-lines/index.js";
 import { maxFileLinesWarning, maxFileLinesError } from "./rules/max-file-lines/index.js";
 import noEnvAccessRule from "./rules/no-env-access/index.js";
-import { securityRules } from "./rules/plugin/security/index.js";
+import { pluginRules } from "./rules/plugin/index.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -23,24 +23,17 @@ try {
 
 // Shared rules for both JS and TS files
 const sharedRules = {
-  "import/extensions": ["off"],
-  "import/no-extraneous-dependencies": ["off"],
+  ...pluginRules,
   "react/self-closing-comp": "off",
   "object-curly-newline": "off",
-  "import/no-unresolved": "off",
-  "import/no-absolute-path": "off",
   "no-shadow": "off",
   "react/destructuring-assignment": "off",
   "react/jsx-props-no-spreading": "off",
   "react/button-has-type": "off",
-  "import/order": "off",
   "comma-dangle": "off",
   "function-paren-newline": "off",
   quotes: "off",
   "no-unused-vars": "off",
-  "import/newline-after-import": "off",
-  "import/first": "off",
-  "import/prefer-default-export": "off",
   "react/react-in-jsx-scope": "off",
   "max-lines-per-function": maxFunctionLinesWarning,
   "max-lines": maxFileLinesWarning,
@@ -61,10 +54,7 @@ const sharedRules = {
   "no-continue": "off",
   "jsx-a11y/label-has-associated-control": "off",
   "react/jsx-no-useless-fragment": "off",
-  "import/group-exports": "off",
-  "import/no-default-export": "off",
   "custom-rules/no-env-access": "error",
-  ...securityRules,
 };
 
 // Shared no-restricted-syntax rules for both JS and TS
@@ -89,31 +79,10 @@ const sharedRestrictedSyntax = [
       "Nullish coalescing operator (??) is not allowed. Use explicit null/undefined checks instead.",
   },
   {
-    selector: "ExportAllDeclaration",
-    message: "Re-exports using 'export *' syntax are not allowed.",
-  },
-  {
-    selector: "ExportNamedDeclaration[specifiers.length>1]:not([source])",
-    message:
-      "Multiple exports in a single statement suggest this file contains too much logic. Consider splitting logic units into separate files for better maintainability.",
-  },
-  {
-    selector:
-      "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))",
-    message:
-      "Only one export per file is allowed. Consider splitting logic units into separate files for better maintainability.",
-  },
-  {
     selector:
       "ExportNamedDeclaration[exportKind=type]:not([source]):has(ExportSpecifier)",
     message:
       "Type-only exports are not allowed. Use regular export or re-export with 'from' clause.",
-  },
-  {
-    selector:
-      "ExportNamedDeclaration:not([source]):not([exportKind=type]):has(ExportSpecifier)",
-    message:
-      "Export specifiers without re-export are not allowed. Use direct export or re-export with 'from' clause.",
   },
   {
     selector: "ExportSpecifier[local.name=default][exported.name!=default]",
@@ -927,17 +896,6 @@ const config = [
             'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
         },
         // Export restriction rules
-        {
-          selector:
-            "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))",
-          message:
-            "Only one export per file is allowed. Consider splitting logic units into separate files for better maintainability.",
-        },
-        {
-          selector: "ExportNamedDeclaration[specifiers.length>1]:not([source])",
-          message:
-            "Multiple exports in a single statement suggest this file contains too much logic. Consider splitting logic units into separate files for better maintainability.",
-        },
         // Required export rules
         ...requiredExportRules,
       ],
