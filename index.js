@@ -4,11 +4,13 @@ import tsParser from "@typescript-eslint/parser";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactPlugin from "eslint-plugin-react";
 import importPlugin from "eslint-plugin-import";
+import securityPlugin from "eslint-plugin-security";
 import globals from "globals";
 import noTrailingSpacesConfig from "./rules/no-trailing-spaces/index.js";
 import { maxFunctionLinesWarning, maxFunctionLinesError } from "./rules/max-function-lines/index.js";
 import { maxFileLinesWarning, maxFileLinesError } from "./rules/max-file-lines/index.js";
 import noEnvAccessRule from "./rules/no-env-access/index.js";
+import { securityRules } from "./rules/plugin/security/index.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -62,6 +64,7 @@ const sharedRules = {
   "import/group-exports": "off",
   "import/no-default-export": "off",
   "custom-rules/no-env-access": "error",
+  ...securityRules,
 };
 
 // Shared no-restricted-syntax rules for both JS and TS
@@ -302,6 +305,7 @@ const config = [
       "@typescript-eslint": tsPlugin,
       react: reactPlugin,
       import: importPlugin,
+      security: securityPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -514,6 +518,7 @@ const config = [
     plugins: {
       import: importPlugin,
       react: reactPlugin,
+      security: securityPlugin,
     },
     settings: {
       react: {
@@ -578,6 +583,7 @@ const config = [
       "@typescript-eslint": tsPlugin,
       react: reactPlugin,
       import: importPlugin,
+      security: securityPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -694,6 +700,7 @@ const config = [
       "@typescript-eslint": tsPlugin,
       react: reactPlugin,
       import: importPlugin,
+      security: securityPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -919,7 +926,7 @@ const config = [
           message:
             'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
         },
-        // Export restriction rules  
+        // Export restriction rules
         {
           selector:
             "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))",
