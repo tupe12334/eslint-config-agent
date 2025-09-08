@@ -11,6 +11,7 @@ import { maxFunctionLinesWarning, maxFunctionLinesError } from "./rules/max-func
 import { maxFileLinesWarning, maxFileLinesError } from "./rules/max-file-lines/index.js";
 import noEnvAccessRule from "./rules/no-env-access/index.js";
 import { pluginRules } from "./rules/plugin/index.js";
+import { typescriptEslintRules } from "./rules/plugin/typescript-eslint/index.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -24,36 +25,21 @@ try {
 // Shared rules for both JS and TS files
 const sharedRules = {
   ...pluginRules,
-  "react/self-closing-comp": "off",
   "object-curly-newline": "off",
   "no-shadow": "off",
-  "react/destructuring-assignment": "off",
-  "react/jsx-props-no-spreading": "off",
-  "react/button-has-type": "off",
   "comma-dangle": "off",
   "function-paren-newline": "off",
   quotes: "off",
   "no-unused-vars": "off",
-  "react/react-in-jsx-scope": "off",
   "max-lines-per-function": maxFunctionLinesWarning,
   "max-lines": maxFileLinesWarning,
-  "react/jsx-filename-extension": ["error", { extensions: [".tsx", ".jsx"] }],
   semi: "off",
-  "react/function-component-definition": "off",
-  "react/jsx-one-expression-per-line": "off",
-  "react/no-unknown-property": "off",
-  "react/jsx-no-target-blank": "off",
-  "react/require-default-props": "off",
   complexity: "off",
   "no-trailing-spaces": noTrailingSpacesConfig,
   "operator-linebreak": "off",
   "implicit-arrow-linebreak": "off",
-  "react/jsx-wrap-multilines": "off",
   "arrow-body-style": "off",
-  "react/jsx-closing-bracket-location": "off",
   "no-continue": "off",
-  "jsx-a11y/label-has-associated-control": "off",
-  "react/jsx-no-useless-fragment": "off",
   "custom-rules/no-env-access": "error",
 };
 
@@ -284,15 +270,8 @@ const config = [
     },
     rules: {
       ...sharedRules,
-      "no-undef": "off",
-      "@typescript-eslint/no-explicit-any": "error",
-      "@typescript-eslint/consistent-type-assertions": [
-        "error",
-        {
-          assertionStyle: "as",
-          objectLiteralTypeAssertions: "allow-as-parameter",
-        },
-      ],
+      ...typescriptEslintRules,
+      "no-undef": "off", // TypeScript handles this
       "no-restricted-syntax": [
         "error",
         ...sharedRestrictedSyntax,
