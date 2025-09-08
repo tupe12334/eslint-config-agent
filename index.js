@@ -7,6 +7,7 @@ import importPlugin from "eslint-plugin-import";
 import securityPlugin from "eslint-plugin-security";
 import nPlugin from "eslint-plugin-n";
 import classExportPlugin from "eslint-plugin-class-export";
+import storybookPlugin from "eslint-plugin-storybook";
 import globals from "globals";
 import noTrailingSpacesConfig from "./rules/no-trailing-spaces/index.js";
 import { maxFunctionLinesWarning, maxFunctionLinesError } from "./rules/max-function-lines/index.js";
@@ -222,6 +223,7 @@ const config = [
       "packages/auth-service-sdk/src/core/**",
       "packages/auth-service-sdk/src/client/**",
       "packages/auth-service-sdk/src/*.gen.ts",
+      "**/*.stories.{js,jsx,ts,tsx}",
     ],
     languageOptions: {
       parser: tsParser,
@@ -267,6 +269,7 @@ const config = [
   // TypeScript/TSX Rules - Switch case rules as errors, other rules as warnings
   {
     files: ["**/*.tsx"],
+    ignores: ["**/*.stories.{js,jsx,ts,tsx}"],
     rules: {
       // Include all shared rules (like max-lines-per-function)
       ...sharedRules,
@@ -344,6 +347,7 @@ const config = [
   // TypeScript/TSX Rules - Other rules as warnings to accommodate className check
   {
     files: ["**/*.tsx"],
+    ignores: ["**/*.stories.{js,jsx,ts,tsx}"],
     rules: {
       "no-restricted-syntax": [
         "warn",
@@ -432,6 +436,7 @@ const config = [
       "**/*.umd.js",
       "**/*.cjs",
       "**/*.mjs",
+      "**/*.stories.{js,jsx,ts,tsx}",
     ],
     languageOptions: {
       parserOptions: {
@@ -497,6 +502,7 @@ const config = [
       "**/build/**",
       "pnpm-lock.yaml",
       "packages/auth-service-sdk/**",
+      "**/*.stories.{js,jsx,ts,tsx}",
     ],
     languageOptions: {
       parser: tsParser,
@@ -616,6 +622,7 @@ const config = [
       "**/build/**",
       "pnpm-lock.yaml",
       "packages/auth-service-sdk/**",
+      "**/*.stories.{js,jsx,ts,tsx}",
     ],
     languageOptions: {
       parser: tsParser,
@@ -776,6 +783,7 @@ const config = [
   // Switch case rules as errors for all TypeScript/JSX files (must come last to override)
   {
     files: ["**/*.{ts,tsx,js,jsx}"],
+    ignores: ["**/*.stories.{js,jsx,ts,tsx}"],
     rules: {
       "no-restricted-syntax": [
         "error",
@@ -866,6 +874,7 @@ const config = [
   // className requirement for JSX files
   {
     files: ["**/*.{tsx,jsx}"],
+    ignores: ["**/*.stories.{js,jsx,ts,tsx}"],
     rules: {
       "no-restricted-syntax": [
         "error",
@@ -881,6 +890,7 @@ const config = [
   // Function and file length rules - strict error thresholds
   {
     files: ["**/*.{ts,tsx,js,jsx}"],
+    ignores: ["**/*.stories.{js,jsx,ts,tsx}"],
     rules: {
       // Function length: error at 70+ lines
       "max-lines-per-function": maxFunctionLinesError,
@@ -912,6 +922,32 @@ const config = [
     ],
     rules: {
       "import/no-default-export": "off",
+    },
+  },
+
+  // Storybook files configuration - only use storybook plugin rules
+  {
+    files: ["**/*.stories.{js,jsx,ts,tsx}"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+      },
+    },
+    plugins: {
+      storybook: storybookPlugin,
+    },
+    rules: {
+      // Enable recommended storybook rules only
+      ...storybookPlugin.configs.recommended.rules,
     },
   },
 ];
