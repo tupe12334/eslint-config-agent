@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.0.24](https://github.com/tupe12334/eslint-config/compare/v1.0.23...v1.0.24) (2025-09-08)
+
+### Features
+
+* add export restrictions for TSX and JSX files to improve maintainability ([2707d60](https://github.com/tupe12334/eslint-config/commit/2707d60521b6209954acc92b2643e519cb3492b8))
+* add jsx-a11y and react rules, and integrate TypeScript ESLint rules for enhanced linting support ([7de3c30](https://github.com/tupe12334/eslint-config/commit/7de3c304b7d07de0423ee3c9872e5b198167a880))
+* add security rules and plugin to enhance code safety ([905695e](https://github.com/tupe12334/eslint-config/commit/905695e3a01153ad888f054a7f567b2e537134cc))
+* enforce className attribute requirement for HTML elements in JSX and TSX ([03b61e6](https://github.com/tupe12334/eslint-config/commit/03b61e60285fa1ee2afb1f15dc576e62f84d44fd))
+* refactor import/export rules and consolidate plugin rules for better organization ([4656334](https://github.com/tupe12334/eslint-config/commit/46563347a5c5cfed7375544590711df28df20e21))
+
+### Bug Fixes
+
+* consolidate export declarations to satisfy import/group-exports rule ([3d75c61](https://github.com/tupe12334/eslint-config/commit/3d75c618101b27ea0d7e39bb5d5c437c75e4635c))
+* relax nullish coalescing validation check ([eac56b0](https://github.com/tupe12334/eslint-config/commit/eac56b06f95e7953181c167c7ce3e353db3a20cf))
+
 ## [1.0.23](https://github.com/tupe12334/eslint-config/compare/v1.0.22...v1.0.23) (2025-09-05)
 
 ### Features
