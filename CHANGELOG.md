@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.1.2](https://github.com/tupe12334/eslint-config/compare/v1.1.1...v1.1.2) (2025-09-10)
+
+### Features
+
+* add no-process-env-properties rule to disallow direct access to process.env properties ([741d3a4](https://github.com/tupe12334/eslint-config/commit/741d3a442d79be766639c64a0946a99452aa8ee4))
+
 ## [1.1.1](https://github.com/tupe12334/eslint-config/compare/v1.1.0...v1.1.1) (2025-09-08)
 
 ## [1.1.0](https://github.com/tupe12334/eslint-config/compare/v1.0.27...v1.1.0) (2025-09-08)
