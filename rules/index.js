@@ -19,6 +19,26 @@ import { pluginRules } from "./plugin/index.js";
 import { typescriptEslintRules } from "./plugin/typescript-eslint/index.js";
 
 // Consolidated exports
+const allRules = {
+  // Core rule configurations
+  noTrailingSpacesConfig,
+  maxFunctionLinesWarning,
+  maxFunctionLinesError,
+  maxFileLinesWarning,
+  maxFileLinesError,
+
+  // Custom restricted syntax rules
+  noProcessEnvPropertiesConfig,
+  noTypeAssertionsConfig,
+
+  // Plugin rule configurations
+  pluginRules,
+  typescriptEslintRules,
+};
+
+export default allRules;
+
+// Named exports for backward compatibility
 export {
   // Core rule configurations
   noTrailingSpacesConfig,

@@ -9,17 +9,7 @@ import nPlugin from "eslint-plugin-n";
 import classExportPlugin from "eslint-plugin-class-export";
 import storybookPlugin from "eslint-plugin-storybook";
 import globals from "globals";
-import {
-  noTrailingSpacesConfig,
-  maxFunctionLinesWarning,
-  maxFunctionLinesError,
-  maxFileLinesWarning,
-  maxFileLinesError,
-  pluginRules,
-  typescriptEslintRules,
-  noProcessEnvPropertiesConfig,
-  noTypeAssertionsConfig,
-} from "./rules/index.js";
+import allRules from "./rules/index.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -32,18 +22,18 @@ try {
 
 // Shared rules for both JS and TS files
 const sharedRules = {
-  ...pluginRules,
+  ...allRules.pluginRules,
   "object-curly-newline": "off",
   "no-shadow": "off",
   "comma-dangle": "off",
   "function-paren-newline": "off",
   quotes: "off",
   "no-unused-vars": "off",
-  "max-lines-per-function": maxFunctionLinesWarning,
-  "max-lines": maxFileLinesWarning,
+  "max-lines-per-function": allRules.maxFunctionLinesWarning,
+  "max-lines": allRules.maxFileLinesWarning,
   semi: "off",
   complexity: "off",
-  "no-trailing-spaces": noTrailingSpacesConfig,
+  "no-trailing-spaces": allRules.noTrailingSpacesConfig,
   "operator-linebreak": "off",
   "implicit-arrow-linebreak": "off",
   "arrow-body-style": "off",
@@ -104,7 +94,7 @@ const sharedRestrictedSyntax = [
     message:
       "Exporting from external libraries is not allowed. Only re-export from relative paths or scoped packages.",
   },
-  noProcessEnvPropertiesConfig,
+  allRules.noProcessEnvPropertiesConfig,
 ];
 
 // Required export rules (always errors)
@@ -153,7 +143,7 @@ const tsOnlyRestrictedSyntax = [
     message:
       "Class properties with literal unions should use a named type declaration.",
   },
-  noTypeAssertionsConfig,
+  allRules.noTypeAssertionsConfig,
   {
     selector: "TSAsExpression:has(> TSIndexedAccessType > TSTypeQuery)",
     message:
@@ -258,7 +248,7 @@ const config = [
     },
     rules: {
       ...sharedRules,
-      ...typescriptEslintRules,
+      ...allRules.typescriptEslintRules,
       "no-undef": "off", // TypeScript handles this
       "no-restricted-syntax": [
         "error",
@@ -868,8 +858,8 @@ const config = [
           message:
             'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
         },
-        noTypeAssertionsConfig,
-        noProcessEnvPropertiesConfig,
+        allRules.noTypeAssertionsConfig,
+        allRules.noProcessEnvPropertiesConfig,
         // Export restriction rules
         // Required export rules
         ...requiredExportRules,
@@ -899,9 +889,9 @@ const config = [
     ignores: ["**/*.stories.{js,jsx,ts,tsx}"],
     rules: {
       // Function length: error at 70+ lines
-      "max-lines-per-function": maxFunctionLinesError,
+      "max-lines-per-function": allRules.maxFunctionLinesError,
       // File length: error at 100+ lines
-      "max-lines": maxFileLinesError,
+      "max-lines": allRules.maxFileLinesError,
     },
   },
 
