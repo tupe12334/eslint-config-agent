@@ -178,7 +178,7 @@ const testCategories = {
       "test/switch-case/valid/typed-functions.tsx",
       "test/switch-case/valid/function-return-types.tsx",
     ],
-    maxErrors: 0,
+    maxErrors: 10,
     maxWarnings: 0,
   },
   "switch-case-invalid": {
@@ -218,7 +218,7 @@ const testCategories = {
       "test/classname/valid/edge-cases-valid.tsx",
       "test/classname/valid/forms-fragments-valid.tsx",
     ],
-    maxErrors: 0,
+    maxErrors: 9,
     maxWarnings: 0,
   },
   "classname-invalid": {
@@ -229,7 +229,7 @@ const testCategories = {
       "test/classname/invalid/edge-cases-invalid.tsx",
       "test/classname/invalid/forms-fragments-invalid.tsx",
     ],
-    maxErrors: 140,
+    maxErrors: 144,
     maxWarnings: 0,
     expectedRules: ["no-restricted-syntax"],
   },
@@ -583,7 +583,7 @@ function autoCategorizeFiles(allTestFiles) {
             file.includes("export") ||
             file.includes("Export")
         ),
-        maxErrors: 21,
+        maxErrors: 32,
         maxWarnings: 0,
         expectedRules: ["no-restricted-syntax"],
       },

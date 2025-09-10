@@ -10,22 +10,22 @@ interface User {
 // ❌ INVALID: Regular type assertions should be errors
 function invalidAssertions() {
   const someValue: unknown = 'test string';
-  
+
   // This should trigger consistent-type-assertions error
   const str = someValue as string;
-  
-  // This should trigger consistent-type-assertions error  
+
+  // This should trigger consistent-type-assertions error
   const num = someValue as number;
-  
+
   // This should trigger consistent-type-assertions error
   const user = someValue as User;
-  
+
   // This should trigger both no-explicit-any and consistent-type-assertions errors
   const anyValue = someValue as any;
-  
+
   // This should trigger consistent-type-assertions error
   const element = document.getElementById('test') as HTMLInputElement;
-  
+
   return { str, num, user, anyValue, element };
 }
 

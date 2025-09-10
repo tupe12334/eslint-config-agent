@@ -10,7 +10,7 @@ interface CreateUserInput {
   name: string;
 }
 
-@Resolver(() => String)  
+@Resolver(() => String)
 export class UserResolver {
 
   @Query(() => [String])

@@ -7,7 +7,7 @@
  * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-process-env.md
  */
 
-const rule = "error";
+const rule = "off";
 
 const options = {};
 

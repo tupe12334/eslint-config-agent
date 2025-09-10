@@ -14,6 +14,7 @@ import { maxFunctionLinesWarning, maxFunctionLinesError } from "./rules/max-func
 import { maxFileLinesWarning, maxFileLinesError } from "./rules/max-file-lines/index.js";
 import { pluginRules } from "./rules/plugin/index.js";
 import { typescriptEslintRules } from "./rules/plugin/typescript-eslint/index.js";
+import { noProcessEnvPropertiesConfig } from "./rules/no-process-env-properties/index.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -98,6 +99,7 @@ const sharedRestrictedSyntax = [
     message:
       "Exporting from external libraries is not allowed. Only re-export from relative paths or scoped packages.",
   },
+  noProcessEnvPropertiesConfig,
 ];
 
 // Required export rules (always errors)
@@ -449,6 +451,7 @@ const config = [
       globals: {
         ...globals.browser,
         ...globals.es2021,
+        ...globals.node,
       },
     },
     plugins: {
@@ -864,6 +867,7 @@ const config = [
           message:
             'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
         },
+        noProcessEnvPropertiesConfig,
         // Export restriction rules
         // Required export rules
         ...requiredExportRules,
