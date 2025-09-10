@@ -1,5 +1,5 @@
 import { RuleTester } from "eslint";
-import { rule, selector, message } from "./index.js";
+import { selector, message } from "./index.js";
 
 const ruleTester = new RuleTester({
   languageOptions: {
@@ -40,26 +40,26 @@ ruleTester.run("no-empty-exports", mockRule, {
     'export const foo = 1;',
     'export function bar() {}',
     'export class Baz {}',
-    
+
     // Default exports
     'const foo = 1; export default foo;',
     'export default function() {}',
     'export default class {}',
-    
+
     // Re-exports from other modules (allowed)
     'export { } from "./other";',
     'export { foo } from "./other";',
     'export * from "./other";',
     'export * as namespace from "./other";',
-    
+
     // Regular exports
     'const Bar = {}; export { Bar };',
-    
+
     // No exports at all
     'const foo = 1;',
     'function bar() {}',
     'class Baz {}',
-    
+
     // Named exports with local variables
     'const foo = 1; const bar = 2; export { foo };',
     'const foo = 1; const bar = 2; export { foo, bar };',

@@ -432,6 +432,7 @@ const config = [
       "**/*.cjs",
       "**/*.mjs",
       "**/*.stories.{js,jsx,ts,tsx}",
+      "**/rules/**",
     ],
     languageOptions: {
       parserOptions: {
@@ -718,7 +719,33 @@ const config = [
             rule.selector !==
               "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
             rule.selector !==
-              "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))"
+              "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
+            rule.selector !==
+              "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
+        ),
+        ...tsOnlyRestrictedSyntax,
+      ],
+    },
+  },
+
+  // Test files that should have ERROR level rules but exclude export specifier rule
+  {
+    files: [
+      "**/test/type-assertions/**",
+      "**/test/test-optional.ts",
+      "**/test/test-js-optional.js",
+      "**/test/test-record-literals.ts",
+      "**/test/no-env-access-test.ts",
+      "**/test/import-export-rules.ts",
+    ],
+    rules: {
+      "max-lines-per-function": "off",
+      "no-restricted-syntax": [
+        "error", // Error level for these test files
+        ...sharedRestrictedSyntax.filter(
+          (rule) =>
+            rule.selector !==
+              "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
         ),
         ...tsOnlyRestrictedSyntax,
       ],
@@ -729,6 +756,9 @@ const config = [
   {
     files: [
       "**/test/invalid.tsx", // Special handling for the main test file
+      "**/test/single-export-valid.ts", // Allow export specifiers for import/group-exports testing
+      "**/test/typescript-rules.ts", // Allow export specifiers for typescript rules testing
+      "**/test/type-assertions/indexed-access-valid.ts", // Allow export specifiers for type assertions testing
     ],
     rules: {
       "max-lines-per-function": "off",
@@ -739,7 +769,9 @@ const config = [
             rule.selector !==
               "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
             rule.selector !==
-              "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))"
+              "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
+            rule.selector !==
+              "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
         ),
         ...tsOnlyRestrictedSyntax,
         // For TSX files, also include required export rules as warnings since we can't mix severities
@@ -779,7 +811,7 @@ const config = [
   // Switch case rules as errors for all TypeScript/JSX files (must come last to override)
   {
     files: ["**/*.{ts,tsx,js,jsx}"],
-    ignores: ["**/*.stories.{js,jsx,ts,tsx}"],
+    ignores: ["**/*.stories.{js,jsx,ts,tsx}", "**/test/**", "!**/test/export/**", "!**/test/required-exports/**", "**/rules/**"],
     rules: {
       "no-restricted-syntax": [
         "error",
@@ -947,6 +979,27 @@ const config = [
     rules: {
       // Enable recommended storybook rules only
       ...storybookPlugin.configs.recommended.rules,
+    },
+  },
+
+  // Rules directory configuration - allow export specifiers for API definitions
+  {
+    files: ["**/rules/**/*.{js,ts}"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        // Include all shared rules EXCEPT our export specifier rule
+        ...sharedRestrictedSyntax.filter(
+          (rule) =>
+            rule.selector !==
+              "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
+        ),
+      ],
     },
   },
 ];

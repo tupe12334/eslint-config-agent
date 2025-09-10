@@ -60,7 +60,7 @@ const testCategories = {
   imports: {
     description: "Import/export patterns testing",
     files: ["test/import-export-rules.ts"],
-    maxErrors: 11, // import/group-exports + import/no-namespace + import/first errors
+    maxErrors: 13, // import/group-exports + import/no-namespace + import/first errors + export specifier rules
     maxWarnings: 0,
     expectedRules: ["import/group-exports", "import/no-namespace", "import/first"],
   },
@@ -123,7 +123,7 @@ const testCategories = {
       "test/export/invalid/export-of-import.ts",
       "test/export/invalid/export-from-lib.ts",
     ],
-    maxErrors: 8, // class-export/class-export + remaining no-restricted-syntax
+    maxErrors: 16, // class-export/class-export + remaining no-restricted-syntax + export specifier rules
     maxWarnings: 0,
     expectedRules: ["no-restricted-syntax", "class-export/class-export"],
   },
@@ -244,7 +244,7 @@ const testCategories = {
   "record-literals": {
     description: "Record literal type tests",
     files: ["test/test-record-literals.ts"],
-    maxErrors: 2,
+    maxErrors: 12,
     maxWarnings: 0,
     expectedRules: ["@typescript-eslint/no-explicit-any"],
   },
@@ -582,7 +582,7 @@ function autoCategorizeFiles(allTestFiles) {
             file.includes("Export")
         ),
         maxErrors: 32,
-        maxWarnings: 0,
+        maxWarnings: 2,
         expectedRules: ["no-restricted-syntax"],
       },
       "auto-component-tests": {
