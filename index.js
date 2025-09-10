@@ -95,7 +95,9 @@ const sharedRestrictedSyntax = [
       "Exporting from external libraries is not allowed. Only re-export from relative paths or scoped packages.",
   },
   allRules.noProcessEnvPropertiesConfig,
+  allRules.noExportSpecifiersConfig,
 ];
+
 
 // Required export rules (always errors)
 const requiredExportRules = [
@@ -860,6 +862,7 @@ const config = [
         },
         allRules.noTypeAssertionsConfig,
         allRules.noProcessEnvPropertiesConfig,
+        allRules.noExportSpecifiersConfig,
         // Export restriction rules
         // Required export rules
         ...requiredExportRules,

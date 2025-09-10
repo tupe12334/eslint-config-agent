@@ -13,6 +13,7 @@ import { maxFileLinesWarning, maxFileLinesError } from "./max-file-lines/index.j
 // Custom restricted syntax rules
 import { noProcessEnvPropertiesConfig } from "./no-process-env-properties/index.js";
 import { noTypeAssertionsConfig } from "./no-type-assertions/index.js";
+import { noExportSpecifiersConfig } from "./no-empty-exports/index.js";
 
 // Plugin rule configurations
 import { pluginRules } from "./plugin/index.js";
@@ -30,6 +31,7 @@ const allRules = {
   // Custom restricted syntax rules
   noProcessEnvPropertiesConfig,
   noTypeAssertionsConfig,
+  noExportSpecifiersConfig,
 
   // Plugin rule configurations
   pluginRules,
@@ -50,6 +52,7 @@ export {
   // Custom restricted syntax rules
   noProcessEnvPropertiesConfig,
   noTypeAssertionsConfig,
+  noExportSpecifiersConfig,
 
   // Plugin rule configurations
   pluginRules,
