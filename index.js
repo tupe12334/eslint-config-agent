@@ -19,7 +19,6 @@ try {
   // eslint-plugin-preact is not available
 }
 
-
 // Shared rules for both JS and TS files
 const sharedRules = {
   ...allRules.pluginRules,
@@ -98,11 +97,11 @@ const sharedRestrictedSyntax = [
   allRules.noExportSpecifiersConfig,
 ];
 
-
 // Required export rules (always errors)
 const requiredExportRules = [
   {
-    selector: "ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration):not(ExportDefaultDeclaration > ClassDeclaration)",
+    selector:
+      "ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration):not(ExportDefaultDeclaration > ClassDeclaration)",
     message:
       "Classes must be exported. Use 'export class' or 'export default class'.",
   },
@@ -201,9 +200,6 @@ const config = [
     },
   },
   reactHooks.configs["recommended-latest"],
-  {
-    ignores: ["packages/auth-service-sdk/**"],
-  },
   js.configs.recommended,
 
   // TypeScript and TSX files
@@ -214,10 +210,6 @@ const config = [
       "**/dist/**",
       "**/build/**",
       "pnpm-lock.yaml",
-      "packages/auth-service-sdk/**",
-      "packages/auth-service-sdk/src/core/**",
-      "packages/auth-service-sdk/src/client/**",
-      "packages/auth-service-sdk/src/*.gen.ts",
       "**/*.stories.{js,jsx,ts,tsx}",
     ],
     languageOptions: {
@@ -427,7 +419,6 @@ const config = [
       "**/dist/**",
       "**/build/**",
       "pnpm-lock.yaml",
-      "packages/auth-service-sdk/**",
       "**/*.umd.js",
       "**/*.cjs",
       "**/*.mjs",
@@ -498,7 +489,6 @@ const config = [
       "**/dist/**",
       "**/build/**",
       "pnpm-lock.yaml",
-      "packages/auth-service-sdk/**",
       "**/*.stories.{js,jsx,ts,tsx}",
     ],
     languageOptions: {
@@ -618,7 +608,6 @@ const config = [
       "**/dist/**",
       "**/build/**",
       "pnpm-lock.yaml",
-      "packages/auth-service-sdk/**",
       "**/*.stories.{js,jsx,ts,tsx}",
     ],
     languageOptions: {
@@ -745,7 +734,7 @@ const config = [
         ...sharedRestrictedSyntax.filter(
           (rule) =>
             rule.selector !==
-              "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
+            "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
         ),
         ...tsOnlyRestrictedSyntax,
       ],
@@ -811,7 +800,13 @@ const config = [
   // Switch case rules as errors for all TypeScript/JSX files (must come last to override)
   {
     files: ["**/*.{ts,tsx,js,jsx}"],
-    ignores: ["**/*.stories.{js,jsx,ts,tsx}", "**/test/**", "!**/test/export/**", "!**/test/required-exports/**", "**/rules/**"],
+    ignores: [
+      "**/*.stories.{js,jsx,ts,tsx}",
+      "**/test/**",
+      "!**/test/export/**",
+      "!**/test/required-exports/**",
+      "**/rules/**",
+    ],
     rules: {
       "no-restricted-syntax": [
         "error",
@@ -997,7 +992,7 @@ const config = [
         ...sharedRestrictedSyntax.filter(
           (rule) =>
             rule.selector !==
-              "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
+            "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
         ),
       ],
     },
