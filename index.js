@@ -423,7 +423,7 @@ const config = [
       "**/*.cjs",
       "**/*.mjs",
       "**/*.stories.{js,jsx,ts,tsx}",
-      "**/rules/**",
+      "**/rules/**/index.js",
     ],
     languageOptions: {
       parserOptions: {
@@ -805,7 +805,7 @@ const config = [
       "**/test/**",
       "!**/test/export/**",
       "!**/test/required-exports/**",
-      "**/rules/**",
+      "**/rules/**/index.js",
     ],
     rules: {
       "no-restricted-syntax": [
