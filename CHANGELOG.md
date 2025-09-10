@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.1.4](https://github.com/tupe12334/eslint-config/compare/v1.1.3...v1.1.4) (2025-09-10)
+
+### Features
+
+* add no-empty-exports rule to prevent empty export specifiers and include test cases ([7757007](https://github.com/tupe12334/eslint-config/commit/77570076e41bdab64dbed53ca7a40a935eda7e3a))
+* enhance export specifier rules and update test configurations for improved validation ([fe64b9c](https://github.com/tupe12334/eslint-config/commit/fe64b9cb7f1bdf80b16a97db75a5fd04901c2e7f))
+* remove package-specific ignores from ESLint config for cleaner configuration ([03cef75](https://github.com/tupe12334/eslint-config/commit/03cef75a6ad6d682ede5f4c5dc5d5e1a8d0a9aaa))
+
 ## [1.1.3](https://github.com/tupe12334/eslint-config/compare/v1.1.2...v1.1.3) (2025-09-10)
 
 ### Features
