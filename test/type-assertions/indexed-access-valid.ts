@@ -1,11 +1,11 @@
 // Test file for valid patterns that should not trigger the indexed access restriction
 // These patterns demonstrate the recommended approach
 
-const locales = ['en', 'es', 'fr'] as const;
+const locales = ["en", "es", "fr"] as const;
 
 // Valid: Define a named type first
 type Locale = (typeof locales)[number];
-type LocaleUnion = 'en' | 'es' | 'fr';
+type LocaleUnion = "en" | "es" | "fr";
 
 // Valid: Use the named types (though general as restriction still applies)
 const locale1: Locale = "en";
@@ -15,7 +15,7 @@ const locale2: LocaleUnion = "es";
 const locale3 = "fr"; // inferred as string
 
 // Valid: Using as const (allowed exception)
-const localeArray = ['en', 'es', 'fr'] as const;
+const localeArray = ["en", "es", "fr"] as const;
 
 // Valid: Function parameter with proper typing
 function setLocale(locale: Locale): void {
@@ -24,7 +24,8 @@ function setLocale(locale: Locale): void {
 
 // Valid: Type guard function
 function isValidLocale(value: string): value is Locale {
-  return locales.includes(value as Locale);
+  const validLocales: string[] = ["en", "es", "fr"];
+  return validLocales.includes(value);
 }
 
 // Export to avoid unused variable errors

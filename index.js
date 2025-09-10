@@ -15,6 +15,7 @@ import { maxFileLinesWarning, maxFileLinesError } from "./rules/max-file-lines/i
 import { pluginRules } from "./rules/plugin/index.js";
 import { typescriptEslintRules } from "./rules/plugin/typescript-eslint/index.js";
 import { noProcessEnvPropertiesConfig } from "./rules/no-process-env-properties/index.js";
+import { noTypeAssertionsConfig } from "./rules/no-type-assertions/index.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -148,11 +149,7 @@ const tsOnlyRestrictedSyntax = [
     message:
       "Class properties with literal unions should use a named type declaration.",
   },
-  {
-    selector:
-      'TSAsExpression:not(:has(TSTypeReference[typeName.name="const"]))',
-    message: 'Type assertions with "as" are not allowed except for "as const".',
-  },
+  noTypeAssertionsConfig,
   {
     selector: "TSAsExpression:has(> TSIndexedAccessType > TSTypeQuery)",
     message:
@@ -867,6 +864,7 @@ const config = [
           message:
             'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
         },
+        noTypeAssertionsConfig,
         noProcessEnvPropertiesConfig,
         // Export restriction rules
         // Required export rules
