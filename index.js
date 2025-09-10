@@ -9,13 +9,17 @@ import nPlugin from "eslint-plugin-n";
 import classExportPlugin from "eslint-plugin-class-export";
 import storybookPlugin from "eslint-plugin-storybook";
 import globals from "globals";
-import noTrailingSpacesConfig from "./rules/no-trailing-spaces/index.js";
-import { maxFunctionLinesWarning, maxFunctionLinesError } from "./rules/max-function-lines/index.js";
-import { maxFileLinesWarning, maxFileLinesError } from "./rules/max-file-lines/index.js";
-import { pluginRules } from "./rules/plugin/index.js";
-import { typescriptEslintRules } from "./rules/plugin/typescript-eslint/index.js";
-import { noProcessEnvPropertiesConfig } from "./rules/no-process-env-properties/index.js";
-import { noTypeAssertionsConfig } from "./rules/no-type-assertions/index.js";
+import {
+  noTrailingSpacesConfig,
+  maxFunctionLinesWarning,
+  maxFunctionLinesError,
+  maxFileLinesWarning,
+  maxFileLinesError,
+  pluginRules,
+  typescriptEslintRules,
+  noProcessEnvPropertiesConfig,
+  noTypeAssertionsConfig,
+} from "./rules/index.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
