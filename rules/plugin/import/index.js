@@ -1,8 +1,9 @@
 import { noUnusedModulesConfig } from "./no-unused-modules/index.js";
+import { groupExportsConfig } from "./group-exports/index.js";
 
 export const importRules = {
   // Import/export organization and restrictions
-  "import/group-exports": "error", // Enforce consolidating exports into single statements
+  ...groupExportsConfig,
   "import/no-default-export": "off", // Allow default exports
   "import/no-namespace": "error",
   ...noUnusedModulesConfig,
