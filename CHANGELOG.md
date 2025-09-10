@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.1.3](https://github.com/tupe12334/eslint-config/compare/v1.1.2...v1.1.3) (2025-09-10)
+
+### Features
+
+* add no-type-assertions rule to disallow TypeScript type assertions using "as" keyword ([39b708f](https://github.com/tupe12334/eslint-config/commit/39b708f9da6eb0c491b0e53248af78821f4b3598))
+* consolidate ESLint rule imports into a single index file for better organization ([37be460](https://github.com/tupe12334/eslint-config/commit/37be46083350d151a5803b9c230c538caa9eb857))
+* refactor ESLint rule imports to use a consolidated allRules object for improved organization ([47c3eea](https://github.com/tupe12334/eslint-config/commit/47c3eea5f02dd204bf86ab6150d319eed07440da))
+
 ## [1.1.2](https://github.com/tupe12334/eslint-config/compare/v1.1.1...v1.1.2) (2025-09-10)
 
 ### Features
