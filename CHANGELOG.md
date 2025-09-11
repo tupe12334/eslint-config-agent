@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.2.2](https://github.com/tupe12334/eslint-config/compare/v1.2.1...v1.2.2) (2025-09-11)
+
+### Features
+
+* add "Stand With Israel" badge to README ([400d112](https://github.com/tupe12334/eslint-config/commit/400d11274561871da1b46ec5a61a0fa16698bebc))
+* add migration guide for transitioning to eslint-config-agent ([d2efb4f](https://github.com/tupe12334/eslint-config/commit/d2efb4f87cebd40ed74142727c2041c621675e36))
+* create CONTRIBUTING.md for development setup and contribution guidelines ([b37dd91](https://github.com/tupe12334/eslint-config/commit/b37dd91179c76fd05e62290fe506de1aeba34c53))
+* move troubleshooting and FAQ content to FAQ.md ([08a8dd5](https://github.com/tupe12334/eslint-config/commit/08a8dd559a488bdcc40dbcbbfc9ceb6a587fa02a))
+* remove supported file types and configurations section from README ([5671273](https://github.com/tupe12334/eslint-config/commit/567127398d938fc9098ae5794b2559af983c07d0))
+* remove supported file types and version history sections from README ([a77cb9c](https://github.com/tupe12334/eslint-config/commit/a77cb9cc7ff03f52909e03b5aaa8ffbc4bff0ac0))
+
 ## [1.2.1](https://github.com/tupe12334/eslint-config/compare/v1.2.0...v1.2.1) (2025-09-11)
 
 ### Features
