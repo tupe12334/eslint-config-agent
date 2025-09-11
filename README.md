@@ -290,54 +290,7 @@ A: Please use the [GitHub repository](https://github.com/tupe12334/eslint-config
 
 For development setup, testing guidelines, and contribution instructions, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Supported File Types & Environments
-
-| File Extension | Framework | Environment | Parser |
-|----------------|-----------|-------------|---------|
-| `.ts` | TypeScript | Browser | @typescript-eslint/parser |
-| `.tsx` | TypeScript + React/Preact | Browser + JSX | @typescript-eslint/parser |
-| `.js` | JavaScript | Browser | ESLint default |
-| `.jsx` | JavaScript + React/Preact | Browser + JSX | ESLint default |
-| `scripts/**/*.js` | Node.js scripts | Node.js | ESLint default |
-
-## Version History & Changelog
-
-### Latest Release: v1.0.5
-
-#### **v1.0.5** (Latest)
-- Enhanced ESLint rules for optional chaining and member expressions
-- Updated documentation with comprehensive usage examples
-- Improved test coverage and validation scripts
-
-#### **v1.0.4** 
-- Enhanced type assertion rules and test coverage
-- Updated ESLint rules for invalid TypeScript patterns
-- Improved documentation and release management
-
-#### Previous Versions
-- **v1.0.3**: Enhanced React hooks rules and dependency validation
-- **v1.0.2**: Added comprehensive TypeScript support
-- **v1.0.1**: Initial React and Preact support
-- **v1.0.0**: Initial release with basic ESLint configuration
-
-For detailed changelog information, see the [releases page](https://github.com/tupe12334/eslint-config/releases).
-
-## Dependencies & Peer Requirements
-
-### **Required Peer Dependencies**
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `eslint` | `^9.34.0` | Core ESLint engine |
-| `@typescript-eslint/parser` | `^8.40.0` | TypeScript parsing |
-| `@typescript-eslint/eslint-plugin` | `^8.40.0` | TypeScript rules |
-| `eslint-plugin-react` | `^7.37.5` | React-specific rules |
-| `eslint-plugin-react-hooks` | `^5.2.0` | React hooks validation |
-| `eslint-plugin-import` | `^2.32.0` | Import/export rules |
-
-### **Optional Dependencies**
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `eslint-plugin-preact` | `^0.1.0` | Preact-specific optimizations |
+For version history and changelog information, see [CHANGELOG.md](CHANGELOG.md) or the [releases page](https://github.com/tupe12334/eslint-config/releases).
 
 ## License
 
