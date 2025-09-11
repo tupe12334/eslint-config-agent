@@ -1,4 +1,6 @@
+import { noExplicitAnyConfig } from "./no-explicit-any/index.js";
+
 export const typescriptEslintRules = {
-  "@typescript-eslint/no-explicit-any": "error",
+  ...noExplicitAnyConfig,
   "@typescript-eslint/consistent-type-assertions": "off",
 };

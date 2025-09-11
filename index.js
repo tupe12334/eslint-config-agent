@@ -977,9 +977,10 @@ const config = [
     },
   },
 
-  // Rules directory configuration - allow export specifiers for API definitions
+  // Rules directory configuration - allow export specifiers for API definitions (but not examples)
   {
     files: ["**/rules/**/*.{js,ts}"],
+    ignores: ["**/rules/**/examples/**"],
     languageOptions: {
       globals: {
         ...globals.node,
