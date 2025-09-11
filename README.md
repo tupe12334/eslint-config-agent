@@ -231,63 +231,7 @@ This configuration focuses on enforcing patterns that improve long-term maintain
 
 For migration instructions from legacy ESLint configurations, see [MIGRATION.md](MIGRATION.md).
 
-## Troubleshooting & FAQ
-
-### Common Issues
-
-#### "Cannot find module 'eslint-config-agent'"
-
-**Solution:** Ensure the package is installed correctly:
-```bash
-npm ls eslint-config-agent
-# If not found, reinstall:
-npm install --save-dev eslint-config-agent
-```
-
-#### "Parsing error: Cannot find module '@typescript-eslint/parser'"
-
-**Solution:** Install all required peer dependencies:
-```bash
-npm install --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin
-```
-
-#### ESLint flat config not recognized
-
-**Solution:** Ensure you're using ESLint 9+ and your config file is named `eslint.config.js`:
-```bash
-npm ls eslint
-# Upgrade if needed:
-npm install --save-dev eslint@^9.34.0
-```
-
-#### VS Code not using flat config
-
-**Solution:** Add to your VS Code settings:
-```json
-{
-  "eslint.useFlatConfig": true
-}
-```
-
-### Frequently Asked Questions
-
-#### **Q: Does this work with monorepos?**
-A: Yes! Place the `eslint.config.js` at the root of each package, or use a shared config:
-```javascript
-// packages/shared/eslint.config.js
-import baseConfig from 'eslint-config-agent';
-export default baseConfig;
-
-// packages/frontend/eslint.config.js
-import sharedConfig from '../shared/eslint.config.js';
-export default sharedConfig;
-```
-
-#### **Q: How does this help with AI coding assistants like GitHub Copilot, Claude, or ChatGPT?**
-A: This configuration helps AI assistants generate more maintainable and debuggable code by enforcing consistent patterns and preventing problematic shortcuts. This means you get AI assistance while maintaining code that you can actually understand and debug months later.
-
-#### **Q: How do I contribute or report issues?**
-A: Please use the [GitHub repository](https://github.com/tupe12334/eslint-config) for issues and contributions.
+For troubleshooting common issues and frequently asked questions, see [FAQ.md](FAQ.md).
 
 For development setup, testing guidelines, and contribution instructions, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
