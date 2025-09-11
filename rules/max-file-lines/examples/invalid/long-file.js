@@ -110,4 +110,4 @@ const line108 = 108;
 const line109 = 109;
 const line110 = 110;
 
-export { line1 };
+export default line1;

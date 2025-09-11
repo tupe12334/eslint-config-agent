@@ -22,4 +22,4 @@ const line96 = 96; const line97 = 97; const line98 = 98; const line99 = 99; cons
 const line101 = 101; const line102 = 102; const line103 = 103; const line104 = 104; const line105 = 105;
 const line106 = 106; const line107 = 107; const line108 = 108; const line109 = 109; const line110 = 110;
 
-export { line1 };
+export default line1;
