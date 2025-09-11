@@ -210,15 +210,6 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **🛠️ Maintainable**: Patterns that remain clear even as the codebase grows
 
 
-### Supported File Types & Configurations
-
-| File Pattern | Parser | Plugins | Environment |
-|--------------|---------|---------|-------------|
-| `**/*.ts` | TypeScript | TypeScript ESLint | Browser |
-| `**/*.tsx` | TypeScript | TypeScript, React, React Hooks | Browser + JSX |
-| `**/*.js` | JavaScript | Import | Browser |
-| `**/*.jsx` | JavaScript | React, React Hooks, Import | Browser + JSX |
-| `scripts/**/*.js` | JavaScript | - | Node.js |
 
 ### Framework-Specific Features
 
