@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.2.0](https://github.com/tupe12334/eslint-config/compare/v1.1.4...v1.2.0) (2025-09-11)
+
+### Features
+
+* add examples for valid and invalid export patterns and update import rules configuration ([a78e03d](https://github.com/tupe12334/eslint-config/commit/a78e03d201e335b423c1830593c015ddd0346028))
+* add no-explicit-any rule configuration and examples for valid/invalid usage ([2bc0ad8](https://github.com/tupe12334/eslint-config/commit/2bc0ad836ff42199456ebc7ebd0b6948cca1a7b1))
+* add no-unused-modules rule configuration and examples for unused exports ([336db1b](https://github.com/tupe12334/eslint-config/commit/336db1b26bf4ac0d3e9bd56c95817748bfda4799))
+* refine ESLint configuration to include specific index.js files and update CI test command ([5693dbc](https://github.com/tupe12334/eslint-config/commit/5693dbc65dc37cbddb6a41498b4886d360c17684))
+* update ESLint configuration to disable size limits for test/spec files and add examples for valid/invalid file lengths ([ac57e22](https://github.com/tupe12334/eslint-config/commit/ac57e223f7d1cedab32976cee5f305ca197ca0c8))
+* update export statements in test files to use default export syntax ([c4a846b](https://github.com/tupe12334/eslint-config/commit/c4a846bc78105f287fafcb4248c8de334c84b0fb))
+
 ## [1.1.4](https://github.com/tupe12334/eslint-config/compare/v1.1.3...v1.1.4) (2025-09-10)
 
 ### Features
