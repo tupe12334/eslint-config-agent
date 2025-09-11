@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.2.1](https://github.com/tupe12334/eslint-config/compare/v1.2.0...v1.2.1) (2025-09-11)
+
+### Features
+
+* remove outdated TODO and ESLint rules documentation ([4d820ce](https://github.com/tupe12334/eslint-config/commit/4d820cec99d8ffb8e9e23c8c313e644351871d70))
+
 ## [1.2.0](https://github.com/tupe12334/eslint-config/compare/v1.1.4...v1.2.0) (2025-09-11)
 
 ### Features
