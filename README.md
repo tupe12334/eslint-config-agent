@@ -209,17 +209,17 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **📚 Self-Documenting**: Code that explains its intent without extensive comments
 - **🛠️ Maintainable**: Patterns that remain clear even as the codebase grows
 
-
-
 ### Framework-Specific Features
 
 #### React Support
+
 - React 17+ automatic JSX runtime support
 - Comprehensive hooks validation (rules-of-hooks, exhaustive-deps)
 - Component prop validation
 - JSX accessibility hints
 
 #### Preact Support (Optional)
+
 - Automatic detection and configuration when `eslint-plugin-preact` is installed
 - Compatible with Preact-specific patterns and optimizations
 - Shared configuration with React rules where applicable
@@ -228,94 +228,14 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 
 This configuration focuses on enforcing patterns that improve long-term maintainability while reducing noise from less impactful rules. The ruleset is carefully curated to balance developer productivity with code quality.
 
-## Migration Guide
-
-### From Legacy .eslintrc Configuration
-
-If you're migrating from an older ESLint configuration, here's how to transition:
-
-#### 1. Remove Old Configuration Files
-```bash
-# Remove old config files
-rm .eslintrc.js .eslintrc.json .eslintrc.yml .eslintrc
-```
-
-#### 2. Update Package Dependencies
-```bash
-# Remove old ESLint packages (if present)
-npm uninstall @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-react-app
-
-# Install eslint-config-agent and required peer dependencies
-npm install --save-dev eslint-config-agent
-# ... (see Installation section for full peer dependencies)
-```
-
-#### 3. Create New Flat Configuration
-Replace your old configuration with:
-
-```javascript
-// eslint.config.js
-import config from 'eslint-config-agent';
-
-export default config;
-```
-
-#### 4. Update Scripts
-Update your package.json scripts to use the flat config:
-
-```json
-{
-  "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
-  }
-}
-```
-
-### From Create React App
-
-If migrating from Create React App's ESLint configuration:
-
-```javascript
-// Replace react-scripts ESLint config
-import config from 'eslint-config-agent';
-
-export default [
-  ...config,
-  {
-    // Add any CRA-specific overrides you need
-    files: ['src/**/*.{js,jsx,ts,tsx}'],
-    rules: {
-      // Custom rules for your React app
-    }
-  }
-];
-```
-
-### From Airbnb Config
-
-Transitioning from Airbnb's ESLint config:
-
-```javascript
-import config from 'eslint-config-agent';
-
-export default [
-  ...config,
-  {
-    // Airbnb users might want these additional rules
-    rules: {
-      'import/prefer-default-export': 'warn',
-      'class-methods-use-this': 'warn',
-    }
-  }
-];
-```
+For migration instructions from legacy ESLint configurations, see [MIGRATION.md](MIGRATION.md).
 
 ## Troubleshooting & FAQ
 
 ### Common Issues
 
 #### "Cannot find module 'eslint-config-agent'"
+
 **Solution:** Ensure the package is installed correctly:
 ```bash
 npm ls eslint-config-agent
@@ -324,12 +244,14 @@ npm install --save-dev eslint-config-agent
 ```
 
 #### "Parsing error: Cannot find module '@typescript-eslint/parser'"
+
 **Solution:** Install all required peer dependencies:
 ```bash
 npm install --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin
 ```
 
 #### ESLint flat config not recognized
+
 **Solution:** Ensure you're using ESLint 9+ and your config file is named `eslint.config.js`:
 ```bash
 npm ls eslint
@@ -338,6 +260,7 @@ npm install --save-dev eslint@^9.34.0
 ```
 
 #### VS Code not using flat config
+
 **Solution:** Add to your VS Code settings:
 ```json
 {
@@ -346,7 +269,6 @@ npm install --save-dev eslint@^9.34.0
 ```
 
 ### Frequently Asked Questions
-
 
 #### **Q: Does this work with monorepos?**
 A: Yes! Place the `eslint.config.js` at the root of each package, or use a shared config:
