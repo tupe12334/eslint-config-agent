@@ -209,36 +209,6 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **📚 Self-Documenting**: Code that explains its intent without extensive comments
 - **🛠️ Maintainable**: Patterns that remain clear even as the codebase grows
 
-### Key Rules Enforced
-
-#### Type Safety Rules
-- **🚫 No Optional Chaining** (`?.`): Forces explicit null/undefined checks
-  ```typescript
-  // ❌ Avoid
-  const name = user?.profile?.name;
-  
-  // ✅ Preferred
-  const name = user && user.profile ? user.profile.name : undefined;
-  ```
-
-- **🚫 No Nullish Coalescing** (`??`): Use explicit checks instead
-  ```typescript
-  // ❌ Avoid
-  const name = userName ?? 'Anonymous';
-  
-  // ✅ Preferred
-  const name = userName !== null && userName !== undefined ? userName : 'Anonymous';
-  ```
-
-#### File Organization Rules
-- **📁 JSX File Extensions**: JSX syntax only allowed in `.tsx` and `.jsx` files
-- **📏 Function Length**: Maximum 100 lines per function (warning level)
-- **🧹 No Trailing Spaces**: Enforces clean, consistent formatting
-
-#### React & TypeScript Rules
-- **⚛️ React Hooks**: Full enforcement of hooks rules and dependency arrays
-- **🔤 TypeScript**: Strict type checking with explicit type assertions
-- **📦 Import/Export**: Consistent module patterns and import ordering
 
 ### Supported File Types & Configurations
 
@@ -263,21 +233,9 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - Compatible with Preact-specific patterns and optimizations
 - Shared configuration with React rules where applicable
 
-### Rule Categories
+### Configuration Philosophy
 
-#### **Enabled Rules** (Errors & Warnings)
-- TypeScript strict type checking
-- React hooks validation
-- Import/export consistency  
-- Function complexity limits
-- Whitespace and formatting
-
-#### **Disabled Rules**
-Many common ESLint and React rules are intentionally disabled to reduce noise while focusing on the most impactful code quality issues:
-- `react/react-in-jsx-scope` (not needed with modern React)
-- `@typescript-eslint/no-unused-vars` (TypeScript handles this)
-- `no-undef` (TypeScript handles this)
-- Plus 50+ other rules optimized for developer productivity
+This configuration focuses on enforcing patterns that improve long-term maintainability while reducing noise from less impactful rules. The ruleset is carefully curated to balance developer productivity with code quality.
 
 ## Migration Guide
 
@@ -398,37 +356,6 @@ npm install --save-dev eslint@^9.34.0
 
 ### Frequently Asked Questions
 
-#### **Q: Why are optional chaining and nullish coalescing disabled?**
-A: These features, while convenient, can hide potential runtime errors. Explicit null checks make your code's intention clearer and prevent unexpected behavior when dealing with complex nested objects.
-
-#### **Q: Can I enable optional chaining for specific files?**
-A: Yes! Use file-specific overrides:
-```javascript
-export default [
-  ...config,
-  {
-    files: ['src/legacy/**/*.ts'],
-    rules: {
-      '@typescript-eslint/prefer-nullish-coalescing': 'off',
-      '@typescript-eslint/prefer-optional-chain': 'off',
-    }
-  }
-];
-```
-
-#### **Q: How do I handle large existing codebases?**
-A: Start with warnings instead of errors:
-```javascript
-export default [
-  ...config,
-  {
-    rules: {
-      '@typescript-eslint/prefer-nullish-coalescing': 'warn',
-      '@typescript-eslint/prefer-optional-chain': 'warn',
-    }
-  }
-];
-```
 
 #### **Q: Does this work with monorepos?**
 A: Yes! Place the `eslint.config.js` at the root of each package, or use a shared config:
@@ -443,16 +370,7 @@ export default sharedConfig;
 ```
 
 #### **Q: How does this help with AI coding assistants like GitHub Copilot, Claude, or ChatGPT?**
-A: This configuration prevents AI assistants from generating "convenient" but problematic code patterns:
-
-- **🚫 Prevents**: AI generating `user?.profile?.name` shortcuts
-- **✅ Enforces**: AI writing `user && user.profile ? user.profile.name : undefined`  
-- **🚫 Prevents**: AI using `value ?? fallback` patterns
-- **✅ Enforces**: AI writing explicit null/undefined checks
-- **📏 Limits**: Function length so AI doesn't generate massive functions
-- **🗂️ Organizes**: File structure so AI puts JSX only in proper file extensions
-
-This means you get AI assistance while maintaining code that you can actually understand and debug months later.
+A: This configuration helps AI assistants generate more maintainable and debuggable code by enforcing consistent patterns and preventing problematic shortcuts. This means you get AI assistance while maintaining code that you can actually understand and debug months later.
 
 #### **Q: How do I contribute or report issues?**
 A: Please use the [GitHub repository](https://github.com/tupe12334/eslint-config) for issues and contributions.
