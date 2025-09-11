@@ -684,7 +684,7 @@ const config = [
     },
   },
 
-  // Disable function size limits for test and spec files
+  // Disable function and file size limits for test and spec files
   {
     files: [
       "**/*.test.{js,jsx,ts,tsx}",
@@ -700,6 +700,7 @@ const config = [
     ],
     rules: {
       "max-lines-per-function": "off",
+      "max-lines": "off", // Ignore file length limits in test and spec files
       // Allow multiple exports in test files for testing import/export patterns
       "no-restricted-syntax": [
         "warn",
@@ -916,7 +917,14 @@ const config = [
   // Function and file length rules - strict error thresholds
   {
     files: ["**/*.{ts,tsx,js,jsx}"],
-    ignores: ["**/*.stories.{js,jsx,ts,tsx}"],
+    ignores: [
+      "**/*.stories.{js,jsx,ts,tsx}",
+      "**/*.test.{js,jsx,ts,tsx}",
+      "**/*.spec.{js,jsx,ts,tsx}",
+      "**/test/**/*.{js,jsx,ts,tsx}",
+      "**/tests/**/*.{js,jsx,ts,tsx}",
+      "**/__tests__/**/*.{js,jsx,ts,tsx}",
+    ],
     rules: {
       // Function length: error at 70+ lines
       "max-lines-per-function": allRules.maxFunctionLinesError,
