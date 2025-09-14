@@ -145,6 +145,7 @@ const tsOnlyRestrictedSyntax = [
       "Class properties with literal unions should use a named type declaration.",
   },
   allRules.noTypeAssertionsConfig,
+  allRules.noClassPropertyDefaultsConfig,
   {
     selector: "TSAsExpression:has(> TSIndexedAccessType > TSTypeQuery)",
     message:
@@ -889,6 +890,7 @@ const config = [
             'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
         },
         allRules.noTypeAssertionsConfig,
+        allRules.noClassPropertyDefaultsConfig,
         allRules.noProcessEnvPropertiesConfig,
         allRules.noExportSpecifiersConfig,
         // Export restriction rules

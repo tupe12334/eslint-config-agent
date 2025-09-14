@@ -14,6 +14,7 @@ import { maxFileLinesWarning, maxFileLinesError } from "./max-file-lines/index.j
 import { noProcessEnvPropertiesConfig } from "./no-process-env-properties/index.js";
 import { noTypeAssertionsConfig } from "./no-type-assertions/index.js";
 import { noExportSpecifiersConfig } from "./no-empty-exports/index.js";
+import { noClassPropertyDefaultsConfig } from "./no-class-property-defaults/index.js";
 
 // Plugin rule configurations
 import { pluginRules } from "./plugin/index.js";
@@ -32,6 +33,7 @@ const allRules = {
   noProcessEnvPropertiesConfig,
   noTypeAssertionsConfig,
   noExportSpecifiersConfig,
+  noClassPropertyDefaultsConfig,
 
   // Plugin rule configurations
   pluginRules,
@@ -53,6 +55,7 @@ export {
   noProcessEnvPropertiesConfig,
   noTypeAssertionsConfig,
   noExportSpecifiersConfig,
+  noClassPropertyDefaultsConfig,
 
   // Plugin rule configurations
   pluginRules,
