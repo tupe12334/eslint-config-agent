@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.2.3](https://github.com/tupe12334/eslint-config/compare/v1.2.2...v1.2.3) (2025-09-14)
+
+### Features
+
+* add no-class-property-defaults rule to disallow default values for class properties ([1e4ca82](https://github.com/tupe12334/eslint-config/commit/1e4ca8226d9a9cfc2843b0d6d641c008f3a35d20))
+
+### Bug Fixes
+
+* update badge style and improve formatting in README ([b152ed3](https://github.com/tupe12334/eslint-config/commit/b152ed3c4b92c4fc03267c3d5b5fef3104daee94))
+
 ## [1.2.2](https://github.com/tupe12334/eslint-config/compare/v1.2.1...v1.2.2) (2025-09-11)
 
 ### Features
