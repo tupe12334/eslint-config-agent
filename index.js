@@ -196,7 +196,8 @@ const config = [
       },
     },
   },
-  reactHooks.configs["recommended-latest"],
+  // Use recommended-latest if available (v5+), otherwise fall back to recommended
+  ...(reactHooks.configs["recommended-latest"] ? [reactHooks.configs["recommended-latest"]] : [reactHooks.configs.recommended]),
   js.configs.recommended,
 
   // TypeScript and TSX files
