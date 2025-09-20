@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.3.0](https://github.com/tupe12334/eslint-config/compare/v1.2.3...v1.3.0) (2025-09-20)
+
+### Features
+
+* add eslint-plugin-single-export to enforce single export rules ([9cfb800](https://github.com/tupe12334/eslint-config/commit/9cfb80073cf9cdcefd31af5cc2c9a1c83dcd6926))
+* add no-default-class-export rule to enforce named exports for classes ([03d5273](https://github.com/tupe12334/eslint-config/commit/03d52731ca190ebf3d76d4ded7c6ace7fe5fc75f))
+
+### Bug Fixes
+
+* disable group-exports rule to prevent enforcing single statement exports ([0cfd699](https://github.com/tupe12334/eslint-config/commit/0cfd6994a0978d8a15e7ecae83b0765e5cfcf747))
+* improve null check for class names in no-default-class-export rule ([bf090e3](https://github.com/tupe12334/eslint-config/commit/bf090e3490f08f6e9b07a16227ab22aba702f31c))
+
 ## [1.2.3](https://github.com/tupe12334/eslint-config/compare/v1.2.2...v1.2.3) (2025-09-14)
 
 ### Features
