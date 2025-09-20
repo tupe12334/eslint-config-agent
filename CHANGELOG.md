@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.3.4](https://github.com/tupe12334/eslint-config/compare/v1.3.3...v1.3.4) (2025-09-20)
+
+### Bug Fixes
+
+* update reactHooks configuration to use recommended-latest if available ([bb5bf9d](https://github.com/tupe12334/eslint-config/commit/bb5bf9d8b9ef8110123fd4f8f23d35ee7af22e02))
+
 ## [1.3.3](https://github.com/tupe12334/eslint-config/compare/v1.3.2...v1.3.3) (2025-09-20)
 
 ### Features
