@@ -29,5 +29,4 @@ function isValidLocale(value: string): value is Locale {
 }
 
 // Export to avoid unused variable errors
-export { locale1, locale2, locale3, localeArray, setLocale, isValidLocale };
-export type { Locale, LocaleUnion };
+export { locale1, locale2, locale3, localeArray, setLocale, isValidLocale, type Locale, type LocaleUnion };

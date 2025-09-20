@@ -202,7 +202,7 @@ const config = [
       n: nPlugin,
       "class-export": classExportPlugin,
       "single-export": singleExportPlugin,
-      "custom": {
+      custom: {
         rules: {
           "no-default-class-export": noDefaultClassExportRule,
         },
@@ -355,8 +355,6 @@ const config = [
         // Include shared rules but remove the multiple exports restriction and switch case rules for TSX
         ...sharedRestrictedSyntax.filter(
           (rule) =>
-            rule.selector !==
-              "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
             rule.selector !==
               "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
             rule.selector !==
@@ -665,8 +663,6 @@ const config = [
         // Include shared rules but remove the multiple exports restriction and switch case rules for JSX
         ...sharedRestrictedSyntax.filter(
           (rule) =>
-            rule.selector !==
-              "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
             rule.selector !==
               "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
             rule.selector !==
