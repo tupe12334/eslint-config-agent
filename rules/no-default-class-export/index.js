@@ -36,7 +36,7 @@ export const noDefaultClassExportRule = {
         // Check if the default export is a class declaration
         if (node.declaration && node.declaration.type === "ClassDeclaration") {
           const classDeclaration = node.declaration;
-          const className = classDeclaration.id?.name || "ClassName";
+          const className = (classDeclaration.id && classDeclaration.id.name) || "ClassName";
 
           context.report({
             node: node,
@@ -65,7 +65,7 @@ export const noDefaultClassExportRule = {
         // Check if the default export is a class expression
         else if (node.declaration && node.declaration.type === "ClassExpression") {
           const classExpression = node.declaration;
-          const className = classExpression.id?.name || "ClassName";
+          const className = (classExpression.id && classExpression.id.name) || "ClassName";
 
           context.report({
             node: node,
