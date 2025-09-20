@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      eslint-plugin-single-export:
+        specifier: ^1.1.0
+        version: 1.1.0(eslint@9.34.0(jiti@2.5.1))
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.1
@@ -1319,6 +1323,12 @@ packages:
   eslint-plugin-security@3.0.1:
     resolution: {integrity: sha512-XjVGBhtDZJfyuhIxnQ/WMm385RbX3DBu7H1J7HNNhmB2tnGxMeqVSnYv79oAj992ayvIBZghsymwkYFS6cGH4Q==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  eslint-plugin-single-export@1.1.0:
+    resolution: {integrity: sha512-jLg77t7mpqgk7cJNws0EoO9kO+vthAvcyha6jy872PCPcpsKtT8iSkHvcjzBYym9EwT1TvJfbUuLUT99kZWwLw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      eslint: '>=9.0.0'
 
   eslint-plugin-storybook@9.1.5:
     resolution: {integrity: sha512-vCfaZ2Wk1N1vvK4vmNZoA6y2CYxJwbgIs6BE8/toPf4Z6hCAipoobP6a/30Rs0g/B2TSxTSj41TfrJKJrowpjQ==}
@@ -4061,6 +4071,10 @@ snapshots:
   eslint-plugin-security@3.0.1:
     dependencies:
       safe-regex: 2.1.1
+
+  eslint-plugin-single-export@1.1.0(eslint@9.34.0(jiti@2.5.1)):
+    dependencies:
+      eslint: 9.34.0(jiti@2.5.1)
 
   eslint-plugin-storybook@9.1.5(eslint@9.34.0(jiti@2.5.1))(storybook@9.1.5(@testing-library/dom@10.4.1))(typescript@5.9.2):
     dependencies:

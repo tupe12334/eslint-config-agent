@@ -7,6 +7,7 @@ import importPlugin from "eslint-plugin-import";
 import securityPlugin from "eslint-plugin-security";
 import nPlugin from "eslint-plugin-n";
 import classExportPlugin from "eslint-plugin-class-export";
+import singleExportPlugin from "eslint-plugin-single-export";
 import storybookPlugin from "eslint-plugin-storybook";
 import globals from "globals";
 import allRules from "./rules/index.js";
@@ -200,6 +201,7 @@ const config = [
     plugins: {
       n: nPlugin,
       "class-export": classExportPlugin,
+      "single-export": singleExportPlugin,
       "custom": {
         rules: {
           "no-default-class-export": noDefaultClassExportRule,
@@ -253,6 +255,7 @@ const config = [
       ...allRules.typescriptEslintRules,
       "no-undef": "off", // TypeScript handles this
       "custom/no-default-class-export": "error",
+      "single-export/single-export": "error",
       "no-restricted-syntax": [
         "error",
         ...sharedRestrictedSyntax,
@@ -269,6 +272,7 @@ const config = [
     rules: {
       // Include all shared rules (like max-lines-per-function)
       ...sharedRules,
+      "single-export/single-export": "off", // TSX files have their own specific export rules
       "no-restricted-syntax": [
         "error",
         // Switch case rules as errors
@@ -345,6 +349,7 @@ const config = [
     files: ["**/*.tsx"],
     ignores: ["**/*.stories.{js,jsx,ts,tsx}"],
     rules: {
+      "single-export/single-export": "off", // TSX files have their own specific export rules
       "no-restricted-syntax": [
         "warn",
         // Include shared rules but remove the multiple exports restriction and switch case rules for TSX
@@ -454,6 +459,7 @@ const config = [
       security: securityPlugin,
       n: nPlugin,
       "class-export": classExportPlugin,
+      "single-export": singleExportPlugin,
     },
     settings: {
       react: {
@@ -462,6 +468,7 @@ const config = [
     },
     rules: {
       ...sharedRules,
+      "single-export/single-export": "error",
       "no-restricted-syntax": [
         "error",
         ...sharedRestrictedSyntax,
@@ -521,6 +528,7 @@ const config = [
       security: securityPlugin,
       n: nPlugin,
       "class-export": classExportPlugin,
+      "single-export": singleExportPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -531,6 +539,7 @@ const config = [
     rules: {
       ...sharedRules,
       "no-undef": "off", // TypeScript handles this
+      "single-export/single-export": "off", // JSX files have their own specific export rules
       "no-restricted-syntax": [
         "error",
         // Switch case rules as errors
@@ -640,6 +649,7 @@ const config = [
       security: securityPlugin,
       n: nPlugin,
       "class-export": classExportPlugin,
+      "single-export": singleExportPlugin,
       ...(preactPlugin && { preact: preactPlugin }),
     },
     settings: {
@@ -649,6 +659,7 @@ const config = [
     },
     rules: {
       "no-undef": "off", // TypeScript handles this
+      "single-export/single-export": "off", // JSX files have their own specific export rules
       "no-restricted-syntax": [
         "warn",
         // Include shared rules but remove the multiple exports restriction and switch case rules for JSX
