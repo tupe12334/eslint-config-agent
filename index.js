@@ -196,8 +196,20 @@ const config = [
       },
     },
   },
-  // Use recommended-latest if available (v5+), otherwise fall back to recommended
-  ...(reactHooks.configs["recommended-latest"] ? [reactHooks.configs["recommended-latest"]] : [reactHooks.configs.recommended]),
+  // Use recommended-latest if available (v5+), otherwise create flat config equivalent of legacy recommended
+  ...(reactHooks.configs["recommended-latest"]
+    ? [reactHooks.configs["recommended-latest"]]
+    : [{
+        name: "react-hooks/recommended-flat",
+        plugins: {
+          "react-hooks": reactHooks,
+        },
+        rules: {
+          "react-hooks/rules-of-hooks": "error",
+          "react-hooks/exhaustive-deps": "warn",
+        },
+      }]
+  ),
   js.configs.recommended,
 
   // TypeScript and TSX files
