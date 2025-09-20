@@ -100,12 +100,10 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-security": "^3.0.1",
+    "eslint-plugin-single-export": "^1.1.1",
     "eslint-plugin-storybook": "^9.1.5",
     "globals": "^16.3.0",
     "release-it": "^19.0.4",
     "typescript-eslint": "^8.40.0"
-  },
-  "dependencies": {
-    "eslint-plugin-single-export": "^1.1.0"
   }
 }
