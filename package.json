@@ -99,6 +99,7 @@
     "eslint-plugin-preact": "^0.1.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-required-exports": "^0.2.0",
     "eslint-plugin-security": "^3.0.1",
     "eslint-plugin-single-export": "^1.1.2",
     "eslint-plugin-storybook": "^9.1.5",

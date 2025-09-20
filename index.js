@@ -8,6 +8,7 @@ import securityPlugin from "eslint-plugin-security";
 import nPlugin from "eslint-plugin-n";
 import classExportPlugin from "eslint-plugin-class-export";
 import singleExportPlugin from "eslint-plugin-single-export";
+import requiredExportsPlugin from "eslint-plugin-required-exports";
 import storybookPlugin from "eslint-plugin-storybook";
 import globals from "globals";
 import allRules from "./rules/index.js";
@@ -100,21 +101,6 @@ const sharedRestrictedSyntax = [
   ...allRules.noDefaultClassExportRules,
 ];
 
-// Required export rules (always errors)
-const requiredExportRules = [
-  {
-    selector:
-      "ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration):not(ExportDefaultDeclaration > ClassDeclaration)",
-    message:
-      "Classes must be exported. Use 'export class' or 'export default class'.",
-  },
-  {
-    selector:
-      "TSEnumDeclaration:not(ExportNamedDeclaration > TSEnumDeclaration):not(ExportDefaultDeclaration > TSEnumDeclaration)",
-    message:
-      "Enums must be exported. Use 'export enum' or 'export default enum'.",
-  },
-];
 
 // TypeScript-specific no-restricted-syntax rules
 const tsOnlyRestrictedSyntax = [
@@ -202,6 +188,7 @@ const config = [
       n: nPlugin,
       "class-export": classExportPlugin,
       "single-export": singleExportPlugin,
+      "required-exports": requiredExportsPlugin,
       custom: {
         rules: {
           "no-default-class-export": noDefaultClassExportRule,
@@ -256,11 +243,19 @@ const config = [
       "no-undef": "off", // TypeScript handles this
       "custom/no-default-class-export": "error",
       "single-export/single-export": "error",
+      "required-exports/required-exports": ["error", {
+        "variable": false,    // Don't require exporting variables/constants
+        "function": false,    // Don't require exporting functions
+        "class": true,        // Require exporting classes (matches old behavior)
+        "interface": false,   // Don't require exporting interfaces
+        "type": false,        // Don't require exporting types
+        "enum": true,         // Require exporting enums (matches old behavior)
+        "ignorePrivate": true // Ignore declarations starting with _
+      }],
       "no-restricted-syntax": [
         "error",
         ...sharedRestrictedSyntax,
         ...tsOnlyRestrictedSyntax,
-        ...requiredExportRules,
       ],
     },
   },
@@ -273,6 +268,15 @@ const config = [
       // Include all shared rules (like max-lines-per-function)
       ...sharedRules,
       "single-export/single-export": "off", // TSX files have their own specific export rules
+      "required-exports/required-exports": ["error", {
+        "variable": false,    // Don't require exporting variables/constants
+        "function": false,    // Don't require exporting functions
+        "class": true,        // Require exporting classes (matches old behavior)
+        "interface": false,   // Don't require exporting interfaces
+        "type": false,        // Don't require exporting types
+        "enum": true,         // Require exporting enums (matches old behavior)
+        "ignorePrivate": true // Ignore declarations starting with _
+      }],
       "no-restricted-syntax": [
         "error",
         // Switch case rules as errors
@@ -417,8 +421,6 @@ const config = [
             rule.selector !==
               "FunctionExpression:has(SwitchStatement):not([returnType])"
         ),
-        // Required export rules - these will be warnings in TSX since we can't mix severities
-        ...requiredExportRules,
       ],
     },
   },
@@ -467,16 +469,18 @@ const config = [
     rules: {
       ...sharedRules,
       "single-export/single-export": "error",
+      "required-exports/required-exports": ["error", {
+        "variable": false,    // Don't require exporting variables/constants
+        "function": false,    // Don't require exporting functions
+        "class": true,        // Require exporting classes (matches old behavior)
+        "interface": false,   // Don't require exporting interfaces (N/A for JS)
+        "type": false,        // Don't require exporting types (N/A for JS)
+        "enum": false,        // Don't require exporting enums (N/A for JS)
+        "ignorePrivate": true // Ignore declarations starting with _
+      }],
       "no-restricted-syntax": [
         "error",
         ...sharedRestrictedSyntax,
-        // Only class rules apply to JS files (no enums in JS)
-        {
-          selector:
-            "ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration):not(ExportDefaultDeclaration > ClassDeclaration)",
-          message:
-            "Classes must be exported. Add 'export' before the class declaration.",
-        },
       ],
     },
   },
@@ -538,6 +542,15 @@ const config = [
       ...sharedRules,
       "no-undef": "off", // TypeScript handles this
       "single-export/single-export": "off", // JSX files have their own specific export rules
+      "required-exports/required-exports": ["error", {
+        "variable": false,    // Don't require exporting variables/constants
+        "function": false,    // Don't require exporting functions
+        "class": true,        // Require exporting classes (matches old behavior)
+        "interface": false,   // Don't require exporting interfaces (N/A for JSX)
+        "type": false,        // Don't require exporting types (N/A for JSX)
+        "enum": false,        // Don't require exporting enums (N/A for JSX)
+        "ignorePrivate": true // Ignore declarations starting with _
+      }],
       "no-restricted-syntax": [
         "error",
         // Switch case rules as errors
@@ -658,6 +671,15 @@ const config = [
     rules: {
       "no-undef": "off", // TypeScript handles this
       "single-export/single-export": "off", // JSX files have their own specific export rules
+      "required-exports/required-exports": ["warn", {
+        "variable": false,    // Don't require exporting variables/constants
+        "function": false,    // Don't require exporting functions
+        "class": true,        // Require exporting classes (matches old behavior)
+        "interface": false,   // Don't require exporting interfaces (N/A for JSX)
+        "type": false,        // Don't require exporting types (N/A for JSX)
+        "enum": false,        // Don't require exporting enums (N/A for JSX)
+        "ignorePrivate": true // Ignore declarations starting with _
+      }],
       "no-restricted-syntax": [
         "warn",
         // Include shared rules but remove the multiple exports restriction and switch case rules for JSX
@@ -780,8 +802,6 @@ const config = [
               "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
         ),
         ...tsOnlyRestrictedSyntax,
-        // For TSX files, also include required export rules as warnings since we can't mix severities
-        ...requiredExportRules,
       ],
     },
   },
@@ -825,6 +845,15 @@ const config = [
       "**/rules/**/index.js",
     ],
     rules: {
+      "required-exports/required-exports": ["error", {
+        "variable": false,    // Don't require exporting variables/constants
+        "function": false,    // Don't require exporting functions
+        "class": true,        // Require exporting classes (matches old behavior)
+        "interface": false,   // Don't require exporting interfaces
+        "type": false,        // Don't require exporting types
+        "enum": true,         // Require exporting enums (matches old behavior)
+        "ignorePrivate": true // Ignore declarations starting with _
+      }],
       "no-restricted-syntax": [
         "error",
         // Switch case rules as errors
@@ -908,9 +937,6 @@ const config = [
         allRules.noClassPropertyDefaultsConfig,
         allRules.noProcessEnvPropertiesConfig,
         allRules.noExportSpecifiersConfig,
-        // Export restriction rules
-        // Required export rules
-        ...requiredExportRules,
       ],
     },
   },

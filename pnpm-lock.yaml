@@ -47,6 +47,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^5.2.0
         version: 5.2.0(eslint@9.34.0(jiti@2.5.1))
+      eslint-plugin-required-exports:
+        specifier: ^0.2.0
+        version: 0.2.0(eslint@9.34.0(jiti@2.5.1))
       eslint-plugin-security:
         specifier: ^3.0.1
         version: 3.0.1
@@ -1318,6 +1321,12 @@ packages:
     engines: {node: '>=4'}
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
+
+  eslint-plugin-required-exports@0.2.0:
+    resolution: {integrity: sha512-jMru2Yf3M1J04pN0RvbLLcxiTCh8y2hlH2TaBkAXgMu5Hp28kYHmvpDYplPh7c6x2Fj7qCkVQ6ETkfzuZ0HcOQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      eslint: ^9.0.0
 
   eslint-plugin-security@3.0.1:
     resolution: {integrity: sha512-XjVGBhtDZJfyuhIxnQ/WMm385RbX3DBu7H1J7HNNhmB2tnGxMeqVSnYv79oAj992ayvIBZghsymwkYFS6cGH4Q==}
@@ -4066,6 +4075,10 @@ snapshots:
       semver: 6.3.1
       string.prototype.matchall: 4.0.12
       string.prototype.repeat: 1.0.0
+
+  eslint-plugin-required-exports@0.2.0(eslint@9.34.0(jiti@2.5.1)):
+    dependencies:
+      eslint: 9.34.0(jiti@2.5.1)
 
   eslint-plugin-security@3.0.1:
     dependencies:
