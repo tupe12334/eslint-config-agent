@@ -15,6 +15,7 @@ import { noProcessEnvPropertiesConfig } from "./no-process-env-properties/index.
 import { noTypeAssertionsConfig } from "./no-type-assertions/index.js";
 import { noExportSpecifiersConfig } from "./no-empty-exports/index.js";
 import { noClassPropertyDefaultsConfig } from "./no-class-property-defaults/index.js";
+import { noDefaultClassExportRules } from "./no-default-class-export/index.js";
 
 // Plugin rule configurations
 import { pluginRules } from "./plugin/index.js";
@@ -34,6 +35,7 @@ const allRules = {
   noTypeAssertionsConfig,
   noExportSpecifiersConfig,
   noClassPropertyDefaultsConfig,
+  noDefaultClassExportRules,
 
   // Plugin rule configurations
   pluginRules,
@@ -56,6 +58,7 @@ export {
   noTypeAssertionsConfig,
   noExportSpecifiersConfig,
   noClassPropertyDefaultsConfig,
+  noDefaultClassExportRules,
 
   // Plugin rule configurations
   pluginRules,

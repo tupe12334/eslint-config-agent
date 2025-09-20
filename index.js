@@ -10,6 +10,7 @@ import classExportPlugin from "eslint-plugin-class-export";
 import storybookPlugin from "eslint-plugin-storybook";
 import globals from "globals";
 import allRules from "./rules/index.js";
+import { noDefaultClassExportRule } from "./rules/no-default-class-export/index.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -95,6 +96,7 @@ const sharedRestrictedSyntax = [
   },
   allRules.noProcessEnvPropertiesConfig,
   allRules.noExportSpecifiersConfig,
+  ...allRules.noDefaultClassExportRules,
 ];
 
 // Required export rules (always errors)
@@ -198,6 +200,11 @@ const config = [
     plugins: {
       n: nPlugin,
       "class-export": classExportPlugin,
+      "custom": {
+        rules: {
+          "no-default-class-export": noDefaultClassExportRule,
+        },
+      },
     },
   },
   reactHooks.configs["recommended-latest"],
@@ -245,6 +252,7 @@ const config = [
       ...sharedRules,
       ...allRules.typescriptEslintRules,
       "no-undef": "off", // TypeScript handles this
+      "custom/no-default-class-export": "error",
       "no-restricted-syntax": [
         "error",
         ...sharedRestrictedSyntax,
