@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.3.6](https://github.com/tupe12334/eslint-config/compare/v1.3.5...v1.3.6) (2025-09-21)
+
+### Bug Fixes
+
+* update TypeScript ESLint integration and remove deprecated parser references ([79ef677](https://github.com/tupe12334/eslint-config/commit/79ef677335cbeb7ed4550da40a0789975dcc68d7))
+
 ## [1.3.5](https://github.com/tupe12334/eslint-config/compare/v1.3.4...v1.3.5) (2025-09-20)
 
 ### Bug Fixes
