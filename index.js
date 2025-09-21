@@ -1,6 +1,5 @@
 import js from "@eslint/js";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
+import tseslint from "typescript-eslint";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactPlugin from "eslint-plugin-react";
 import importPlugin from "eslint-plugin-import";
@@ -18,7 +17,7 @@ import { noDefaultClassExportRule } from "./rules/no-default-class-export/index.
 let preactPlugin = null;
 try {
   preactPlugin = (await import("eslint-plugin-preact")).default;
-} catch (error) {
+} catch {
   // eslint-plugin-preact is not available
 }
 
@@ -31,6 +30,7 @@ const sharedRules = {
   "function-paren-newline": "off",
   quotes: "off",
   "no-unused-vars": "off",
+  "@typescript-eslint/no-unused-vars": "off",
   "max-lines-per-function": allRules.maxFunctionLinesWarning,
   "max-lines": allRules.maxFileLinesWarning,
   semi: "off",
@@ -211,6 +211,7 @@ const config = [
       }]
   ),
   js.configs.recommended,
+  ...tseslint.configs.recommended,
 
   // TypeScript and TSX files
   {
@@ -223,21 +224,12 @@ const config = [
       "**/*.stories.{js,jsx,ts,tsx}",
     ],
     languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
       globals: {
         ...globals.browser,
         ...globals.es2021,
       },
     },
     plugins: {
-      "@typescript-eslint": tsPlugin,
       react: reactPlugin,
       import: importPlugin,
       security: securityPlugin,
@@ -523,21 +515,12 @@ const config = [
       "**/*.stories.{js,jsx,ts,tsx}",
     ],
     languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
       globals: {
         ...globals.browser,
         ...globals.es2021,
       },
     },
     plugins: {
-      "@typescript-eslint": tsPlugin,
       react: reactPlugin,
       import: importPlugin,
       security: securityPlugin,
@@ -653,21 +636,12 @@ const config = [
       "**/*.stories.{js,jsx,ts,tsx}",
     ],
     languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
       globals: {
         ...globals.browser,
         ...globals.es2021,
       },
     },
     plugins: {
-      "@typescript-eslint": tsPlugin,
       react: reactPlugin,
       import: importPlugin,
       security: securityPlugin,
@@ -1019,14 +993,6 @@ const config = [
   {
     files: ["**/*.stories.{js,jsx,ts,tsx}"],
     languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
       globals: {
         ...globals.browser,
         ...globals.es2021,
