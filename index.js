@@ -192,6 +192,7 @@ const config = [
       custom: {
         rules: {
           "no-default-class-export": noDefaultClassExportRule,
+          "jsx-classname-required": allRules.jsxClassNameRequiredRule,
         },
       },
     },
@@ -342,12 +343,6 @@ const config = [
           selector: "FunctionExpression:has(SwitchStatement):not([returnType])",
           message:
             "Function expressions containing switch statements must have explicit return type annotations.",
-        },
-        // className requirement for HTML elements
-        {
-          selector:
-            'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
-          message: "HTML elements must have a className attribute.",
         },
       ],
     },
@@ -608,12 +603,6 @@ const config = [
           message:
             "Function expressions containing switch statements must have explicit return type annotations.",
         },
-        // className requirement for HTML elements
-        {
-          selector:
-            'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
-          message: "HTML elements must have a className attribute.",
-        },
         // Required export rules as errors (class rule only for JSX)
         {
           selector:
@@ -829,6 +818,7 @@ const config = [
       "**/test/**",
       "!**/test/export/**",
       "!**/test/required-exports/**",
+      "!**/test/switch-case/**",
       "**/rules/**/index.js",
     ],
     rules: {
@@ -933,14 +923,7 @@ const config = [
     files: ["**/*.{tsx,jsx}"],
     ignores: ["**/*.stories.{js,jsx,ts,tsx}"],
     rules: {
-      "no-restricted-syntax": [
-        "error",
-        {
-          selector:
-            'JSXOpeningElement:not([name.name=/^[A-Z]/]):not([name.name="Fragment"]):not(:has(JSXAttribute[name.name="className"]))',
-          message: "HTML elements must have a className attribute.",
-        },
-      ],
+      "custom/jsx-classname-required": "error",
     },
   },
 

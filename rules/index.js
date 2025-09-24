@@ -16,6 +16,7 @@ import { noTypeAssertionsConfig } from "./no-type-assertions/index.js";
 import { noExportSpecifiersConfig } from "./no-empty-exports/index.js";
 import { noClassPropertyDefaultsConfig } from "./no-class-property-defaults/index.js";
 import { noDefaultClassExportRules } from "./no-default-class-export/index.js";
+import { jsxClassNameRequiredRule } from "./jsx-classname-required/index.js";
 
 // Plugin rule configurations
 import { pluginRules } from "./plugin/index.js";
@@ -36,6 +37,7 @@ const allRules = {
   noExportSpecifiersConfig,
   noClassPropertyDefaultsConfig,
   noDefaultClassExportRules,
+  jsxClassNameRequiredRule,
 
   // Plugin rule configurations
   pluginRules,
@@ -59,6 +61,7 @@ export {
   noExportSpecifiersConfig,
   noClassPropertyDefaultsConfig,
   noDefaultClassExportRules,
+  jsxClassNameRequiredRule,
 
   // Plugin rule configurations
   pluginRules,
