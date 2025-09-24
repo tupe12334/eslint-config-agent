@@ -12,6 +12,7 @@ import storybookPlugin from "eslint-plugin-storybook";
 import globals from "globals";
 import allRules from "./rules/index.js";
 import { noDefaultClassExportRule } from "./rules/no-default-class-export/index.js";
+import errorPlugin from "eslint-plugin-error";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -40,6 +41,12 @@ const sharedRules = {
   "implicit-arrow-linebreak": "off",
   "arrow-body-style": "off",
   "no-continue": "off",
+  // Error handling rules from eslint-plugin-error
+  "error/no-generic-error": "error",
+  "error/require-custom-error": "error",
+  "error/no-throw-literal": "error",
+  // Additional built-in error handling rules
+  "prefer-promise-reject-errors": "error",
 };
 
 // Shared no-restricted-syntax rules for both JS and TS
@@ -100,7 +107,6 @@ const sharedRestrictedSyntax = [
   allRules.noExportSpecifiersConfig,
   ...allRules.noDefaultClassExportRules,
 ];
-
 
 // TypeScript-specific no-restricted-syntax rules
 const tsOnlyRestrictedSyntax = [
@@ -189,6 +195,7 @@ const config = [
       "class-export": classExportPlugin,
       "single-export": singleExportPlugin,
       "required-exports": requiredExportsPlugin,
+      error: errorPlugin,
       custom: {
         rules: {
           "no-default-class-export": noDefaultClassExportRule,
@@ -200,17 +207,18 @@ const config = [
   // Use recommended-latest if available (v5+), otherwise create flat config equivalent of legacy recommended
   ...(reactHooks.configs["recommended-latest"]
     ? [reactHooks.configs["recommended-latest"]]
-    : [{
-        name: "react-hooks/recommended-flat",
-        plugins: {
-          "react-hooks": reactHooks,
+    : [
+        {
+          name: "react-hooks/recommended-flat",
+          plugins: {
+            "react-hooks": reactHooks,
+          },
+          rules: {
+            "react-hooks/rules-of-hooks": "error",
+            "react-hooks/exhaustive-deps": "warn",
+          },
         },
-        rules: {
-          "react-hooks/rules-of-hooks": "error",
-          "react-hooks/exhaustive-deps": "warn",
-        },
-      }]
-  ),
+      ]),
   js.configs.recommended,
   ...tseslint.configs.recommended,
 
@@ -249,15 +257,18 @@ const config = [
       "no-undef": "off", // TypeScript handles this
       "custom/no-default-class-export": "error",
       "single-export/single-export": "error",
-      "required-exports/required-exports": ["error", {
-        "variable": false,    // Don't require exporting variables/constants
-        "function": false,    // Don't require exporting functions
-        "class": true,        // Require exporting classes (matches old behavior)
-        "interface": false,   // Don't require exporting interfaces
-        "type": false,        // Don't require exporting types
-        "enum": true,         // Require exporting enums (matches old behavior)
-        "ignorePrivate": true // Ignore declarations starting with _
-      }],
+      "required-exports/required-exports": [
+        "error",
+        {
+          variable: false, // Don't require exporting variables/constants
+          function: false, // Don't require exporting functions
+          class: true, // Require exporting classes (matches old behavior)
+          interface: false, // Don't require exporting interfaces
+          type: false, // Don't require exporting types
+          enum: true, // Require exporting enums (matches old behavior)
+          ignorePrivate: true, // Ignore declarations starting with _
+        },
+      ],
       "no-restricted-syntax": [
         "error",
         ...sharedRestrictedSyntax,
@@ -274,15 +285,18 @@ const config = [
       // Include all shared rules (like max-lines-per-function)
       ...sharedRules,
       "single-export/single-export": "off", // TSX files have their own specific export rules
-      "required-exports/required-exports": ["error", {
-        "variable": false,    // Don't require exporting variables/constants
-        "function": false,    // Don't require exporting functions
-        "class": true,        // Require exporting classes (matches old behavior)
-        "interface": false,   // Don't require exporting interfaces
-        "type": false,        // Don't require exporting types
-        "enum": true,         // Require exporting enums (matches old behavior)
-        "ignorePrivate": true // Ignore declarations starting with _
-      }],
+      "required-exports/required-exports": [
+        "error",
+        {
+          variable: false, // Don't require exporting variables/constants
+          function: false, // Don't require exporting functions
+          class: true, // Require exporting classes (matches old behavior)
+          interface: false, // Don't require exporting interfaces
+          type: false, // Don't require exporting types
+          enum: true, // Require exporting enums (matches old behavior)
+          ignorePrivate: true, // Ignore declarations starting with _
+        },
+      ],
       "no-restricted-syntax": [
         "error",
         // Switch case rules as errors
@@ -469,19 +483,19 @@ const config = [
     rules: {
       ...sharedRules,
       "single-export/single-export": "error",
-      "required-exports/required-exports": ["error", {
-        "variable": false,    // Don't require exporting variables/constants
-        "function": false,    // Don't require exporting functions
-        "class": true,        // Require exporting classes (matches old behavior)
-        "interface": false,   // Don't require exporting interfaces (N/A for JS)
-        "type": false,        // Don't require exporting types (N/A for JS)
-        "enum": false,        // Don't require exporting enums (N/A for JS)
-        "ignorePrivate": true // Ignore declarations starting with _
-      }],
-      "no-restricted-syntax": [
+      "required-exports/required-exports": [
         "error",
-        ...sharedRestrictedSyntax,
+        {
+          variable: false, // Don't require exporting variables/constants
+          function: false, // Don't require exporting functions
+          class: true, // Require exporting classes (matches old behavior)
+          interface: false, // Don't require exporting interfaces (N/A for JS)
+          type: false, // Don't require exporting types (N/A for JS)
+          enum: false, // Don't require exporting enums (N/A for JS)
+          ignorePrivate: true, // Ignore declarations starting with _
+        },
       ],
+      "no-restricted-syntax": ["error", ...sharedRestrictedSyntax],
     },
   },
 
@@ -533,15 +547,18 @@ const config = [
       ...sharedRules,
       "no-undef": "off", // TypeScript handles this
       "single-export/single-export": "off", // JSX files have their own specific export rules
-      "required-exports/required-exports": ["error", {
-        "variable": false,    // Don't require exporting variables/constants
-        "function": false,    // Don't require exporting functions
-        "class": true,        // Require exporting classes (matches old behavior)
-        "interface": false,   // Don't require exporting interfaces (N/A for JSX)
-        "type": false,        // Don't require exporting types (N/A for JSX)
-        "enum": false,        // Don't require exporting enums (N/A for JSX)
-        "ignorePrivate": true // Ignore declarations starting with _
-      }],
+      "required-exports/required-exports": [
+        "error",
+        {
+          variable: false, // Don't require exporting variables/constants
+          function: false, // Don't require exporting functions
+          class: true, // Require exporting classes (matches old behavior)
+          interface: false, // Don't require exporting interfaces (N/A for JSX)
+          type: false, // Don't require exporting types (N/A for JSX)
+          enum: false, // Don't require exporting enums (N/A for JSX)
+          ignorePrivate: true, // Ignore declarations starting with _
+        },
+      ],
       "no-restricted-syntax": [
         "error",
         // Switch case rules as errors
@@ -647,15 +664,18 @@ const config = [
     rules: {
       "no-undef": "off", // TypeScript handles this
       "single-export/single-export": "off", // JSX files have their own specific export rules
-      "required-exports/required-exports": ["warn", {
-        "variable": false,    // Don't require exporting variables/constants
-        "function": false,    // Don't require exporting functions
-        "class": true,        // Require exporting classes (matches old behavior)
-        "interface": false,   // Don't require exporting interfaces (N/A for JSX)
-        "type": false,        // Don't require exporting types (N/A for JSX)
-        "enum": false,        // Don't require exporting enums (N/A for JSX)
-        "ignorePrivate": true // Ignore declarations starting with _
-      }],
+      "required-exports/required-exports": [
+        "warn",
+        {
+          variable: false, // Don't require exporting variables/constants
+          function: false, // Don't require exporting functions
+          class: true, // Require exporting classes (matches old behavior)
+          interface: false, // Don't require exporting interfaces (N/A for JSX)
+          type: false, // Don't require exporting types (N/A for JSX)
+          enum: false, // Don't require exporting enums (N/A for JSX)
+          ignorePrivate: true, // Ignore declarations starting with _
+        },
+      ],
       "no-restricted-syntax": [
         "warn",
         // Include shared rules but remove the multiple exports restriction and switch case rules for JSX
@@ -822,15 +842,18 @@ const config = [
       "**/rules/**/index.js",
     ],
     rules: {
-      "required-exports/required-exports": ["error", {
-        "variable": false,    // Don't require exporting variables/constants
-        "function": false,    // Don't require exporting functions
-        "class": true,        // Require exporting classes (matches old behavior)
-        "interface": false,   // Don't require exporting interfaces
-        "type": false,        // Don't require exporting types
-        "enum": true,         // Require exporting enums (matches old behavior)
-        "ignorePrivate": true // Ignore declarations starting with _
-      }],
+      "required-exports/required-exports": [
+        "error",
+        {
+          variable: false, // Don't require exporting variables/constants
+          function: false, // Don't require exporting functions
+          class: true, // Require exporting classes (matches old behavior)
+          interface: false, // Don't require exporting interfaces
+          type: false, // Don't require exporting types
+          enum: true, // Require exporting enums (matches old behavior)
+          ignorePrivate: true, // Ignore declarations starting with _
+        },
+      ],
       "no-restricted-syntax": [
         "error",
         // Switch case rules as errors

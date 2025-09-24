@@ -74,9 +74,9 @@ const testCategories = {
   performance: {
     description: "Performance and large file testing",
     files: ["test/performance-test.tsx"],
-    maxErrors: 45,
+    maxErrors: 47,
     maxWarnings: 35,
-    expectedRules: ["max-lines-per-function", "max-lines", "no-restricted-syntax", "@typescript-eslint/no-explicit-any"],
+    expectedRules: ["max-lines-per-function", "max-lines", "no-restricted-syntax", "@typescript-eslint/no-explicit-any", "error/no-generic-error", "error/require-custom-error"],
   },
   "export-valid": {
     description: "Valid export patterns",
