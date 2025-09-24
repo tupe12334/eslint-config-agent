@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.3.7](https://github.com/tupe12334/eslint-config/compare/v1.3.6...v1.3.7) (2025-09-24)
+
+### Features
+
+* add error handling rules from eslint-plugin-error ([082701f](https://github.com/tupe12334/eslint-config/commit/082701f8abe8730ed12afe206caf8f10825b4d1c))
+* add jsx-classname-required rule to enforce className attribute on HTML elements in JSX ([3603865](https://github.com/tupe12334/eslint-config/commit/360386582f05e63d6ba1625548725b9216c4f4d6))
+* integrate error handling rules from eslint-plugin-error and update configuration ([7c8b846](https://github.com/tupe12334/eslint-config/commit/7c8b84694550b92ac2a265591fac736d5ddb1180))
+
 ## [1.3.6](https://github.com/tupe12334/eslint-config/compare/v1.3.5...v1.3.6) (2025-09-21)
 
 ### Bug Fixes
