@@ -41,10 +41,6 @@ const sharedRules = {
   "implicit-arrow-linebreak": "off",
   "arrow-body-style": "off",
   "no-continue": "off",
-  // Error handling rules from eslint-plugin-error
-  "error/no-generic-error": "error",
-  "error/require-custom-error": "error",
-  "error/no-throw-literal": "error",
   // Additional built-in error handling rules
   "prefer-promise-reject-errors": "error",
 };
@@ -221,6 +217,15 @@ const config = [
       ]),
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  // Error handling plugin strict config
+  {
+    plugins: {
+      error: errorPlugin,
+    },
+    rules: {
+      ...errorPlugin.configs.strict.rules,
+    },
+  },
 
   // TypeScript and TSX files
   {
