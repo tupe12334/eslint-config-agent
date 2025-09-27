@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.3.9](https://github.com/tupe12334/eslint-config/compare/v1.3.8...v1.3.9) (2025-09-27)
+
+### Bug Fixes
+
+* update eslint-plugin-error to version 1.1.3 for improved stability ([4fc6a2f](https://github.com/tupe12334/eslint-config/commit/4fc6a2f688ea195d5e2038222449993fce4a7dc7))
+
 ## [1.3.8](https://github.com/tupe12334/eslint-config/compare/v1.3.7...v1.3.8) (2025-09-27)
 
 ### Features
