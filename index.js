@@ -6,6 +6,7 @@ import allRules from "./rules/index.js";
 import { noRecordLiteralTypesConfigs } from "./rules/no-record-literal-types/index.js";
 import { plugins } from "./plugins/index.js";
 import { testFilesConfig } from "./configs/test-files.js";
+import { storybookConfig } from "./configs/storybook.js";
 
 // Shared rules for both JS and TS files
 const sharedRules = {
@@ -651,23 +652,8 @@ const config = [
     },
   },
 
-  // Storybook files configuration - only use storybook plugin rules
-  {
-    files: ["**/*.stories.{js,jsx,ts,tsx}"],
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.es2021,
-      },
-    },
-    plugins: {
-      storybook: plugins.storybook,
-    },
-    rules: {
-      // Enable recommended storybook rules only
-      ...plugins.storybook.configs.recommended.rules,
-    },
-  },
+  // Storybook files configuration
+  storybookConfig,
 
   // Rules directory configuration - allow export specifiers for API definitions (but not examples)
   {
