@@ -8,9 +8,9 @@ interface PrimitiveUnions {
   callback: (() => void) | ((value: string) => void) | null;
 }
 
-type PrimitiveType = {
+interface PrimitiveType {
   mixed: string | number | boolean;
   element: HTMLElement | SVGElement;
-};
+}
 
 export { PrimitiveUnions, PrimitiveType };

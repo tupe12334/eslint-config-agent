@@ -22,19 +22,19 @@ interface ProperInterface {
   age: number;
 }
 
-type ProperType = {
+interface ProperType {
   key1: unknown;
   prop: any;
-};
+}
 
 // Test with nested types
-type NestedBad = {
+interface NestedBad {
   data: Record<"id" | "value", string>; // Should trigger error
-};
+}
 
-type NestedGood = {
+interface NestedGood {
   data: Record<string, string>; // Should be allowed
-};
+}
 
 // Test with union types containing Record
 type UnionBad = string | Record<"test", boolean>; // Should trigger error

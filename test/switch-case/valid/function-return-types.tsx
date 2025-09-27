@@ -31,7 +31,7 @@ export const validFunctionExpression = function(value: "test" | "other"): string
 };
 
 // Valid: complex return type
-type ActionResult = { success: boolean; message: string };
+interface ActionResult { success: boolean; message: string }
 
 export function validComplexFunction(action: "save" | "delete"): ActionResult {
   switch (action) {

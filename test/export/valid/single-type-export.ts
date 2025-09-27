@@ -1,7 +1,7 @@
 // Test: Single type export (should be valid)
 type Status = 'active' | 'inactive';
 
-export type ValidType = {
+export interface ValidType {
   status: Status;
   count: number;
-};
+}

@@ -1,8 +1,8 @@
 // Invalid: export type without from clause (local export)
 
-type ProgressAnalysis = {
+interface ProgressAnalysis {
   status: string;
-};
+}
 
 // This should trigger the new rule
 export type { ProgressAnalysis };
