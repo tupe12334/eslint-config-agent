@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.3.8](https://github.com/tupe12334/eslint-config/compare/v1.3.7...v1.3.8) (2025-09-27)
+
+### Features
+
+* add eslint-plugin-default for enhanced linting rules; configure default plugin strict settings ([70d3ac6](https://github.com/tupe12334/eslint-config/commit/70d3ac6f7ab6666eb7652840cf8eb6b68de74df7))
+* add test files configuration and refactor index.js to import shared rules ([28d3799](https://github.com/tupe12334/eslint-config/commit/28d3799edbc7d4726027adbbdc597746579e516e))
+* add TODO.md with function export and translation function guidelines ([94bfd21](https://github.com/tupe12334/eslint-config/commit/94bfd2167b29480cf7f3d2bb11120756239b0ee7))
+* implement no-nullish-coalescing rule with examples and tests ([838196f](https://github.com/tupe12334/eslint-config/commit/838196f500125d09e92f9fa0d7f6bb65280a2f3b))
+* implement no-record-literal-types rule to enforce type safety; add examples and tests ([3308ccb](https://github.com/tupe12334/eslint-config/commit/3308ccb59ba4e9d05725e2f810453df454c63ba5))
+* include configs directory in package.json files list ([3bce2b4](https://github.com/tupe12334/eslint-config/commit/3bce2b41440a7330816603918bf74dfea3900b2b))
+* refine .npmignore and package.json to better manage test and example files in rules directory ([9ed652b](https://github.com/tupe12334/eslint-config/commit/9ed652bae2410faa4428dab583e3494abf9cc5bc))
+* update .npmignore to include examples and test files in rules directory ([d1bb23d](https://github.com/tupe12334/eslint-config/commit/d1bb23df50c623ada2bc2805f7638f9398f2ba64))
+* update no-empty-exports tests for consistency and clarity; enhance test-runner to scan for spec files ([25a7d26](https://github.com/tupe12334/eslint-config/commit/25a7d2660cc992e9031e0577197bfb57faf2c570))
+
 ## [1.3.7](https://github.com/tupe12334/eslint-config/compare/v1.3.6...v1.3.7) (2025-09-24)
 
 ### Features
