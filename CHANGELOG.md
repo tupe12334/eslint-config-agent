@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.4.1](https://github.com/tupe12334/eslint-config/compare/v1.3.9...v1.4.1) (2025-09-27)
+
+### Features
+
+* add no-optional-chaining rule and update test configurations ([90ac6ca](https://github.com/tupe12334/eslint-config/commit/90ac6cab81cdbee76ac8dd65f7ffabebb1aa9962))
+* add Storybook ESLint configuration and integrate into main config ([666c513](https://github.com/tupe12334/eslint-config/commit/666c5134fedbf984dc9118721218c1f2a9b5a349))
+* add switch case explicit return rule with tests and documentation ([a6bca6d](https://github.com/tupe12334/eslint-config/commit/a6bca6d0925b219f6960743b23e3d88f5104bbe7))
+* add switch statements return type rule to enforce explicit return type annotations ([5e365e3](https://github.com/tupe12334/eslint-config/commit/5e365e30902ae05fc5f66401c86441b6f5606e5a))
+* centralize ESLint plugin registration and remove individual imports ([603aa7d](https://github.com/tupe12334/eslint-config/commit/603aa7dbecc3721a0c564f07ce163206d0d6883a))
+* implement switch case functions return type rule with comprehensive tests and documentation ([ffe0e71](https://github.com/tupe12334/eslint-config/commit/ffe0e717325819ce5f23e40e2eee0381de1aff9f))
+* update tests to use @typescript-eslint/rule-tester v8 and ESLint v9 flat config for switch-case and switch-statements return type rules ([673fca5](https://github.com/tupe12334/eslint-config/commit/673fca5bdf2630eb420b472c32caf427e8b8ce07))
+
+### Bug Fixes
+
+* update release scripts to use npx dotenv for proper environment variable loading ([348d4e4](https://github.com/tupe12334/eslint-config/commit/348d4e442af95622fd76393ab231698abff617a5))
+* use pnpm exec for dotenv in release scripts ([dec3c80](https://github.com/tupe12334/eslint-config/commit/dec3c80f864ae4874a7510aae8223feab2afaf38))
+
 ## [1.3.9](https://github.com/tupe12334/eslint-config/compare/v1.3.8...v1.3.9) (2025-09-27)
 
 ### Bug Fixes
