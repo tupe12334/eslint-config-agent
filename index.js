@@ -1,30 +1,11 @@
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import reactHooks from "eslint-plugin-react-hooks";
-import reactPlugin from "eslint-plugin-react";
-import importPlugin from "eslint-plugin-import";
-import securityPlugin from "eslint-plugin-security";
-import nPlugin from "eslint-plugin-n";
-import classExportPlugin from "eslint-plugin-class-export";
-import singleExportPlugin from "eslint-plugin-single-export";
-import requiredExportsPlugin from "eslint-plugin-required-exports";
-import storybookPlugin from "eslint-plugin-storybook";
 import globals from "globals";
 import allRules from "./rules/index.js";
-import { noDefaultClassExportRule } from "./rules/no-default-class-export/index.js";
 import { noRecordLiteralTypesConfigs } from "./rules/no-record-literal-types/index.js";
-import errorPlugin from "eslint-plugin-error";
-import defaultPlugin from "eslint-plugin-default";
-import noOptionalChainingPlugin from "eslint-plugin-no-optional-chaining";
+import { plugins } from "./plugins/index.js";
 import { testFilesConfig } from "./configs/test-files.js";
-
-// Conditionally import preact plugin if available
-let preactPlugin = null;
-try {
-  preactPlugin = (await import("eslint-plugin-preact")).default;
-} catch {
-  // eslint-plugin-preact is not available
-}
 
 // Shared rules for both JS and TS files
 const sharedRules = {
@@ -122,20 +103,7 @@ const tsOnlyRestrictedSyntax = [
 const config = [
   // Global plugin definitions
   {
-    plugins: {
-      n: nPlugin,
-      "class-export": classExportPlugin,
-      "single-export": singleExportPlugin,
-      "required-exports": requiredExportsPlugin,
-      error: errorPlugin,
-      "no-optional-chaining": noOptionalChainingPlugin,
-      custom: {
-        rules: {
-          "no-default-class-export": noDefaultClassExportRule,
-          "jsx-classname-required": allRules.jsxClassNameRequiredRule,
-        },
-      },
-    },
+    plugins,
   },
   // Use recommended-latest if available (v5+), otherwise create flat config equivalent of legacy recommended
   ...(reactHooks.configs["recommended-latest"]
@@ -157,16 +125,16 @@ const config = [
   // Error handling plugin strict config
   {
     plugins: {
-      error: errorPlugin,
+      error: plugins.error,
     },
     rules: {
-      ...errorPlugin.configs.strict.rules,
+      ...plugins.error.configs.strict.rules,
     },
   },
   // Default plugin strict config
   {
     plugins: {
-      default: defaultPlugin,
+      default: plugins.default,
     },
     rules: {
       "default/no-localhost": ["error", { allowInTests: true }],
@@ -191,12 +159,12 @@ const config = [
       },
     },
     plugins: {
-      react: reactPlugin,
-      import: importPlugin,
-      security: securityPlugin,
-      n: nPlugin,
-      "class-export": classExportPlugin,
-      ...(preactPlugin && { preact: preactPlugin }),
+      react: plugins.react,
+      import: plugins.import,
+      security: plugins.security,
+      n: plugins.n,
+      "class-export": plugins["class-export"],
+      ...(plugins.preact && { preact: plugins.preact }),
     },
     settings: {
       "import/resolver": {
@@ -361,12 +329,12 @@ const config = [
       },
     },
     plugins: {
-      import: importPlugin,
-      react: reactPlugin,
-      security: securityPlugin,
-      n: nPlugin,
-      "class-export": classExportPlugin,
-      "single-export": singleExportPlugin,
+      import: plugins.import,
+      react: plugins.react,
+      security: plugins.security,
+      n: plugins.n,
+      "class-export": plugins["class-export"],
+      "single-export": plugins["single-export"],
     },
     settings: {
       react: {
@@ -423,13 +391,13 @@ const config = [
       },
     },
     plugins: {
-      react: reactPlugin,
-      import: importPlugin,
-      security: securityPlugin,
-      n: nPlugin,
-      "class-export": classExportPlugin,
-      "single-export": singleExportPlugin,
-      ...(preactPlugin && { preact: preactPlugin }),
+      react: plugins.react,
+      import: plugins.import,
+      security: plugins.security,
+      n: plugins.n,
+      "class-export": plugins["class-export"],
+      "single-export": plugins["single-export"],
+      ...(plugins.preact && { preact: plugins.preact }),
     },
     settings: {
       react: {
@@ -491,13 +459,13 @@ const config = [
       },
     },
     plugins: {
-      react: reactPlugin,
-      import: importPlugin,
-      security: securityPlugin,
-      n: nPlugin,
-      "class-export": classExportPlugin,
-      "single-export": singleExportPlugin,
-      ...(preactPlugin && { preact: preactPlugin }),
+      react: plugins.react,
+      import: plugins.import,
+      security: plugins.security,
+      n: plugins.n,
+      "class-export": plugins["class-export"],
+      "single-export": plugins["single-export"],
+      ...(plugins.preact && { preact: plugins.preact }),
     },
     settings: {
       react: {
@@ -693,11 +661,11 @@ const config = [
       },
     },
     plugins: {
-      storybook: storybookPlugin,
+      storybook: plugins.storybook,
     },
     rules: {
       // Enable recommended storybook rules only
-      ...storybookPlugin.configs.recommended.rules,
+      ...plugins.storybook.configs.recommended.rules,
     },
   },
 

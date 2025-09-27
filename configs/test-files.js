@@ -1,6 +1,6 @@
 import allRules from "../rules/index.js";
 import { noRecordLiteralTypesConfigs } from "../rules/no-record-literal-types/index.js";
-import noOptionalChainingPlugin from "eslint-plugin-no-optional-chaining";
+import { plugins } from "../plugins/index.js";
 
 // Shared rules for both JS and TS files
 const sharedRules = {
@@ -99,9 +99,7 @@ const tsOnlyRestrictedSyntax = [
 export const testFilesConfig = [
   // Global plugin registration for test files
   {
-    plugins: {
-      "no-optional-chaining": noOptionalChainingPlugin,
-    },
+    plugins,
   },
 
   // Disable function and file size limits for test and spec files
