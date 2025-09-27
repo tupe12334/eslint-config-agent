@@ -14,6 +14,7 @@ import allRules from "./rules/index.js";
 import { noDefaultClassExportRule } from "./rules/no-default-class-export/index.js";
 import { noRecordLiteralTypesConfigs } from "./rules/no-record-literal-types/index.js";
 import errorPlugin from "eslint-plugin-error";
+import defaultPlugin from "eslint-plugin-default";
 import { testFilesConfig } from "./configs/test-files.js";
 
 // Conditionally import preact plugin if available
@@ -211,6 +212,16 @@ const config = [
     },
     rules: {
       ...errorPlugin.configs.strict.rules,
+    },
+  },
+  // Default plugin strict config
+  {
+    plugins: {
+      default: defaultPlugin,
+    },
+    rules: {
+      "default/no-localhost": ["error", { allowInTests: true }],
+      "default/no-hardcoded-urls": ["error", { allowInTests: true }],
     },
   },
 

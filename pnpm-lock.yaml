@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      eslint-plugin-default:
+        specifier: ^1.0.1
+        version: 1.0.1(eslint@9.34.0(jiti@2.5.1))
       eslint-plugin-error:
         specifier: ^1.1.1
         version: 1.1.1(eslint@9.34.0(jiti@2.5.1))
@@ -1285,6 +1288,12 @@ packages:
     engines: {node: '>=9.x'}
     peerDependencies:
       eslint: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
+
+  eslint-plugin-default@1.0.1:
+    resolution: {integrity: sha512-dniDI50jcTfbjCDkndqgEpynUChnsNhVXliDSHfCSznpAMXO5c9Gnbgoyp4+gO7Wq+uP0RcDi6eK+Y9/Fi2p+A==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      eslint: ^9.0.0
 
   eslint-plugin-error@1.1.1:
     resolution: {integrity: sha512-/mC5VSF5KQRrOEDtbsU1fDMHIYb3gkaQr1UJ3f3wYDjhOkZN7V/iAktksuP/UoT68op7QQ5NeqpK+rwFx1Mfuw==}
@@ -3999,6 +4008,10 @@ snapshots:
       find-up: 5.0.0
       lodash.memoize: 4.1.2
       semver: 7.3.5
+
+  eslint-plugin-default@1.0.1(eslint@9.34.0(jiti@2.5.1)):
+    dependencies:
+      eslint: 9.34.0(jiti@2.5.1)
 
   eslint-plugin-error@1.1.1(eslint@9.34.0(jiti@2.5.1)):
     dependencies:
