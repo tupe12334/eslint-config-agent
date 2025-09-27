@@ -13,6 +13,7 @@ import globals from "globals";
 import allRules from "./rules/index.js";
 import { noDefaultClassExportRule } from "./rules/no-default-class-export/index.js";
 import errorPlugin from "eslint-plugin-error";
+import { testFilesConfig } from "./configs/test-files.js";
 
 // Conditionally import preact plugin if available
 let preactPlugin = null;
@@ -723,89 +724,8 @@ const config = [
     },
   },
 
-  // Disable function and file size limits for test and spec files
-  {
-    files: [
-      "**/*.test.{js,jsx,ts,tsx}",
-      "**/*.spec.{js,jsx,ts,tsx}",
-      "**/test/**/*.{js,jsx,ts,tsx}",
-      "**/tests/**/*.{js,jsx,ts,tsx}",
-      "**/__tests__/**/*.{js,jsx,ts,tsx}",
-    ],
-    ignores: [
-      "**/long-function-test.tsx", // Exception: this file tests the max-lines rule itself
-      "**/test/export/**", // Export tests should follow strict export rules
-      "**/test/required-exports/**", // Required export tests should follow strict export rules
-    ],
-    rules: {
-      "max-lines-per-function": "off",
-      "max-lines": "off", // Ignore file length limits in test and spec files
-      // Allow multiple exports in test files for testing import/export patterns
-      "no-restricted-syntax": [
-        "warn",
-        ...sharedRestrictedSyntax.filter(
-          (rule) =>
-            rule.selector !==
-              "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
-            rule.selector !==
-              "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
-            rule.selector !==
-              "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
-        ),
-        ...tsOnlyRestrictedSyntax,
-      ],
-    },
-  },
-
-  // Test files that should have ERROR level rules but exclude export specifier rule
-  {
-    files: [
-      "**/test/type-assertions/**",
-      "**/test/test-optional.ts",
-      "**/test/test-js-optional.js",
-      "**/test/test-record-literals.ts",
-      "**/test/no-env-access-test.ts",
-      "**/test/import-export-rules.ts",
-    ],
-    rules: {
-      "max-lines-per-function": "off",
-      "no-restricted-syntax": [
-        "error", // Error level for these test files
-        ...sharedRestrictedSyntax.filter(
-          (rule) =>
-            rule.selector !==
-            "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
-        ),
-        ...tsOnlyRestrictedSyntax,
-      ],
-    },
-  },
-
-  // Test files configuration with mixed severity levels
-  {
-    files: [
-      "**/test/invalid.tsx", // Special handling for the main test file
-      "**/test/single-export-valid.ts", // Allow export specifiers for import/group-exports testing
-      "**/test/typescript-rules.ts", // Allow export specifiers for typescript rules testing
-      "**/test/type-assertions/indexed-access-valid.ts", // Allow export specifiers for type assertions testing
-    ],
-    rules: {
-      "max-lines-per-function": "off",
-      "no-restricted-syntax": [
-        "warn", // Base level for most rules
-        ...sharedRestrictedSyntax.filter(
-          (rule) =>
-            rule.selector !==
-              "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
-            rule.selector !==
-              "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
-            rule.selector !==
-              "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
-        ),
-        ...tsOnlyRestrictedSyntax,
-      ],
-    },
-  },
+  // Test and spec files configuration (imported from separate config)
+  ...testFilesConfig,
 
   // Index files configuration - allow specific export patterns
   {
@@ -974,18 +894,6 @@ const config = [
     },
   },
 
-  // Disable file length rules for configuration and spec files
-  {
-    files: [
-      "index.js", // Main configuration file
-      "**/rules/**/*.spec.js", // Spec files in rules directory
-      "**/scripts/**/*.js", // Script files
-    ],
-    rules: {
-      "max-lines": "off",
-      "max-lines-per-function": "off",
-    },
-  },
 
   // Allow default exports in configuration files (must be last to override)
   {

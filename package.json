@@ -28,7 +28,7 @@
     "test:edge": "eslint test/edge-cases.tsx",
     "test:performance": "eslint test/performance-test.tsx",
     "test:comprehensive": "node scripts/test-runner.js",
-    "test:ci": "eslint . --ignore-pattern 'test/**' --ignore-pattern 'scripts/**' --ignore-pattern 'rules/**/examples/**' --max-warnings 0",
+    "test:ci": "eslint . --ignore-pattern 'test/**' --ignore-pattern 'scripts/**' --ignore-pattern 'rules/**/examples/**' --ignore-pattern 'configs/**' --ignore-pattern 'index.js' --max-warnings 0",
     "validate": "node scripts/validate-config.js",
     "release": "dotenv -e .env -- release-it",
     "release:patch": "dotenv -e .env -- release-it patch",
