@@ -12,6 +12,7 @@
     "README.md",
     "CHANGELOG.md",
     "configs/",
+    "plugins/",
     "rules/**/index.js",
     "!rules/**/examples/",
     "!rules/**/*.spec.js",
