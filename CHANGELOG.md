@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.4.2](https://github.com/tupe12334/eslint-config/compare/v1.4.1...v1.4.2) (2025-09-27)
+
+### Features
+
+* add configuration for handling hardcoded values and default exports in config files ([0673c64](https://github.com/tupe12334/eslint-config/commit/0673c64d4e021eb5cd206a37b35b1509f007f57b))
+
 ## [1.4.1](https://github.com/tupe12334/eslint-config/compare/v1.3.9...v1.4.1) (2025-09-27)
 
 ### Features
