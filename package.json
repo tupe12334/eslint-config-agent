@@ -114,6 +114,7 @@
   },
   "dependencies": {
     "eslint-plugin-default": "^1.0.1",
-    "eslint-plugin-error": "^1.1.3"
+    "eslint-plugin-error": "^1.1.3",
+    "eslint-plugin-no-optional-chaining": "^1.0.0"
   }
 }

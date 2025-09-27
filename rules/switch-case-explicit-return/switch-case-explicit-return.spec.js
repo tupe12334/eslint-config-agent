@@ -8,6 +8,14 @@ import { switchCaseExplicitReturnConfigs } from "./index.js";
  * and ESLint v9 flat config for testing TypeScript ESLint rules.
  */
 
+// Custom error class for test failures
+export class TestError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'TestError';
+  }
+}
+
 // Configure RuleTester for Node.js test environment (modern best practice)
 RuleTester.afterAll = () => {}; // No cleanup needed for simple tests
 RuleTester.describe = (name, fn) => {
@@ -20,7 +28,7 @@ RuleTester.it = (name, fn) => {
     console.log(`   ✅ ${name}`);
   } catch (error) {
     console.log(`   ❌ ${name}: ${error.message}`);
-    throw error;
+    throw new TestError(error.message || 'Test failed');
   }
 };
 RuleTester.itOnly = RuleTester.it;
@@ -296,4 +304,3 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
   console.log(`      → ${config.message}`);
 });
 
-export { switchCaseExplicitReturnConfigs };

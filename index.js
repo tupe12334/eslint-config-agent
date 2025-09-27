@@ -15,6 +15,7 @@ import { noDefaultClassExportRule } from "./rules/no-default-class-export/index.
 import { noRecordLiteralTypesConfigs } from "./rules/no-record-literal-types/index.js";
 import errorPlugin from "eslint-plugin-error";
 import defaultPlugin from "eslint-plugin-default";
+import noOptionalChainingPlugin from "eslint-plugin-no-optional-chaining";
 import { testFilesConfig } from "./configs/test-files.js";
 
 // Conditionally import preact plugin if available
@@ -46,18 +47,12 @@ const sharedRules = {
   "no-continue": "off",
   // Additional built-in error handling rules
   "prefer-promise-reject-errors": "error",
+  // Optional chaining restriction
+  "no-optional-chaining/no-optional-chaining": "error",
 };
 
 // Shared no-restricted-syntax rules for both JS and TS
 const sharedRestrictedSyntax = [
-  {
-    selector: "MemberExpression[optional=true]",
-    message: "Optional chaining is not allowed.",
-  },
-  {
-    selector: "CallExpression[optional=true]",
-    message: "Optional chaining is not allowed.",
-  },
   allRules.noNullishCoalescingConfig,
   {
     selector:
@@ -133,6 +128,7 @@ const config = [
       "single-export": singleExportPlugin,
       "required-exports": requiredExportsPlugin,
       error: errorPlugin,
+      "no-optional-chaining": noOptionalChainingPlugin,
       custom: {
         rules: {
           "no-default-class-export": noDefaultClassExportRule,
@@ -631,14 +627,6 @@ const config = [
         },
         ...allRules.switchCaseFunctionsReturnTypeConfigs,
         ...allRules.switchStatementsReturnTypeConfigs,
-        {
-          selector: "MemberExpression[optional=true]",
-          message: "Optional chaining is not allowed.",
-        },
-        {
-          selector: "CallExpression[optional=true]",
-          message: "Optional chaining is not allowed.",
-        },
         allRules.noNullishCoalescingConfig,
         {
           selector: 'TSAsExpression[typeAnnotation.type="TSIndexedAccessType"]',

@@ -1,5 +1,6 @@
 import allRules from "../rules/index.js";
 import { noRecordLiteralTypesConfigs } from "../rules/no-record-literal-types/index.js";
+import noOptionalChainingPlugin from "eslint-plugin-no-optional-chaining";
 
 // Shared rules for both JS and TS files
 const sharedRules = {
@@ -22,18 +23,12 @@ const sharedRules = {
   "no-continue": "off",
   // Additional built-in error handling rules
   "prefer-promise-reject-errors": "error",
+  // Optional chaining restriction
+  "no-optional-chaining/no-optional-chaining": "error",
 };
 
 // Shared no-restricted-syntax rules for both JS and TS
 const sharedRestrictedSyntax = [
-  {
-    selector: "MemberExpression[optional=true]",
-    message: "Optional chaining is not allowed.",
-  },
-  {
-    selector: "CallExpression[optional=true]",
-    message: "Optional chaining is not allowed.",
-  },
   allRules.noNullishCoalescingConfig,
   {
     selector:
@@ -102,6 +97,13 @@ const tsOnlyRestrictedSyntax = [
 
 // Test and spec files configuration
 export const testFilesConfig = [
+  // Global plugin registration for test files
+  {
+    plugins: {
+      "no-optional-chaining": noOptionalChainingPlugin,
+    },
+  },
+
   // Disable function and file size limits for test and spec files
   {
     files: [

@@ -29,9 +29,9 @@ const testCategories = {
       "test/invalid.tsx",
       "test/jsx-extension-test.js",
     ],
-    maxErrors: 4,
+    maxErrors: 7,
     maxWarnings: 6,
-    expectedRules: ["no-restricted-syntax", "react/jsx-filename-extension", "custom/jsx-classname-required", "@typescript-eslint/no-explicit-any"],
+    expectedRules: ["no-restricted-syntax", "no-optional-chaining/no-optional-chaining", "react/jsx-filename-extension", "custom/jsx-classname-required", "@typescript-eslint/no-explicit-any"],
   },
   "type-assertions-indexed": {
     description: "Indexed access type assertion restrictions",
