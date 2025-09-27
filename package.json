@@ -113,7 +113,7 @@
     "typescript-eslint": "^8.40.0"
   },
   "dependencies": {
-    "eslint-plugin-default": "^1.0.1",
+    "eslint-plugin-default": "^1.1.0",
     "eslint-plugin-error": "^1.1.3",
     "eslint-plugin-no-optional-chaining": "^1.0.0"
   }

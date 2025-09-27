@@ -7,6 +7,7 @@ import { noRecordLiteralTypesConfigs } from "./rules/no-record-literal-types/ind
 import { plugins } from "./plugins/index.js";
 import { testFilesConfig } from "./configs/test-files.js";
 import { storybookConfig } from "./configs/storybook.js";
+import { configFilesConfig } from "./configs/config-files.js";
 
 // Shared rules for both JS and TS files
 const sharedRules = {
@@ -133,15 +134,7 @@ const config = [
     },
   },
   // Default plugin strict config
-  {
-    plugins: {
-      default: plugins.default,
-    },
-    rules: {
-      "default/no-localhost": ["error", { allowInTests: true }],
-      "default/no-hardcoded-urls": ["error", { allowInTests: true }],
-    },
-  },
+  plugins.default.configs.strict,
 
   // TypeScript and TSX files
   {
@@ -289,14 +282,21 @@ const config = [
           message:
             "Cannot have both type alias export and type-only export in the same TSX file.",
         },
-        ...tsOnlyRestrictedSyntax.filter(
-          (rule) => {
-            const switchCaseFunctionSelectors = allRules.switchCaseFunctionsReturnTypeConfigs.map(r => r.selector);
-            const switchStatementFunctionSelectors = allRules.switchStatementsReturnTypeConfigs.map(r => r.selector);
-            const switchCaseExplicitReturnSelectors = allRules.switchCaseExplicitReturnConfigs.map(r => r.selector);
-            return ![...switchCaseFunctionSelectors, ...switchStatementFunctionSelectors, ...switchCaseExplicitReturnSelectors].includes(rule.selector);
-          }
-        ),
+        ...tsOnlyRestrictedSyntax.filter((rule) => {
+          const switchCaseFunctionSelectors =
+            allRules.switchCaseFunctionsReturnTypeConfigs.map(
+              (r) => r.selector
+            );
+          const switchStatementFunctionSelectors =
+            allRules.switchStatementsReturnTypeConfigs.map((r) => r.selector);
+          const switchCaseExplicitReturnSelectors =
+            allRules.switchCaseExplicitReturnConfigs.map((r) => r.selector);
+          return ![
+            ...switchCaseFunctionSelectors,
+            ...switchStatementFunctionSelectors,
+            ...switchCaseExplicitReturnSelectors,
+          ].includes(rule.selector);
+        }),
       ],
     },
   },
@@ -533,6 +533,9 @@ const config = [
   // Test and spec files configuration (imported from separate config)
   ...testFilesConfig,
 
+  // Configuration files (imported from separate config)
+  ...configFilesConfig,
+
   // Index files configuration - allow specific export patterns
   {
     files: [
@@ -639,19 +642,6 @@ const config = [
   },
 
 
-  // Allow default exports in configuration files (must be last to override)
-  {
-    files: [
-      "*.config.js",
-      "*.config.ts",
-      "eslint.config.js",
-      "eslint.config.ts",
-    ],
-    rules: {
-      "import/no-default-export": "off",
-    },
-  },
-
   // Storybook files configuration
   storybookConfig,
 
@@ -676,6 +666,7 @@ const config = [
       ],
     },
   },
+
 ];
 
 export default config;

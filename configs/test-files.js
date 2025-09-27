@@ -119,6 +119,9 @@ export const testFilesConfig = [
     rules: {
       "max-lines-per-function": "off",
       "max-lines": "off", // Ignore file length limits in test and spec files
+      "default/no-localhost": ["error", { allowInTests: true }],
+      "default/no-hardcoded-urls": ["error", { allowInTests: true }],
+      "default/no-default-params": "off", // Allow default parameters in test files for demonstration purposes
       // Allow multiple exports in test files for testing import/export patterns
       "no-restricted-syntax": [
         "warn",
@@ -170,6 +173,9 @@ export const testFilesConfig = [
     ],
     rules: {
       "max-lines-per-function": "off",
+      "default/no-localhost": ["error", { allowInTests: true }],
+      "default/no-hardcoded-urls": ["error", { allowInTests: true }],
+      "default/no-default-params": "off", // Allow default parameters in test files for demonstration purposes
       "no-restricted-syntax": [
         "warn", // Base level for most rules
         ...sharedRestrictedSyntax.filter(
@@ -196,6 +202,18 @@ export const testFilesConfig = [
     rules: {
       "max-lines": "off",
       "max-lines-per-function": "off",
+    },
+  },
+
+  // Export test files - allow hardcoded URLs for testing but keep strict export rules
+  {
+    files: [
+      "**/test/export/**/*.{js,ts,tsx,jsx}",
+    ],
+    rules: {
+      "default/no-localhost": ["error", { allowInTests: true }],
+      "default/no-hardcoded-urls": ["error", { allowInTests: true }],
+      "default/no-default-params": "off", // Allow default parameters in test files for demonstration purposes
     },
   },
 ];
