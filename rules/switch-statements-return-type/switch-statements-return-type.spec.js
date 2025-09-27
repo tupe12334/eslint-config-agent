@@ -1,12 +1,29 @@
-import { RuleTester } from "eslint";
+import { RuleTester } from "@typescript-eslint/rule-tester";
 import { switchStatementsReturnTypeConfigs } from "./index.js";
 
 /**
  * Test suite for switch-statements-return-type rules
  *
- * This tests the no-restricted-syntax configurations that enforce
- * explicit return type annotations for functions containing switch statements.
+ * This uses the modern 2024 approach with @typescript-eslint/rule-tester v8
+ * and ESLint v9 flat config for testing TypeScript ESLint rules.
  */
+
+// Configure RuleTester for Node.js test environment (modern best practice)
+RuleTester.afterAll = () => {}; // No cleanup needed for simple tests
+RuleTester.describe = (name, fn) => {
+  console.log(`\n📝 ${name}`);
+  fn();
+};
+RuleTester.it = (name, fn) => {
+  try {
+    fn();
+    console.log(`   ✅ ${name}`);
+  } catch (error) {
+    console.log(`   ❌ ${name}: ${error.message}`);
+    throw error;
+  }
+};
+RuleTester.itOnly = RuleTester.it;
 
 // Create a single rule that tests all selectors
 const switchStatementsReturnTypeRule = {
@@ -14,11 +31,13 @@ const switchStatementsReturnTypeRule = {
     type: "problem",
     docs: {
       description: "Require explicit return type annotations for functions containing switch statements",
+      recommended: "strict",
     },
     messages: {
       requireReturnType: "Functions containing switch statements must have explicit return type annotations.",
     },
     schema: [],
+    fixable: null,
   },
   create(context) {
     const rules = {};
@@ -37,16 +56,15 @@ const switchStatementsReturnTypeRule = {
   },
 };
 
+// Modern ESLint v9 + typescript-eslint v8 configuration
 const ruleTester = new RuleTester({
   languageOptions: {
-    ecmaVersion: 2022,
+    ecmaVersion: "latest",
     sourceType: "module",
-    parser: (await import("@typescript-eslint/parser")).default,
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
       },
-      project: null,
     },
   },
 });
@@ -189,11 +207,18 @@ ruleTester.run("switch-statements-return-type", switchStatementsReturnTypeRule, 
   ],
 });
 
-console.log("✅ All switch-statements-return-type tests passed!");
+console.log("\n✅ All switch-statements-return-type RuleTester tests completed!");
+console.log("\n🎯 Modern Testing Benefits:");
+console.log("   • Uses @typescript-eslint/rule-tester v8 (latest)");
+console.log("   • ESLint v9 flat config compatibility");
+console.log("   • Automatic TypeScript parser handling");
+console.log("   • Enhanced error reporting and type safety");
+console.log("   • No manual parser configuration required");
+
+console.log(`\n📋 Tested ${switchStatementsReturnTypeConfigs.length} rule configurations:`);
 switchStatementsReturnTypeConfigs.forEach((config, index) => {
-  console.log(`   Rule ${index + 1}:`);
-  console.log(`     Selector: ${config.selector}`);
-  console.log(`     Message: ${config.message}`);
+  console.log(`   ${index + 1}. ${config.selector}`);
+  console.log(`      → ${config.message}`);
 });
 
 export { switchStatementsReturnTypeRule };
