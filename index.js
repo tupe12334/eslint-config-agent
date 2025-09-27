@@ -12,6 +12,7 @@ import storybookPlugin from "eslint-plugin-storybook";
 import globals from "globals";
 import allRules from "./rules/index.js";
 import { noDefaultClassExportRule } from "./rules/no-default-class-export/index.js";
+import { noRecordLiteralTypesConfigs } from "./rules/no-record-literal-types/index.js";
 import errorPlugin from "eslint-plugin-error";
 import { testFilesConfig } from "./configs/test-files.js";
 
@@ -103,18 +104,7 @@ const sharedRestrictedSyntax = [
 
 // TypeScript-specific no-restricted-syntax rules
 const tsOnlyRestrictedSyntax = [
-  {
-    selector:
-      'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > .params:first-child TSLiteralType',
-    message:
-      "Avoid using Record with string literal keys. Use a more specific interface or type instead.",
-  },
-  {
-    selector:
-      'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > TSLiteralType:first-child',
-    message:
-      "Avoid using Record with string literal keys. Use a more specific interface or type instead.",
-  },
+  ...noRecordLiteralTypesConfigs,
   {
     selector:
       "TSTypeAnnotation > TSUnionType:not(PropertyDefinition > .typeAnnotation > .typeAnnotation):not(TSPropertySignature > .typeAnnotation > .typeAnnotation)",

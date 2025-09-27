@@ -1,4 +1,5 @@
 import allRules from "../rules/index.js";
+import { noRecordLiteralTypesConfigs } from "../rules/no-record-literal-types/index.js";
 
 // Shared rules for both JS and TS files
 const sharedRules = {
@@ -80,18 +81,7 @@ const sharedRestrictedSyntax = [
 
 // TypeScript-specific no-restricted-syntax rules
 const tsOnlyRestrictedSyntax = [
-  {
-    selector:
-      'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > .params:first-child TSLiteralType',
-    message:
-      "Avoid using Record with string literal keys. Use a more specific interface or type instead.",
-  },
-  {
-    selector:
-      'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > TSLiteralType:first-child',
-    message:
-      "Avoid using Record with string literal keys. Use a more specific interface or type instead.",
-  },
+  ...noRecordLiteralTypesConfigs,
   {
     selector:
       "TSTypeAnnotation > TSUnionType:not(PropertyDefinition > .typeAnnotation > .typeAnnotation):not(TSPropertySignature > .typeAnnotation > .typeAnnotation)",
