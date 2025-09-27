@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.4.3](https://github.com/tupe12334/eslint-config/compare/v1.4.2...v1.4.3) (2025-09-27)
+
+### Features
+
+* include plugins directory in package files for better distribution ([9923ae5](https://github.com/tupe12334/eslint-config/commit/9923ae55458253eed988c7b433d4f11359b9eb6a))
+
 ## [1.4.2](https://github.com/tupe12334/eslint-config/compare/v1.4.1...v1.4.2) (2025-09-27)
 
 ### Features
