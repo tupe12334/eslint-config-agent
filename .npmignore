@@ -20,6 +20,11 @@ __tests__/
 coverage/
 .nyc_output/
 
+# Examples and test files in rules directory
+**/examples/
+*.spec.js
+**/*.spec.js
+
 # Configuration files
 .release-it.json
 eslint.config.js
