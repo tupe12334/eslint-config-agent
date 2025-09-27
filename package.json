@@ -11,7 +11,10 @@
     "index.js",
     "README.md",
     "CHANGELOG.md",
-    "rules/"
+    "rules/**/index.js",
+    "!rules/**/examples/",
+    "!rules/**/*.spec.js",
+    "!rules/**/*.test.js"
   ],
   "engines": {
     "node": ">=18.0.0"

@@ -21,9 +21,10 @@ coverage/
 .nyc_output/
 
 # Examples and test files in rules directory
-**/examples/
-*.spec.js
-**/*.spec.js
+rules/**/examples/
+rules/**/*.spec.js
+rules/**/examples/**
+rules/**/*.test.js
 
 # Configuration files
 .release-it.json
