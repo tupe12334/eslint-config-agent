@@ -154,21 +154,7 @@ const tsOnlyRestrictedSyntax = [
     message:
       "Switch case function expressions must have explicit return type annotations.",
   },
-  {
-    selector: "FunctionDeclaration:has(SwitchStatement):not([returnType])",
-    message:
-      "Functions containing switch statements must have explicit return type annotations.",
-  },
-  {
-    selector: "ArrowFunctionExpression:has(SwitchStatement):not([returnType])",
-    message:
-      "Arrow functions containing switch statements must have explicit return type annotations.",
-  },
-  {
-    selector: "FunctionExpression:has(SwitchStatement):not([returnType])",
-    message:
-      "Function expressions containing switch statements must have explicit return type annotations.",
-  },
+  ...allRules.switchStatementsReturnTypeConfigs,
 ];
 
 const config = [
@@ -344,23 +330,7 @@ const config = [
           message:
             "Switch case function expressions must have explicit return type annotations.",
         },
-        {
-          selector:
-            "FunctionDeclaration:has(SwitchStatement):not([returnType])",
-          message:
-            "Functions containing switch statements must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "ArrowFunctionExpression:has(SwitchStatement):not([returnType])",
-          message:
-            "Arrow functions containing switch statements must have explicit return type annotations.",
-        },
-        {
-          selector: "FunctionExpression:has(SwitchStatement):not([returnType])",
-          message:
-            "Function expressions containing switch statements must have explicit return type annotations.",
-        },
+        ...allRules.switchStatementsReturnTypeConfigs,
       ],
     },
   },
@@ -606,23 +576,7 @@ const config = [
           message:
             "Switch case function expressions must have explicit return type annotations.",
         },
-        {
-          selector:
-            "FunctionDeclaration:has(SwitchStatement):not([returnType])",
-          message:
-            "Functions containing switch statements must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "ArrowFunctionExpression:has(SwitchStatement):not([returnType])",
-          message:
-            "Arrow functions containing switch statements must have explicit return type annotations.",
-        },
-        {
-          selector: "FunctionExpression:has(SwitchStatement):not([returnType])",
-          message:
-            "Function expressions containing switch statements must have explicit return type annotations.",
-        },
+        ...allRules.switchStatementsReturnTypeConfigs,
         // Required export rules as errors (class rule only for JSX)
         {
           selector:
@@ -820,23 +774,7 @@ const config = [
           message:
             "Switch case function expressions must have explicit return type annotations.",
         },
-        {
-          selector:
-            "FunctionDeclaration:has(SwitchStatement):not([returnType])",
-          message:
-            "Functions containing switch statements must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "ArrowFunctionExpression:has(SwitchStatement):not([returnType])",
-          message:
-            "Arrow functions containing switch statements must have explicit return type annotations.",
-        },
-        {
-          selector: "FunctionExpression:has(SwitchStatement):not([returnType])",
-          message:
-            "Function expressions containing switch statements must have explicit return type annotations.",
-        },
+        ...allRules.switchStatementsReturnTypeConfigs,
         {
           selector: "MemberExpression[optional=true]",
           message: "Optional chaining is not allowed.",
