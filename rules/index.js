@@ -17,6 +17,7 @@ import { noExportSpecifiersConfig } from "./no-empty-exports/index.js";
 import { noClassPropertyDefaultsConfig } from "./no-class-property-defaults/index.js";
 import { noDefaultClassExportRules } from "./no-default-class-export/index.js";
 import { jsxClassNameRequiredRule } from "./jsx-classname-required/index.js";
+import { noNullishCoalescingConfig } from "./nullish-coalescing/index.js";
 
 // Plugin rule configurations
 import { pluginRules } from "./plugin/index.js";
@@ -38,6 +39,7 @@ const allRules = {
   noClassPropertyDefaultsConfig,
   noDefaultClassExportRules,
   jsxClassNameRequiredRule,
+  noNullishCoalescingConfig,
 
   // Plugin rule configurations
   pluginRules,
@@ -62,6 +64,7 @@ export {
   noClassPropertyDefaultsConfig,
   noDefaultClassExportRules,
   jsxClassNameRequiredRule,
+  noNullishCoalescingConfig,
 
   // Plugin rule configurations
   pluginRules,

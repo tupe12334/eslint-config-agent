@@ -56,11 +56,7 @@ const sharedRestrictedSyntax = [
     selector: "CallExpression[optional=true]",
     message: "Optional chaining is not allowed.",
   },
-  {
-    selector: 'LogicalExpression[operator="??"]',
-    message:
-      "Nullish coalescing operator (??) is not allowed. Use explicit null/undefined checks instead.",
-  },
+  allRules.noNullishCoalescingConfig,
   {
     selector:
       "ExportNamedDeclaration[exportKind=type]:not([source]):has(ExportSpecifier)",
@@ -848,11 +844,7 @@ const config = [
           selector: "CallExpression[optional=true]",
           message: "Optional chaining is not allowed.",
         },
-        {
-          selector: 'LogicalExpression[operator="??"]',
-          message:
-            "Nullish coalescing operator (??) is not allowed. Use explicit null/undefined checks instead.",
-        },
+        allRules.noNullishCoalescingConfig,
         {
           selector: 'TSAsExpression[typeAnnotation.type="TSIndexedAccessType"]',
           message:
