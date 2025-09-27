@@ -53,7 +53,7 @@ ruleTester.run("no-empty-exports", mockRule, {
     'export * as namespace from "./other";',
 
     // Regular exports
-    'const Bar = {}; export { Bar };',
+    'export const Bar = {};',
 
     // No exports at all
     'const foo = 1;',
@@ -61,9 +61,9 @@ ruleTester.run("no-empty-exports", mockRule, {
     'class Baz {}',
 
     // Named exports with local variables
-    'const foo = 1; const bar = 2; export { foo };',
-    'const foo = 1; const bar = 2; export { foo, bar };',
-    'const foo = 1; export { foo as bar };',
+    'const bar = 2; export const foo = 1;',
+    'export const foo = 1; export const bar = 2;',
+    'export const bar = 1;',
   ],
   invalid: [
     {

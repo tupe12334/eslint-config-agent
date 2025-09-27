@@ -120,11 +120,21 @@ function VeryLongSpecFunction() {
 }
 
 // Spec function to verify the rule is disabled
-describe('VeryLongSpecFunction', () => {
-  it('should execute without max-lines-per-function warning', () => {
-    const result = VeryLongSpecFunction();
-    expect(result.line101).toBe('line 101');
-  });
-});
+function testVeryLongSpecFunction() {
+  const result = VeryLongSpecFunction();
+  if (result.line101 === 'line 101') {
+    console.log('✅ VeryLongSpecFunction test passed!');
+    return true;
+  } else {
+    console.log('❌ VeryLongSpecFunction test failed!');
+    return false;
+  }
+}
 
-module.exports = VeryLongSpecFunction;
+// Run the test
+const testPassed = testVeryLongSpecFunction();
+if (!testPassed) {
+  process.exit(1);
+}
+
+export default VeryLongSpecFunction;

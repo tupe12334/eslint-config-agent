@@ -290,6 +290,32 @@ async function findTestFiles() {
 
   await scanDirectory(join(projectRoot, "test"), "test");
 
+  // Scan rules directory for spec files only
+  async function scanRulesForSpecs(rulesPath, relativePath) {
+    try {
+      const entries = await readdir(rulesPath);
+
+      for (const entry of entries) {
+        const fullPath = join(rulesPath, entry);
+        const stats = await stat(fullPath);
+        const relativeFilePath = join(relativePath, entry);
+
+        if (stats.isFile() && entry.endsWith('.spec.js')) {
+          files.push(relativeFilePath);
+        } else if (stats.isDirectory() && !entry.includes('examples')) {
+          await scanRulesForSpecs(fullPath, relativeFilePath);
+        }
+      }
+    } catch (error) {
+      console.warn(
+        `⚠️  Could not read rules directory ${relativePath}:`,
+        error.message
+      );
+    }
+  }
+
+  await scanRulesForSpecs(join(projectRoot, "rules"), "rules");
+
   // Check for specific test files in root directory
   const rootTestFiles = [];
   for (const testFile of rootTestFiles) {
@@ -663,8 +689,12 @@ async function runComprehensiveTests() {
     allTestFiles.forEach((file) => console.log(`   - ${file}`));
 
     // Separate standalone test files from lint test files
-    const standaloneTestFiles = allTestFiles.filter(file => file.endsWith('.test.js'));
-    const lintTestFiles = allTestFiles.filter(file => !file.endsWith('.test.js'));
+    const standaloneTestFiles = allTestFiles.filter(file =>
+      file.endsWith('.test.js') || file.endsWith('.spec.js')
+    );
+    const lintTestFiles = allTestFiles.filter(file =>
+      !file.endsWith('.test.js') && !file.endsWith('.spec.js')
+    );
 
     // Auto-categorize lint test files only (predefined + auto-discovered)
     const allCategories = autoCategorizeFiles(lintTestFiles);
