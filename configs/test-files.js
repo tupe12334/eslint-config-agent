@@ -52,17 +52,7 @@ const sharedRestrictedSyntax = [
     message:
       "Exporting imported variables is not allowed. Use direct re-export with 'from' clause or define new values.",
   },
-  {
-    selector: "SwitchStatement > SwitchCase > ReturnStatement[argument=null]",
-    message:
-      "Switch case functions must provide an explicit return value. Default return values are not allowed.",
-  },
-  {
-    selector:
-      "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]",
-    message:
-      "Switch case functions must provide an explicit return value. Default return values are not allowed.",
-  },
+  ...allRules.switchCaseExplicitReturnConfigs,
   {
     selector: "SwitchStatement > SwitchCase[test=null]",
     message:

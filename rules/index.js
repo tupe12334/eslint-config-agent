@@ -20,6 +20,7 @@ import { jsxClassNameRequiredRule } from "./jsx-classname-required/index.js";
 import { noNullishCoalescingConfig } from "./nullish-coalescing/index.js";
 import { switchStatementsReturnTypeConfigs } from "./switch-statements-return-type/index.js";
 import { switchCaseFunctionsReturnTypeConfigs } from "./switch-case-functions-return-type/index.js";
+import { switchCaseExplicitReturnConfigs } from "./switch-case-explicit-return/index.js";
 
 // Plugin rule configurations
 import { pluginRules } from "./plugin/index.js";
@@ -44,6 +45,7 @@ const allRules = {
   noNullishCoalescingConfig,
   switchStatementsReturnTypeConfigs,
   switchCaseFunctionsReturnTypeConfigs,
+  switchCaseExplicitReturnConfigs,
 
   // Plugin rule configurations
   pluginRules,
@@ -71,6 +73,7 @@ export {
   noNullishCoalescingConfig,
   switchStatementsReturnTypeConfigs,
   switchCaseFunctionsReturnTypeConfigs,
+  switchCaseExplicitReturnConfigs,
 
   // Plugin rule configurations
   pluginRules,
