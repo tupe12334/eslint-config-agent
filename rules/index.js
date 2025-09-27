@@ -19,6 +19,7 @@ import { noDefaultClassExportRules } from "./no-default-class-export/index.js";
 import { jsxClassNameRequiredRule } from "./jsx-classname-required/index.js";
 import { noNullishCoalescingConfig } from "./nullish-coalescing/index.js";
 import { switchStatementsReturnTypeConfigs } from "./switch-statements-return-type/index.js";
+import { switchCaseFunctionsReturnTypeConfigs } from "./switch-case-functions-return-type/index.js";
 
 // Plugin rule configurations
 import { pluginRules } from "./plugin/index.js";
@@ -42,6 +43,7 @@ const allRules = {
   jsxClassNameRequiredRule,
   noNullishCoalescingConfig,
   switchStatementsReturnTypeConfigs,
+  switchCaseFunctionsReturnTypeConfigs,
 
   // Plugin rule configurations
   pluginRules,
@@ -68,6 +70,7 @@ export {
   jsxClassNameRequiredRule,
   noNullishCoalescingConfig,
   switchStatementsReturnTypeConfigs,
+  switchCaseFunctionsReturnTypeConfigs,
 
   // Plugin rule configurations
   pluginRules,

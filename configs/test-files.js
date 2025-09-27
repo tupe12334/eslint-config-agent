@@ -106,30 +106,7 @@ const tsOnlyRestrictedSyntax = [
     message:
       'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
   },
-  {
-    selector:
-      "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])",
-    message:
-      "Switch case arrow functions must have explicit return type annotations.",
-  },
-  {
-    selector:
-      "SwitchStatement > SwitchCase FunctionExpression:not([returnType])",
-    message:
-      "Switch case function expressions must have explicit return type annotations.",
-  },
-  {
-    selector:
-      "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])",
-    message:
-      "Switch case arrow functions must have explicit return type annotations.",
-  },
-  {
-    selector:
-      "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])",
-    message:
-      "Switch case function expressions must have explicit return type annotations.",
-  },
+  ...allRules.switchCaseFunctionsReturnTypeConfigs,
   ...allRules.switchStatementsReturnTypeConfigs,
 ];
 

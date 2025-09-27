@@ -130,30 +130,7 @@ const tsOnlyRestrictedSyntax = [
     message:
       'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
   },
-  {
-    selector:
-      "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])",
-    message:
-      "Switch case arrow functions must have explicit return type annotations.",
-  },
-  {
-    selector:
-      "SwitchStatement > SwitchCase FunctionExpression:not([returnType])",
-    message:
-      "Switch case function expressions must have explicit return type annotations.",
-  },
-  {
-    selector:
-      "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])",
-    message:
-      "Switch case arrow functions must have explicit return type annotations.",
-  },
-  {
-    selector:
-      "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])",
-    message:
-      "Switch case function expressions must have explicit return type annotations.",
-  },
+  ...allRules.switchCaseFunctionsReturnTypeConfigs,
   ...allRules.switchStatementsReturnTypeConfigs,
 ];
 
@@ -306,30 +283,7 @@ const config = [
           message:
             "Default cases are not allowed in switch statements. Handle all possible cases explicitly.",
         },
-        {
-          selector:
-            "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])",
-          message:
-            "Switch case arrow functions must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "SwitchStatement > SwitchCase FunctionExpression:not([returnType])",
-          message:
-            "Switch case function expressions must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])",
-          message:
-            "Switch case arrow functions must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])",
-          message:
-            "Switch case function expressions must have explicit return type annotations.",
-        },
+        ...allRules.switchCaseFunctionsReturnTypeConfigs,
         ...allRules.switchStatementsReturnTypeConfigs,
       ],
     },
@@ -392,21 +346,11 @@ const config = [
             "Cannot have both type alias export and type-only export in the same TSX file.",
         },
         ...tsOnlyRestrictedSyntax.filter(
-          (rule) =>
-            rule.selector !==
-              "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])" &&
-            rule.selector !==
-              "SwitchStatement > SwitchCase FunctionExpression:not([returnType])" &&
-            rule.selector !==
-              "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])" &&
-            rule.selector !==
-              "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])" &&
-            rule.selector !==
-              "FunctionDeclaration:has(SwitchStatement):not([returnType])" &&
-            rule.selector !==
-              "ArrowFunctionExpression:has(SwitchStatement):not([returnType])" &&
-            rule.selector !==
-              "FunctionExpression:has(SwitchStatement):not([returnType])"
+          (rule) => {
+            const switchCaseFunctionSelectors = allRules.switchCaseFunctionsReturnTypeConfigs.map(r => r.selector);
+            const switchStatementFunctionSelectors = allRules.switchStatementsReturnTypeConfigs.map(r => r.selector);
+            return ![...switchCaseFunctionSelectors, ...switchStatementFunctionSelectors].includes(rule.selector);
+          }
         ),
       ],
     },
@@ -552,30 +496,7 @@ const config = [
           message:
             "Default cases are not allowed in switch statements. Handle all possible cases explicitly.",
         },
-        {
-          selector:
-            "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])",
-          message:
-            "Switch case arrow functions must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "SwitchStatement > SwitchCase FunctionExpression:not([returnType])",
-          message:
-            "Switch case function expressions must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])",
-          message:
-            "Switch case arrow functions must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])",
-          message:
-            "Switch case function expressions must have explicit return type annotations.",
-        },
+        ...allRules.switchCaseFunctionsReturnTypeConfigs,
         ...allRules.switchStatementsReturnTypeConfigs,
         // Required export rules as errors (class rule only for JSX)
         {
@@ -750,30 +671,7 @@ const config = [
           message:
             "Default cases are not allowed in switch statements. Handle all possible cases explicitly.",
         },
-        {
-          selector:
-            "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])",
-          message:
-            "Switch case arrow functions must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "SwitchStatement > SwitchCase FunctionExpression:not([returnType])",
-          message:
-            "Switch case function expressions must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])",
-          message:
-            "Switch case arrow functions must have explicit return type annotations.",
-        },
-        {
-          selector:
-            "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])",
-          message:
-            "Switch case function expressions must have explicit return type annotations.",
-        },
+        ...allRules.switchCaseFunctionsReturnTypeConfigs,
         ...allRules.switchStatementsReturnTypeConfigs,
         {
           selector: "MemberExpression[optional=true]",
