@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.4.6](https://github.com/tupe12334/eslint-config/compare/v1.4.5...v1.4.6) (2025-09-30)
+
+### Bug Fixes
+
+* update storybookConfig to be an array and spread into main config ([b6de10e](https://github.com/tupe12334/eslint-config/commit/b6de10efcbdb1deff790e4be8c37f432217b23bd))
+
 ## [1.4.5](https://github.com/tupe12334/eslint-config/compare/v1.4.4...v1.4.5) (2025-09-30)
 
 ### Bug Fixes
