@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.4.4](https://github.com/tupe12334/eslint-config/compare/v1.4.3...v1.4.4) (2025-09-30)
+
+### Features
+
+* add no-trivial-type-aliases rule with examples and tests ([27da82f](https://github.com/tupe12334/eslint-config/commit/27da82f53a084e2cdb88b26b06b53e11992a2a32))
+
+### Bug Fixes
+
+* restore eslint-plugin-single-export dependency in package.json and pnpm-lock.yaml ([7b273a5](https://github.com/tupe12334/eslint-config/commit/7b273a595c7ee1c5c5919b98f800fdca2c1d6fb9))
+
 ## [1.4.3](https://github.com/tupe12334/eslint-config/compare/v1.4.2...v1.4.3) (2025-09-27)
 
 ### Features
