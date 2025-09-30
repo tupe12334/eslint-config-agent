@@ -644,7 +644,7 @@ const config = [
 
 
   // Storybook files configuration
-  storybookConfig,
+  ...storybookConfig,
 
   // Rules directory configuration - allow export specifiers for API definitions (but not examples)
   {

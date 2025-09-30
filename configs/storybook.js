@@ -8,7 +8,7 @@
 import globals from "globals";
 import { plugins } from "../plugins/index.js";
 
-export const storybookConfig = {
+export const storybookConfig = [{
   files: ["**/*.stories.{js,jsx,ts,tsx}"],
   languageOptions: {
     globals: {
@@ -23,4 +23,4 @@ export const storybookConfig = {
     // Enable recommended storybook rules only
     ...plugins.storybook.configs.recommended.rules,
   },
-};
+}];
