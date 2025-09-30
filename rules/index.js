@@ -21,6 +21,7 @@ import { noNullishCoalescingConfig } from "./nullish-coalescing/index.js";
 import { switchStatementsReturnTypeConfigs } from "./switch-statements-return-type/index.js";
 import { switchCaseFunctionsReturnTypeConfigs } from "./switch-case-functions-return-type/index.js";
 import { switchCaseExplicitReturnConfigs } from "./switch-case-explicit-return/index.js";
+import { noTrivialTypeAliasesConfigs } from "./no-trivial-type-aliases/index.js";
 
 // Plugin rule configurations
 import { pluginRules } from "./plugin/index.js";
@@ -46,6 +47,7 @@ const allRules = {
   switchStatementsReturnTypeConfigs,
   switchCaseFunctionsReturnTypeConfigs,
   switchCaseExplicitReturnConfigs,
+  noTrivialTypeAliasesConfigs,
 
   // Plugin rule configurations
   pluginRules,
@@ -74,6 +76,7 @@ export {
   switchStatementsReturnTypeConfigs,
   switchCaseFunctionsReturnTypeConfigs,
   switchCaseExplicitReturnConfigs,
+  noTrivialTypeAliasesConfigs,
 
   // Plugin rule configurations
   pluginRules,

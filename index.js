@@ -100,6 +100,7 @@ const tsOnlyRestrictedSyntax = [
   },
   ...allRules.switchCaseFunctionsReturnTypeConfigs,
   ...allRules.switchStatementsReturnTypeConfigs,
+  ...allRules.noTrivialTypeAliasesConfigs,
 ];
 
 const config = [
