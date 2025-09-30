@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.4.5](https://github.com/tupe12334/eslint-config/compare/v1.4.4...v1.4.5) (2025-09-30)
+
+### Bug Fixes
+
+* restore eslint-plugin-required-exports dependency in package.json and pnpm-lock.yaml ([a937603](https://github.com/tupe12334/eslint-config/commit/a9376031562f77b5854824e95bc825fae7c93eb5))
+
 ## [1.4.4](https://github.com/tupe12334/eslint-config/compare/v1.4.3...v1.4.4) (2025-09-30)
 
 ### Features
