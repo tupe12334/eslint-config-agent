@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.5.0](https://github.com/tupe12334/eslint-config/compare/v1.4.6...v1.5.0) (2025-10-08)
+
+### Features
+
+* add ddd ESLint configuration and plugin integration ([04a0104](https://github.com/tupe12334/eslint-config/commit/04a0104683e57b1446eda9b55d7cd426eec35a9e))
+* add README for file-type-specific ESLint configurations ([dcb7d1c](https://github.com/tupe12334/eslint-config/commit/dcb7d1c4d60555833b52635f8f8bc90dc4b7b82a))
+
 ## [1.4.6](https://github.com/tupe12334/eslint-config/compare/v1.4.5...v1.4.6) (2025-09-30)
 
 ### Bug Fixes
