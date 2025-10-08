@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./ddd": "./exports/ddd.js"
   },
   "files": [
     "index.js",
@@ -13,6 +14,7 @@
     "CHANGELOG.md",
     "configs/",
     "plugins/",
+    "exports/",
     "rules/**/index.js",
     "!rules/**/examples/",
     "!rules/**/*.spec.js",
@@ -112,6 +114,7 @@
     "typescript-eslint": "^8.40.0"
   },
   "dependencies": {
+    "eslint-plugin-ddd": "^0.5.0",
     "eslint-plugin-default": "^1.1.0",
     "eslint-plugin-error": "^1.1.3",
     "eslint-plugin-no-optional-chaining": "^1.0.0",
