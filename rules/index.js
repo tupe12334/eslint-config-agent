@@ -22,6 +22,7 @@ import { switchStatementsReturnTypeConfigs } from "./switch-statements-return-ty
 import { switchCaseFunctionsReturnTypeConfigs } from "./switch-case-functions-return-type/index.js";
 import { switchCaseExplicitReturnConfigs } from "./switch-case-explicit-return/index.js";
 import { noTrivialTypeAliasesConfigs } from "./no-trivial-type-aliases/index.js";
+import { noInlineUnionTypesConfigs } from "./no-inline-union-types/index.js";
 
 // Plugin rule configurations
 import { pluginRules } from "./plugin/index.js";
@@ -48,6 +49,7 @@ const allRules = {
   switchCaseFunctionsReturnTypeConfigs,
   switchCaseExplicitReturnConfigs,
   noTrivialTypeAliasesConfigs,
+  noInlineUnionTypesConfigs,
 
   // Plugin rule configurations
   pluginRules,
@@ -77,6 +79,7 @@ export {
   switchCaseFunctionsReturnTypeConfigs,
   switchCaseExplicitReturnConfigs,
   noTrivialTypeAliasesConfigs,
+  noInlineUnionTypesConfigs,
 
   // Plugin rule configurations
   pluginRules,
