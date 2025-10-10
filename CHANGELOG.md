@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.6.0](https://github.com/tupe12334/eslint-config/compare/v1.5.0...v1.6.0) (2025-10-10)
+
+### Features
+
+* add eslint-plugin-ddd dependency to pnpm-lock.yaml ([b44339f](https://github.com/tupe12334/eslint-config/commit/b44339f09c3611b546b0efefd9493e4f740f7ecf))
+* add examples for no-inline-union-types rule with valid and invalid cases ([09b1e2c](https://github.com/tupe12334/eslint-config/commit/09b1e2c9bbb4899672d11f5266d4ca3dfd833ef3))
+* add no-inline-union-types rule with comprehensive examples and tests ([db2c3bd](https://github.com/tupe12334/eslint-config/commit/db2c3bd771e53c18b2e5ca2168033bf03fd8e981))
+* integrate no-inline-union-types rule into TypeScript-specific restrictions ([ac0c1bd](https://github.com/tupe12334/eslint-config/commit/ac0c1bd6fdfb9e5a876bb71709c367488fa20634))
+
+### Bug Fixes
+
+* update packageManager version to pnpm@10.18.2 ([f31a468](https://github.com/tupe12334/eslint-config/commit/f31a468a54dfbd76fcbb8211316902c085a3bf39))
+
 ## [1.5.0](https://github.com/tupe12334/eslint-config/compare/v1.4.6...v1.5.0) (2025-10-08)
 
 ### Features
