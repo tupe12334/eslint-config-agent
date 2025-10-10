@@ -70,7 +70,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@10.18.2",
   "peerDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.34.0",
