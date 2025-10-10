@@ -1,5 +1,6 @@
 import allRules from "../rules/index.js";
 import { noRecordLiteralTypesConfigs } from "../rules/no-record-literal-types/index.js";
+import { noInlineUnionTypesConfigs } from "../rules/no-inline-union-types/index.js";
 import { plugins } from "../plugins/index.js";
 
 // Shared rules for both JS and TS files
@@ -67,23 +68,7 @@ const sharedRestrictedSyntax = [
 // TypeScript-specific no-restricted-syntax rules
 const tsOnlyRestrictedSyntax = [
   ...noRecordLiteralTypesConfigs,
-  {
-    selector:
-      "TSTypeAnnotation > TSUnionType:not(PropertyDefinition > .typeAnnotation > .typeAnnotation):not(TSPropertySignature > .typeAnnotation > .typeAnnotation)",
-    message: "Use a named type declaration instead of inline union types.",
-  },
-  {
-    selector:
-      "TSPropertySignature > TSTypeAnnotation > TSUnionType:has(TSLiteralType)",
-    message:
-      "Interface properties with literal unions should use a named type declaration.",
-  },
-  {
-    selector:
-      "PropertyDefinition > TSTypeAnnotation > TSUnionType:has(TSLiteralType)",
-    message:
-      "Class properties with literal unions should use a named type declaration.",
-  },
+  ...noInlineUnionTypesConfigs,
   allRules.noTypeAssertionsConfig,
   allRules.noClassPropertyDefaultsConfig,
   {
