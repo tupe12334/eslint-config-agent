@@ -9,6 +9,7 @@ import { plugins } from "./plugins/index.js";
 import { testFilesConfig } from "./configs/test-files.js";
 import { storybookConfig } from "./configs/storybook.js";
 import { configFilesConfig } from "./configs/config-files.js";
+import { examplesConfig } from "./configs/examples.js";
 
 // Shared rules for both JS and TS files
 const sharedRules = {
@@ -652,6 +653,9 @@ const config = [
       ],
     },
   },
+
+  // Examples files configuration (imported from separate config)
+  ...examplesConfig,
 
 ];
 

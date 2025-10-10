@@ -6,17 +6,8 @@ type Language = 'en' | 'es' | 'fr';
 type NotificationLevel = 'all' | 'important' | 'none';
 
 // ✅ Using named types in interfaces
-interface UserPreferences {
+export interface UserPreferences {
   theme: Theme;
   language: Language;
   notifications: NotificationLevel;
 }
-
-// ✅ Named types for HTTP methods
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
-type DataFormat = 'json' | 'xml';
-
-type ApiConfig = {
-  method: HttpMethod;
-  format: DataFormat;
-};

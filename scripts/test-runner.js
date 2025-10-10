@@ -127,28 +127,6 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ["no-restricted-syntax", "class-export/class-export", "single-export/single-export"],
   },
-  "union-types-valid": {
-    description: "Valid union types patterns",
-    files: [
-      "test/union-types/valid/named-type-declarations.tsx",
-      "test/union-types/valid/primitive-unions.tsx",
-      "test/union-types/valid/function-named-types.tsx",
-      "test/union-types/valid/class-named-types.tsx",
-    ],
-    maxErrors: 0,
-    maxWarnings: 6,
-  },
-  "union-types-invalid": {
-    description: "Invalid union types patterns",
-    files: [
-      "test/union-types/invalid/interface-literal-unions.tsx",
-      "test/union-types/invalid/function-inline-unions.tsx",
-      "test/union-types/invalid/class-literal-unions.tsx",
-    ],
-    maxErrors: 2,
-    maxWarnings: 18,
-    expectedRules: ["no-restricted-syntax"],
-  },
   "index-files-valid": {
     description: "Valid index file patterns",
     files: [
