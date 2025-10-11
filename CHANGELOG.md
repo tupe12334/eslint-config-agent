@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.6.1](https://github.com/tupe12334/eslint-config/compare/v1.6.0...v1.6.1) (2025-10-11)
+
+### Features
+
+* add comprehensive ESLint configurations for JavaScript, TypeScript, TSX, and JSX files, including base plugin integration and strict rules enforcement ([8b67778](https://github.com/tupe12334/eslint-config/commit/8b67778e12b1e492afed94685428c1ff7698b580))
+* add guard-clauses plugin and integrate rules into ESLint configuration ([3294d4c](https://github.com/tupe12334/eslint-config/commit/3294d4c73a2ff5f0d1a418287d91292576a32ae7))
+
 ## [1.6.0](https://github.com/tupe12334/eslint-config/compare/v1.5.0...v1.6.0) (2025-10-10)
 
 ### Features
