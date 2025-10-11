@@ -66,7 +66,7 @@
  */
 const noTrivialTypeReferenceConfig = {
   selector:
-    "TSTypeAliasDeclaration > TSTypeReference:not(:has(TSTypeParameterInstantiation))",
+    "TSTypeAliasDeclaration[typeParameters=undefined] > TSTypeReference:not([typeArguments])",
   message:
     "Trivial type aliases are not allowed. Use the original type directly instead of creating an alias that doesn't add meaning.",
 };
@@ -77,7 +77,7 @@ const noTrivialTypeReferenceConfig = {
  */
 const noTrivialPrimitiveTypeConfig = {
   selector:
-    "TSTypeAliasDeclaration:has(TSStringKeyword):not(:has(TSUnionType)):not(:has(TSIntersectionType)):not(:has(TSMappedType))",
+    "TSTypeAliasDeclaration > :matches(TSStringKeyword, TSNumberKeyword, TSBooleanKeyword, TSAnyKeyword, TSUnknownKeyword)",
   message:
     "Trivial type aliases to primitive types are not allowed. Use the primitive type directly instead.",
 };
