@@ -67,16 +67,16 @@ const testCategories = {
   "edge-cases": {
     description: "Edge cases and boundary testing",
     files: ["test/edge-cases.tsx"],
-    maxErrors: 30,
+    maxErrors: 33,
     maxWarnings: 30,
-    expectedRules: ["no-restricted-syntax", "max-lines", "@typescript-eslint/no-explicit-any"],
+    expectedRules: ["no-restricted-syntax", "max-lines", "@typescript-eslint/no-explicit-any", "guard-clauses/prefer-guard-at-function-start", "guard-clauses/no-else-return", "guard-clauses/prefer-early-continue"],
   },
   performance: {
     description: "Performance and large file testing",
     files: ["test/performance-test.tsx"],
-    maxErrors: 47,
+    maxErrors: 48,
     maxWarnings: 35,
-    expectedRules: ["max-lines-per-function", "max-lines", "no-restricted-syntax", "@typescript-eslint/no-explicit-any", "error/no-generic-error", "error/require-custom-error"],
+    expectedRules: ["max-lines-per-function", "max-lines", "no-restricted-syntax", "@typescript-eslint/no-explicit-any", "error/no-generic-error", "error/require-custom-error", "guard-clauses/prefer-guard-at-function-start", "guard-clauses/no-else-return"],
   },
   "export-valid": {
     description: "Valid export patterns",

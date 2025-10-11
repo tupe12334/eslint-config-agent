@@ -6,12 +6,12 @@ interface Props {
 }
 
 function ValidComponent({ name, age }: Props) {
-  const greeting = `Hello, ${name}!`;
-
   if (age !== undefined && age !== null) {
+    const greeting = `Hello, ${name}!`;
     return <div className="greeting">{greeting} You are {age} years old.</div>;
   }
 
+  const greeting = `Hello, ${name}!`;
   return <div className="greeting">{greeting}</div>;
 }
 

@@ -113,15 +113,18 @@ const config = [
   ...tseslint.configs.recommended,
   // Error handling plugin strict config
   {
-    plugins: {
-      error: plugins.error,
-    },
     rules: {
       ...plugins.error.configs.strict.rules,
     },
   },
   // Default plugin strict config
   plugins.default.configs.strict,
+  // Guard clauses plugin strict config
+  {
+    rules: {
+      ...plugins["guard-clauses"].configs.strict.rules,
+    },
+  },
 
   // TypeScript and TSX files
   {
