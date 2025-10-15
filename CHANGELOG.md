@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.6.2](https://github.com/tupe12334/eslint-config/compare/v1.6.1...v1.6.2) (2025-10-15)
+
+### Bug Fixes
+
+* restore globals dependency in package.json and pnpm-lock.yaml ([02c2bb5](https://github.com/tupe12334/eslint-config/commit/02c2bb5b2bb261e95ff811d8e4b8f017fabb4dbd))
+
 ## [1.6.1](https://github.com/tupe12334/eslint-config/compare/v1.6.0...v1.6.1) (2025-10-11)
 
 ### Features
