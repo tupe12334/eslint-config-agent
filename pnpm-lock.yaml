@@ -29,6 +29,9 @@ importers:
       eslint-plugin-single-export:
         specifier: ^1.1.2
         version: 1.1.2(eslint@9.37.0(jiti@2.6.1))
+      globals:
+        specifier: ^16.4.0
+        version: 16.4.0
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.1
@@ -78,9 +81,6 @@ importers:
       eslint-plugin-storybook:
         specifier: ^9.1.10
         version: 9.1.10(eslint@9.37.0(jiti@2.6.1))(storybook@9.1.5(@testing-library/dom@10.4.1))(typescript@5.9.2)
-      globals:
-        specifier: ^16.4.0
-        version: 16.4.0
       release-it:
         specifier: ^19.0.5
         version: 19.0.5
