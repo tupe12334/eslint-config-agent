@@ -17,9 +17,6 @@ importers:
       eslint-plugin-error:
         specifier: ^1.2.1
         version: 1.2.1(eslint@9.37.0(jiti@2.6.1))
-      eslint-plugin-guard-clauses:
-        specifier: ^0.0.1
-        version: 0.0.1(eslint@9.37.0(jiti@2.6.1))
       eslint-plugin-no-optional-chaining:
         specifier: ^1.0.0
         version: 1.0.0(eslint@9.37.0(jiti@2.6.1))
@@ -1312,12 +1309,6 @@ packages:
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       eslint: '>=8'
-
-  eslint-plugin-guard-clauses@0.0.1:
-    resolution: {integrity: sha512-0cGN65wFsk2bup/7FFl8ZEgQ5a7SgWgHPaQRJfYHHBRVmZUI4yQgsInSwAk+kzxIKqBr8blKL2FHTCDu86H3WA==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      eslint: '>=9.0.0'
 
   eslint-plugin-import@2.32.0:
     resolution: {integrity: sha512-whOE1HFo/qJDyX4SnXzP4N6zOWn79WhnCUY/iDR0mPfQZO8wcYE4JClzI2oZrhBnnMUCBCHZhO6VQyoBU95mZA==}
@@ -4054,10 +4045,6 @@ snapshots:
       '@eslint-community/regexpp': 4.12.1
       eslint: 9.37.0(jiti@2.6.1)
       eslint-compat-utils: 0.5.1(eslint@9.37.0(jiti@2.6.1))
-
-  eslint-plugin-guard-clauses@0.0.1(eslint@9.37.0(jiti@2.6.1)):
-    dependencies:
-      eslint: 9.37.0(jiti@2.6.1)
 
   eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.46.1(eslint@9.37.0(jiti@2.6.1))(typescript@5.9.2))(eslint@9.37.0(jiti@2.6.1)):
     dependencies:
