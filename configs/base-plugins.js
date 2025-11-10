@@ -1,7 +1,7 @@
 /**
  * Base Plugin Configurations
  *
- * Applies strict configs from error, default, and guard-clauses plugins.
+ * Applies strict configs from error and default plugins.
  * These apply globally to all file types.
  */
 
@@ -16,10 +16,4 @@ export const basePluginsConfig = [
   },
   // Default plugin strict config
   plugins.default.configs.strict,
-  // Guard clauses plugin strict config
-  {
-    rules: {
-      ...plugins["guard-clauses"].configs.strict.rules,
-    },
-  },
 ];

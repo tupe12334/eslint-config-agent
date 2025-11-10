@@ -17,7 +17,6 @@ import errorPlugin from "eslint-plugin-error";
 import defaultPlugin from "eslint-plugin-default";
 import noOptionalChainingPlugin from "eslint-plugin-no-optional-chaining";
 import dddPlugin from "eslint-plugin-ddd";
-import guardClausesPlugin from "eslint-plugin-guard-clauses";
 import allRules from "../rules/index.js";
 import { noDefaultClassExportRule } from "../rules/no-default-class-export/index.js";
 
@@ -43,7 +42,6 @@ export const plugins = {
   default: defaultPlugin,
   "no-optional-chaining": noOptionalChainingPlugin,
   ddd: dddPlugin,
-  "guard-clauses": guardClausesPlugin,
   ...(preactPlugin && { preact: preactPlugin }),
   custom: {
     rules: {
