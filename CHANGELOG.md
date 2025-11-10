@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.7.1](https://github.com/tupe12334/eslint-config/compare/v1.6.3...v1.7.1) (2025-11-10)
+
+### Bug Fixes
+
+* add write permissions to release workflow ([317ed2f](https://github.com/tupe12334/eslint-config/commit/317ed2f))
+* remove explicit pnpm version from GitHub workflow ([a067942](https://github.com/tupe12334/eslint-config/commit/a067942))
+* upgrade Node.js version to 20 in release workflow ([d9f84b6](https://github.com/tupe12334/eslint-config/commit/d9f84b6))
+
+### Maintenance
+
+* update pnpm-lock.yaml ([b51b4ba](https://github.com/tupe12334/eslint-config/commit/b51b4ba))
+
 ## [1.6.3](https://github.com/tupe12334/eslint-config/compare/v1.6.2...v1.6.3) (2025-11-04)
 
 ## [1.6.2](https://github.com/tupe12334/eslint-config/compare/v1.6.1...v1.6.2) (2025-10-15)
