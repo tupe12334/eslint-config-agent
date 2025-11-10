@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.7.2](https://github.com/tupe12334/eslint-config/compare/v1.7.1...v1.7.2) (2025-11-10)
+
+### Features
+
+* Add project onboarding and boot verification documentation ([9c4d726](https://github.com/tupe12334/eslint-config/commit/9c4d726b2f6db94a5e1d38749343c34f48ca1b9a))
+
 ## [1.7.1](https://github.com/tupe12334/eslint-config/compare/v1.6.3...v1.7.1) (2025-11-10)
 
 ### Bug Fixes
