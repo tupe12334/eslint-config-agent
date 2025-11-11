@@ -107,6 +107,10 @@ export const testFilesConfig = [
       "default/no-localhost": ["error", { allowInTests: true }],
       "default/no-hardcoded-urls": ["error", { allowInTests: true }],
       "default/no-default-params": "off", // Allow default parameters in test files for demonstration purposes
+      // Disable error plugin rules in test files
+      "error/no-generic-error": "off",
+      "error/require-custom-error": "off",
+      "error/no-throw-literal": "off",
       // Allow multiple exports in test files for testing import/export patterns
       "no-restricted-syntax": [
         "warn",
@@ -136,6 +140,10 @@ export const testFilesConfig = [
     ],
     rules: {
       "max-lines-per-function": "off",
+      // Disable error plugin rules in test files
+      "error/no-generic-error": "off",
+      "error/require-custom-error": "off",
+      "error/no-throw-literal": "off",
       "no-restricted-syntax": [
         "error", // Error level for these test files
         ...sharedRestrictedSyntax.filter(
@@ -161,6 +169,10 @@ export const testFilesConfig = [
       "default/no-localhost": ["error", { allowInTests: true }],
       "default/no-hardcoded-urls": ["error", { allowInTests: true }],
       "default/no-default-params": "off", // Allow default parameters in test files for demonstration purposes
+      // Disable error plugin rules in test files
+      "error/no-generic-error": "off",
+      "error/require-custom-error": "off",
+      "error/no-throw-literal": "off",
       "no-restricted-syntax": [
         "warn", // Base level for most rules
         ...sharedRestrictedSyntax.filter(
@@ -187,6 +199,10 @@ export const testFilesConfig = [
     rules: {
       "max-lines": "off",
       "max-lines-per-function": "off",
+      // Disable error plugin rules in spec files
+      "error/no-generic-error": "off",
+      "error/require-custom-error": "off",
+      "error/no-throw-literal": "off",
     },
   },
 
