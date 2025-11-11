@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.8.2](https://github.com/tupe12334/eslint-config/compare/v1.8.1...v1.8.2) (2025-11-11)
+
+### Features
+
+* **config:** disable spec file requirement for config files ([7e5748b](https://github.com/tupe12334/eslint-config/commit/7e5748b4bb744e3d3ab6250d4fb2ab8fe8a3d19d))
+
 ## [1.8.1](https://github.com/tupe12334/eslint-config/compare/v1.8.0...v1.8.1) (2025-11-11)
 
 ### Features
