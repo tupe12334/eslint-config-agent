@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.7.3](https://github.com/tupe12334/eslint-config/compare/v1.7.2...v1.7.3) (2025-11-11)
+
+### Features
+
+* **ddd:** enable spec file requirement by default for all source files ([f06b965](https://github.com/tupe12334/eslint-config/commit/f06b96563da10ed2d5aaaae2fe35e1ce87f1aae5))
+
 ## [1.7.2](https://github.com/tupe12334/eslint-config/compare/v1.7.1...v1.7.2) (2025-11-10)
 
 ### Features
