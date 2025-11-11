@@ -1,29 +1,15 @@
+/**
+ * DDD Configuration Export
+ *
+ * NOTE: As of the latest version, DDD rules (require-spec-file) are now
+ * included in the base configuration by default. This export is maintained
+ * for backward compatibility and is currently equivalent to the base config.
+ *
+ * You can use either:
+ * - import config from "eslint-config-agent" (includes DDD rules)
+ * - import config from "eslint-config-agent/ddd" (same as above)
+ */
+
 import config from "../index.js";
-import { plugins } from "../plugins/index.js";
 
-const dddConfig = [
-  {
-    plugins: {
-      ddd: plugins.ddd,
-    },
-    rules: {
-      "ddd/require-spec-file": ["error", {
-        excludePatterns: [
-          "**/*.spec.js",
-          "**/*.spec.ts",
-          "**/*.test.js",
-          "**/*.test.ts",
-          "**/index.js",
-          "**/index.ts",
-          "**/*.d.ts",
-          "**/*.config.js",
-          "**/*.config.ts",
-          "**/eslint.config.js",
-          "**/*.stories.{js,jsx,ts,tsx}",
-        ],
-      }],
-    },
-  },
-];
-
-export default [...config, ...dddConfig];
+export default config;

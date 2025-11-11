@@ -48,6 +48,7 @@ This configuration enforces patterns that:
 - **⚛️ React & Preact**: Complete support for both React and Preact projects
 - **🔐 Strict Standards**: Enforces explicit null/undefined checks, disallows optional chaining and nullish coalescing for better code clarity
 - **📏 Code Quality**: Function length limits (100 lines), trailing space detection, and consistent formatting
+- **🧪 DDD by Default**: Requires spec files for all source files to ensure comprehensive test coverage
 - **🚀 Modern ESLint**: Uses the latest flat configuration format (ESLint 9+)
 - **📋 Comprehensive Testing**: 12+ test categories with automated validation
 - **🔄 CI/CD Ready**: Zero-warning configuration for production builds
@@ -222,6 +223,51 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - Automatic detection and configuration when `eslint-plugin-preact` is installed
 - Compatible with Preact-specific patterns and optimizations
 - Shared configuration with React rules where applicable
+
+### Spec File Requirements (DDD)
+
+**By default, this configuration requires that every source file has a corresponding spec file.** This ensures comprehensive test coverage and encourages test-driven development.
+
+**What files require specs:**
+- All TypeScript/JavaScript source files (`.ts`, `.js`, `.tsx`, `.jsx`)
+- Implementation files that contain business logic
+
+**What files are excluded:**
+- Test files themselves (`.spec.ts`, `.test.js`, etc.)
+- Configuration files (`.config.js`, `eslint.config.js`, etc.)
+- Index/barrel files (`index.ts`, `index.js`)
+- Type definition files (`.d.ts`)
+- Storybook files (`.stories.tsx`)
+- Example files in `examples/` directories
+
+**Example structure:**
+```
+src/
+├── utils.ts          # Requires: utils.spec.ts
+├── utils.spec.ts     # ✅ Spec file present
+├── components/
+│   ├── Button.tsx    # Requires: Button.spec.tsx
+│   ├── Button.spec.tsx  # ✅ Spec file present
+│   └── index.ts      # ⚠️ Excluded (index file)
+└── config.ts         # ⚠️ Excluded (config file)
+```
+
+**Disabling for specific files:**
+If you need to disable this requirement for specific files, you can add an override in your `eslint.config.js`:
+
+```javascript
+import baseConfig from "eslint-config-agent";
+
+export default [
+  ...baseConfig,
+  {
+    files: ["src/legacy/**/*.ts"],
+    rules: {
+      "ddd/require-spec-file": "off",
+    },
+  },
+];
+```
 
 ### Configuration Philosophy
 
