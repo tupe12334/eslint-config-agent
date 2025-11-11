@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.8.1](https://github.com/tupe12334/eslint-config/compare/v1.8.0...v1.8.1) (2025-11-11)
+
+### Features
+
+* **test-config:** disable error plugin rules in test and spec files ([37c7d63](https://github.com/tupe12334/eslint-config/commit/37c7d63bea5fc302173a421beb27f451076316d9))
+
 ## [1.8.0](https://github.com/tupe12334/eslint-config/compare/v1.7.2...v1.8.0) (2025-11-11)
 
 ### Features
