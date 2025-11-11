@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
-## [1.7.3](https://github.com/tupe12334/eslint-config/compare/v1.7.2...v1.7.3) (2025-11-11)
+## [1.8.0](https://github.com/tupe12334/eslint-config/compare/v1.7.2...v1.8.0) (2025-11-11)
 
 ### Features
 
