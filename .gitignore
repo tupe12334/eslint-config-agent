@@ -103,3 +103,7 @@ temp/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Claude Code temporary files
+.claude-container/
+eslint-report.json
