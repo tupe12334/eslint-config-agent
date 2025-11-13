@@ -54,6 +54,24 @@ export const InvalidComponentsWithoutClassName = () => {
   );
 };
 
+// Invalid cases - HTML elements with empty className strings (should trigger errors)
+export const InvalidComponentsWithEmptyClassName = () => {
+  return (
+    <div className="container">
+      <div className="">This div should trigger an error - empty className</div> {/* ERROR */}
+      <span className="">This span should trigger an error - empty className</span> {/* ERROR */}
+      <p className="">This paragraph should trigger an error - empty className</p> {/* ERROR */}
+      <button className="">This button should trigger an error - empty className</button> {/* ERROR */}
+      <input className="" type="text" /> {/* ERROR */}
+      <img className="" src="test.jpg" alt="test" /> {/* ERROR */}
+      <h1 className="">This heading should trigger an error - empty className</h1> {/* ERROR */}
+      <section className="">This section should trigger an error - empty className</section> {/* ERROR */}
+      <ul className="">This ul should trigger an error - empty className</ul> {/* ERROR */}
+      <li className="">This li should trigger an error - empty className</li> {/* ERROR */}
+    </div>
+  );
+};
+
 // Mixed valid and invalid cases
 export const MixedValidInvalid = () => {
   return (

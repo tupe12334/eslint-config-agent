@@ -1,11 +1,12 @@
 /**
  * ESLint rule to require className attribute on HTML elements in JSX
  *
- * This rule enforces that all HTML elements in JSX must have a className attribute.
+ * This rule enforces that all HTML elements in JSX must have a non-empty className attribute.
  * It excludes React components (starting with capital letters) and fragments.
  *
  * Examples:
  * - ❌ <div>Content</div>
+ * - ❌ <div className="">Content</div>
  * - ✅ <div className="container">Content</div>
  * - ✅ <MyComponent>Content</MyComponent> (ignored - React component)
  * - ✅ <Fragment>Content</Fragment> (ignored - fragment)
@@ -17,7 +18,7 @@ const jsxClassNameRequiredRule = {
   meta: {
     type: "layout",
     docs: {
-      description: "Require className attribute on HTML elements in JSX",
+      description: "Require non-empty className attribute on HTML elements in JSX",
       category: "Stylistic Issues",
       recommended: false,
     },
@@ -25,6 +26,7 @@ const jsxClassNameRequiredRule = {
     schema: [],
     messages: {
       missingClassName: "HTML elements must have a className attribute.",
+      emptyClassName: "HTML elements must have a non-empty className attribute.",
     },
   },
 
@@ -48,16 +50,26 @@ const jsxClassNameRequiredRule = {
           return;
         }
 
-        // Check if element has className attribute
-        const hasClassName = node.attributes.some(attr =>
+        // Find className attribute
+        const classNameAttr = node.attributes.find(attr =>
           attr.type === 'JSXAttribute' &&
           attr.name.name === 'className'
         );
 
-        if (!hasClassName) {
+        if (!classNameAttr) {
           context.report({
             node,
             messageId: 'missingClassName',
+          });
+          return;
+        }
+
+        // Check if className is an empty string
+        const value = classNameAttr.value;
+        if (value && value.type === 'Literal' && value.value === '') {
+          context.report({
+            node,
+            messageId: 'emptyClassName',
           });
         }
       },

@@ -54,9 +54,6 @@ export const ValidComponentsWithClassName = () => {
 export const EdgeCasesValid = () => {
   return (
     <div className="edge-cases">
-      {/* Empty className should still count as having className attribute */}
-      <div className="">Empty className should be valid</div>
-
       {/* Dynamic className values should be valid */}
       <div className={undefined}>Dynamic className (undefined) should be valid</div>
       <div className={null}>Dynamic className (null) should be valid</div>

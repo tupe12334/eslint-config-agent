@@ -279,5 +279,75 @@ ruleTester.run('jsx-classname-required', jsxClassNameRequiredRule, {
         },
       ],
     },
+
+    // Empty className strings (should be rejected)
+    {
+      code: '<div className="">Content</div>',
+      errors: [
+        {
+          messageId: 'emptyClassName',
+          type: 'JSXOpeningElement',
+        },
+      ],
+    },
+    {
+      code: '<span className="">Text</span>',
+      errors: [
+        {
+          messageId: 'emptyClassName',
+          type: 'JSXOpeningElement',
+        },
+      ],
+    },
+    {
+      code: '<p className="">Paragraph</p>',
+      errors: [
+        {
+          messageId: 'emptyClassName',
+          type: 'JSXOpeningElement',
+        },
+      ],
+    },
+    {
+      code: '<button className="">Button</button>',
+      errors: [
+        {
+          messageId: 'emptyClassName',
+          type: 'JSXOpeningElement',
+        },
+      ],
+    },
+    {
+      code: '<input className="" type="text" />',
+      errors: [
+        {
+          messageId: 'emptyClassName',
+          type: 'JSXOpeningElement',
+        },
+      ],
+    },
+    {
+      code: '<img className="" src="test.jpg" alt="test" />',
+      errors: [
+        {
+          messageId: 'emptyClassName',
+          type: 'JSXOpeningElement',
+        },
+      ],
+    },
+    {
+      code: `
+        <div className="container">
+          <span className="">Empty className</span>
+          <p className="valid">Valid className</p>
+        </div>
+      `,
+      errors: [
+        {
+          messageId: 'emptyClassName',
+          type: 'JSXOpeningElement',
+        },
+      ],
+    },
   ],
 });
