@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.8.3](https://github.com/tupe12334/eslint-config/compare/v1.8.2...v1.8.3) (2025-11-13)
+
+### Features
+
+* **classname:** reject empty className strings in JSX elements ([ee401e9](https://github.com/tupe12334/eslint-config/commit/ee401e96197944346144baa5b681247345763547))
+
 ## [1.8.2](https://github.com/tupe12334/eslint-config/compare/v1.8.1...v1.8.2) (2025-11-11)
 
 ### Features
