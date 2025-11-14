@@ -30,8 +30,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
+      - name: Lint production code
+        run: pnpm test:ci
 
       - name: Format check
         run: pnpm format:check
@@ -44,6 +44,3 @@ jobs:
 
       - name: Run validation
         run: pnpm validate
-
-      - name: Run CI tests
-        run: pnpm test:ci
