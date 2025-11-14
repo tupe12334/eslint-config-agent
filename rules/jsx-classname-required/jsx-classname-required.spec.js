@@ -1,18 +1,18 @@
-import { RuleTester } from "eslint";
-import { jsxClassNameRequiredRule } from "./index.js";
+import { RuleTester } from 'eslint'
+import { jsxClassNameRequiredRule } from './index.js'
 
 const ruleTester = new RuleTester({
   languageOptions: {
     ecmaVersion: 2022,
-    sourceType: "module",
-    parser: (await import("typescript-eslint")).parser,
+    sourceType: 'module',
+    parser: (await import('typescript-eslint')).parser,
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
       },
     },
   },
-});
+})
 
 ruleTester.run('jsx-classname-required', jsxClassNameRequiredRule, {
   valid: [
@@ -350,4 +350,4 @@ ruleTester.run('jsx-classname-required', jsxClassNameRequiredRule, {
       ],
     },
   ],
-});
+})

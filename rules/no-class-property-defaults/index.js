@@ -14,11 +14,12 @@
  * @see https://eslint.org/docs/latest/rules/no-restricted-syntax
  */
 
-const rule = "error";
+const rule = 'error'
 
-const selector = "PropertyDefinition[value]";
+const selector = 'PropertyDefinition[value]'
 
-const message = "Class properties cannot have default values. Initialize properties in the constructor or through methods instead.";
+const message =
+  'Class properties cannot have default values. Initialize properties in the constructor or through methods instead.'
 
 /**
  * Export the complete rule configuration for no-restricted-syntax
@@ -28,14 +29,9 @@ const message = "Class properties cannot have default values. Initialize propert
 const noClassPropertyDefaultsConfig = {
   selector,
   message,
-};
+}
 
 // Consolidated exports
-export {
-  rule,
-  selector,
-  message,
-  noClassPropertyDefaultsConfig,
-};
+export { rule, selector, message, noClassPropertyDefaultsConfig }
 
-export default noClassPropertyDefaultsConfig;
+export default noClassPropertyDefaultsConfig

@@ -3,4 +3,4 @@
 // For now, this rule is disabled to avoid configuration conflicts
 export const noUnusedModulesConfig = {
   // "import/no-unused-modules": "off", // Disabled due to flat config compatibility issues
-};
+}

@@ -1,12 +1,12 @@
-const obj = { a: 1 };
+const obj = { a: 1 }
 
 // This should trigger optional chaining error
-const value = obj?.a;
+const value = obj?.a
 
 // This should also trigger optional chaining error
-const fn = obj?.toString?.();
+const fn = obj?.toString?.()
 
 // This should trigger nullish coalescing error
-const result = value ?? 'default';
+const result = value ?? 'default'
 
-export { value, fn, result };
+export { value, fn, result }

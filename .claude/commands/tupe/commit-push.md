@@ -10,17 +10,20 @@ Stage, commit, and push only the changes relevant to the latest task. Analyzes g
 ## Current State
 
 ### Repository Status
+
 - Current branch: !`git branch --show-current 2>/dev/null || echo "N/A"`
 - Upstream status: !`git status -sb 2>/dev/null || echo "N/A"`
 - Unstaged files: !`git status --short 2>/dev/null || echo "No changes"`
 - Last commit: !`git log -1 --pretty=format:"%h - %s (%ar)" 2>/dev/null || echo "N/A"`
 
 ### Recent Changes
+
 - Modified files: !`git status --porcelain 2>/dev/null | grep -E '^\s*M' || echo "None"`
 - New files: !`git status --porcelain 2>/dev/null | grep -E '^\?\?' || echo "None"`
 - Staged files: !`git status --porcelain 2>/dev/null | grep -E '^[MADRC]' || echo "None"`
 
 ### Active Context
+
 - Active specs: !`ls -1 .kiro/specs/ 2>/dev/null || echo "No specs"`
 - Recent spec changes: !`git status --porcelain .kiro/specs/ 2>/dev/null || echo "No spec changes"`
 - Recent command changes: !`git status --porcelain .claude/commands/ 2>/dev/null || echo "No command changes"`
@@ -32,12 +35,14 @@ Follow these steps to intelligently commit and push only relevant changes:
 ### 1. Analyze the Context
 
 **Identify the latest task** by examining:
+
 - Active specifications in `.kiro/specs/`
 - Recent changes in the working directory
 - Last commit message for context
 - Modified files to understand what was being worked on
 
 **Determine change scope**:
+
 - Are changes related to a specific feature/spec?
 - Are they related to new commands or configuration?
 - Are they bug fixes or refactoring?
@@ -46,12 +51,14 @@ Follow these steps to intelligently commit and push only relevant changes:
 ### 2. Filter Relevant Changes
 
 **IMPORTANT**: Only stage files directly related to the latest task. Exclude:
+
 - Unrelated files that may have been modified
 - Debug or temporary files
 - Configuration changes not part of the task
 - Files from previous tasks not yet committed
 
 **Group changes logically**:
+
 - If working on a spec: stage spec-related files + implementation files
 - If creating commands: stage command files + any related configs
 - If fixing bugs: stage only affected source files + tests
@@ -69,6 +76,7 @@ git add tests/NewComponent.test.tsx
 ```
 
 **Verify staging**:
+
 - Run `git status` to confirm only relevant files are staged
 - Run `git diff --cached` to review what will be committed
 - Double-check no sensitive or unintended files are included
@@ -76,6 +84,7 @@ git add tests/NewComponent.test.tsx
 ### 4. Create Descriptive Commit Message
 
 Generate a commit message that:
+
 - Follows conventional commit format: `type(scope): description`
 - Types: feat, fix, docs, style, refactor, test, chore
 - Clearly describes what changed and why
@@ -117,11 +126,13 @@ EOF
 ### 6. Push to Remote
 
 Before pushing:
+
 - Verify you're on the correct branch
 - Check if remote tracking branch exists
 - Pull any remote changes if needed (with --rebase if appropriate)
 
 Push command:
+
 ```bash
 # If branch has upstream
 git push
@@ -133,6 +144,7 @@ git push -u origin $(git branch --show-current)
 ### 7. Verify Success
 
 After pushing:
+
 - Confirm push was successful
 - Show the commit hash and message
 - Provide remote URL for the commit if available
@@ -141,6 +153,7 @@ After pushing:
 ## Safety Checks
 
 **MUST DO before committing**:
+
 - [ ] Review all staged files with `git status`
 - [ ] Check diff with `git diff --cached`
 - [ ] Ensure no secrets or credentials are being committed
@@ -149,6 +162,7 @@ After pushing:
 - [ ] Test that code builds/runs if applicable
 
 **DO NOT commit**:
+
 - Files containing secrets, tokens, or credentials
 - Large binary files unless intentional
 - Generated files that should be gitignored
@@ -158,6 +172,7 @@ After pushing:
 ## Output Format
 
 Provide clear output showing:
+
 1. **Analysis**: What task was identified
 2. **Files staged**: List of files being committed with reason
 3. **Files excluded**: Any modified files not being committed and why

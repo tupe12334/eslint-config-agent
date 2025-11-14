@@ -13,6 +13,7 @@ Executes ALL pending tasks using TDD methodology, then runs comprehensive valida
 ## Overview
 
 This command combines:
+
 1. **Implementation Phase**: Execute all pending spec tasks using TDD (`/kiro:spec-impl`)
 2. **Validation Phase**: Comprehensive feature validation with testing (`/tupe:validate-feature`)
 
@@ -21,15 +22,18 @@ This command combines:
 Validate that the specification is ready for implementation:
 
 **Required Files**:
+
 - `.kiro/specs/$1/spec.json` - Spec metadata
 - `.kiro/specs/$1/requirements.md` - Feature requirements
 - `.kiro/specs/$1/design.md` - Technical design
 - `.kiro/specs/$1/tasks.md` - Implementation tasks
 
 **Approval Validation**:
+
 - Check `spec.json` for approval status
 - Ensure tasks phase is complete: `phase: "tasks-generated"` or later
 - If approvals missing: Stop with error message:
+
   ```
   ❌ Specification not ready for implementation
 
@@ -48,15 +52,18 @@ Validate that the specification is ready for implementation:
 Load complete project context for implementation:
 
 ### Core Steering Documents
+
 - @.kiro/steering/structure.md - File organization, naming, code patterns
 - @.kiro/steering/tech.md - Technology stack, frameworks, libraries
 - @.kiro/steering/product.md - Business context, product vision
 
 ### Custom Steering Documents
+
 - Load ALL additional `*.md` files in `.kiro/steering/` directory (excluding core files above)
 - Examples: `api.md`, `testing.md`, `security.md`, etc.
 
 ### Specification Documents for $1
+
 - @.kiro/specs/$1/spec.json - Metadata and approval tracking
 - @.kiro/specs/$1/requirements.md - EARS-format requirements
 - @.kiro/specs/$1/design.md - Technical design document
@@ -71,12 +78,14 @@ Execute **ALL pending tasks** (unchecked `- [ ]` items) using strict Test-Driven
 ### Task Identification
 
 Parse `tasks.md` to identify:
+
 - Total tasks: [count all checkbox items]
 - Completed tasks: [count `- [x]` items]
 - Pending tasks: [count `- [ ]` items]
 - Task list: [extract all pending task numbers and descriptions]
 
 **Output Example**:
+
 ```
 📋 Task Analysis for feature: $1
    Total tasks: 15
@@ -98,6 +107,7 @@ For each pending task in sequential order:
 #### 1. RED Phase - Write Failing Tests First
 
 **Before any implementation code**:
+
 - Analyze task requirements from tasks.md details
 - Reference requirements and design documents for expected behavior
 - Write comprehensive test cases covering:
@@ -108,6 +118,7 @@ For each pending task in sequential order:
 - Run tests to confirm they fail (no implementation yet)
 
 **Test File Naming**:
+
 - Follow project conventions from `structure.md`
 - Common patterns: `*.test.ts`, `*.spec.ts`, `__tests__/*.ts`
 - Place tests near implementation or in dedicated test directories
@@ -115,6 +126,7 @@ For each pending task in sequential order:
 #### 2. GREEN Phase - Minimal Implementation
 
 **Write just enough code to pass the tests**:
+
 - Implement ONLY what the current task requires
 - Follow design document specifications strictly
 - Use project patterns from `structure.md`
@@ -124,6 +136,7 @@ For each pending task in sequential order:
 - No extra features beyond task scope
 
 **Implementation Guidelines**:
+
 - Single responsibility per function/class
 - Clear, descriptive naming
 - Type safety (TypeScript: proper types, avoid `any`)
@@ -133,6 +146,7 @@ For each pending task in sequential order:
 #### 3. REFACTOR Phase - Clean and Improve
 
 **After tests pass, improve code quality**:
+
 - Remove duplication
 - Improve naming and clarity
 - Extract reusable components
@@ -142,6 +156,7 @@ For each pending task in sequential order:
 - Maintain test coverage
 
 **Refactoring Checklist**:
+
 - [ ] Code is DRY (Don't Repeat Yourself)
 - [ ] Names are clear and descriptive
 - [ ] Functions are small and focused
@@ -152,6 +167,7 @@ For each pending task in sequential order:
 #### 4. VERIFY Phase - Quality Assurance
 
 **Before marking task complete**:
+
 - Run ALL project tests (not just new ones)
   ```bash
   npm test || pnpm test || yarn test
@@ -169,6 +185,7 @@ For each pending task in sequential order:
 - Manual smoke test of the feature
 
 **Quality Gates** (MUST PASS before continuing):
+
 - ✅ All tests passing
 - ✅ No linting errors
 - ✅ No type errors
@@ -176,6 +193,7 @@ For each pending task in sequential order:
 - ✅ No console errors or warnings
 
 **If any gate fails**:
+
 - Fix issues immediately
 - Re-run verification
 - Do NOT proceed to next task until all gates pass
@@ -183,12 +201,14 @@ For each pending task in sequential order:
 #### 5. MARK COMPLETE Phase - Update Task Status
 
 **After successful verification**:
+
 - Update tasks.md: change `- [ ]` to `- [x]` for completed task
 - Example:
   ```markdown
   - [x] 2.1 Create user CRUD operations
   ```
 - Commit the implementation with descriptive message:
+
   ```bash
   git add [relevant files only]
   git commit -m "$(cat <<'EOF'
@@ -226,6 +246,7 @@ Next task...
 ### Progress Tracking
 
 **After each task completion, output progress**:
+
 ```
 ✅ Task 2.1 completed: Create user CRUD operations
    Progress: 4/15 tasks complete (27%)
@@ -237,6 +258,7 @@ Next task...
 ### Integration Tasks
 
 **Pay special attention to integration tasks**:
+
 - These wire together previously implemented components
 - Test end-to-end flows
 - Verify components work together correctly
@@ -246,6 +268,7 @@ Next task...
 ### Implementation Complete
 
 **When all tasks are checked**:
+
 ```
 🎉 Implementation Phase Complete!
 
@@ -268,6 +291,7 @@ After implementation completes, run **ultra-thorough validation** using the same
 ### Validation Overview
 
 Execute six-phase comprehensive validation:
+
 1. Documentation Discovery & Analysis
 2. Codebase Deep Dive
 3. Behavioral & Requirements Analysis
@@ -282,6 +306,7 @@ Execute six-phase comprehensive validation:
 **Adaptive Documentation Search** - works with ANY project structure:
 
 **Search Locations** (use Task tool with Explore agent):
+
 - `README*.md` - Feature descriptions
 - `docs/**/*.md` - Documentation folders
 - `.kiro/specs/$1/**/*.md` - Kiro specification (our source of truth)
@@ -291,6 +316,7 @@ Execute six-phase comprehensive validation:
 - Code comments and JSDoc/TSDoc
 
 **Search Strategy**:
+
 1. Use Task tool (Explore agent, "very thorough" mode) to find all docs mentioning "$1"
 2. Extract expected behavior from documentation
 3. Identify requirements, acceptance criteria, success metrics
@@ -299,6 +325,7 @@ Execute six-phase comprehensive validation:
 **Fallback**: If minimal documentation, use `.kiro/specs/$1/` as primary source and infer from code.
 
 **Documentation Quality Assessment**:
+
 - Completeness: Are all aspects documented?
 - Accuracy: Does documentation match implementation?
 - Clarity: Is documentation understandable?
@@ -312,6 +339,7 @@ Execute six-phase comprehensive validation:
 **Implementation Discovery** (use Task tool with Explore agent, "very thorough"):
 
 **Find and analyze**:
+
 - ALL files implementing the feature
 - Complete code flow and execution paths
 - Data flow through the system
@@ -322,6 +350,7 @@ Execute six-phase comprehensive validation:
 **Code Quality Analysis**:
 
 **Architecture**:
+
 - Alignment with project patterns from `structure.md`
 - Modularity and separation of concerns
 - Component boundaries and responsibilities
@@ -329,6 +358,7 @@ Execute six-phase comprehensive validation:
 - Integration approach
 
 **Code Consistency**:
+
 - Follows codebase conventions
 - Consistent naming patterns
 - Consistent error handling approach
@@ -336,6 +366,7 @@ Execute six-phase comprehensive validation:
 - Matches existing code style
 
 **Error Handling**:
+
 - Input validation present and thorough
 - Edge cases covered (null, undefined, empty, boundary values)
 - Error messages clear and actionable
@@ -343,6 +374,7 @@ Execute six-phase comprehensive validation:
 - Proper exception handling
 
 **Security Assessment**:
+
 - Input sanitization (prevent injection attacks)
 - Authentication and authorization checks
 - XSS prevention (sanitize user input in UI)
@@ -352,6 +384,7 @@ Execute six-phase comprehensive validation:
 - Rate limiting (if applicable for APIs)
 
 **Performance Analysis**:
+
 - Algorithm efficiency (no O(n²) where O(n) possible)
 - Database query optimization (no N+1 queries)
 - Caching strategies (appropriate memoization)
@@ -360,6 +393,7 @@ Execute six-phase comprehensive validation:
 - Response time measurements
 
 **Type Safety** (TypeScript projects):
+
 - Proper type definitions (interfaces, types)
 - Avoid excessive `any` usage
 - Type guards for runtime safety
@@ -367,12 +401,14 @@ Execute six-phase comprehensive validation:
 - Generic usage where appropriate
 
 **Code Duplication**:
+
 - DRY principle adherence
 - Reusable components extracted
 - Shared utilities utilized
 - No copy-paste code
 
 **Technical Debt Identification**:
+
 - TODO/FIXME/HACK comments (with file:line references)
 - Workarounds or temporary solutions
 - Known limitations
@@ -386,6 +422,7 @@ Execute six-phase comprehensive validation:
 **Expected Behavior Extraction**:
 
 From `.kiro/specs/$1/requirements.md` and other documentation:
+
 - Core functionality requirements
 - User stories and use cases
 - Business rules and constraints
@@ -398,6 +435,7 @@ From `.kiro/specs/$1/requirements.md` and other documentation:
 
 **Requirements Traceability**:
 For each requirement in `requirements.md`:
+
 ```
 REQ-X.X: [Requirement description from requirements.md]
 Status: ✅ Implemented / ⚠️ Partial / ❌ Missing
@@ -407,6 +445,7 @@ Notes: [Any deviations, concerns, or limitations]
 ```
 
 **Gap Analysis**:
+
 - Missing functionality: Requirements not implemented
 - Extra functionality: Implemented features not in requirements (scope creep?)
 - Inconsistencies: Docs say X, code does Y
@@ -418,6 +457,7 @@ Notes: [Any deviations, concerns, or limitations]
 ### Phase 3.4: Interactive Testing with Playwright
 
 **Test Planning**:
+
 - Identify all user-facing surfaces (UI, API, CLI)
 - Map user flows from requirements
 - List edge cases and error scenarios
@@ -430,6 +470,7 @@ Notes: [Any deviations, concerns, or limitations]
 **Browser Testing with Playwright MCP**:
 
 1. **Setup**:
+
    ```
    - Launch browser (desktop viewport)
    - Navigate to feature location
@@ -505,6 +546,7 @@ Notes: [Any deviations, concerns, or limitations]
    - Document expected request/response formats
 
 2. **Success Path Testing**:
+
    ```bash
    # Test successful operations
    curl -X POST /api/feature -d '{"valid": "data"}' -H "Content-Type: application/json"
@@ -586,6 +628,7 @@ Notes: [Any deviations, concerns, or limitations]
    - Identify default behaviors
 
 2. **Valid Input Testing**:
+
    ```bash
    # Test with valid inputs
    ./cli feature-command --arg value
@@ -660,12 +703,14 @@ Overall: 93% tests passed (3 issues found)
 Identify bugs across all categories:
 
 **Functional Bugs**:
+
 - Feature doesn't work as designed
 - Wrong output or behavior
 - Logic errors in implementation
 - Missing functionality from requirements
 
 **UI/UX Issues**:
+
 - Confusing user interactions
 - Poor feedback to user actions
 - Inconsistent visual design
@@ -673,6 +718,7 @@ Identify bugs across all categories:
 - Responsive layout issues
 
 **Performance Problems**:
+
 - Slow response times (>500ms for API, >3s for page load)
 - Memory leaks
 - Inefficient algorithms (O(n²) where O(n) possible)
@@ -680,6 +726,7 @@ Identify bugs across all categories:
 - Large bundle sizes
 
 **Security Vulnerabilities**:
+
 - XSS vulnerabilities (unsanitized user input in HTML)
 - SQL injection vulnerabilities (string concatenation in queries)
 - Authentication bypass
@@ -688,6 +735,7 @@ Identify bugs across all categories:
 - CSRF vulnerabilities
 
 **Accessibility Issues**:
+
 - Missing ARIA labels
 - Keyboard navigation broken
 - Poor color contrast (<4.5:1 for normal text)
@@ -695,6 +743,7 @@ Identify bugs across all categories:
 - Focus management problems
 
 **Edge Case Failures**:
+
 - Null/undefined handling missing
 - Empty state handling broken
 - Boundary value errors (0, negative, MAX_INT)
@@ -702,12 +751,14 @@ Identify bugs across all categories:
 - Race conditions
 
 **Error Handling Gaps**:
+
 - Uncaught exceptions
 - Poor error messages (technical jargon or "Error occurred")
 - No error recovery mechanism
 - Errors not logged properly
 
 **Integration Issues**:
+
 - API call failures not handled
 - Database connection errors not caught
 - Third-party service failures not handled
@@ -718,6 +769,7 @@ Identify bugs across all categories:
 For each bug identified, classify severity:
 
 **🔴 Critical** (Ship blocker):
+
 - Feature completely broken
 - Data loss or data corruption
 - Security vulnerability (XSS, SQL injection, auth bypass)
@@ -725,6 +777,7 @@ For each bug identified, classify severity:
 - Complete inaccessibility
 
 **🟠 High** (Ship risk):
+
 - Major functionality severely impaired
 - Poor user experience causing user frustration
 - Security concern (not exploitable but concerning)
@@ -732,6 +785,7 @@ For each bug identified, classify severity:
 - Accessibility failure (feature unusable for disabled users)
 
 **🟡 Medium** (Should fix before ship):
+
 - Minor functionality issue
 - Edge case failure
 - Moderate performance impact (slow but usable)
@@ -739,6 +793,7 @@ For each bug identified, classify severity:
 - Confusing error messages
 
 **🟢 Low** (Nice to fix):
+
 - Cosmetic issues
 - Minor inconsistencies
 - Small UX improvements
@@ -758,6 +813,7 @@ For **each bug found**, provide detailed analysis:
 **Location**: src/auth/session-manager.ts:45, src/components/UserForm.tsx:120
 
 **Reproduction Steps**:
+
 1. Log in to the application
 2. Navigate to the user profile form
 3. Fill out the form with data (don't submit)
@@ -766,12 +822,14 @@ For **each bug found**, provide detailed analysis:
 6. Observe: Session expired error, form data lost
 
 **Expected Behavior**:
+
 - User should receive warning before session expires (at 13-14 min mark)
 - Form data should be auto-saved to localStorage as fallback
 - On session expiry, user should be redirected to login with return URL
 - After re-login, user should return to form with data restored
 
 **Actual Behavior**:
+
 - No warning given before session expires
 - Form submission fails with generic error: "Authentication required"
 - User is not redirected to login page automatically
@@ -781,12 +839,14 @@ For **each bug found**, provide detailed analysis:
 The session manager (session-manager.ts:45) checks auth status only on API calls, not proactively. The UserForm component does not implement auto-save or session monitoring. When the API call fails due to expired token, the error handling (UserForm.tsx:120) only shows a generic error and doesn't preserve form state.
 
 Technical details:
+
 - Session timeout: 15 minutes (set in auth config)
 - No client-side session monitoring or warning system
 - No localStorage backup for form data
 - Error handler catches 401 but doesn't trigger re-auth flow
 
 **Impact**:
+
 - High user frustration (data loss)
 - Affects all forms in the application with long fill times
 - Poor user experience, especially for users who are interrupted
@@ -820,12 +880,14 @@ Technical details:
    - Call on user activity (mouse move, keyboard input) with throttling
 
 **Fix Effort Estimate**: 6-8 hours
+
 - Session warning: 2-3 hours
 - Form auto-save: 2-3 hours
 - Error handling improvements: 1-2 hours
 - Testing: 1 hour
 
 **Testing Approach**:
+
 1. Mock short session timeout (2 minutes for testing)
 2. Verify warning shows at expected time
 3. Test "Extend Session" button works
@@ -835,6 +897,7 @@ Technical details:
 7. Test across all forms in application
 
 **Risks**:
+
 - localStorage quota could be exceeded (mitigate: limit autosave data size)
 - Session extension could be exploited (mitigate: limit extensions per session)
 - Multiple tabs could conflict (mitigate: use unique keys per tab)
@@ -859,6 +922,7 @@ Generate detailed validation report with the following structure:
 **Feature**: $1
 
 **Overall Result**:
+
 - ✅ **PASS** - Feature fully functional, production ready
 - ⚠️ **PASS WITH ISSUES** - Feature works but has non-critical issues (X bugs: Y high, Z medium)
 - ❌ **FAIL** - Feature has critical bugs or missing core functionality
@@ -871,6 +935,7 @@ Generate detailed validation report with the following structure:
 **Test Coverage**: [XX% or "Not measured"]
 
 **Recommendation**:
+
 - **PRODUCTION READY** - Deploy with confidence ✅
 - **NEEDS FIXES** - Fix X critical/high issues before deployment ⚠️
 - **REQUIRES REWORK** - Significant changes needed ❌
@@ -886,6 +951,7 @@ Generate detailed validation report with the following structure:
 [What the feature is supposed to do, from requirements]
 
 **Implementation Summary**:
+
 - **Files created/modified**: X files (list key files with file:line counts)
 - **Lines of code**: ~XXX LOC implementation, ~XXX LOC tests
 - **Test coverage**: XX% (or "Not measured")
@@ -897,6 +963,7 @@ Generate detailed validation report with the following structure:
 ### Documentation Analysis
 
 **Specification Documentation** (Kiro):
+
 - ✅ Requirements: .kiro/specs/$1/requirements.md (X requirements)
 - ✅ Design: .kiro/specs/$1/design.md (detailed technical design)
 - ✅ Tasks: .kiro/specs/$1/tasks.md (X tasks, all completed)
@@ -908,10 +975,12 @@ OR: "⚠️ No additional documentation found outside Kiro spec"
 **Documentation Quality**: Excellent / Good / Fair / Poor
 
 **Documentation Gaps Identified**:
+
 - [List what should be documented but isn't]
 - [Examples: User guide, API documentation, deployment guide, troubleshooting, etc.]
 
 **Recommendations**:
+
 1. [Documentation that should be created]
 2. [Documentation that should be updated]
 3. [Documentation that should be improved]
@@ -923,6 +992,7 @@ OR: "⚠️ No additional documentation found outside Kiro spec"
 **Architecture Alignment**: Excellent / Good / Fair / Poor
 
 **Assessment**:
+
 - Follows project patterns from .kiro/steering/structure.md: [Yes/No/Partially]
 - Integration points properly implemented: [assessment]
 - Modularity and separation of concerns: [assessment]
@@ -931,6 +1001,7 @@ OR: "⚠️ No additional documentation found outside Kiro spec"
 **Code Quality**: Excellent / Good / Fair / Poor
 
 **Assessment**:
+
 - Readability: [Clear naming, well-structured / Adequate / Needs improvement]
 - Maintainability: [Easy to modify / Moderate / Difficult]
 - Consistency with codebase: [Matches conventions / Mostly matches / Inconsistent]
@@ -940,6 +1011,7 @@ OR: "⚠️ No additional documentation found outside Kiro spec"
 **Error Handling**: Excellent / Good / Fair / Poor
 
 **Assessment**:
+
 - Edge case coverage: [Comprehensive / Adequate / Insufficient]
 - Error messages quality: [Clear and actionable / Adequate / Poor]
 - Graceful degradation: [Handles failures well / Adequate / Missing]
@@ -948,6 +1020,7 @@ OR: "⚠️ No additional documentation found outside Kiro spec"
 **Security**: Excellent / Good / Fair / Poor
 
 **Assessment**:
+
 - Input validation: [All inputs validated / Most validated / Validation missing]
 - Authentication/Authorization: [Properly implemented / Adequate / Issues found]
 - Data sanitization: [XSS prevention in place / Basic / Missing]
@@ -957,6 +1030,7 @@ OR: "⚠️ No additional documentation found outside Kiro spec"
 **Performance**: Excellent / Good / Fair / Poor
 
 **Assessment**:
+
 - Response times: [<100ms / <500ms / >500ms] (for API endpoints)
 - Page load times: [<2s / <3s / >3s] (for UI pages)
 - Database queries: [Optimized / Acceptable / N+1 issues detected]
@@ -967,34 +1041,37 @@ OR: "⚠️ No additional documentation found outside Kiro spec"
 **Type Safety** (TypeScript projects): Excellent / Good / Fair / Poor
 
 **Assessment**:
+
 - Proper type definitions: [All typed / Mostly typed / Many any types]
 - `any` usage: [Minimal (<5%) / Moderate (5-15%) / Excessive (>15%)]
 - Type guards: [Appropriate runtime checks / Some checks / Missing checks]
 - Type safety violations: [None / Minor / Significant]
 
 **Technical Debt Identified**:
+
 1. **TODO/FIXME Items** (X found):
    - [file.ts:line]: [description of TODO]
    - [file.ts:line]: [description of FIXME]
-   ...
+     ...
 
 2. **Code Duplication** (X instances):
    - [description of duplication with file references]
-   ...
+     ...
 
 3. **Refactoring Opportunities**:
    - [area needing refactoring with rationale]
-   ...
+     ...
 
 4. **Deprecated Dependencies**:
    - [library@version]: [reason to upgrade/replace]
-   ...
+     ...
 
 ---
 
 ### Testing Results
 
 **Automated Test Suite**:
+
 - Total tests executed: X
 - Passed: X ✅
 - Failed: X ❌
@@ -1005,50 +1082,59 @@ OR: "⚠️ No additional documentation found outside Kiro spec"
 **UI Testing** (if applicable):
 
 **User Flows Tested**:
+
 1. [Flow name]: ✅ PASS / ❌ FAIL [details]
 2. [Flow name]: ✅ PASS / ❌ FAIL [details]
-...
+   ...
 
 **Form Validation Testing**:
+
 - Required fields: ✅ PASS / ❌ FAIL
 - Format validation: ✅ PASS / ❌ FAIL
 - Length limits: ✅ PASS / ❌ FAIL
 - Error messages: ✅ PASS / ❌ FAIL
 
 **Edge Cases Tested**:
+
 1. [Edge case]: ✅ PASS / ❌ FAIL [details]
 2. [Edge case]: ✅ PASS / ❌ FAIL [details]
-...
+   ...
 
 **Responsive Testing**:
+
 - Desktop (1920x1080): ✅ PASS / ❌ FAIL
 - Tablet (768x1024): ✅ PASS / ❌ FAIL
 - Mobile (375x667): ✅ PASS / ❌ FAIL
 
 **Accessibility Testing**:
+
 - ARIA labels: ✅ Present / ⚠️ Partial / ❌ Missing
 - Keyboard navigation: ✅ Works / ⚠️ Partial / ❌ Broken
 - Color contrast: ✅ WCAG AA / ⚠️ Some issues / ❌ WCAG fail
 - Screen reader support: ✅ Good / ⚠️ Fair / ❌ Poor
 
 **Console Output**:
+
 - Errors: X errors detected [list if any]
 - Warnings: X warnings detected [list if any]
 - Network failures: X failures [list if any]
 
 **Visual Verification**:
+
 - Screenshots captured: X (saved to /tmp/)
 - Key states verified: [list states: success, error, loading, empty, etc.]
 
 **API Testing** (if applicable):
 
 **Endpoints Tested**:
+
 - GET /api/endpoint: ✅ PASS / ❌ FAIL (XXms avg response time)
 - POST /api/endpoint: ✅ PASS / ❌ FAIL (XXms avg response time)
 - PUT /api/endpoint/:id: ✅ PASS / ❌ FAIL (XXms avg response time)
 - DELETE /api/endpoint/:id: ✅ PASS / ❌ FAIL (XXms avg response time)
 
 **API Test Coverage**:
+
 - Success scenarios: XX/XX passed
 - Error scenarios: XX/XX passed
 - Validation scenarios: XX/XX passed
@@ -1056,6 +1142,7 @@ OR: "⚠️ No additional documentation found outside Kiro spec"
 - Rate limiting: ✅ Working / N/A
 
 **API Performance**:
+
 - Average response time: XXms
 - P95 response time: XXms
 - P99 response time: XXms
@@ -1063,6 +1150,7 @@ OR: "⚠️ No additional documentation found outside Kiro spec"
 **CLI Testing** (if applicable):
 
 **Commands Tested**:
+
 - Valid inputs: ✅ PASS / ❌ FAIL
 - Invalid inputs: ✅ PASS / ❌ FAIL
 - Error handling: ✅ PASS / ❌ FAIL
@@ -1111,6 +1199,7 @@ REQ-1.2: [Requirement description]
 ```
 
 **Coverage Summary**:
+
 - Total requirements: X
 - ✅ Fully implemented: X (XX%)
 - ⚠️ Partially implemented: X (XX%)
@@ -1133,29 +1222,34 @@ REQ-1.2: [Requirement description]
 [For each critical/high bug:]
 
 **1. BUG-XXX: [Bug Title]**
-   - **Priority**: P0 (Critical) / P1 (High)
-   - **Severity**: [Impact on users/system]
-   - **Location**: [file.ts:line]
-   - **Effort**: [X hours/days]
-   - **Dependencies**: [Any dependencies or blockers]
 
-   **Fix Approach**:
-   1. [Specific implementation step 1]
-   2. [Specific implementation step 2]
-   3. [Specific implementation step 3]
-   ...
+- **Priority**: P0 (Critical) / P1 (High)
+- **Severity**: [Impact on users/system]
+- **Location**: [file.ts:line]
+- **Effort**: [X hours/days]
+- **Dependencies**: [Any dependencies or blockers]
 
-   **Testing Approach**:
-   - [How to test the fix]
-   - [Regression testing needed]
-   - [Expected test results]
+**Fix Approach**:
 
-   **Success Criteria**:
-   - [How to know the fix is complete]
+1.  [Specific implementation step 1]
+2.  [Specific implementation step 2]
+3.  [Specific implementation step 3]
+    ...
 
-   **Risks**:
-   - [Any risks in implementing this fix]
-   - [Mitigation strategies]
+**Testing Approach**:
+
+- [How to test the fix]
+- [Regression testing needed]
+- [Expected test results]
+
+**Success Criteria**:
+
+- [How to know the fix is complete]
+
+**Risks**:
+
+- [Any risks in implementing this fix]
+- [Mitigation strategies]
 
 [Repeat for each critical/high bug]
 
@@ -1166,11 +1260,12 @@ REQ-1.2: [Requirement description]
 **Should fix for quality**:
 
 **1. Issue: [Title]**
-   - **Location**: [file.ts:line]
-   - **Effort**: [X hours]
-   - **Improvement Approach**:
-     - [Step 1]
-     - [Step 2]
+
+- **Location**: [file.ts:line]
+- **Effort**: [X hours]
+- **Improvement Approach**:
+  - [Step 1]
+  - [Step 2]
 
 [Repeat for each medium issue]
 
@@ -1181,12 +1276,13 @@ REQ-1.2: [Requirement description]
 **Nice to have for maintainability**:
 
 **1. Debt Item: [Description]**
-   - **Location**: [file.ts:line]
-   - **Effort**: [X hours]
-   - **Refactoring Approach**:
-     - [How to clean up]
-   - **Benefits**:
-     - [Why this matters for future development]
+
+- **Location**: [file.ts:line]
+- **Effort**: [X hours]
+- **Refactoring Approach**:
+  - [How to clean up]
+- **Benefits**:
+  - [Why this matters for future development]
 
 [Repeat for each debt item]
 
@@ -1207,24 +1303,29 @@ REQ-1.2: [Requirement description]
 #### Implementation Timeline
 
 **Phase 1: Critical Fixes** (Must complete before deployment)
+
 - [List of P0 bugs]
 - **Estimated effort**: X hours/days
 - **Testing time**: Y hours
 
 **Phase 2: High Priority Fixes** (Should complete before deployment)
+
 - [List of P1 bugs]
 - **Estimated effort**: X hours/days
 - **Testing time**: Y hours
 
 **Phase 3: Medium Improvements** (Post-deployment acceptable)
+
 - [List of medium issues]
 - **Estimated effort**: X hours/days
 
 **Phase 4: Technical Debt & Documentation** (Ongoing)
+
 - [List of low priority items]
 - **Estimated effort**: X hours/days
 
 **Total Estimated Effort**:
+
 - **Pre-deployment**: X hours/days (Phase 1 + 2)
 - **Post-deployment**: Y hours/days (Phase 3 + 4)
 - **Grand total**: Z hours/days
@@ -1234,16 +1335,19 @@ REQ-1.2: [Requirement description]
 #### Testing Strategy After Fixes
 
 **Regression Testing**:
+
 - Areas affected by fixes: [list components/features]
 - Full test suite: Run all X tests
 - Manual testing needed: [list specific flows]
 
 **New Test Cases to Add**:
+
 1. [Test case for bug reproduction]
 2. [Test case for edge case coverage]
-...
+   ...
 
 **Validation Approach**:
+
 - [ ] All critical bugs verified fixed
 - [ ] All high priority bugs verified fixed
 - [ ] No regressions introduced
@@ -1277,6 +1381,7 @@ REQ-1.2: [Requirement description]
 **Checklist Score**: X/12 items complete
 
 **Risk Assessment**:
+
 - 🟢 **Low Risk**: 10-12 items complete, no critical issues
 - 🟡 **Medium Risk**: 7-9 items complete, some concerns
 - 🔴 **High Risk**: <7 items complete, major concerns
@@ -1291,6 +1396,7 @@ REQ-1.2: [Requirement description]
 [Provide detailed, actionable recommendation. Examples:]
 
 **Example 1 (Production Ready)**:
+
 ```
 ✅ PRODUCTION READY
 
@@ -1304,6 +1410,7 @@ Minor issues identified (2 medium, 1 low) can be addressed post-deployment witho
 ```
 
 **Example 2 (Needs Fixes)**:
+
 ```
 ⚠️ NEEDS FIXES BEFORE DEPLOYMENT
 
@@ -1320,6 +1427,7 @@ These issues would impact user experience and data integrity. All other aspects 
 ```
 
 **Example 3 (Requires Rework)**:
+
 ```
 ❌ REQUIRES REWORK BEFORE DEPLOYMENT
 
@@ -1365,15 +1473,18 @@ Additionally, test coverage is only 34%, security concerns exist, and performanc
 #### Long-term Improvements
 
 **Strategic Improvements** (for future iterations):
+
 - [Improvement 1]: [Rationale and benefits]
 - [Improvement 2]: [Rationale and benefits]
 - [Improvement 3]: [Rationale and benefits]
 
 **Architecture Evolution**:
+
 - [Consideration 1]: [Why and when]
 - [Consideration 2]: [Why and when]
 
 **Tooling/Process Improvements**:
+
 - [Tool/process 1]: [How it would help]
 - [Tool/process 2]: [How it would help]
 
@@ -1382,6 +1493,7 @@ Additionally, test coverage is only 34%, security concerns exist, and performanc
 **Production Monitoring** (what to watch post-deployment):
 
 **Key Metrics to Track**:
+
 1. **Performance**:
    - API response times (alert if >500ms p95)
    - Page load times (alert if >3s p95)
@@ -1399,6 +1511,7 @@ Additionally, test coverage is only 34%, security concerns exist, and performanc
    - Task completion rates
 
 **Alerts to Set Up**:
+
 - [ ] API response time >500ms for 5+ minutes
 - [ ] Error rate >1% for 5+ minutes
 - [ ] Failed requests >10/minute
@@ -1406,12 +1519,14 @@ Additionally, test coverage is only 34%, security concerns exist, and performanc
 - [ ] [Feature-specific alert]
 
 **Logging Requirements**:
+
 - [ ] All errors logged with stack traces
 - [ ] User actions logged (for debugging)
 - [ ] Performance metrics logged
 - [ ] Security events logged (auth failures, etc.)
 
 **Dashboard Widgets**:
+
 - Real-time request rate
 - Error rate over time
 - p50/p95/p99 response times
@@ -1437,6 +1552,7 @@ Additionally, test coverage is only 34%, security concerns exist, and performanc
 After validation report is delivered, update spec metadata:
 
 **Update `.kiro/specs/$1/spec.json`**:
+
 ```json
 {
   "phase": "implementation-complete",
@@ -1448,6 +1564,7 @@ After validation report is delivered, update spec metadata:
 ```
 
 **Final Output**:
+
 ```
 ✨ Implementation and Validation Complete!
 
@@ -1480,10 +1597,12 @@ Next steps: [Based on production readiness assessment]
 ```
 
 **Prerequisites**:
+
 - Spec must exist in `.kiro/specs/[feature-name]/`
 - Requirements, design, and tasks must be generated and approved
 
 **What it does**:
+
 1. ✅ Validates spec is ready
 2. 📚 Loads all context (steering + spec)
 3. 🔨 Implements ALL pending tasks using TDD
@@ -1495,6 +1614,7 @@ Next steps: [Based on production readiness assessment]
 9. 💡 Provides actionable fix plans
 
 **Time Estimate**:
+
 - Small feature (5 tasks): 2-4 hours
 - Medium feature (10-15 tasks): 4-8 hours
 - Large feature (20+ tasks): 8-16 hours

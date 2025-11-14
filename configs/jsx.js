@@ -5,19 +5,19 @@
  * Plugin registration removed - all plugins registered globally in index.js.
  */
 
-import globals from "globals";
-import allRules from "../rules/index.js";
+import globals from 'globals'
+import allRules from '../rules/index.js'
 
 export const jsxConfig = (sharedRules, sharedRestrictedSyntax) => [
   // JSX files with TypeScript support - Error rules
   {
-    files: ["**/*.jsx"],
+    files: ['**/*.jsx'],
     ignores: [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/build/**",
-      "pnpm-lock.yaml",
-      "**/*.stories.{js,jsx,ts,tsx}",
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      'pnpm-lock.yaml',
+      '**/*.stories.{js,jsx,ts,tsx}',
     ],
     languageOptions: {
       globals: {
@@ -27,15 +27,15 @@ export const jsxConfig = (sharedRules, sharedRestrictedSyntax) => [
     },
     settings: {
       react: {
-        version: "detect",
+        version: 'detect',
       },
     },
     rules: {
       ...sharedRules,
-      "no-undef": "off",
-      "single-export/single-export": "off",
-      "required-exports/required-exports": [
-        "error",
+      'no-undef': 'off',
+      'single-export/single-export': 'off',
+      'required-exports/required-exports': [
+        'error',
         {
           variable: false,
           function: false,
@@ -46,19 +46,19 @@ export const jsxConfig = (sharedRules, sharedRestrictedSyntax) => [
           ignorePrivate: true,
         },
       ],
-      "no-restricted-syntax": [
-        "error",
+      'no-restricted-syntax': [
+        'error',
         ...allRules.switchCaseExplicitReturnConfigs,
         {
-          selector: "SwitchStatement > SwitchCase[test=null]",
+          selector: 'SwitchStatement > SwitchCase[test=null]',
           message:
-            "Default cases are not allowed in switch statements. Handle all possible cases explicitly.",
+            'Default cases are not allowed in switch statements. Handle all possible cases explicitly.',
         },
         ...allRules.switchCaseFunctionsReturnTypeConfigs,
         ...allRules.switchStatementsReturnTypeConfigs,
         {
           selector:
-            "ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration):not(ExportDefaultDeclaration > ClassDeclaration)",
+            'ClassDeclaration:not(ExportNamedDeclaration > ClassDeclaration):not(ExportDefaultDeclaration > ClassDeclaration)',
           message:
             "Classes must be exported. Add 'export' before the class declaration.",
         },
@@ -68,13 +68,13 @@ export const jsxConfig = (sharedRules, sharedRestrictedSyntax) => [
 
   // JSX Warning Rules - Lower priority restricted syntax rules as warnings
   {
-    files: ["**/*.jsx"],
+    files: ['**/*.jsx'],
     ignores: [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/build/**",
-      "pnpm-lock.yaml",
-      "**/*.stories.{js,jsx,ts,tsx}",
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      'pnpm-lock.yaml',
+      '**/*.stories.{js,jsx,ts,tsx}',
     ],
     languageOptions: {
       globals: {
@@ -84,14 +84,14 @@ export const jsxConfig = (sharedRules, sharedRestrictedSyntax) => [
     },
     settings: {
       react: {
-        version: "detect",
+        version: 'detect',
       },
     },
     rules: {
-      "no-undef": "off",
-      "single-export/single-export": "off",
-      "required-exports/required-exports": [
-        "warn",
+      'no-undef': 'off',
+      'single-export/single-export': 'off',
+      'required-exports/required-exports': [
+        'warn',
         {
           variable: false,
           function: false,
@@ -102,43 +102,43 @@ export const jsxConfig = (sharedRules, sharedRestrictedSyntax) => [
           ignorePrivate: true,
         },
       ],
-      "no-restricted-syntax": [
-        "warn",
+      'no-restricted-syntax': [
+        'warn',
         ...sharedRestrictedSyntax.filter(
-          (rule) =>
+          rule =>
             rule.selector !==
-              "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
+              'Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))' &&
             rule.selector !==
-              "SwitchStatement > SwitchCase > ReturnStatement[argument=null]" &&
+              'SwitchStatement > SwitchCase > ReturnStatement[argument=null]' &&
             rule.selector !==
-              "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]" &&
-            rule.selector !== "SwitchStatement > SwitchCase[test=null]"
+              'SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]' &&
+            rule.selector !== 'SwitchStatement > SwitchCase[test=null]'
         ),
         {
           selector:
-            "Program:has(ExportNamedDeclaration:not([source]):not([exportKind=type]):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)) ~ ExportNamedDeclaration:not([source]):not([exportKind=type]):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)))",
+            'Program:has(ExportNamedDeclaration:not([source]):not([exportKind=type]):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)) ~ ExportNamedDeclaration:not([source]):not([exportKind=type]):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)))',
           message:
-            "Only one component export per JSX file is allowed (plus optionally one type/interface export).",
+            'Only one component export per JSX file is allowed (plus optionally one type/interface export).',
         },
         {
           selector:
-            "Program:has(ExportNamedDeclaration[exportKind=type]:not([source]) ~ ExportNamedDeclaration[exportKind=type]:not([source]))",
+            'Program:has(ExportNamedDeclaration[exportKind=type]:not([source]) ~ ExportNamedDeclaration[exportKind=type]:not([source]))',
           message:
-            "Only one type export per JSX file is allowed (plus optionally one component export).",
+            'Only one type export per JSX file is allowed (plus optionally one component export).',
         },
         {
           selector:
-            "Program:has(ExportNamedDeclaration:not([source]):has(TSInterfaceDeclaration) ~ ExportNamedDeclaration:not([source]):has(TSInterfaceDeclaration))",
+            'Program:has(ExportNamedDeclaration:not([source]):has(TSInterfaceDeclaration) ~ ExportNamedDeclaration:not([source]):has(TSInterfaceDeclaration))',
           message:
-            "Only one interface export per JSX file is allowed (plus optionally one component export).",
+            'Only one interface export per JSX file is allowed (plus optionally one component export).',
         },
         {
           selector:
-            "Program:has(ExportNamedDeclaration:not([source]):has(TSTypeAliasDeclaration) ~ ExportNamedDeclaration:not([source]):has(TSTypeAliasDeclaration))",
+            'Program:has(ExportNamedDeclaration:not([source]):has(TSTypeAliasDeclaration) ~ ExportNamedDeclaration:not([source]):has(TSTypeAliasDeclaration))',
           message:
-            "Only one type alias export per JSX file is allowed (plus optionally one component export).",
+            'Only one type alias export per JSX file is allowed (plus optionally one component export).',
         },
       ],
     },
   },
-];
+]

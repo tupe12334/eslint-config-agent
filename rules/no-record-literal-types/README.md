@@ -11,36 +11,36 @@ This rule helps enforce better type safety and readability by discouraging the u
 ❌ **Incorrect** - Record with literal keys:
 
 ```typescript
-type UserInfo = Record<"name" | "age", string>;
-type Status = Record<"active", boolean>;
-type Config = Record<"host" | "port" | "ssl", string>;
+type UserInfo = Record<'name' | 'age', string>
+type Status = Record<'active', boolean>
+type Config = Record<'host' | 'port' | 'ssl', string>
 ```
 
 ✅ **Correct** - Explicit interfaces and types:
 
 ```typescript
 interface UserInfo {
-  name: string;
-  age: string;
+  name: string
+  age: string
 }
 
 type Status = {
-  active: boolean;
-};
+  active: boolean
+}
 
 type Config = {
-  host: string;
-  port: number;
-  ssl: boolean;
-};
+  host: string
+  port: number
+  ssl: boolean
+}
 ```
 
 ✅ **Correct** - Generic Record types:
 
 ```typescript
-type UserData = Record<string, unknown>;
-type IndexMap = Record<number, string>;
-type DynamicKeys = Record<`prefix-${string}`, boolean>;
+type UserData = Record<string, unknown>
+type IndexMap = Record<number, string>
+type DynamicKeys = Record<`prefix-${string}`, boolean>
 ```
 
 ## Why This Rule Exists
@@ -55,6 +55,7 @@ type DynamicKeys = Record<`prefix-${string}`, boolean>;
 This rule is tested through integration tests in `/test/test-record-literals.ts` which validates that the rule correctly identifies and reports violations in real TypeScript code.
 
 The rule uses two AST selectors to comprehensively catch Record literal patterns:
+
 1. `.params:first-child TSLiteralType` - Catches literals inside unions
 2. `TSLiteralType:first-child` - Catches direct literal types
 

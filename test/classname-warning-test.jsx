@@ -1,7 +1,7 @@
 // Test file for className warning rule in JavaScript/JSX
 // This file tests that UI elements without className attributes generate warnings in .jsx files
 
-import React from 'react';
+import React from 'react'
 
 // Valid cases - should NOT trigger warnings
 const ValidComponentsWithClassName = () => {
@@ -13,10 +13,12 @@ const ValidComponentsWithClassName = () => {
       <button className="btn">Valid button with className</button>
       <input className="input" type="text" />
       <img className="image" src="test.jpg" alt="test" />
-      <CustomComponent prop="value">Custom components should be ignored</CustomComponent>
+      <CustomComponent prop="value">
+        Custom components should be ignored
+      </CustomComponent>
     </div>
-  );
-};
+  )
+}
 
 // Invalid cases - should trigger warnings
 const InvalidComponentsWithoutClassName = () => {
@@ -34,21 +36,29 @@ const InvalidComponentsWithoutClassName = () => {
       <ul>This ul should trigger a warning - no className</ul>
       <li>This li should trigger a warning - no className</li>
     </div>
-  );
-};
+  )
+}
 
 // Mixed cases
 const MixedComponents = () => {
   return (
     <div className="container">
-      <div className="with-class">This div has a className - should be fine</div>
+      <div className="with-class">
+        This div has a className - should be fine
+      </div>
       <div>This div has no className - should trigger warning</div>
       <CustomComponent>
-        <div className="nested-with-class">Nested with className - should be fine</div>
+        <div className="nested-with-class">
+          Nested with className - should be fine
+        </div>
         <div>Nested without className - should trigger warning</div>
       </CustomComponent>
     </div>
-  );
-};
+  )
+}
 
-export { ValidComponentsWithClassName, InvalidComponentsWithoutClassName, MixedComponents };
+export {
+  ValidComponentsWithClassName,
+  InvalidComponentsWithoutClassName,
+  MixedComponents,
+}

@@ -21,15 +21,18 @@
  * @see https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
  */
 
-const rule = "error";
+const rule = 'error'
 
 // First selector: matches TSLiteralType descendants of first param (catches literals inside unions)
-const selectorNestedParams = 'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > .params:first-child TSLiteralType';
+const selectorNestedParams =
+  'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > .params:first-child TSLiteralType'
 
 // Second selector: matches direct TSLiteralType as first param
-const selectorFirstChild = 'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > TSLiteralType:first-child';
+const selectorFirstChild =
+  'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > TSLiteralType:first-child'
 
-const message = "Avoid using Record with string literal keys. Use a more specific interface or type instead.";
+const message =
+  'Avoid using Record with string literal keys. Use a more specific interface or type instead.'
 
 /**
  * Export the complete rule configurations for no-restricted-syntax
@@ -38,12 +41,12 @@ const message = "Avoid using Record with string literal keys. Use a more specifi
 const noRecordLiteralTypesNestedConfig = {
   selector: selectorNestedParams,
   message,
-};
+}
 
 const noRecordLiteralTypesFirstChildConfig = {
   selector: selectorFirstChild,
   message,
-};
+}
 
 /**
  * Combined rule configurations for comprehensive Record literal type prevention
@@ -51,7 +54,7 @@ const noRecordLiteralTypesFirstChildConfig = {
 const noRecordLiteralTypesConfigs = [
   noRecordLiteralTypesNestedConfig,
   noRecordLiteralTypesFirstChildConfig,
-];
+]
 
 // Consolidated exports
 export {
@@ -62,6 +65,6 @@ export {
   noRecordLiteralTypesNestedConfig,
   noRecordLiteralTypesFirstChildConfig,
   noRecordLiteralTypesConfigs,
-};
+}
 
-export default noRecordLiteralTypesConfigs;
+export default noRecordLiteralTypesConfigs

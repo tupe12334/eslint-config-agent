@@ -1,10 +1,10 @@
 // Invalid: Named exports scattered across multiple statements
-const config = { api: 'v1' };
-const utils = { format: () => {} };
+const config = { api: 'v1' }
+const utils = { format: () => {} }
 
-export { config };
+export { config }
 
-const helpers = { validate: () => {} };
+const helpers = { validate: () => {} }
 
-export { utils };
-export { helpers };
+export { utils }
+export { helpers }

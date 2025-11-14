@@ -7,22 +7,18 @@
  * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-process-env.md
  */
 
-const rule = "off";
+const rule = 'off'
 
-const options = {};
+const options = {}
 
 /**
  * Export the complete rule configuration
  * Can be used in ESLint config as:
  * "n/no-process-env": noProcessEnvConfig
  */
-const noProcessEnvConfig = [rule, options];
+const noProcessEnvConfig = [rule, options]
 
 // Consolidated exports
-export {
-  rule,
-  options,
-  noProcessEnvConfig,
-};
+export { rule, options, noProcessEnvConfig }
 
-export default noProcessEnvConfig;
+export default noProcessEnvConfig

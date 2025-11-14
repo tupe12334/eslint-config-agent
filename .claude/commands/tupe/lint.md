@@ -9,6 +9,7 @@ You are an expert ESLint error fixer focused on methodically resolving linting i
 ## Your Mission
 
 Fix ALL ESLint errors in the project systematically, one by one, while ensuring:
+
 1. The project uses the latest `eslint-config-agent` as the only ESLint configuration
 2. Tests continue to pass after each fix
 3. Build continues to work after each fix
@@ -24,17 +25,20 @@ Fix ALL ESLint errors in the project systematically, one by one, while ensuring:
    - If not, check for other ESLint config files (`.eslintrc.*`, `package.json` eslintConfig)
 
 2. **Install/Update eslint-config-agent**:
+
    ```bash
    pnpm add -D eslint-config-agent@latest
    ```
 
 3. **Create/Update `eslint.config.mjs`**:
    - Replace entire config with:
+
    ```javascript
    import agentConfig from 'eslint-config-agent'
 
    export default agentConfig
    ```
+
    - Remove any other ESLint configuration files if they exist
    - Remove `eslintConfig` from `package.json` if present
 
@@ -46,11 +50,13 @@ Fix ALL ESLint errors in the project systematically, one by one, while ensuring:
 ### Step 2: Initial Analysis
 
 1. **Run ESLint to get all errors**:
+
    ```bash
    pnpm exec eslint . --format json --output-file eslint-report.json
    ```
 
 2. **Also get human-readable output**:
+
    ```bash
    pnpm exec eslint . 2>&1 | tee eslint-errors.txt
    ```
@@ -70,66 +76,82 @@ For EACH error in the list, follow this process:
 ### Fix Cycle (Repeat for Each Error)
 
 #### 1. Select Next Error
+
 - Pick ONE error from the list (start with easiest/most common)
 - Note the file, line, and rule being violated
 - Read the file and surrounding context
 
 #### 2. Understand the Error
+
 - Analyze what the ESLint rule is trying to enforce
 - Understand the current code logic
 - Plan the fix that maintains functionality
 
 #### 3. Apply the Fix
+
 - Make the minimal change needed to fix THIS error
 - Use the Edit tool to apply the fix
 - Ensure you preserve the code's logic and behavior
 - Add comments if the fix needs explanation
 
 #### 4. Verify the Fix
+
 Run these checks in sequence:
 
 **A. Check Linting**:
+
 ```bash
 pnpm exec eslint [fixed-file] --format compact
 ```
+
 - Ensure the specific error is gone
 - Check if any NEW errors appeared in this file
 
 **B. Run Tests**:
+
 ```bash
 pnpm test
 ```
+
 - Ensure all tests still pass
 - If tests fail, analyze why and adjust the fix
 - DO NOT proceed if tests are broken
 
 **C. Run Build**:
+
 ```bash
 pnpm build
 ```
+
 - Ensure build completes successfully
 - If build fails, analyze why and adjust the fix
 - DO NOT proceed if build is broken
 
 **D. Full Lint Check**:
+
 ```bash
 pnpm exec eslint . --format compact
 ```
+
 - Count remaining errors
 - Verify error count decreased by at least 1
 - Check if new errors were introduced elsewhere
 
 #### 5. Handle New Errors (If Any)
+
 If new errors were introduced:
+
 - Identify all new errors
 - Add them to your todo list
 - Fix them immediately before proceeding to the next original error
 - Run the full verification cycle for each new error fix
 
 #### 6. Update Progress
+
 - Mark the error as fixed in your todo list
 - Show progress: "Fixed X of Y errors (Z remaining)"
 - Commit the fix with a descriptive message:
+
   ```bash
   git add [files]
   git commit -m "fix(lint): resolve [rule-name] in [file-name]
@@ -141,6 +163,7 @@ If new errors were introduced:
   ```
 
 #### 7. Continue to Next Error
+
 - Repeat the entire cycle for the next error
 - Keep going until ALL errors are fixed
 
@@ -149,22 +172,28 @@ If new errors were introduced:
 After all errors are fixed:
 
 1. **Final Lint Check**:
+
    ```bash
    pnpm exec eslint . --format stylish
    ```
+
    - Should show 0 errors
    - Document any warnings
 
 2. **Final Test Run**:
+
    ```bash
    pnpm test
    ```
+
    - All tests must pass
 
 3. **Final Build**:
+
    ```bash
    pnpm build
    ```
+
    - Build must complete successfully
 
 4. **Generate Report**:
@@ -175,6 +204,7 @@ After all errors are fixed:
    - Summary of changes made
 
 5. **Cleanup Generated Files**:
+
    ```bash
    # Remove all report files generated during the linting process
    rm -f eslint-report.json
@@ -196,6 +226,7 @@ After all errors are fixed:
 ## Important Guidelines
 
 ### DO:
+
 - ✅ Fix ONE error at a time
 - ✅ Run full verification after EACH fix
 - ✅ Commit after each successful fix
@@ -205,6 +236,7 @@ After all errors are fixed:
 - ✅ Keep the user informed of progress
 
 ### DO NOT:
+
 - ❌ Fix multiple errors at once
 - ❌ Skip verification steps
 - ❌ Proceed if tests fail
@@ -216,6 +248,7 @@ After all errors are fixed:
 ## Error Handling
 
 If you get stuck on an error:
+
 1. Document why it's challenging
 2. Try alternative fixes
 3. If no fix works without breaking functionality:
@@ -227,6 +260,7 @@ If you get stuck on an error:
 ## Progress Tracking
 
 Maintain a todo list showing:
+
 - Total errors found: [number]
 - Errors fixed: [number]
 - Errors remaining: [number]
@@ -239,6 +273,7 @@ Update after each fix to show clear progress.
 ## Success Criteria
 
 You are done when:
+
 1. ✅ `pnpm exec eslint .` shows 0 errors
 2. ✅ `pnpm test` passes all tests
 3. ✅ `pnpm build` completes successfully

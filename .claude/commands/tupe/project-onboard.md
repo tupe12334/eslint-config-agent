@@ -10,29 +10,34 @@ Conduct a comprehensive exploration and learning session about the current proje
 ## Current State
 
 ### Repository Information
+
 - Current directory: !`pwd`
 - Current branch: !`git branch --show-current 2>/dev/null || echo "N/A"`
 - Repository status: !`git status --short 2>/dev/null | head -10 || echo "N/A"`
 - Last commit: !`git log -1 --oneline 2>/dev/null || echo "N/A"`
 
 ### Project Structure Overview
+
 - Root contents: !`ls -la | head -20`
 - Source directories: !`find . -maxdepth 2 -type d ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/dist/*" ! -path "*/build/*" 2>/dev/null | head -30 || echo "Unable to list directories"`
 - Configuration files: !`find . -maxdepth 2 -type f \( -name "package.json" -o -name "tsconfig.json" -o -name "*.config.*" -o -name ".*rc*" \) ! -path "*/node_modules/*" 2>/dev/null || echo "No config files found"`
 
 ### Documentation
+
 - README files: !`find . -maxdepth 3 -name "README*" ! -path "*/node_modules/*" 2>/dev/null || echo "No README found"`
 - Documentation files: !`find . -maxdepth 3 -name "*.md" ! -path "*/node_modules/*" ! -path "*/.git/*" 2>/dev/null | head -20 || echo "No docs found"`
 - CLAUDE.md (project instructions): @CLAUDE.md
 - Main README: @README.md
 
 ### Steering Documents
+
 - Steering directory: !`ls -la .kiro/steering/ 2>/dev/null || echo "No steering documents"`
 - Product overview: @.kiro/steering/product.md
 - Technology stack: @.kiro/steering/tech.md
 - Project structure: @.kiro/steering/structure.md
 
 ### Active Specifications
+
 - Specifications: !`ls -1 .kiro/specs/ 2>/dev/null || echo "No active specs"`
 - Spec status: !`find .kiro/specs/ -name "spec.json" -exec sh -c 'echo "=== $(dirname {}) ===" && cat {}' \; 2>/dev/null || echo "No spec metadata"`
 
@@ -89,7 +94,7 @@ Conduct a comprehensive exploration and learning session about the current proje
 2. **Explore Directory Structure**:
    - Identify main source directories (src/, lib/, app/)
    - Understand organization patterns (feature-based, layer-based)
-   - Locate tests (test/, __tests__/, *.test.*, *.spec.*)
+   - Locate tests (test/, **tests**/, _.test._, _.spec._)
    - Find documentation (docs/, documentation/)
 
 3. **Analyze Code Patterns**:
@@ -159,24 +164,28 @@ Conduct a comprehensive exploration and learning session about the current proje
 Provide a comprehensive onboarding summary including:
 
 ### 1. Project Overview
+
 - **Name**: Project name
 - **Purpose**: What the project does in 1-2 sentences
 - **Type**: CLI tool, web app, library, API, etc.
 - **Status**: Active development, maintenance mode, production-ready
 
 ### 2. Technology Stack
+
 - **Language**: Primary language(s) and versions
 - **Framework**: Main framework(s)
 - **Key Dependencies**: Important libraries (5-10 most critical)
 - **Tools**: Build tools, testing frameworks, linters
 
 ### 3. Project Structure
+
 - **Organization**: How the codebase is organized
 - **Entry Points**: Main files to start exploring
 - **Key Directories**: Purpose of each major directory
 - **Conventions**: Naming and organizational patterns
 
 ### 4. Development Workflow
+
 - **Setup**: How to get started (installation steps)
 - **Running**: How to run the project locally
 - **Testing**: How to run tests
@@ -184,18 +193,21 @@ Provide a comprehensive onboarding summary including:
 - **Common Commands**: 5-10 most used commands
 
 ### 5. Architecture & Patterns
+
 - **Architecture**: Overall system design
 - **Design Patterns**: Key patterns in use
 - **Code Style**: Conventions and standards
 - **Best Practices**: Project-specific guidelines
 
 ### 6. Current State
+
 - **Recent Work**: What's been worked on recently
 - **Active Features**: Any in-progress development
 - **Known Issues**: Any obvious problems or todos
 - **Next Steps**: Potential areas to focus on
 
 ### 7. Learning Resources
+
 - **Key Files to Read**: Most important files for understanding the project
 - **Documentation**: Where to find more information
 - **Examples**: Example code or usage
@@ -206,7 +218,7 @@ Provide a comprehensive onboarding summary including:
 Use these tools effectively:
 
 1. **Read**: For reading documentation and key files
-2. **Glob**: For finding files by pattern (*.ts, *.test.js, etc.)
+2. **Glob**: For finding files by pattern (_.ts, _.test.js, etc.)
 3. **Grep**: For searching code patterns and keywords
 4. **Bash**: For running analysis commands
 5. **Task**: For complex exploration that needs an Explore agent
@@ -232,6 +244,7 @@ Use these tools effectively:
 ## Success Criteria
 
 You should be able to answer:
+
 - ✓ What does this project do?
 - ✓ How is it architected?
 - ✓ What technologies does it use?

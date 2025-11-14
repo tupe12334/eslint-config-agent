@@ -8,19 +8,27 @@
 
 export const switchCaseFunctionsReturnTypeConfigs = [
   {
-    selector: "SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])",
-    message: "Switch case arrow functions must have explicit return type annotations.",
+    selector:
+      'SwitchStatement > SwitchCase ArrowFunctionExpression:not([returnType])',
+    message:
+      'Switch case arrow functions must have explicit return type annotations.',
   },
   {
-    selector: "SwitchStatement > SwitchCase FunctionExpression:not([returnType])",
-    message: "Switch case function expressions must have explicit return type annotations.",
+    selector:
+      'SwitchStatement > SwitchCase FunctionExpression:not([returnType])',
+    message:
+      'Switch case function expressions must have explicit return type annotations.',
   },
   {
-    selector: "SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])",
-    message: "Switch case arrow functions must have explicit return type annotations.",
+    selector:
+      'SwitchStatement > SwitchCase > BlockStatement ArrowFunctionExpression:not([returnType])',
+    message:
+      'Switch case arrow functions must have explicit return type annotations.',
   },
   {
-    selector: "SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])",
-    message: "Switch case function expressions must have explicit return type annotations.",
+    selector:
+      'SwitchStatement > SwitchCase > BlockStatement FunctionExpression:not([returnType])',
+    message:
+      'Switch case function expressions must have explicit return type annotations.',
   },
-];
+]

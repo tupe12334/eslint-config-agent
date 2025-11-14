@@ -4,11 +4,11 @@
 function handleAction(action) {
   switch (action.type) {
     case 'increment':
-      const incrementer = (value) => value + 1; // Missing return type
-      return incrementer(action.payload);
+      const incrementer = value => value + 1 // Missing return type
+      return incrementer(action.payload)
     case 'decrement':
-      const decrementer = (value) => value - 1; // Missing return type
-      return decrementer(action.payload);
+      const decrementer = value => value - 1 // Missing return type
+      return decrementer(action.payload)
   }
 }
 
@@ -16,15 +16,17 @@ function handleAction(action) {
 function processValue(type, value) {
   switch (type) {
     case 'string':
-      const formatter = function(val) { // Missing return type
-        return val.toUpperCase();
-      };
-      return formatter(value);
+      const formatter = function (val) {
+        // Missing return type
+        return val.toUpperCase()
+      }
+      return formatter(value)
     case 'number':
-      const calculator = function(val) { // Missing return type
-        return val * 2;
-      };
-      return calculator(value);
+      const calculator = function (val) {
+        // Missing return type
+        return val * 2
+      }
+      return calculator(value)
   }
 }
 
@@ -32,16 +34,18 @@ function processValue(type, value) {
 function advancedProcessor(operation, data) {
   switch (operation) {
     case 'transform': {
-      const transformer = (input) => { // Missing return type
-        return input.map(x => x * 2);
-      };
-      return transformer(data);
+      const transformer = input => {
+        // Missing return type
+        return input.map(x => x * 2)
+      }
+      return transformer(data)
     }
     case 'filter': {
-      const filterer = function(input) { // Missing return type
-        return input.filter(x => x > 0);
-      };
-      return filterer(data);
+      const filterer = function (input) {
+        // Missing return type
+        return input.filter(x => x > 0)
+      }
+      return filterer(data)
     }
   }
 }
@@ -52,8 +56,8 @@ function complexHandler(outerType, innerType, value) {
     case 'level1':
       switch (innerType) {
         case 'level2':
-          const nestedHandler = (val) => val.toString(); // Missing return type
-          return nestedHandler(value);
+          const nestedHandler = val => val.toString() // Missing return type
+          return nestedHandler(value)
       }
   }
 }

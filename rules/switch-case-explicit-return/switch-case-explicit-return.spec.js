@@ -1,5 +1,5 @@
-import { RuleTester } from "@typescript-eslint/rule-tester";
-import { switchCaseExplicitReturnConfigs } from "./index.js";
+import { RuleTester } from '@typescript-eslint/rule-tester'
+import { switchCaseExplicitReturnConfigs } from './index.js'
 
 /**
  * Test suite for switch-case-explicit-return rules
@@ -11,48 +11,49 @@ import { switchCaseExplicitReturnConfigs } from "./index.js";
 // Custom error class for test failures
 export class TestError extends Error {
   constructor(message) {
-    super(message);
-    this.name = 'TestError';
+    super(message)
+    this.name = 'TestError'
   }
 }
 
 // Configure RuleTester for Node.js test environment (modern best practice)
-RuleTester.afterAll = () => {}; // No cleanup needed for simple tests
+RuleTester.afterAll = () => {} // No cleanup needed for simple tests
 RuleTester.describe = (name, fn) => {
-  console.log(`\n📝 ${name}`);
-  fn();
-};
+  console.log(`\n📝 ${name}`)
+  fn()
+}
 RuleTester.it = (name, fn) => {
   try {
-    fn();
-    console.log(`   ✅ ${name}`);
+    fn()
+    console.log(`   ✅ ${name}`)
   } catch (error) {
-    console.log(`   ❌ ${name}: ${error.message}`);
-    throw new TestError(error.message || 'Test failed');
+    console.log(`   ❌ ${name}: ${error.message}`)
+    throw new TestError(error.message || 'Test failed')
   }
-};
-RuleTester.itOnly = RuleTester.it;
+}
+RuleTester.itOnly = RuleTester.it
 
 // Modern ESLint v9 + typescript-eslint v8 configuration
 const ruleTester = new RuleTester({
   languageOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
+    ecmaVersion: 'latest',
+    sourceType: 'module',
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
       },
     },
   },
-});
+})
 
 // Create individual rules for each selector configuration
-const createSwitchCaseExplicitReturnRule = (config) => ({
+const createSwitchCaseExplicitReturnRule = config => ({
   meta: {
-    type: "problem",
+    type: 'problem',
     docs: {
-      description: "Require explicit return values in switch case return statements",
-      recommended: "strict",
+      description:
+        'Require explicit return values in switch case return statements',
+      recommended: 'strict',
     },
     messages: {
       requireExplicitReturn: config.message,
@@ -62,26 +63,28 @@ const createSwitchCaseExplicitReturnRule = (config) => ({
   },
   create(context) {
     return {
-      [config.selector]: function(node) {
+      [config.selector]: function (node) {
         context.report({
           node,
-          messageId: "requireExplicitReturn",
-        });
+          messageId: 'requireExplicitReturn',
+        })
       },
-    };
+    }
   },
-});
+})
 
-console.log("🧪 Testing switch-case-explicit-return rules with modern RuleTester...");
+console.log(
+  '🧪 Testing switch-case-explicit-return rules with modern RuleTester...'
+)
 
 // Test each rule configuration
 switchCaseExplicitReturnConfigs.forEach((config, index) => {
-  const rule = createSwitchCaseExplicitReturnRule(config);
-  const ruleName = `switch-case-explicit-return-${index}`;
+  const rule = createSwitchCaseExplicitReturnRule(config)
+  const ruleName = `switch-case-explicit-return-${index}`
 
-  const isInBlockStatement = config.selector.includes("BlockStatement");
+  const isInBlockStatement = config.selector.includes('BlockStatement')
 
-  console.log(`\n🔍 Rule ${index + 1}: ${config.selector}`);
+  console.log(`\n🔍 Rule ${index + 1}: ${config.selector}`)
 
   const testCases = {
     valid: [
@@ -97,8 +100,8 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
             }
           }
         `,
-        name: "explicit return values in switch cases",
-        filename: "test.ts",
+        name: 'explicit return values in switch cases',
+        filename: 'test.ts',
       },
 
       // Valid: Switch cases using break instead of return
@@ -117,8 +120,8 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
             return result;
           }
         `,
-        name: "switch cases using break instead of return",
-        filename: "test.ts",
+        name: 'switch cases using break instead of return',
+        filename: 'test.ts',
       },
 
       // Valid: Switch without return statements
@@ -135,8 +138,8 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
             }
           }
         `,
-        name: "switch without return statements",
-        filename: "test.ts",
+        name: 'switch without return statements',
+        filename: 'test.ts',
       },
 
       // Valid: Return statements outside switch cases
@@ -149,12 +152,12 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
             return 'default';
           }
         `,
-        name: "empty return outside switch case",
-        filename: "test.ts",
+        name: 'empty return outside switch case',
+        filename: 'test.ts',
       },
     ],
-    invalid: []
-  };
+    invalid: [],
+  }
 
   // Add specific test cases based on rule type
   if (isInBlockStatement) {
@@ -173,9 +176,9 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
           }
         }
       `,
-      name: "explicit return values in block statements",
-      filename: "test.ts",
-    });
+      name: 'explicit return values in block statements',
+      filename: 'test.ts',
+    })
 
     testCases.invalid.push({
       code: `
@@ -189,10 +192,10 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
           }
         }
       `,
-      errors: [{ messageId: "requireExplicitReturn" }],
-      name: "empty return in block statement within switch case",
-      filename: "test.ts",
-    });
+      errors: [{ messageId: 'requireExplicitReturn' }],
+      name: 'empty return in block statement within switch case',
+      filename: 'test.ts',
+    })
 
     testCases.invalid.push({
       code: `
@@ -207,10 +210,10 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
           }
         }
       `,
-      errors: [{ messageId: "requireExplicitReturn" }],
-      name: "empty return in block after side effect",
-      filename: "test.ts",
-    });
+      errors: [{ messageId: 'requireExplicitReturn' }],
+      name: 'empty return in block after side effect',
+      filename: 'test.ts',
+    })
   } else {
     testCases.valid.push({
       code: `
@@ -225,9 +228,9 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
           }
         }
       `,
-      name: "explicit null and object returns",
-      filename: "test.ts",
-    });
+      name: 'explicit null and object returns',
+      filename: 'test.ts',
+    })
 
     testCases.invalid.push({
       code: `
@@ -240,10 +243,10 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
           }
         }
       `,
-      errors: [{ messageId: "requireExplicitReturn" }],
-      name: "empty return in switch case",
-      filename: "test.ts",
-    });
+      errors: [{ messageId: 'requireExplicitReturn' }],
+      name: 'empty return in switch case',
+      filename: 'test.ts',
+    })
 
     testCases.invalid.push({
       code: `
@@ -259,12 +262,12 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
         }
       `,
       errors: [
-        { messageId: "requireExplicitReturn" },
-        { messageId: "requireExplicitReturn" }
+        { messageId: 'requireExplicitReturn' },
+        { messageId: 'requireExplicitReturn' },
       ],
-      name: "multiple empty returns in different cases",
-      filename: "test.ts",
-    });
+      name: 'multiple empty returns in different cases',
+      filename: 'test.ts',
+    })
 
     testCases.invalid.push({
       code: `
@@ -279,28 +282,29 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
           }
         }
       `,
-      errors: [{ messageId: "requireExplicitReturn" }],
-      name: "empty return instead of explicit boolean",
-      filename: "test.ts",
-    });
+      errors: [{ messageId: 'requireExplicitReturn' }],
+      name: 'empty return instead of explicit boolean',
+      filename: 'test.ts',
+    })
   }
 
   // Run the test for this specific rule
-  ruleTester.run(ruleName, rule, testCases);
-  console.log(`   ✅ Rule ${index + 1} tests passed`);
-});
+  ruleTester.run(ruleName, rule, testCases)
+  console.log(`   ✅ Rule ${index + 1} tests passed`)
+})
 
-console.log("\n✅ All switch-case-explicit-return RuleTester tests completed!");
-console.log("\n🎯 Modern Testing Benefits:");
-console.log("   • Uses @typescript-eslint/rule-tester v8 (latest)");
-console.log("   • ESLint v9 flat config compatibility");
-console.log("   • Automatic TypeScript parser handling");
-console.log("   • Enhanced error reporting and type safety");
-console.log("   • No manual parser configuration required");
+console.log('\n✅ All switch-case-explicit-return RuleTester tests completed!')
+console.log('\n🎯 Modern Testing Benefits:')
+console.log('   • Uses @typescript-eslint/rule-tester v8 (latest)')
+console.log('   • ESLint v9 flat config compatibility')
+console.log('   • Automatic TypeScript parser handling')
+console.log('   • Enhanced error reporting and type safety')
+console.log('   • No manual parser configuration required')
 
-console.log(`\n📋 Tested ${switchCaseExplicitReturnConfigs.length} rule configurations:`);
+console.log(
+  `\n📋 Tested ${switchCaseExplicitReturnConfigs.length} rule configurations:`
+)
 switchCaseExplicitReturnConfigs.forEach((config, index) => {
-  console.log(`   ${index + 1}. ${config.selector}`);
-  console.log(`      → ${config.message}`);
-});
-
+  console.log(`   ${index + 1}. ${config.selector}`)
+  console.log(`      → ${config.message}`)
+})

@@ -5,25 +5,25 @@
  * to ensure consistent plugin registration across all config files.
  */
 
-import reactPlugin from "eslint-plugin-react";
-import importPlugin from "eslint-plugin-import";
-import securityPlugin from "eslint-plugin-security";
-import nPlugin from "eslint-plugin-n";
-import classExportPlugin from "eslint-plugin-class-export";
-import singleExportPlugin from "eslint-plugin-single-export";
-import requiredExportsPlugin from "eslint-plugin-required-exports";
-import storybookPlugin from "eslint-plugin-storybook";
-import errorPlugin from "eslint-plugin-error";
-import defaultPlugin from "eslint-plugin-default";
-import noOptionalChainingPlugin from "eslint-plugin-no-optional-chaining";
-import dddPlugin from "eslint-plugin-ddd";
-import allRules from "../rules/index.js";
-import { noDefaultClassExportRule } from "../rules/no-default-class-export/index.js";
+import reactPlugin from 'eslint-plugin-react'
+import importPlugin from 'eslint-plugin-import'
+import securityPlugin from 'eslint-plugin-security'
+import nPlugin from 'eslint-plugin-n'
+import classExportPlugin from 'eslint-plugin-class-export'
+import singleExportPlugin from 'eslint-plugin-single-export'
+import requiredExportsPlugin from 'eslint-plugin-required-exports'
+import storybookPlugin from 'eslint-plugin-storybook'
+import errorPlugin from 'eslint-plugin-error'
+import defaultPlugin from 'eslint-plugin-default'
+import noOptionalChainingPlugin from 'eslint-plugin-no-optional-chaining'
+import dddPlugin from 'eslint-plugin-ddd'
+import allRules from '../rules/index.js'
+import { noDefaultClassExportRule } from '../rules/no-default-class-export/index.js'
 
 // Conditionally import preact plugin if available
-let preactPlugin = null;
+let preactPlugin = null
 try {
-  preactPlugin = (await import("eslint-plugin-preact")).default;
+  preactPlugin = (await import('eslint-plugin-preact')).default
 } catch {
   // eslint-plugin-preact is not available
 }
@@ -34,20 +34,19 @@ export const plugins = {
   import: importPlugin,
   security: securityPlugin,
   n: nPlugin,
-  "class-export": classExportPlugin,
-  "single-export": singleExportPlugin,
-  "required-exports": requiredExportsPlugin,
+  'class-export': classExportPlugin,
+  'single-export': singleExportPlugin,
+  'required-exports': requiredExportsPlugin,
   storybook: storybookPlugin,
   error: errorPlugin,
   default: defaultPlugin,
-  "no-optional-chaining": noOptionalChainingPlugin,
+  'no-optional-chaining': noOptionalChainingPlugin,
   ddd: dddPlugin,
   ...(preactPlugin && { preact: preactPlugin }),
   custom: {
     rules: {
-      "no-default-class-export": noDefaultClassExportRule,
-      "jsx-classname-required": allRules.jsxClassNameRequiredRule,
+      'no-default-class-export': noDefaultClassExportRule,
+      'jsx-classname-required': allRules.jsxClassNameRequiredRule,
     },
   },
-};
-
+}

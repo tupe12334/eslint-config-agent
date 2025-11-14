@@ -6,27 +6,33 @@
  */
 
 // Core rule configurations
-import noTrailingSpacesConfig from "./no-trailing-spaces/index.js";
-import { maxFunctionLinesWarning, maxFunctionLinesError } from "./max-function-lines/index.js";
-import { maxFileLinesWarning, maxFileLinesError } from "./max-file-lines/index.js";
+import noTrailingSpacesConfig from './no-trailing-spaces/index.js'
+import {
+  maxFunctionLinesWarning,
+  maxFunctionLinesError,
+} from './max-function-lines/index.js'
+import {
+  maxFileLinesWarning,
+  maxFileLinesError,
+} from './max-file-lines/index.js'
 
 // Custom restricted syntax rules
-import { noProcessEnvPropertiesConfig } from "./no-process-env-properties/index.js";
-import { noTypeAssertionsConfig } from "./no-type-assertions/index.js";
-import { noExportSpecifiersConfig } from "./no-empty-exports/index.js";
-import { noClassPropertyDefaultsConfig } from "./no-class-property-defaults/index.js";
-import { noDefaultClassExportRules } from "./no-default-class-export/index.js";
-import { jsxClassNameRequiredRule } from "./jsx-classname-required/index.js";
-import { noNullishCoalescingConfig } from "./nullish-coalescing/index.js";
-import { switchStatementsReturnTypeConfigs } from "./switch-statements-return-type/index.js";
-import { switchCaseFunctionsReturnTypeConfigs } from "./switch-case-functions-return-type/index.js";
-import { switchCaseExplicitReturnConfigs } from "./switch-case-explicit-return/index.js";
-import { noTrivialTypeAliasesConfigs } from "./no-trivial-type-aliases/index.js";
-import { noInlineUnionTypesConfigs } from "./no-inline-union-types/index.js";
+import { noProcessEnvPropertiesConfig } from './no-process-env-properties/index.js'
+import { noTypeAssertionsConfig } from './no-type-assertions/index.js'
+import { noExportSpecifiersConfig } from './no-empty-exports/index.js'
+import { noClassPropertyDefaultsConfig } from './no-class-property-defaults/index.js'
+import { noDefaultClassExportRules } from './no-default-class-export/index.js'
+import { jsxClassNameRequiredRule } from './jsx-classname-required/index.js'
+import { noNullishCoalescingConfig } from './nullish-coalescing/index.js'
+import { switchStatementsReturnTypeConfigs } from './switch-statements-return-type/index.js'
+import { switchCaseFunctionsReturnTypeConfigs } from './switch-case-functions-return-type/index.js'
+import { switchCaseExplicitReturnConfigs } from './switch-case-explicit-return/index.js'
+import { noTrivialTypeAliasesConfigs } from './no-trivial-type-aliases/index.js'
+import { noInlineUnionTypesConfigs } from './no-inline-union-types/index.js'
 
 // Plugin rule configurations
-import { pluginRules } from "./plugin/index.js";
-import { typescriptEslintRules } from "./plugin/typescript-eslint/index.js";
+import { pluginRules } from './plugin/index.js'
+import { typescriptEslintRules } from './plugin/typescript-eslint/index.js'
 
 // Consolidated exports
 const allRules = {
@@ -54,9 +60,9 @@ const allRules = {
   // Plugin rule configurations
   pluginRules,
   typescriptEslintRules,
-};
+}
 
-export default allRules;
+export default allRules
 
 // Named exports for backward compatibility
 export {
@@ -84,4 +90,4 @@ export {
   // Plugin rule configurations
   pluginRules,
   typescriptEslintRules,
-};
+}

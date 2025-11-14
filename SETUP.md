@@ -5,6 +5,7 @@
 To publish this package, you need to set up environment variables for authentication:
 
 1. Copy the example environment file:
+
    ```bash
    cp .env.example .env
    ```
@@ -12,7 +13,7 @@ To publish this package, you need to set up environment variables for authentica
 2. Get your NPM authentication token:
    - Go to https://www.npmjs.com/settings/tokens
    - Create a new "Automation" token (this bypasses OTP requirements)
-   - Make sure to select "Automation" type, not "Publish" 
+   - Make sure to select "Automation" type, not "Publish"
    - Copy the token value
 
 3. Edit the `.env` file and replace `your_npm_token_here` with your actual NPM token:
@@ -28,7 +29,7 @@ Once the `.env` file is set up, you can publish using:
 # Patch release (1.0.0 -> 1.0.1)
 pnpm release:patch
 
-# Minor release (1.0.0 -> 1.1.0)  
+# Minor release (1.0.0 -> 1.1.0)
 pnpm release:minor
 
 # Major release (1.0.0 -> 2.0.0)
@@ -39,6 +40,7 @@ pnpm release:dry
 ```
 
 The release process will:
+
 1. Run validation tests
 2. Run lint checks with zero warnings
 3. Bump the version number

@@ -1,5 +1,5 @@
-import { noProcessEnvConfig } from "./no-process-env/index.js";
+import { noProcessEnvConfig } from './no-process-env/index.js'
 
 export const nRules = {
-  "n/no-process-env": noProcessEnvConfig,
-};
+  'n/no-process-env': noProcessEnvConfig,
+}

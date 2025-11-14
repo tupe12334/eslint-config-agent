@@ -1,7 +1,7 @@
 // Test file for valid className usage in JSX
 // This file should have NO errors - all HTML elements have className attributes
 
-import React, { Fragment } from 'react';
+import React, { Fragment } from 'react'
 
 // Valid cases - all HTML elements have className attributes
 export const ValidComponentsWithClassName = () => {
@@ -26,7 +26,9 @@ export const ValidComponentsWithClassName = () => {
       <label className="label">Valid label with className</label>
       <textarea className="textarea">Valid textarea with className</textarea>
       <select className="select">Valid select with className</select>
-      <option className="option" value="test">Valid option with className</option>
+      <option className="option" value="test">
+        Valid option with className
+      </option>
       <ul className="list">Valid ul with className</ul>
       <ol className="ordered-list">Valid ol with className</ol>
       <li className="list-item">Valid li with className</li>
@@ -38,7 +40,9 @@ export const ValidComponentsWithClassName = () => {
       <th className="table-header-cell">Valid th with className</th>
 
       {/* React components should be ignored - no className required */}
-      <CustomComponent prop="value">Custom components are ignored</CustomComponent>
+      <CustomComponent prop="value">
+        Custom components are ignored
+      </CustomComponent>
       <AnotherComponent>
         <div className="nested">Nested elements still need className</div>
       </AnotherComponent>
@@ -47,35 +51,43 @@ export const ValidComponentsWithClassName = () => {
       <Fragment>Fragment is ignored</Fragment>
       <>Empty fragment is ignored</>
     </div>
-  );
-};
+  )
+}
 
 // Edge cases that should be valid
 export const EdgeCasesValid = () => {
   return (
     <div className="edge-cases">
       {/* Dynamic className values should be valid */}
-      <div className={undefined}>Dynamic className (undefined) should be valid</div>
+      <div className={undefined}>
+        Dynamic className (undefined) should be valid
+      </div>
       <div className={null}>Dynamic className (null) should be valid</div>
       <div className={false}>Dynamic className (boolean) should be valid</div>
       <div className={0}>Dynamic className (number) should be valid</div>
-      <div className={"dynamic"}>Dynamic className (string literal) should be valid</div>
-      <div className={`template-${"test"}`}>Dynamic className (template literal) should be valid</div>
+      <div className={'dynamic'}>
+        Dynamic className (string literal) should be valid
+      </div>
+      <div className={`template-${'test'}`}>
+        Dynamic className (template literal) should be valid
+      </div>
 
       {/* Conditional className should be valid */}
-      <div className={"active"}>Conditional className should be valid</div>
+      <div className={'active'}>Conditional className should be valid</div>
 
       {/* Complex className expressions should be valid */}
-      <div className={`base modifier extra`.trim()}>Complex className should be valid</div>
+      <div className={`base modifier extra`.trim()}>
+        Complex className should be valid
+      </div>
     </div>
-  );
-};
+  )
+}
 
 // Custom components for testing
 const CustomComponent = ({ prop, children }) => (
   <div className="custom-component">{children}</div>
-);
+)
 
 const AnotherComponent = ({ children }) => (
   <span className="another-component">{children}</span>
-);
+)

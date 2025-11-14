@@ -6,25 +6,21 @@
  * @see https://eslint.org/docs/latest/rules/no-trailing-spaces
  */
 
-const rule = "error";
+const rule = 'error'
 
 const options = {
-  skipBlankLines: false,  // Don't skip checking empty lines
-  ignoreComments: false   // Don't ignore trailing spaces in comments
-};
+  skipBlankLines: false, // Don't skip checking empty lines
+  ignoreComments: false, // Don't ignore trailing spaces in comments
+}
 
 /**
  * Export the complete rule configuration
  * Can be used in ESLint config as:
  * "no-trailing-spaces": noTrailingSpacesConfig
  */
-const noTrailingSpacesConfig = [rule, options];
+const noTrailingSpacesConfig = [rule, options]
 
 // Consolidated exports
-export {
-  rule,
-  options,
-  noTrailingSpacesConfig,
-};
+export { rule, options, noTrailingSpacesConfig }
 
-export default noTrailingSpacesConfig;
+export default noTrailingSpacesConfig

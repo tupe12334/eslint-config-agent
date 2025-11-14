@@ -1,3 +1,3 @@
 export const groupExportsConfig = {
-  "import/group-exports": "off",
-};
+  'import/group-exports': 'off',
+}

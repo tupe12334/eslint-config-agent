@@ -18,11 +18,12 @@
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing
  */
 
-const rule = "error";
+const rule = 'error'
 
-const selector = 'LogicalExpression[operator="??"]';
+const selector = 'LogicalExpression[operator="??"]'
 
-const message = "Nullish coalescing operator (??) is not allowed. Use explicit null/undefined checks instead.";
+const message =
+  'Nullish coalescing operator (??) is not allowed. Use explicit null/undefined checks instead.'
 
 /**
  * Export the complete rule configuration for no-restricted-syntax
@@ -32,14 +33,9 @@ const message = "Nullish coalescing operator (??) is not allowed. Use explicit n
 const noNullishCoalescingConfig = {
   selector,
   message,
-};
+}
 
 // Consolidated exports
-export {
-  rule,
-  selector,
-  message,
-  noNullishCoalescingConfig,
-};
+export { rule, selector, message, noNullishCoalescingConfig }
 
-export default noNullishCoalescingConfig;
+export default noNullishCoalescingConfig

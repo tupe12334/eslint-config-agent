@@ -34,7 +34,7 @@ The package includes comprehensive testing infrastructure with 12+ test categori
 # 🧪 Run comprehensive test suite with detailed reporting
 pnpm test
 
-# 🎯 Test specific categories  
+# 🎯 Test specific categories
 pnpm test:valid          # Valid code that should pass linting
 pnpm test:invalid        # Invalid code that should trigger errors
 pnpm test:hooks          # React hooks validation rules
@@ -50,16 +50,16 @@ pnpm test:ci            # CI-ready linting (zero warnings allowed)
 
 ### Test Categories & Coverage
 
-| Category | Files | Purpose |
-|----------|--------|---------|
-| **Valid Code** | `valid.tsx`, `preact-test.tsx` | Code that should pass with minimal warnings |
-| **Invalid Code** | `invalid.tsx`, `jsx-extension-test.js` | Code that should trigger specific errors |
-| **Function Limits** | `long-function.tsx` | Test function length restrictions |
-| **React Hooks** | `react-hooks-rules.tsx` | Validate hooks rules and dependency arrays |  
-| **TypeScript** | `typescript-rules.ts` | TypeScript-specific features and rules |
-| **Imports** | `import-export-rules.ts` | Module import/export patterns |
-| **Edge Cases** | `edge-cases.tsx` | Boundary conditions and complex JSX |
-| **Performance** | `performance-test.tsx` | Large files and complex components |
+| Category            | Files                                  | Purpose                                     |
+| ------------------- | -------------------------------------- | ------------------------------------------- |
+| **Valid Code**      | `valid.tsx`, `preact-test.tsx`         | Code that should pass with minimal warnings |
+| **Invalid Code**    | `invalid.tsx`, `jsx-extension-test.js` | Code that should trigger specific errors    |
+| **Function Limits** | `long-function.tsx`                    | Test function length restrictions           |
+| **React Hooks**     | `react-hooks-rules.tsx`                | Validate hooks rules and dependency arrays  |
+| **TypeScript**      | `typescript-rules.ts`                  | TypeScript-specific features and rules      |
+| **Imports**         | `import-export-rules.ts`               | Module import/export patterns               |
+| **Edge Cases**      | `edge-cases.tsx`                       | Boundary conditions and complex JSX         |
+| **Performance**     | `performance-test.tsx`                 | Large files and complex components          |
 
 ### Test Infrastructure
 
@@ -80,7 +80,7 @@ pnpm test:ci            # CI-ready linting (zero warnings allowed)
 ### Pull Request Process
 
 1. Ensure all tests pass locally
-2. Update documentation for any new features  
+2. Update documentation for any new features
 3. Add test cases for new rules or configurations
 4. Submit PR with clear description of changes
 5. Respond to code review feedback
@@ -96,7 +96,7 @@ pnpm test:ci            # CI-ready linting (zero warnings allowed)
 ### Configuration Philosophy
 
 - **AI-Era Development**: Designed for maintainable AI-assisted coding
-- **Explicit over Implicit**: Prefer explicit null checks over optional chaining  
+- **Explicit over Implicit**: Prefer explicit null checks over optional chaining
 - **Human-Readable First**: Prioritize code clarity over brevity
 - **Long-term Maintainability**: Prevent AI from writing "clever" but unmaintainable code
 - **Productivity focused**: Disable noisy rules that don't add value

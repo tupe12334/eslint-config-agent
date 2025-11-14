@@ -5,6 +5,7 @@ This rule enforces that return statements in switch cases must provide an explic
 ## Purpose
 
 Return statements in switch cases should have explicit values to:
+
 - Ensure consistent return behavior across all switch cases
 - Make the intent of each case branch clear and explicit
 - Prevent accidental undefined returns that could cause runtime issues
@@ -15,16 +16,17 @@ Return statements in switch cases should have explicit values to:
 This rule restricts the following patterns:
 
 ❌ **Incorrect:**
+
 ```typescript
 function processAction(action: string) {
   switch (action) {
     case 'skip':
-      return; // Empty return - not allowed
+      return // Empty return - not allowed
     case 'process': {
       if (someCondition) {
-        return; // Empty return in block - not allowed
+        return // Empty return in block - not allowed
       }
-      return 'processed';
+      return 'processed'
     }
   }
 }
@@ -32,24 +34,25 @@ function processAction(action: string) {
 function handleStatus(status: string) {
   switch (status) {
     case 'pending':
-      return; // Empty return - not allowed
+      return // Empty return - not allowed
     case 'complete':
-      return 'done';
+      return 'done'
   }
 }
 ```
 
 ✅ **Correct:**
+
 ```typescript
 function processAction(action: string): string | undefined {
   switch (action) {
     case 'skip':
-      return undefined; // Explicit undefined return
+      return undefined // Explicit undefined return
     case 'process': {
       if (someCondition) {
-        return 'skipped'; // Explicit return value
+        return 'skipped' // Explicit return value
       }
-      return 'processed';
+      return 'processed'
     }
   }
 }
@@ -57,26 +60,26 @@ function processAction(action: string): string | undefined {
 function handleStatus(status: string): string {
   switch (status) {
     case 'pending':
-      return 'waiting'; // Explicit return value
+      return 'waiting' // Explicit return value
     case 'complete':
-      return 'done';
+      return 'done'
   }
 }
 
 // Alternative: Use break instead of return for control flow
 function processWithBreak(action: string): string {
-  let result = 'default';
+  let result = 'default'
 
   switch (action) {
     case 'skip':
-      result = 'skipped';
-      break; // Use break instead of empty return
+      result = 'skipped'
+      break // Use break instead of empty return
     case 'process':
-      result = 'processed';
-      break;
+      result = 'processed'
+      break
   }
 
-  return result;
+  return result
 }
 ```
 
@@ -95,39 +98,42 @@ This rule is implemented using `no-restricted-syntax` with the following selecto
 ## Common Patterns
 
 ### Explicit Undefined Returns
+
 ```typescript
 function maybeProcess(condition: boolean): string | undefined {
   switch (condition) {
     case true:
-      return 'processed';
+      return 'processed'
     case false:
-      return undefined; // Explicit undefined instead of empty return
+      return undefined // Explicit undefined instead of empty return
   }
 }
 ```
 
 ### Explicit Null Returns
+
 ```typescript
 function findItem(id: string): Item | null {
   switch (id) {
     case 'unknown':
-      return null; // Explicit null instead of empty return
+      return null // Explicit null instead of empty return
     default:
-      return getItem(id);
+      return getItem(id)
   }
 }
 ```
 
 ### Using Break for Control Flow
+
 ```typescript
 function processWithSideEffects(action: string): void {
   switch (action) {
     case 'log':
-      console.log('Action logged');
-      break; // Better than empty return for void functions
+      console.log('Action logged')
+      break // Better than empty return for void functions
     case 'save':
-      saveData();
-      break;
+      saveData()
+      break
   }
 }
 ```

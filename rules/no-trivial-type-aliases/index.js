@@ -66,10 +66,10 @@
  */
 const noTrivialTypeReferenceConfig = {
   selector:
-    "TSTypeAliasDeclaration[typeParameters=undefined] > TSTypeReference:not([typeArguments])",
+    'TSTypeAliasDeclaration[typeParameters=undefined] > TSTypeReference:not([typeArguments])',
   message:
     "Trivial type aliases are not allowed. Use the original type directly instead of creating an alias that doesn't add meaning.",
-};
+}
 
 /**
  * Rule configuration for type aliases to primitive types
@@ -77,20 +77,20 @@ const noTrivialTypeReferenceConfig = {
  */
 const noTrivialPrimitiveTypeConfig = {
   selector:
-    "TSTypeAliasDeclaration > :matches(TSStringKeyword, TSNumberKeyword, TSBooleanKeyword, TSAnyKeyword, TSUnknownKeyword)",
+    'TSTypeAliasDeclaration > :matches(TSStringKeyword, TSNumberKeyword, TSBooleanKeyword, TSAnyKeyword, TSUnknownKeyword)',
   message:
-    "Trivial type aliases to primitive types are not allowed. Use the primitive type directly instead.",
-};
+    'Trivial type aliases to primitive types are not allowed. Use the primitive type directly instead.',
+}
 
 /**
  * Rule configuration for type aliases to literal types
  * Catches: type A = 'literal', type B = 42, etc.
  */
 const noTrivialLiteralTypeConfig = {
-  selector: "TSTypeAliasDeclaration > TSLiteralType",
+  selector: 'TSTypeAliasDeclaration > TSLiteralType',
   message:
-    "Trivial type aliases to literal types are not allowed. Use the literal type directly instead.",
-};
+    'Trivial type aliases to literal types are not allowed. Use the literal type directly instead.',
+}
 
 /**
  * Combined configuration array for all trivial type alias rules
@@ -99,7 +99,7 @@ const noTrivialTypeAliasesConfigs = [
   noTrivialTypeReferenceConfig,
   noTrivialPrimitiveTypeConfig,
   noTrivialLiteralTypeConfig,
-];
+]
 
 // Consolidated exports
 export {
@@ -107,6 +107,6 @@ export {
   noTrivialPrimitiveTypeConfig,
   noTrivialLiteralTypeConfig,
   noTrivialTypeAliasesConfigs,
-};
+}
 
-export default noTrivialTypeAliasesConfigs;
+export default noTrivialTypeAliasesConfigs

@@ -8,11 +8,14 @@
 
 export const switchCaseExplicitReturnConfigs = [
   {
-    selector: "SwitchStatement > SwitchCase > ReturnStatement[argument=null]",
-    message: "Switch case functions must provide an explicit return value. Default return values are not allowed.",
+    selector: 'SwitchStatement > SwitchCase > ReturnStatement[argument=null]',
+    message:
+      'Switch case functions must provide an explicit return value. Default return values are not allowed.',
   },
   {
-    selector: "SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]",
-    message: "Switch case functions must provide an explicit return value. Default return values are not allowed.",
+    selector:
+      'SwitchStatement > SwitchCase > BlockStatement > ReturnStatement[argument=null]',
+    message:
+      'Switch case functions must provide an explicit return value. Default return values are not allowed.',
   },
-];
+]

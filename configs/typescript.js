@@ -5,19 +5,23 @@
  * Plugin registration removed - all plugins registered globally in index.js.
  */
 
-import globals from "globals";
-import allRules from "../rules/index.js";
+import globals from 'globals'
+import allRules from '../rules/index.js'
 
-export const typescriptConfig = (sharedRules, sharedRestrictedSyntax, tsOnlyRestrictedSyntax) => [
+export const typescriptConfig = (
+  sharedRules,
+  sharedRestrictedSyntax,
+  tsOnlyRestrictedSyntax
+) => [
   // TypeScript files - Base config
   {
-    files: ["**/*.ts"],
+    files: ['**/*.ts'],
     ignores: [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/build/**",
-      "pnpm-lock.yaml",
-      "**/*.stories.{js,jsx,ts,tsx}",
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      'pnpm-lock.yaml',
+      '**/*.stories.{js,jsx,ts,tsx}',
     ],
     languageOptions: {
       globals: {
@@ -26,18 +30,18 @@ export const typescriptConfig = (sharedRules, sharedRestrictedSyntax, tsOnlyRest
       },
     },
     settings: {
-      "import/resolver": {
+      'import/resolver': {
         typescript: {},
       },
     },
     rules: {
       ...sharedRules,
       ...allRules.typescriptEslintRules,
-      "no-undef": "off", // TypeScript handles this
-      "custom/no-default-class-export": "error",
-      "single-export/single-export": "error",
-      "required-exports/required-exports": [
-        "error",
+      'no-undef': 'off', // TypeScript handles this
+      'custom/no-default-class-export': 'error',
+      'single-export/single-export': 'error',
+      'required-exports/required-exports': [
+        'error',
         {
           variable: false,
           function: false,
@@ -48,11 +52,11 @@ export const typescriptConfig = (sharedRules, sharedRestrictedSyntax, tsOnlyRest
           ignorePrivate: true,
         },
       ],
-      "no-restricted-syntax": [
-        "error",
+      'no-restricted-syntax': [
+        'error',
         ...sharedRestrictedSyntax,
         ...tsOnlyRestrictedSyntax,
       ],
     },
   },
-];
+]

@@ -16,17 +16,19 @@
 
 const jsxClassNameRequiredRule = {
   meta: {
-    type: "layout",
+    type: 'layout',
     docs: {
-      description: "Require non-empty className attribute on HTML elements in JSX",
-      category: "Stylistic Issues",
+      description:
+        'Require non-empty className attribute on HTML elements in JSX',
+      category: 'Stylistic Issues',
       recommended: false,
     },
     fixable: null,
     schema: [],
     messages: {
-      missingClassName: "HTML elements must have a className attribute.",
-      emptyClassName: "HTML elements must have a non-empty className attribute.",
+      missingClassName: 'HTML elements must have a className attribute.',
+      emptyClassName:
+        'HTML elements must have a non-empty className attribute.',
     },
   },
 
@@ -34,47 +36,54 @@ const jsxClassNameRequiredRule = {
     return {
       JSXOpeningElement(node) {
         // Skip if this is a React component (starts with capital letter)
-        if (node.name.type === 'JSXIdentifier' && /^[A-Z]/.test(node.name.name)) {
-          return;
+        if (
+          node.name.type === 'JSXIdentifier' &&
+          /^[A-Z]/.test(node.name.name)
+        ) {
+          return
         }
 
         // Skip if this is Fragment
-        if (node.name.type === 'JSXIdentifier' && node.name.name === 'Fragment') {
-          return;
+        if (
+          node.name.type === 'JSXIdentifier' &&
+          node.name.name === 'Fragment'
+        ) {
+          return
         }
 
         // Skip if this is React.Something (like React.Fragment, React.StrictMode, etc.)
-        if (node.name.type === 'JSXMemberExpression' &&
-            node.name.object.name === 'React' &&
-            /^[A-Z]/.test(node.name.property.name)) {
-          return;
+        if (
+          node.name.type === 'JSXMemberExpression' &&
+          node.name.object.name === 'React' &&
+          /^[A-Z]/.test(node.name.property.name)
+        ) {
+          return
         }
 
         // Find className attribute
-        const classNameAttr = node.attributes.find(attr =>
-          attr.type === 'JSXAttribute' &&
-          attr.name.name === 'className'
-        );
+        const classNameAttr = node.attributes.find(
+          attr => attr.type === 'JSXAttribute' && attr.name.name === 'className'
+        )
 
         if (!classNameAttr) {
           context.report({
             node,
             messageId: 'missingClassName',
-          });
-          return;
+          })
+          return
         }
 
         // Check if className is an empty string
-        const value = classNameAttr.value;
+        const value = classNameAttr.value
         if (value && value.type === 'Literal' && value.value === '') {
           context.report({
             node,
             messageId: 'emptyClassName',
-          });
+          })
         }
       },
-    };
+    }
   },
-};
+}
 
-export { jsxClassNameRequiredRule };
+export { jsxClassNameRequiredRule }

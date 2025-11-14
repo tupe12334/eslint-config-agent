@@ -13,11 +13,13 @@
  * @see https://eslint.org/docs/latest/rules/no-restricted-syntax
  */
 
-const rule = "error";
+const rule = 'error'
 
-const selector = "MemberExpression[object.type='MemberExpression'][object.object.name='process'][object.property.name='env']";
+const selector =
+  "MemberExpression[object.type='MemberExpression'][object.object.name='process'][object.property.name='env']"
 
-const message = "Direct access to process.env properties is not allowed. Use process.env as a whole object instead (e.g., validate(process.env)).";
+const message =
+  'Direct access to process.env properties is not allowed. Use process.env as a whole object instead (e.g., validate(process.env)).'
 
 /**
  * Export the complete rule configuration for no-restricted-syntax
@@ -27,14 +29,9 @@ const message = "Direct access to process.env properties is not allowed. Use pro
 const noProcessEnvPropertiesConfig = {
   selector,
   message,
-};
+}
 
 // Consolidated exports
-export {
-  rule,
-  selector,
-  message,
-  noProcessEnvPropertiesConfig,
-};
+export { rule, selector, message, noProcessEnvPropertiesConfig }
 
-export default noProcessEnvPropertiesConfig;
+export default noProcessEnvPropertiesConfig

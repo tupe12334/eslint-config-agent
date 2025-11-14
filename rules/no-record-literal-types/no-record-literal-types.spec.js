@@ -1,46 +1,46 @@
-import { RuleTester } from "eslint";
-import { noRecordLiteralTypesConfigs, message } from "./index.js";
+import { RuleTester } from 'eslint'
+import { noRecordLiteralTypesConfigs, message } from './index.js'
 
 const ruleTester = new RuleTester({
   languageOptions: {
     ecmaVersion: 2022,
-    sourceType: "module",
-    parser: await import("@typescript-eslint/parser"),
+    sourceType: 'module',
+    parser: await import('@typescript-eslint/parser'),
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
       },
     },
   },
-});
+})
 
 // Create a mock rule that handles dual selectors properly
 const mockRule = {
   meta: {
-    type: "problem",
+    type: 'problem',
     docs: {
-      description: "Disallow Record type with string literal keys",
+      description: 'Disallow Record type with string literal keys',
     },
     schema: [],
   },
   create(context) {
-    const handlers = {};
+    const handlers = {}
 
     // Add handlers for both selectors from our configuration
     noRecordLiteralTypesConfigs.forEach(config => {
-      handlers[config.selector] = (node) => {
+      handlers[config.selector] = node => {
         context.report({
           node,
           message: config.message,
-        });
-      };
-    });
+        })
+      }
+    })
 
-    return handlers;
+    return handlers
   },
-};
+}
 
-ruleTester.run("no-record-literal-types", mockRule, {
+ruleTester.run('no-record-literal-types', mockRule, {
   valid: [
     // Generic Record types (allowed)
     'type UserData = Record<string, unknown>;',
@@ -99,4 +99,4 @@ ruleTester.run("no-record-literal-types", mockRule, {
       errors: [{ message }],
     },
   ],
-});
+})

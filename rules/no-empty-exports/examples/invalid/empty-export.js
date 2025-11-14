@@ -1,2 +1,2 @@
 // Invalid: Empty export specifiers
-export { };
+export {}

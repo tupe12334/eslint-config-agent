@@ -1,46 +1,52 @@
-import { RuleTester } from "eslint";
-import { noInlineUnionTypesConfigs, messageGeneral, messageProperty, messageClassProperty } from "./index.js";
+import { RuleTester } from 'eslint'
+import {
+  noInlineUnionTypesConfigs,
+  messageGeneral,
+  messageProperty,
+  messageClassProperty,
+} from './index.js'
 
 const ruleTester = new RuleTester({
   languageOptions: {
     ecmaVersion: 2022,
-    sourceType: "module",
-    parser: await import("@typescript-eslint/parser"),
+    sourceType: 'module',
+    parser: await import('@typescript-eslint/parser'),
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
       },
     },
   },
-});
+})
 
 // Create a mock rule that handles multiple selectors properly
 const mockRule = {
   meta: {
-    type: "problem",
+    type: 'problem',
     docs: {
-      description: "Disallow inline union types in favor of named type declarations",
+      description:
+        'Disallow inline union types in favor of named type declarations',
     },
     schema: [],
   },
   create(context) {
-    const handlers = {};
+    const handlers = {}
 
     // Add handlers for all selectors from our configuration
     noInlineUnionTypesConfigs.forEach(config => {
-      handlers[config.selector] = (node) => {
+      handlers[config.selector] = node => {
         context.report({
           node,
           message: config.message,
-        });
-      };
-    });
+        })
+      }
+    })
 
-    return handlers;
+    return handlers
   },
-};
+}
 
-ruleTester.run("no-inline-union-types", mockRule, {
+ruleTester.run('no-inline-union-types', mockRule, {
   valid: [
     // Named type declarations (preferred)
     'type Status = "active" | "inactive"; function foo(status: Status) {}',
@@ -98,4 +104,4 @@ ruleTester.run("no-inline-union-types", mockRule, {
       errors: [{ message: messageGeneral }],
     },
   ],
-});
+})

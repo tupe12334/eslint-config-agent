@@ -14,13 +14,13 @@
  * @see https://eslint.org/docs/latest/rules/no-restricted-syntax
  */
 
-const rule = "error";
+const rule = 'error'
 
 const selector =
-  'TSAsExpression:not(:has(TSTypeReference[typeName.name="const"]))';
+  'TSAsExpression:not(:has(TSTypeReference[typeName.name="const"]))'
 
 const message =
-  'Type assertions with "as" are not allowed except for "as const".';
+  'Type assertions with "as" are not allowed except for "as const".'
 
 /**
  * Export the complete rule configuration for no-restricted-syntax
@@ -30,9 +30,9 @@ const message =
 const noTypeAssertionsConfig = {
   selector,
   message,
-};
+}
 
 // Consolidated exports
-export { rule, selector, message, noTypeAssertionsConfig };
+export { rule, selector, message, noTypeAssertionsConfig }
 
-export default noTypeAssertionsConfig;
+export default noTypeAssertionsConfig

@@ -1,5 +1,5 @@
-import { RuleTester } from "@typescript-eslint/rule-tester";
-import { switchCaseFunctionsReturnTypeConfigs } from "./index.js";
+import { RuleTester } from '@typescript-eslint/rule-tester'
+import { switchCaseFunctionsReturnTypeConfigs } from './index.js'
 
 /**
  * Test suite for switch-case-functions-return-type rules
@@ -11,49 +11,50 @@ import { switchCaseFunctionsReturnTypeConfigs } from "./index.js";
 // Custom error class for test failures
 export class TestError extends Error {
   constructor(message) {
-    super(message);
-    this.name = 'TestError';
+    super(message)
+    this.name = 'TestError'
   }
 }
 
 // Configure RuleTester for Node.js test environment (modern best practice)
-RuleTester.afterAll = () => {}; // No cleanup needed for simple tests
+RuleTester.afterAll = () => {} // No cleanup needed for simple tests
 RuleTester.describe = (name, fn) => {
-  console.log(`\n📝 ${name}`);
-  fn();
-};
+  console.log(`\n📝 ${name}`)
+  fn()
+}
 RuleTester.it = (name, fn) => {
   try {
-    fn();
-    console.log(`   ✅ ${name}`);
+    fn()
+    console.log(`   ✅ ${name}`)
   } catch (error) {
-    console.log(`   ❌ ${name}: ${error.message}`);
-    throw new TestError(error.message || 'Test failed');
+    console.log(`   ❌ ${name}: ${error.message}`)
+    throw new TestError(error.message || 'Test failed')
   }
-};
-RuleTester.itOnly = RuleTester.it;
+}
+RuleTester.itOnly = RuleTester.it
 
 // Modern ESLint v9 + typescript-eslint v8 configuration
 // Parser is automatically handled by typescript-eslint
 const ruleTester = new RuleTester({
   languageOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
+    ecmaVersion: 'latest',
+    sourceType: 'module',
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
       },
     },
   },
-});
+})
 
 // Create individual rules for each selector configuration
-const createSwitchCaseFunctionRule = (config) => ({
+const createSwitchCaseFunctionRule = config => ({
   meta: {
-    type: "problem",
+    type: 'problem',
     docs: {
-      description: "Require explicit return type annotations for functions defined within switch cases",
-      recommended: "strict",
+      description:
+        'Require explicit return type annotations for functions defined within switch cases',
+      recommended: 'strict',
     },
     messages: {
       requireReturnType: config.message,
@@ -63,28 +64,31 @@ const createSwitchCaseFunctionRule = (config) => ({
   },
   create(context) {
     return {
-      [config.selector]: function(node) {
+      [config.selector]: function (node) {
         context.report({
           node,
-          messageId: "requireReturnType",
-        });
+          messageId: 'requireReturnType',
+        })
       },
-    };
+    }
   },
-});
+})
 
-console.log("🧪 Testing switch-case-functions-return-type rules with modern RuleTester...");
+console.log(
+  '🧪 Testing switch-case-functions-return-type rules with modern RuleTester...'
+)
 
 // Test each rule configuration
 switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
-  const rule = createSwitchCaseFunctionRule(config);
-  const ruleName = `switch-case-functions-return-type-${index}`;
+  const rule = createSwitchCaseFunctionRule(config)
+  const ruleName = `switch-case-functions-return-type-${index}`
 
-  const isArrowFunction = config.selector.includes("ArrowFunctionExpression");
-  const isFunctionExpression = config.selector.includes("FunctionExpression") && !isArrowFunction;
-  const isInBlockStatement = config.selector.includes("BlockStatement");
+  const isArrowFunction = config.selector.includes('ArrowFunctionExpression')
+  const isFunctionExpression =
+    config.selector.includes('FunctionExpression') && !isArrowFunction
+  const isInBlockStatement = config.selector.includes('BlockStatement')
 
-  console.log(`\n🔍 Rule ${index + 1}: ${config.selector}`);
+  console.log(`\n🔍 Rule ${index + 1}: ${config.selector}`)
 
   const testCases = {
     valid: [
@@ -100,8 +104,8 @@ switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
             }
           }
         `,
-        name: "switch without functions",
-        filename: "test.ts",
+        name: 'switch without functions',
+        filename: 'test.ts',
       },
 
       // Functions outside switch cases (rule doesn't apply)
@@ -115,12 +119,12 @@ switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
             }
           }
         `,
-        name: "function outside switch case",
-        filename: "test.ts",
+        name: 'function outside switch case',
+        filename: 'test.ts',
       },
     ],
-    invalid: []
-  };
+    invalid: [],
+  }
 
   // Add specific test cases based on rule type
   if (isArrowFunction) {
@@ -136,9 +140,9 @@ switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
             }
           }
         `,
-        name: "arrow function in block statement with return type",
-        filename: "test.ts",
-      });
+        name: 'arrow function in block statement with return type',
+        filename: 'test.ts',
+      })
 
       testCases.invalid.push({
         code: `
@@ -151,10 +155,10 @@ switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
             }
           }
         `,
-        errors: [{ messageId: "requireReturnType" }],
-        name: "arrow function in block statement without return type",
-        filename: "test.ts",
-      });
+        errors: [{ messageId: 'requireReturnType' }],
+        name: 'arrow function in block statement without return type',
+        filename: 'test.ts',
+      })
     } else {
       testCases.valid.push({
         code: `
@@ -166,9 +170,9 @@ switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
             }
           }
         `,
-        name: "arrow function in switch case with return type",
-        filename: "test.ts",
-      });
+        name: 'arrow function in switch case with return type',
+        filename: 'test.ts',
+      })
 
       testCases.invalid.push({
         code: `
@@ -180,10 +184,10 @@ switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
             }
           }
         `,
-        errors: [{ messageId: "requireReturnType" }],
-        name: "arrow function in switch case without return type",
-        filename: "test.ts",
-      });
+        errors: [{ messageId: 'requireReturnType' }],
+        name: 'arrow function in switch case without return type',
+        filename: 'test.ts',
+      })
     }
   }
 
@@ -202,9 +206,9 @@ switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
             }
           }
         `,
-        name: "function expression in block statement with return type",
-        filename: "test.ts",
-      });
+        name: 'function expression in block statement with return type',
+        filename: 'test.ts',
+      })
 
       testCases.invalid.push({
         code: `
@@ -219,10 +223,10 @@ switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
             }
           }
         `,
-        errors: [{ messageId: "requireReturnType" }],
-        name: "function expression in block statement without return type",
-        filename: "test.ts",
-      });
+        errors: [{ messageId: 'requireReturnType' }],
+        name: 'function expression in block statement without return type',
+        filename: 'test.ts',
+      })
     } else {
       testCases.valid.push({
         code: `
@@ -236,9 +240,9 @@ switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
             }
           }
         `,
-        name: "function expression in switch case with return type",
-        filename: "test.ts",
-      });
+        name: 'function expression in switch case with return type',
+        filename: 'test.ts',
+      })
 
       testCases.invalid.push({
         code: `
@@ -252,29 +256,32 @@ switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
             }
           }
         `,
-        errors: [{ messageId: "requireReturnType" }],
-        name: "function expression in switch case without return type",
-        filename: "test.ts",
-      });
+        errors: [{ messageId: 'requireReturnType' }],
+        name: 'function expression in switch case without return type',
+        filename: 'test.ts',
+      })
     }
   }
 
   // Run the test for this specific rule
-  ruleTester.run(ruleName, rule, testCases);
-  console.log(`   ✅ Rule ${index + 1} tests passed`);
-});
+  ruleTester.run(ruleName, rule, testCases)
+  console.log(`   ✅ Rule ${index + 1} tests passed`)
+})
 
-console.log("\n✅ All switch-case-functions-return-type RuleTester tests completed!");
-console.log("\n🎯 Modern Testing Benefits:");
-console.log("   • Uses @typescript-eslint/rule-tester v8 (latest)");
-console.log("   • ESLint v9 flat config compatibility");
-console.log("   • Automatic TypeScript parser handling");
-console.log("   • Enhanced error reporting and type safety");
-console.log("   • No manual parser configuration required");
+console.log(
+  '\n✅ All switch-case-functions-return-type RuleTester tests completed!'
+)
+console.log('\n🎯 Modern Testing Benefits:')
+console.log('   • Uses @typescript-eslint/rule-tester v8 (latest)')
+console.log('   • ESLint v9 flat config compatibility')
+console.log('   • Automatic TypeScript parser handling')
+console.log('   • Enhanced error reporting and type safety')
+console.log('   • No manual parser configuration required')
 
-console.log(`\n📋 Tested ${switchCaseFunctionsReturnTypeConfigs.length} rule configurations:`);
+console.log(
+  `\n📋 Tested ${switchCaseFunctionsReturnTypeConfigs.length} rule configurations:`
+)
 switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
-  console.log(`   ${index + 1}. ${config.selector}`);
-  console.log(`      → ${config.message}`);
-});
-
+  console.log(`   ${index + 1}. ${config.selector}`)
+  console.log(`      → ${config.message}`)
+})

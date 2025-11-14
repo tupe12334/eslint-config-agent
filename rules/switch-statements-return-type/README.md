@@ -5,6 +5,7 @@ This rule enforces explicit return type annotations for functions that contain s
 ## Purpose
 
 Functions containing switch statements should have explicit return type annotations to:
+
 - Ensure type safety across all switch cases
 - Make return type contracts clear and explicit
 - Prevent accidental type inconsistencies between cases
@@ -14,45 +15,47 @@ Functions containing switch statements should have explicit return type annotati
 This rule restricts the following patterns:
 
 ❌ **Incorrect:**
+
 ```typescript
 function handleAction(action) {
   switch (action.type) {
     case 'increment':
-      return { count: action.payload + 1 };
+      return { count: action.payload + 1 }
     case 'decrement':
-      return { count: action.payload - 1 };
+      return { count: action.payload - 1 }
   }
 }
 
-const processValue = (value) => {
+const processValue = value => {
   switch (typeof value) {
     case 'string':
-      return value.toUpperCase();
+      return value.toUpperCase()
     case 'number':
-      return value.toString();
+      return value.toString()
   }
-};
+}
 ```
 
 ✅ **Correct:**
+
 ```typescript
 function handleAction(action): { count: number } {
   switch (action.type) {
     case 'increment':
-      return { count: action.payload + 1 };
+      return { count: action.payload + 1 }
     case 'decrement':
-      return { count: action.payload - 1 };
+      return { count: action.payload - 1 }
   }
 }
 
 const processValue = (value): string => {
   switch (typeof value) {
     case 'string':
-      return value.toUpperCase();
+      return value.toUpperCase()
     case 'number':
-      return value.toString();
+      return value.toString()
   }
-};
+}
 ```
 
 ## Configuration

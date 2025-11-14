@@ -9,5 +9,5 @@
 
 export const classExportRules = {
   // Require named exports for classes instead of default exports
-  "class-export/class-export": ["error", { require: "named" }],
-};
+  'class-export/class-export': ['error', { require: 'named' }],
+}

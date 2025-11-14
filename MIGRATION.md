@@ -28,9 +28,9 @@ Replace your old configuration with:
 
 ```javascript
 // eslint.config.js
-import config from 'eslint-config-agent';
+import config from 'eslint-config-agent'
 
-export default config;
+export default config
 ```
 
 ### 4. Update Scripts
@@ -52,7 +52,7 @@ If migrating from Create React App's ESLint configuration:
 
 ```javascript
 // Replace react-scripts ESLint config
-import config from 'eslint-config-agent';
+import config from 'eslint-config-agent'
 
 export default [
   ...config,
@@ -61,9 +61,9 @@ export default [
     files: ['src/**/*.{js,jsx,ts,tsx}'],
     rules: {
       // Custom rules for your React app
-    }
-  }
-];
+    },
+  },
+]
 ```
 
 ## From Airbnb Config
@@ -71,7 +71,7 @@ export default [
 Transitioning from Airbnb's ESLint config:
 
 ```javascript
-import config from 'eslint-config-agent';
+import config from 'eslint-config-agent'
 
 export default [
   ...config,
@@ -80,7 +80,7 @@ export default [
     rules: {
       'import/prefer-default-export': 'warn',
       'class-methods-use-this': 'warn',
-    }
-  }
-];
+    },
+  },
+]
 ```

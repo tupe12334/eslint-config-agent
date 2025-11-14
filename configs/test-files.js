@@ -1,69 +1,69 @@
-import allRules from "../rules/index.js";
-import { noRecordLiteralTypesConfigs } from "../rules/no-record-literal-types/index.js";
-import { noInlineUnionTypesConfigs } from "../rules/no-inline-union-types/index.js";
-import { plugins } from "../plugins/index.js";
+import allRules from '../rules/index.js'
+import { noRecordLiteralTypesConfigs } from '../rules/no-record-literal-types/index.js'
+import { noInlineUnionTypesConfigs } from '../rules/no-inline-union-types/index.js'
+import { plugins } from '../plugins/index.js'
 
 // Shared rules for both JS and TS files
 const sharedRules = {
   ...allRules.pluginRules,
-  "object-curly-newline": "off",
-  "no-shadow": "off",
-  "comma-dangle": "off",
-  "function-paren-newline": "off",
-  quotes: "off",
-  "no-unused-vars": "off",
-  "@typescript-eslint/no-unused-vars": "off",
-  "max-lines-per-function": allRules.maxFunctionLinesWarning,
-  "max-lines": allRules.maxFileLinesWarning,
-  semi: "off",
-  complexity: "off",
-  "no-trailing-spaces": allRules.noTrailingSpacesConfig,
-  "operator-linebreak": "off",
-  "implicit-arrow-linebreak": "off",
-  "arrow-body-style": "off",
-  "no-continue": "off",
+  'object-curly-newline': 'off',
+  'no-shadow': 'off',
+  'comma-dangle': 'off',
+  'function-paren-newline': 'off',
+  quotes: 'off',
+  'no-unused-vars': 'off',
+  '@typescript-eslint/no-unused-vars': 'off',
+  'max-lines-per-function': allRules.maxFunctionLinesWarning,
+  'max-lines': allRules.maxFileLinesWarning,
+  semi: 'off',
+  complexity: 'off',
+  'no-trailing-spaces': allRules.noTrailingSpacesConfig,
+  'operator-linebreak': 'off',
+  'implicit-arrow-linebreak': 'off',
+  'arrow-body-style': 'off',
+  'no-continue': 'off',
   // Additional built-in error handling rules
-  "prefer-promise-reject-errors": "error",
+  'prefer-promise-reject-errors': 'error',
   // Optional chaining restriction
-  "no-optional-chaining/no-optional-chaining": "error",
-};
+  'no-optional-chaining/no-optional-chaining': 'error',
+}
 
 // Shared no-restricted-syntax rules for both JS and TS
 const sharedRestrictedSyntax = [
   allRules.noNullishCoalescingConfig,
   {
     selector:
-      "ExportNamedDeclaration[exportKind=type]:not([source]):has(ExportSpecifier)",
+      'ExportNamedDeclaration[exportKind=type]:not([source]):has(ExportSpecifier)',
     message:
       "Type-only exports are not allowed. Use regular export or re-export with 'from' clause.",
   },
   {
-    selector: "ExportSpecifier[local.name=default][exported.name!=default]",
+    selector: 'ExportSpecifier[local.name=default][exported.name!=default]',
     message:
-      "Re-exporting default as named export is not allowed. Use explicit export declaration instead.",
+      'Re-exporting default as named export is not allowed. Use explicit export declaration instead.',
   },
   {
     selector:
-      "Program:has(ImportDeclaration) ExportNamedDeclaration:has(VariableDeclaration > VariableDeclarator[init.type=Identifier]):not(:has(ClassDeclaration))",
+      'Program:has(ImportDeclaration) ExportNamedDeclaration:has(VariableDeclaration > VariableDeclarator[init.type=Identifier]):not(:has(ClassDeclaration))',
     message:
       "Exporting imported variables is not allowed. Use direct re-export with 'from' clause or define new values.",
   },
   ...allRules.switchCaseExplicitReturnConfigs,
   {
-    selector: "SwitchStatement > SwitchCase[test=null]",
+    selector: 'SwitchStatement > SwitchCase[test=null]',
     message:
-      "Default cases are not allowed in switch statements. Handle all possible cases explicitly.",
+      'Default cases are not allowed in switch statements. Handle all possible cases explicitly.',
   },
   {
     selector:
-      "ExportNamedDeclaration[source.value=/^[a-z]/]:not([source.value=/^@/])",
+      'ExportNamedDeclaration[source.value=/^[a-z]/]:not([source.value=/^@/])',
     message:
-      "Exporting from external libraries is not allowed. Only re-export from relative paths or scoped packages.",
+      'Exporting from external libraries is not allowed. Only re-export from relative paths or scoped packages.',
   },
   allRules.noProcessEnvPropertiesConfig,
   allRules.noExportSpecifiersConfig,
   ...allRules.noDefaultClassExportRules,
-];
+]
 
 // TypeScript-specific no-restricted-syntax rules
 const tsOnlyRestrictedSyntax = [
@@ -72,13 +72,13 @@ const tsOnlyRestrictedSyntax = [
   allRules.noTypeAssertionsConfig,
   allRules.noClassPropertyDefaultsConfig,
   {
-    selector: "TSAsExpression:has(> TSIndexedAccessType > TSTypeQuery)",
+    selector: 'TSAsExpression:has(> TSIndexedAccessType > TSTypeQuery)',
     message:
       'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
   },
   ...allRules.switchCaseFunctionsReturnTypeConfigs,
   ...allRules.switchStatementsReturnTypeConfigs,
-];
+]
 
 // Test and spec files configuration
 export const testFilesConfig = [
@@ -90,38 +90,38 @@ export const testFilesConfig = [
   // Disable function and file size limits for test and spec files
   {
     files: [
-      "**/*.test.{js,jsx,ts,tsx}",
-      "**/*.spec.{js,jsx,ts,tsx}",
-      "**/test/**/*.{js,jsx,ts,tsx}",
-      "**/tests/**/*.{js,jsx,ts,tsx}",
-      "**/__tests__/**/*.{js,jsx,ts,tsx}",
+      '**/*.test.{js,jsx,ts,tsx}',
+      '**/*.spec.{js,jsx,ts,tsx}',
+      '**/test/**/*.{js,jsx,ts,tsx}',
+      '**/tests/**/*.{js,jsx,ts,tsx}',
+      '**/__tests__/**/*.{js,jsx,ts,tsx}',
     ],
     ignores: [
-      "**/long-function-test.tsx", // Exception: this file tests the max-lines rule itself
-      "**/test/export/**", // Export tests should follow strict export rules
-      "**/test/required-exports/**", // Required export tests should follow strict export rules
+      '**/long-function-test.tsx', // Exception: this file tests the max-lines rule itself
+      '**/test/export/**', // Export tests should follow strict export rules
+      '**/test/required-exports/**', // Required export tests should follow strict export rules
     ],
     rules: {
-      "max-lines-per-function": "off",
-      "max-lines": "off", // Ignore file length limits in test and spec files
-      "default/no-localhost": ["error", { allowInTests: true }],
-      "default/no-hardcoded-urls": ["error", { allowInTests: true }],
-      "default/no-default-params": "off", // Allow default parameters in test files for demonstration purposes
+      'max-lines-per-function': 'off',
+      'max-lines': 'off', // Ignore file length limits in test and spec files
+      'default/no-localhost': ['error', { allowInTests: true }],
+      'default/no-hardcoded-urls': ['error', { allowInTests: true }],
+      'default/no-default-params': 'off', // Allow default parameters in test files for demonstration purposes
       // Disable error plugin rules in test files
-      "error/no-generic-error": "off",
-      "error/require-custom-error": "off",
-      "error/no-throw-literal": "off",
+      'error/no-generic-error': 'off',
+      'error/require-custom-error': 'off',
+      'error/no-throw-literal': 'off',
       // Allow multiple exports in test files for testing import/export patterns
-      "no-restricted-syntax": [
-        "warn",
+      'no-restricted-syntax': [
+        'warn',
         ...sharedRestrictedSyntax.filter(
-          (rule) =>
+          rule =>
             rule.selector !==
-              "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
+              'ExportNamedDeclaration[specifiers.length>1]:not([source])' &&
             rule.selector !==
-              "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
+              'Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))' &&
             rule.selector !==
-              "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
+              'ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))'
         ),
         ...tsOnlyRestrictedSyntax,
       ],
@@ -131,25 +131,25 @@ export const testFilesConfig = [
   // Test files that should have ERROR level rules but exclude export specifier rule
   {
     files: [
-      "**/test/type-assertions/**",
-      "**/test/test-optional.ts",
-      "**/test/test-js-optional.js",
-      "**/test/test-record-literals.ts",
-      "**/test/no-env-access-test.ts",
-      "**/test/import-export-rules.ts",
+      '**/test/type-assertions/**',
+      '**/test/test-optional.ts',
+      '**/test/test-js-optional.js',
+      '**/test/test-record-literals.ts',
+      '**/test/no-env-access-test.ts',
+      '**/test/import-export-rules.ts',
     ],
     rules: {
-      "max-lines-per-function": "off",
+      'max-lines-per-function': 'off',
       // Disable error plugin rules in test files
-      "error/no-generic-error": "off",
-      "error/require-custom-error": "off",
-      "error/no-throw-literal": "off",
-      "no-restricted-syntax": [
-        "error", // Error level for these test files
+      'error/no-generic-error': 'off',
+      'error/require-custom-error': 'off',
+      'error/no-throw-literal': 'off',
+      'no-restricted-syntax': [
+        'error', // Error level for these test files
         ...sharedRestrictedSyntax.filter(
-          (rule) =>
+          rule =>
             rule.selector !==
-            "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
+            'ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))'
         ),
         ...tsOnlyRestrictedSyntax,
       ],
@@ -159,30 +159,30 @@ export const testFilesConfig = [
   // Test files configuration with mixed severity levels
   {
     files: [
-      "**/test/invalid.tsx", // Special handling for the main test file
-      "**/test/single-export-valid.ts", // Allow export specifiers for import/group-exports testing
-      "**/test/typescript-rules.ts", // Allow export specifiers for typescript rules testing
-      "**/test/type-assertions/indexed-access-valid.ts", // Allow export specifiers for type assertions testing
+      '**/test/invalid.tsx', // Special handling for the main test file
+      '**/test/single-export-valid.ts', // Allow export specifiers for import/group-exports testing
+      '**/test/typescript-rules.ts', // Allow export specifiers for typescript rules testing
+      '**/test/type-assertions/indexed-access-valid.ts', // Allow export specifiers for type assertions testing
     ],
     rules: {
-      "max-lines-per-function": "off",
-      "default/no-localhost": ["error", { allowInTests: true }],
-      "default/no-hardcoded-urls": ["error", { allowInTests: true }],
-      "default/no-default-params": "off", // Allow default parameters in test files for demonstration purposes
+      'max-lines-per-function': 'off',
+      'default/no-localhost': ['error', { allowInTests: true }],
+      'default/no-hardcoded-urls': ['error', { allowInTests: true }],
+      'default/no-default-params': 'off', // Allow default parameters in test files for demonstration purposes
       // Disable error plugin rules in test files
-      "error/no-generic-error": "off",
-      "error/require-custom-error": "off",
-      "error/no-throw-literal": "off",
-      "no-restricted-syntax": [
-        "warn", // Base level for most rules
+      'error/no-generic-error': 'off',
+      'error/require-custom-error': 'off',
+      'error/no-throw-literal': 'off',
+      'no-restricted-syntax': [
+        'warn', // Base level for most rules
         ...sharedRestrictedSyntax.filter(
-          (rule) =>
+          rule =>
             rule.selector !==
-              "ExportNamedDeclaration[specifiers.length>1]:not([source])" &&
+              'ExportNamedDeclaration[specifiers.length>1]:not([source])' &&
             rule.selector !==
-              "Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))" &&
+              'Program:has(ExportNamedDeclaration:not([source]) ~ ExportNamedDeclaration:not([source]))' &&
             rule.selector !==
-              "ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))"
+              'ExportNamedDeclaration:not([source]):not(:has(VariableDeclaration)):not(:has(FunctionDeclaration)):not(:has(ClassDeclaration)):not(:has(TSInterfaceDeclaration)):not(:has(TSTypeAliasDeclaration)):not(:has(TSEnumDeclaration))'
         ),
         ...tsOnlyRestrictedSyntax,
       ],
@@ -192,29 +192,27 @@ export const testFilesConfig = [
   // Disable file length rules for configuration and spec files
   {
     files: [
-      "index.js", // Main configuration file
-      "**/rules/**/*.spec.js", // Spec files in rules directory
-      "**/scripts/**/*.js", // Script files
+      'index.js', // Main configuration file
+      '**/rules/**/*.spec.js', // Spec files in rules directory
+      '**/scripts/**/*.js', // Script files
     ],
     rules: {
-      "max-lines": "off",
-      "max-lines-per-function": "off",
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
       // Disable error plugin rules in spec files
-      "error/no-generic-error": "off",
-      "error/require-custom-error": "off",
-      "error/no-throw-literal": "off",
+      'error/no-generic-error': 'off',
+      'error/require-custom-error': 'off',
+      'error/no-throw-literal': 'off',
     },
   },
 
   // Export test files - allow hardcoded URLs for testing but keep strict export rules
   {
-    files: [
-      "**/test/export/**/*.{js,ts,tsx,jsx}",
-    ],
+    files: ['**/test/export/**/*.{js,ts,tsx,jsx}'],
     rules: {
-      "default/no-localhost": ["error", { allowInTests: true }],
-      "default/no-hardcoded-urls": ["error", { allowInTests: true }],
-      "default/no-default-params": "off", // Allow default parameters in test files for demonstration purposes
+      'default/no-localhost': ['error', { allowInTests: true }],
+      'default/no-hardcoded-urls': ['error', { allowInTests: true }],
+      'default/no-default-params': 'off', // Allow default parameters in test files for demonstration purposes
     },
   },
-];
+]

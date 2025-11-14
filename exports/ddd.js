@@ -10,6 +10,6 @@
  * - import config from "eslint-config-agent/ddd" (same as above)
  */
 
-import config from "../index.js";
+import config from '../index.js'
 
-export default config;
+export default config

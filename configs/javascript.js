@@ -5,27 +5,27 @@
  * Plugin registration removed - all plugins registered globally in index.js.
  */
 
-import globals from "globals";
+import globals from 'globals'
 
 export const javascriptConfig = (sharedRules, sharedRestrictedSyntax) => [
   // JavaScript files (not JSX)
   {
-    files: ["**/*.js"],
+    files: ['**/*.js'],
     ignores: [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/build/**",
-      "pnpm-lock.yaml",
-      "**/*.umd.js",
-      "**/*.cjs",
-      "**/*.mjs",
-      "**/*.stories.{js,jsx,ts,tsx}",
-      "**/rules/**/index.js",
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      'pnpm-lock.yaml',
+      '**/*.umd.js',
+      '**/*.cjs',
+      '**/*.mjs',
+      '**/*.stories.{js,jsx,ts,tsx}',
+      '**/rules/**/index.js',
     ],
     languageOptions: {
       parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
+        ecmaVersion: 'latest',
+        sourceType: 'module',
         ecmaFeatures: {
           jsx: true,
         },
@@ -38,14 +38,14 @@ export const javascriptConfig = (sharedRules, sharedRestrictedSyntax) => [
     },
     settings: {
       react: {
-        version: "detect",
+        version: 'detect',
       },
     },
     rules: {
       ...sharedRules,
-      "single-export/single-export": "error",
-      "required-exports/required-exports": [
-        "error",
+      'single-export/single-export': 'error',
+      'required-exports/required-exports': [
+        'error',
         {
           variable: false,
           function: false,
@@ -56,13 +56,13 @@ export const javascriptConfig = (sharedRules, sharedRestrictedSyntax) => [
           ignorePrivate: true,
         },
       ],
-      "no-restricted-syntax": ["error", ...sharedRestrictedSyntax],
+      'no-restricted-syntax': ['error', ...sharedRestrictedSyntax],
     },
   },
 
   // Node.js files (must come after general JS config to override)
   {
-    files: ["scripts/**/*.js"],
+    files: ['scripts/**/*.js'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -70,7 +70,7 @@ export const javascriptConfig = (sharedRules, sharedRestrictedSyntax) => [
     },
     rules: {
       ...sharedRules,
-      "no-restricted-syntax": ["error", ...sharedRestrictedSyntax],
+      'no-restricted-syntax': ['error', ...sharedRestrictedSyntax],
     },
   },
-];
+]

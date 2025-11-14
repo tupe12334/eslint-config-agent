@@ -1,5 +1,5 @@
-import { RuleTester } from "eslint";
-import { noDefaultClassExportRule } from "./index.js";
+import { RuleTester } from 'eslint'
+import { noDefaultClassExportRule } from './index.js'
 
 /**
  * Test suite for no-default-class-export rule
@@ -11,17 +11,17 @@ import { noDefaultClassExportRule } from "./index.js";
 const ruleTester = new RuleTester({
   languageOptions: {
     ecmaVersion: 2022,
-    sourceType: "module",
-    parser: (await import("@typescript-eslint/parser")).default,
+    sourceType: 'module',
+    parser: (await import('@typescript-eslint/parser')).default,
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
       },
     },
   },
-});
+})
 
-ruleTester.run("no-default-class-export", noDefaultClassExportRule, {
+ruleTester.run('no-default-class-export', noDefaultClassExportRule, {
   valid: [
     // Valid: Named class export
     {
@@ -120,7 +120,7 @@ ruleTester.run("no-default-class-export", noDefaultClassExportRule, {
       `,
       errors: [
         {
-          messageId: "noDefaultClassDeclaration",
+          messageId: 'noDefaultClassDeclaration',
         },
       ],
     },
@@ -142,7 +142,7 @@ ruleTester.run("no-default-class-export", noDefaultClassExportRule, {
       `,
       errors: [
         {
-          messageId: "noDefaultClassDeclaration",
+          messageId: 'noDefaultClassDeclaration',
         },
       ],
     },
@@ -160,7 +160,7 @@ ruleTester.run("no-default-class-export", noDefaultClassExportRule, {
       `,
       errors: [
         {
-          messageId: "noDefaultClassDeclaration",
+          messageId: 'noDefaultClassDeclaration',
         },
       ],
     },
@@ -184,7 +184,7 @@ ruleTester.run("no-default-class-export", noDefaultClassExportRule, {
       `,
       errors: [
         {
-          messageId: "noDefaultClassDeclaration",
+          messageId: 'noDefaultClassDeclaration',
         },
       ],
     },
@@ -204,7 +204,7 @@ ruleTester.run("no-default-class-export", noDefaultClassExportRule, {
       `,
       errors: [
         {
-          messageId: "noDefaultClassDeclaration",
+          messageId: 'noDefaultClassDeclaration',
         },
       ],
     },
@@ -222,7 +222,7 @@ ruleTester.run("no-default-class-export", noDefaultClassExportRule, {
       `,
       errors: [
         {
-          messageId: "noDefaultClassDeclaration",
+          messageId: 'noDefaultClassDeclaration',
         },
       ],
     },
@@ -244,7 +244,7 @@ ruleTester.run("no-default-class-export", noDefaultClassExportRule, {
       `,
       errors: [
         {
-          messageId: "noDefaultClassDeclaration",
+          messageId: 'noDefaultClassDeclaration',
         },
       ],
     },
@@ -266,7 +266,7 @@ ruleTester.run("no-default-class-export", noDefaultClassExportRule, {
       `,
       errors: [
         {
-          messageId: "noDefaultClassDeclaration",
+          messageId: 'noDefaultClassDeclaration',
         },
       ],
     },
@@ -288,14 +288,14 @@ ruleTester.run("no-default-class-export", noDefaultClassExportRule, {
       `,
       errors: [
         {
-          messageId: "noDefaultClassDeclaration",
+          messageId: 'noDefaultClassDeclaration',
         },
       ],
     },
   ],
-});
+})
 
-console.log("✅ All no-default-class-export rule tests passed!");
+console.log('✅ All no-default-class-export rule tests passed!')
 
 // Export for potential use in other test files
-export { noDefaultClassExportRule };
+export { noDefaultClassExportRule }

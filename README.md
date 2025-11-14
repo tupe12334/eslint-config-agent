@@ -103,9 +103,9 @@ pnpm install --save-dev $(pnpm info eslint-config-agent peerDependencies --json 
 Create an `eslint.config.js` file in your project root:
 
 ```javascript
-import config from "eslint-config-agent";
+import config from 'eslint-config-agent'
 
-export default config;
+export default config
 ```
 
 ### Advanced Configuration
@@ -113,58 +113,58 @@ export default config;
 #### Extending with Custom Rules
 
 ```javascript
-import baseConfig from "eslint-config-agent";
+import baseConfig from 'eslint-config-agent'
 
 export default [
   ...baseConfig,
   {
     rules: {
       // Override or add your custom rules
-      "no-console": "warn",
-      "@typescript-eslint/explicit-function-return-type": "error",
+      'no-console': 'warn',
+      '@typescript-eslint/explicit-function-return-type': 'error',
     },
   },
-];
+]
 ```
 
 #### Project-Specific Ignores
 
 ```javascript
-import baseConfig from "eslint-config-agent";
+import baseConfig from 'eslint-config-agent'
 
 export default [
   ...baseConfig,
   {
-    ignores: ["build/**", "dist/**", "coverage/**", "*.config.js"],
+    ignores: ['build/**', 'dist/**', 'coverage/**', '*.config.js'],
   },
-];
+]
 ```
 
 #### File-Specific Overrides
 
 ```javascript
-import baseConfig from "eslint-config-agent";
+import baseConfig from 'eslint-config-agent'
 
 export default [
   ...baseConfig,
   {
-    files: ["**/*.test.{ts,tsx,js,jsx}"],
+    files: ['**/*.test.{ts,tsx,js,jsx}'],
     rules: {
       // Relax rules for test files
-      "max-lines-per-function": "off",
-      "@typescript-eslint/no-explicit-any": "off",
+      'max-lines-per-function': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
   {
-    files: ["scripts/**/*.js"],
+    files: ['scripts/**/*.js'],
     languageOptions: {
       globals: {
-        process: "readonly",
-        console: "readonly",
+        process: 'readonly',
+        console: 'readonly',
       },
     },
   },
-];
+]
 ```
 
 ### Integration with Popular Tools
@@ -229,10 +229,12 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 **By default, this configuration requires that every source file has a corresponding spec file.** This ensures comprehensive test coverage and encourages test-driven development.
 
 **What files require specs:**
+
 - All TypeScript/JavaScript source files (`.ts`, `.js`, `.tsx`, `.jsx`)
 - Implementation files that contain business logic
 
 **What files are excluded:**
+
 - Test files themselves (`.spec.ts`, `.test.js`, etc.)
 - Configuration files (`.config.js`, `eslint.config.js`, etc.)
 - Index/barrel files (`index.ts`, `index.js`)
@@ -241,6 +243,7 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - Example files in `examples/` directories
 
 **Example structure:**
+
 ```
 src/
 ├── utils.ts          # Requires: utils.spec.ts
@@ -256,17 +259,17 @@ src/
 If you need to disable this requirement for specific files, you can add an override in your `eslint.config.js`:
 
 ```javascript
-import baseConfig from "eslint-config-agent";
+import baseConfig from 'eslint-config-agent'
 
 export default [
   ...baseConfig,
   {
-    files: ["src/legacy/**/*.ts"],
+    files: ['src/legacy/**/*.ts'],
     rules: {
-      "ddd/require-spec-file": "off",
+      'ddd/require-spec-file': 'off',
     },
   },
-];
+]
 ```
 
 ### Configuration Philosophy

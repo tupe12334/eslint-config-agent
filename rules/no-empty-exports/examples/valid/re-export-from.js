@@ -1,2 +1,2 @@
 // Valid: Re-export from other module
-export { something } from './other-file';
+export { something } from './other-file'

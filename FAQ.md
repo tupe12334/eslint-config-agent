@@ -71,7 +71,7 @@ For development setup, testing guidelines, and contribution instructions, see [C
 A: Yes! You can override any rules in your `eslint.config.js`:
 
 ```javascript
-import baseConfig from 'eslint-config-agent';
+import baseConfig from 'eslint-config-agent'
 
 export default [
   ...baseConfig,
@@ -83,7 +83,7 @@ export default [
       'max-lines-per-function': 'warn',
     },
   },
-];
+]
 ```
 
 ### **Q: Does this work with JavaScript projects (non-TypeScript)?**
@@ -109,6 +109,7 @@ A: Add these scripts to your `package.json`:
 ```
 
 Then run:
+
 - `npm run lint` - Check for issues
 - `npm run lint:fix` - Fix auto-fixable issues
 - `npm run lint:ci` - Strict checking for CI/CD
@@ -125,6 +126,6 @@ If you don't find your answer here:
 2. Review the [CONTRIBUTING.md](CONTRIBUTING.md) for development setup
 3. Create a new issue with:
    - Your ESLint version
-   - Your Node.js version  
+   - Your Node.js version
    - A minimal reproduction case
    - The error message you're seeing

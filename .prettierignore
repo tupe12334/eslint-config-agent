@@ -1,0 +1,8 @@
+node_modules
+coverage
+*.min.js
+pnpm-lock.yaml
+CHANGELOG.md
+.github
+rules/**/examples/**
+test/export/valid/**

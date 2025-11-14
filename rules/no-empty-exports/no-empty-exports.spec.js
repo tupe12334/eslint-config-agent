@@ -1,40 +1,40 @@
-import { RuleTester } from "eslint";
-import { selector, message } from "./index.js";
+import { RuleTester } from 'eslint'
+import { selector, message } from './index.js'
 
 const ruleTester = new RuleTester({
   languageOptions: {
     ecmaVersion: 2022,
-    sourceType: "module",
+    sourceType: 'module',
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
       },
     },
   },
-});
+})
 
 // Create a mock rule for testing
 const mockRule = {
   meta: {
-    type: "problem",
+    type: 'problem',
     docs: {
-      description: "Disallow empty export statements",
+      description: 'Disallow empty export statements',
     },
     schema: [],
   },
   create(context) {
     return {
-      [selector]: (node) => {
+      [selector]: node => {
         context.report({
           node,
           message,
-        });
+        })
       },
-    };
+    }
   },
-};
+}
 
-ruleTester.run("no-empty-exports", mockRule, {
+ruleTester.run('no-empty-exports', mockRule, {
   valid: [
     // Named exports with declarations
     'export const foo = 1;',
@@ -101,4 +101,4 @@ export function bar() {}`,
       errors: [{ message }],
     },
   ],
-});
+})

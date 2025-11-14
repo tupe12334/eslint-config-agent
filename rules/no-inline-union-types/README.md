@@ -16,12 +16,12 @@ function processRequest(method: 'GET' | 'POST' | 'PUT') {}
 
 // Interface properties
 interface User {
-  role: 'admin' | 'user' | 'guest';
+  role: 'admin' | 'user' | 'guest'
 }
 
 // Class properties
 class Config {
-  mode: 'dev' | 'prod';
+  mode: 'dev' | 'prod'
 }
 ```
 
@@ -29,19 +29,19 @@ class Config {
 
 ```typescript
 // Named type for reusability
-type HttpMethod = 'GET' | 'POST' | 'PUT';
+type HttpMethod = 'GET' | 'POST' | 'PUT'
 function processRequest(method: HttpMethod) {}
 
 // Named type in interfaces
-type UserRole = 'admin' | 'user' | 'guest';
+type UserRole = 'admin' | 'user' | 'guest'
 interface User {
-  role: UserRole;
+  role: UserRole
 }
 
 // Named type in classes
-type Environment = 'dev' | 'prod';
+type Environment = 'dev' | 'prod'
 class Config {
-  mode: Environment;
+  mode: Environment
 }
 ```
 
@@ -49,9 +49,9 @@ class Config {
 
 ```typescript
 // These are fine - they're named types
-type Status = 'pending' | 'success' | 'error';
-type Theme = 'light' | 'dark' | 'auto';
-type Size = 'small' | 'medium' | 'large';
+type Status = 'pending' | 'success' | 'error'
+type Theme = 'light' | 'dark' | 'auto'
+type Size = 'small' | 'medium' | 'large'
 ```
 
 ## Why This Rule Exists
@@ -65,26 +65,28 @@ type Size = 'small' | 'medium' | 'large';
 ## Real-World Example
 
 Instead of:
+
 ```typescript
 async function listCourses(params?: {
-  audience?: 'open' | 'professional';
-  offered_by?: 'Bootcamps' | 'CSAIL' | 'MITx' | 'OCW';
-  offset?: number;
-  limit?: number;
+  audience?: 'open' | 'professional'
+  offered_by?: 'Bootcamps' | 'CSAIL' | 'MITx' | 'OCW'
+  offset?: number
+  limit?: number
 }) {}
 ```
 
 Use:
+
 ```typescript
-type Audience = 'open' | 'professional';
-type OfferedBy = 'Bootcamps' | 'CSAIL' | 'MITx' | 'OCW';
+type Audience = 'open' | 'professional'
+type OfferedBy = 'Bootcamps' | 'CSAIL' | 'MITx' | 'OCW'
 
 type ListCoursesParams = {
-  audience?: Audience;
-  offered_by?: OfferedBy;
-  offset?: number;
-  limit?: number;
-};
+  audience?: Audience
+  offered_by?: OfferedBy
+  offset?: number
+  limit?: number
+}
 
 async function listCourses(params?: ListCoursesParams) {}
 ```
@@ -92,11 +94,13 @@ async function listCourses(params?: ListCoursesParams) {}
 ## Testing
 
 This rule is tested through:
+
 - Unit tests in `no-inline-union-types.spec.js`
 - Integration tests in `/test/union-types/` directory
 - Examples in the `examples/` directory
 
 The rule uses three AST selectors to comprehensively catch inline union patterns:
+
 1. General inline union types (excluding property-specific cases)
 2. Interface properties with literal unions
 3. Class properties with literal unions

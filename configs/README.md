@@ -30,17 +30,23 @@ export const [configName]Config = [{
 ## Available Configs
 
 ### `config-files.js`
+
 Configuration for ESLint/config files themselves.
+
 - **Pattern**: `**/eslint.config.{js,cjs,mjs}`, `**/.eslintrc.{js,cjs}`
 - **Purpose**: Relaxed rules for configuration files
 
 ### `storybook.js`
+
 Configuration for Storybook story files.
+
 - **Pattern**: `**/*.stories.{js,jsx,ts,tsx}`
 - **Purpose**: Enables Storybook-specific linting rules
 
 ### `test-files.js`
+
 Configuration for test and spec files.
+
 - **Pattern**: `**/*.{test,spec}.{js,jsx,ts,tsx}`, `**/test/**`, `**/__tests__/**`
 - **Purpose**: Relaxed rules for test files (allows longer files, multiple exports, etc.)
 
@@ -49,16 +55,16 @@ Configuration for test and spec files.
 These configs are automatically included in the main configuration export from `index.js`:
 
 ```js
-import { testFilesConfig } from "./configs/test-files.js";
-import { storybookConfig } from "./configs/storybook.js";
-import { configFilesConfig } from "./configs/config-files.js";
+import { testFilesConfig } from './configs/test-files.js'
+import { storybookConfig } from './configs/storybook.js'
+import { configFilesConfig } from './configs/config-files.js'
 
 const config = [
   // ... other configs
   ...testFilesConfig,
   ...storybookConfig,
   ...configFilesConfig,
-];
+]
 ```
 
 ## Adding New Configs

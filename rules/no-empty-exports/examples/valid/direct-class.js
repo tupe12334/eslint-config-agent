@@ -1,6 +1,6 @@
 // Valid: Direct class export
 export class Baz {
   constructor() {
-    this.value = 42;
+    this.value = 42
   }
 }

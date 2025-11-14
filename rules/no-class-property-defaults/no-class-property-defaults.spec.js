@@ -1,5 +1,5 @@
-import { RuleTester } from "eslint";
-import { noClassPropertyDefaultsConfig } from "./index.js";
+import { RuleTester } from 'eslint'
+import { noClassPropertyDefaultsConfig } from './index.js'
 
 /**
  * Test suite for no-class-property-defaults rule
@@ -11,9 +11,9 @@ import { noClassPropertyDefaultsConfig } from "./index.js";
 // Create a custom rule for testing our selector
 const noClassPropertyDefaultsRule = {
   meta: {
-    type: "problem",
+    type: 'problem',
     docs: {
-      description: "Disallow class properties with default values",
+      description: 'Disallow class properties with default values',
     },
     messages: {
       noClassPropertyDefaults: noClassPropertyDefaultsConfig.message,
@@ -25,27 +25,27 @@ const noClassPropertyDefaultsRule = {
       [noClassPropertyDefaultsConfig.selector](node) {
         context.report({
           node,
-          messageId: "noClassPropertyDefaults",
-        });
+          messageId: 'noClassPropertyDefaults',
+        })
       },
-    };
+    }
   },
-};
+}
 
 const ruleTester = new RuleTester({
   languageOptions: {
     ecmaVersion: 2022,
-    sourceType: "module",
-    parser: (await import("@typescript-eslint/parser")).default,
+    sourceType: 'module',
+    parser: (await import('@typescript-eslint/parser')).default,
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
       },
     },
   },
-});
+})
 
-ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
+ruleTester.run('no-class-property-defaults', noClassPropertyDefaultsRule, {
   valid: [
     // Valid: No default values, initialized in constructor
     {
@@ -58,7 +58,7 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
           this.age = age;
         }
       }`,
-      name: "constructor initialization",
+      name: 'constructor initialization',
     },
     {
       code: `class Service {
@@ -70,7 +70,7 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
           this.isReady = false;
         }
       }`,
-      name: "constructor with default values",
+      name: 'constructor with default values',
     },
     {
       code: `class Counter {
@@ -84,7 +84,7 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
           this.value = 0;
         }
       }`,
-      name: "method initialization",
+      name: 'method initialization',
     },
     {
       code: `class Handler {
@@ -94,7 +94,7 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
           this.callback = fn;
         }
       }`,
-      name: "method-based property setting",
+      name: 'method-based property setting',
     },
     {
       code: `class Collection {
@@ -104,13 +104,13 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
           this.items = items || [];
         }
       }`,
-      name: "conditional constructor initialization",
+      name: 'conditional constructor initialization',
     },
     {
       code: `class Abstract {
         abstract value: string;
       }`,
-      name: "abstract property without default",
+      name: 'abstract property without default',
     },
     {
       code: `class Readonly {
@@ -120,7 +120,7 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
           this.id = id;
         }
       }`,
-      name: "readonly property without default",
+      name: 'readonly property without default',
     },
   ],
 
@@ -130,15 +130,15 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
       code: `class User {
         name = 'default';
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "string default value",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'string default value',
     },
     {
       code: `class User {
         email = '';
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "empty string default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'empty string default',
     },
 
     // Invalid: Number defaults
@@ -146,15 +146,15 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
       code: `class Counter {
         count = 0;
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "number default value",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'number default value',
     },
     {
       code: `class Settings {
         timeout = 5000;
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "positive number default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'positive number default',
     },
 
     // Invalid: Boolean defaults
@@ -162,15 +162,15 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
       code: `class Feature {
         enabled = false;
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "boolean false default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'boolean false default',
     },
     {
       code: `class Debug {
         verbose = true;
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "boolean true default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'boolean true default',
     },
 
     // Invalid: Array defaults
@@ -178,15 +178,15 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
       code: `class Collection {
         items = [];
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "empty array default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'empty array default',
     },
     {
       code: `class Tags {
         list = ['default'];
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "array with values default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'array with values default',
     },
 
     // Invalid: Object defaults
@@ -194,15 +194,15 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
       code: `class Config {
         settings = {};
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "empty object default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'empty object default',
     },
     {
       code: `class Options {
         config = { debug: false };
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "object with properties default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'object with properties default',
     },
 
     // Invalid: Function defaults
@@ -210,15 +210,15 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
       code: `class Handler {
         callback = () => {};
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "arrow function default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'arrow function default',
     },
     {
       code: `class Processor {
         handler = function() { return null; };
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "function expression default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'function expression default',
     },
 
     // Invalid: Complex expression defaults
@@ -226,22 +226,22 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
       code: `class Random {
         value = Math.random();
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "Math.random() default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'Math.random() default',
     },
     {
       code: `class Timestamp {
         created = new Date();
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "new Date() default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'new Date() default',
     },
     {
       code: `class Api {
         baseUrl = process.env.API_URL || 'localhost';
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "environment variable default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'environment variable default',
     },
 
     // Invalid: Multiple properties with defaults
@@ -252,11 +252,11 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
         active = true;
       }`,
       errors: [
-        { messageId: "noClassPropertyDefaults" },
-        { messageId: "noClassPropertyDefaults" },
-        { messageId: "noClassPropertyDefaults" },
+        { messageId: 'noClassPropertyDefaults' },
+        { messageId: 'noClassPropertyDefaults' },
+        { messageId: 'noClassPropertyDefaults' },
       ],
-      name: "multiple properties with defaults",
+      name: 'multiple properties with defaults',
     },
 
     // Invalid: Mixed valid and invalid
@@ -269,8 +269,8 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
           this.validProp = 'set in constructor';
         }
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "mixed valid and invalid properties",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'mixed valid and invalid properties',
     },
 
     // Invalid: TypeScript specific patterns
@@ -281,25 +281,25 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
         protected config = {};
       }`,
       errors: [
-        { messageId: "noClassPropertyDefaults" },
-        { messageId: "noClassPropertyDefaults" },
-        { messageId: "noClassPropertyDefaults" },
+        { messageId: 'noClassPropertyDefaults' },
+        { messageId: 'noClassPropertyDefaults' },
+        { messageId: 'noClassPropertyDefaults' },
       ],
-      name: "access modifiers with defaults",
+      name: 'access modifiers with defaults',
     },
     {
       code: `class Static {
         static defaultConfig = { debug: false };
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "static property with default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'static property with default',
     },
     {
       code: `class ReadonlyDefault {
         readonly id = 'default-id';
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "readonly property with default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'readonly property with default',
     },
 
     // Invalid: Generic and complex types
@@ -307,21 +307,21 @@ ruleTester.run("no-class-property-defaults", noClassPropertyDefaultsRule, {
       code: `class Generic<T> {
         data: T[] = [];
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "generic type with default",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'generic type with default',
     },
     {
       code: `class Promise {
         result: Promise<string> = Promise.resolve('default');
       }`,
-      errors: [{ messageId: "noClassPropertyDefaults" }],
-      name: "Promise default value",
+      errors: [{ messageId: 'noClassPropertyDefaults' }],
+      name: 'Promise default value',
     },
   ],
-});
+})
 
-console.log("✅ All no-class-property-defaults tests passed!");
-console.log(`   Selector: ${noClassPropertyDefaultsConfig.selector}`);
-console.log(`   Message: ${noClassPropertyDefaultsConfig.message}`);
+console.log('✅ All no-class-property-defaults tests passed!')
+console.log(`   Selector: ${noClassPropertyDefaultsConfig.selector}`)
+console.log(`   Message: ${noClassPropertyDefaultsConfig.message}`)
 
-export { noClassPropertyDefaultsRule };
+export { noClassPropertyDefaultsRule }

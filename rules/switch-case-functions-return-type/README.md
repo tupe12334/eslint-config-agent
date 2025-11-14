@@ -5,6 +5,7 @@ This rule enforces explicit return type annotations for arrow functions and func
 ## Purpose
 
 Functions defined inside switch cases should have explicit return type annotations to:
+
 - Ensure type consistency across different case branches
 - Make function contracts clear and explicit within switch logic
 - Prevent accidental type inconsistencies in case-specific function implementations
@@ -14,40 +15,43 @@ Functions defined inside switch cases should have explicit return type annotatio
 This rule restricts the following patterns:
 
 ❌ **Incorrect:**
+
 ```typescript
 function processAction(action) {
   switch (action.type) {
     case 'increment':
-      const handler = (value) => value + 1; // Missing return type
-      return handler(action.payload);
+      const handler = value => value + 1 // Missing return type
+      return handler(action.payload)
     case 'decrement':
-      const processor = function(value) { // Missing return type
-        return value - 1;
-      };
-      return processor(action.payload);
+      const processor = function (value) {
+        // Missing return type
+        return value - 1
+      }
+      return processor(action.payload)
     case 'multiply': {
-      const multiplier = (value) => value * 2; // Missing return type
-      return multiplier(action.payload);
+      const multiplier = value => value * 2 // Missing return type
+      return multiplier(action.payload)
     }
   }
 }
 ```
 
 ✅ **Correct:**
+
 ```typescript
 function processAction(action) {
   switch (action.type) {
     case 'increment':
-      const handler = (value): number => value + 1;
-      return handler(action.payload);
+      const handler = (value): number => value + 1
+      return handler(action.payload)
     case 'decrement':
-      const processor = function(value): number {
-        return value - 1;
-      };
-      return processor(action.payload);
+      const processor = function (value): number {
+        return value - 1
+      }
+      return processor(action.payload)
     case 'multiply': {
-      const multiplier = (value): number => value * 2;
-      return multiplier(action.payload);
+      const multiplier = (value): number => value * 2
+      return multiplier(action.payload)
     }
   }
 }

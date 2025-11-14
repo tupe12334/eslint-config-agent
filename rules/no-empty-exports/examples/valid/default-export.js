@@ -1,3 +1,3 @@
 // Valid: Default export
-const something = { value: 42 };
-export default something;
+const something = { value: 42 }
+export default something
