@@ -72,7 +72,7 @@ Use `git add` with specific file paths, NOT `git add .` or `git add -A`:
 # Example: Stage specific files
 git add .kiro/specs/feature-name/
 git add src/components/NewComponent.tsx
-git add tests/NewComponent.test.tsx
+git add src/components/NewComponent.spec.tsx
 ```
 
 **Verify staging**:

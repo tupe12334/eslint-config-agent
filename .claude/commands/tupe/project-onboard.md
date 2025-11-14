@@ -94,7 +94,7 @@ Conduct a comprehensive exploration and learning session about the current proje
 2. **Explore Directory Structure**:
    - Identify main source directories (src/, lib/, app/)
    - Understand organization patterns (feature-based, layer-based)
-   - Locate tests (test/, **tests**/, _.test._, _.spec._)
+   - Locate tests (\*.spec.ts files next to logic, or test/ directories)
    - Find documentation (docs/, documentation/)
 
 3. **Analyze Code Patterns**:

@@ -120,8 +120,8 @@ For each pending task in sequential order:
 **Test File Naming**:
 
 - Follow project conventions from `structure.md`
-- Common patterns: `*.test.ts`, `*.spec.ts`, `__tests__/*.ts`
-- Place tests near implementation or in dedicated test directories
+- Common pattern: `*.spec.ts` files next to implementation (DDD approach)
+- Place tests next to the logic they test for better discoverability
 
 #### 2. GREEN Phase - Minimal Implementation
 

@@ -200,7 +200,7 @@ fi
     "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
 }
 ```
 
@@ -228,7 +228,7 @@ export default defineConfig({
       exclude: [
         'node_modules/',
         'dist/',
-        '**/*.test.ts',
+        '**/*.spec.ts',
         '**/*.config.ts',
         'coverage/',
       ],
@@ -239,23 +239,20 @@ export default defineConfig({
 
 ### Step 2: Create Example Test Structure
 
-If `src/__tests__/` doesn't exist:
-
-```bash
-mkdir -p src/__tests__
-```
-
-Create example test file `src/__tests__/example.test.ts`:
+Create an example test file next to the source file `src/index.spec.ts`:
 
 ```typescript
 import { describe, it, expect } from 'vitest'
+import { hello } from './index.js'
 
-describe('Example Test Suite', () => {
-  it('should pass', () => {
-    expect(true).toBe(true)
+describe('hello', () => {
+  it('should return greeting with name', () => {
+    expect(hello('World')).toBe('Hello, World!')
   })
 })
 ```
+
+**Note**: Following DDD principles, test files (`.spec.ts`) should be placed next to their corresponding logic files, not in a separate `__tests__/` directory.
 
 ## Phase 5: Linting and Formatting Setup
 
@@ -881,7 +878,7 @@ docs(readme): update installation instructions
 - Write tests for all new features and bug fixes
 - Ensure all tests pass: `pnpm test`
 - Maintain or improve code coverage
-- Tests should be in `src/__tests__/` directory
+- Tests should be in `.spec.ts` files next to their corresponding logic files (DDD approach)
 - Use descriptive test names
 
 ### Git Hooks
@@ -1237,7 +1234,7 @@ Version: X.X.X
   3. Verify LICENSE file has correct copyright year and author
   4. Test git hooks (make a commit to test pre-commit, try pushing to test pre-push)
   5. Write your package code in src/
-  6. Add tests in src/__tests__/
+  6. Add tests in `.spec.ts` files next to your logic files (DDD approach)
   7. Update package.json metadata (author, keywords, description, repository URL)
   8. Add project-specific words to cspell.json
   9. Push to GitHub to trigger CI
@@ -1312,7 +1309,7 @@ Version: X.X.X
 
 5. **Tests fail**:
    - Check vitest.config.ts exists
-   - Verify test files match pattern `*.test.ts`
+   - Verify test files match pattern `*.spec.ts`
    - Run locally first: `pnpm test`
 
 ## Success Criteria
