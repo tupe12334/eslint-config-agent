@@ -3,9 +3,9 @@
 
 echo "🔍 Running pre-push checks..."
 
-# Run linting
+# Run linting (production code only, excluding test files with intentional errors)
 echo "📝 Checking linting..."
-pnpm lint || {
+pnpm test:ci || {
   echo "❌ Linting failed. Please fix errors before pushing."
   exit 1
 }
@@ -24,10 +24,10 @@ pnpm spell || {
   exit 1
 }
 
-# Run tests
-echo "🧪 Running tests..."
-pnpm test || {
-  echo "❌ Tests failed. Please fix failing tests before pushing."
+# Run validation
+echo "🧪 Running validation..."
+pnpm validate || {
+  echo "❌ Validation failed. Please fix errors before pushing."
   exit 1
 }
 
