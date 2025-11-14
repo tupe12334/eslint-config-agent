@@ -1,8 +1,11 @@
+dist
 node_modules
 coverage
 *.min.js
 pnpm-lock.yaml
 CHANGELOG.md
 .github
+.claude
+.kiro
 rules/**/examples/**
 test/export/valid/**
