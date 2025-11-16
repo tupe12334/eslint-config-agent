@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.8.4](https://github.com/tupe12334/eslint-config/compare/v1.8.3...v1.8.4) (2025-11-16)
+
+### Features
+
+* Add comprehensive package setup and validation guide ([d27bed3](https://github.com/tupe12334/eslint-config/commit/d27bed3ffe620e92b01873dbb1f12c0c7a4a752a))
+* add development tooling and format codebase ([6b53911](https://github.com/tupe12334/eslint-config/commit/6b539115aa19d362f5dc3b26ffc78cf4fb191957))
+* **import:** enforce no empty lines between imports ([979f270](https://github.com/tupe12334/eslint-config/commit/979f27056b022478a19d2cfc407e4ba369178e95))
+* **todos:** update testing requirements for .tsx and .jsx files ([99f882b](https://github.com/tupe12334/eslint-config/commit/99f882bd533cad8e3f4c20acd17e9187fbb6e52e))
+
+### Bug Fixes
+
+* **ci:** remove failing test step, keep validation only ([1f482e6](https://github.com/tupe12334/eslint-config/commit/1f482e6813062875fd374f807bab0243d78b7bba))
+* **ci:** remove Node.js 18 from test matrix ([3f2339e](https://github.com/tupe12334/eslint-config/commit/3f2339e8b112bedce5f2394599d96f7884bd11d7))
+* **ci:** remove pnpm version conflict in workflow ([f45f54e](https://github.com/tupe12334/eslint-config/commit/f45f54e4377c68f07d162555dd8322c6a03ae8fb))
+* **ci:** use test:ci instead of lint to exclude test files ([b3ddcf6](https://github.com/tupe12334/eslint-config/commit/b3ddcf605951f7cc75e292fe145bb67d3a82b032))
+* **hooks:** use test:ci in pre-push to exclude test files ([b86e769](https://github.com/tupe12334/eslint-config/commit/b86e769ef2b80caeb55aff8f8c8c24b7d0a94888))
+* **prettier:** exclude .claude and .kiro directories ([c7fedd4](https://github.com/tupe12334/eslint-config/commit/c7fedd4039e3e30f56073046e42930f81b69c589))
+
 ## [1.8.3](https://github.com/tupe12334/eslint-config/compare/v1.8.2...v1.8.3) (2025-11-13)
 
 ### Features
