@@ -12,7 +12,12 @@ export const importRules = {
   'import/no-extraneous-dependencies': ['off'],
   'import/no-unresolved': 'off',
   'import/no-absolute-path': 'off',
-  'import/order': 'off',
+  'import/order': [
+    'error',
+    {
+      'newlines-between': 'never',
+    },
+  ],
   'import/newline-after-import': 'off',
   'import/first': 'error',
   'import/prefer-default-export': 'off',
