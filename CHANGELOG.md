@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.8.5](https://github.com/tupe12334/eslint-config/compare/v1.8.4...v1.8.5) (2025-11-16)
+
+### Bug Fixes
+
+* **package-setup:** use modern ESLint CLI syntax for flat config ([cf70b95](https://github.com/tupe12334/eslint-config/commit/cf70b954886e2687d3809e7ece234a267e7cf88a))
+
 ## [1.8.4](https://github.com/tupe12334/eslint-config/compare/v1.8.3...v1.8.4) (2025-11-16)
 
 ### Features
