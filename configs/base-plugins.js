@@ -34,6 +34,13 @@ export const basePluginsConfig = [
             '**/*.config.ts',
             '**/eslint.config.js',
             '**/*.stories.{js,jsx,ts,tsx}',
+            // Common error file patterns
+            // Note: For files that only export Error classes but don't follow
+            // naming conventions, add: /* eslint-disable ddd/require-spec-file */
+            '**/*-error.{js,ts}',
+            '**/*.error.{js,ts}',
+            '**/errors/**',
+            '**/exceptions/**',
           ],
         },
       ],

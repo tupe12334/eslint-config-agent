@@ -241,6 +241,7 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - Type definition files (`.d.ts`)
 - Storybook files (`.stories.tsx`)
 - Example files in `examples/` directories
+- Error files (`.error.ts`, `-error.ts`, `errors/`, `exceptions/`)
 
 **Example structure:**
 
@@ -256,21 +257,41 @@ src/
 ```
 
 **Disabling for specific files:**
-If you need to disable this requirement for specific files, you can add an override in your `eslint.config.js`:
 
-```javascript
-import baseConfig from 'eslint-config-agent'
+If you have files that only export simple Error classes or other boilerplate without testable logic, you can:
 
-export default [
-  ...baseConfig,
-  {
-    files: ['src/legacy/**/*.ts'],
-    rules: {
-      'ddd/require-spec-file': 'off',
-    },
-  },
-]
-```
+1. **Use a naming convention** (automatically excluded):
+   - `my-error.ts`, `configuration-error.ts`
+   - `my.error.ts`, `configuration.error.ts`
+   - Place in `errors/` or `exceptions/` directory
+
+2. **Add an inline comment** for non-conventional names:
+
+   ```typescript
+   /* eslint-disable ddd/require-spec-file */
+   export class ConfigurationError extends Error {
+     constructor(message: string) {
+       super(message)
+       this.name = 'ConfigurationError'
+     }
+   }
+   ```
+
+3. **Disable for entire directories** in your `eslint.config.js`:
+
+   ```javascript
+   import baseConfig from 'eslint-config-agent'
+
+   export default [
+     ...baseConfig,
+     {
+       files: ['src/legacy/**/*.ts'],
+       rules: {
+         'ddd/require-spec-file': 'off',
+       },
+     },
+   ]
+   ```
 
 ### Configuration Philosophy
 
