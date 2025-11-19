@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.8.6](https://github.com/tupe12334/eslint-config/compare/v1.8.5...v1.8.6) (2025-11-19)
+
+### Features
+
+* **ddd:** allow error-only files to skip spec requirement ([01fae90](https://github.com/tupe12334/eslint-config/commit/01fae90116139ec8c4d54773626173ae5938b595))
+
 ## [1.8.5](https://github.com/tupe12334/eslint-config/compare/v1.8.4...v1.8.5) (2025-11-16)
 
 ### Bug Fixes
