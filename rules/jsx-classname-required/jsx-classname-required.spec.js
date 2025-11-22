@@ -69,6 +69,17 @@ ruleTester.run('jsx-classname-required', jsxClassNameRequiredRule, {
       code: '<React.Profiler id="test" onRender={() => {}}><div className="content">Content</div></React.Profiler>',
     },
 
+    // Title element (should be ignored - used in document head)
+    {
+      code: '<title>Page Title</title>',
+    },
+    {
+      code: '<div className="page"><title>My Page</title><h1 className="heading">Welcome</h1></div>',
+    },
+    {
+      code: '<title>Page Title with Dynamic Content</title>',
+    },
+
     // Mixed cases with valid HTML elements
     {
       code: `

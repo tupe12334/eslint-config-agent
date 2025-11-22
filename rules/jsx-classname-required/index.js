@@ -2,7 +2,7 @@
  * ESLint rule to require className attribute on HTML elements in JSX
  *
  * This rule enforces that all HTML elements in JSX must have a non-empty className attribute.
- * It excludes React components (starting with capital letters) and fragments.
+ * It excludes React components (starting with capital letters), fragments, and title elements.
  *
  * Examples:
  * - ❌ <div>Content</div>
@@ -12,6 +12,7 @@
  * - ✅ <Fragment>Content</Fragment> (ignored - fragment)
  * - ✅ <React.Fragment>Content</React.Fragment> (ignored - React fragment)
  * - ✅ <React.StrictMode>Content</React.StrictMode> (ignored - React component)
+ * - ✅ <title>Page Title</title> (ignored - title element)
  */
 
 const jsxClassNameRequiredRule = {
@@ -57,6 +58,11 @@ const jsxClassNameRequiredRule = {
           node.name.object.name === 'React' &&
           /^[A-Z]/.test(node.name.property.name)
         ) {
+          return
+        }
+
+        // Skip if this is a title element (used in document head)
+        if (node.name.type === 'JSXIdentifier' && node.name.name === 'title') {
           return
         }
 
