@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.8.7](https://github.com/tupe12334/eslint-config/compare/v1.8.6...v1.8.7) (2025-11-22)
+
+### Features
+
+* **jsx-classname:** exempt title elements from className requirement ([c55a982](https://github.com/tupe12334/eslint-config/commit/c55a9829265b699c643239a634fde7e437561d72))
+
 ## [1.8.6](https://github.com/tupe12334/eslint-config/compare/v1.8.5...v1.8.6) (2025-11-19)
 
 ### Features
