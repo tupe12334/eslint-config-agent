@@ -126,7 +126,6 @@ export default noDefaultClassExportConfig
 
 // Named exports for specific use cases
 export {
-  noDefaultClassExportConfig as noDefaultClassExport,
   noDefaultClassExpressionConfig as noDefaultClassExpression,
   noDefaultClassExportRules as allNoDefaultClassExportRules,
 }

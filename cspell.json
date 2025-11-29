@@ -1,6 +1,12 @@
 {
   "version": "0.2",
-  "language": "en",
+  "language": "en,he",
+  "languageSettings": [
+    {
+      "languageId": "*",
+      "locale": "en,he"
+    }
+  ],
   "words": [
     "tupe",
     "pnpm",
@@ -30,7 +36,9 @@
     "multilines",
     "incrementer",
     "decrementer",
-    "kiro"
+    "kiro",
+    "commitlint",
+    "knip"
   ],
   "ignorePaths": [
     "node_modules",

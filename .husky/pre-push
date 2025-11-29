@@ -24,6 +24,13 @@ pnpm spell || {
   exit 1
 }
 
+# Check for unused code
+echo "🔍 Checking for unused code..."
+pnpm knip || {
+  echo "❌ Knip found unused code. Please review and fix."
+  exit 1
+}
+
 # Run validation
 echo "🧪 Running validation..."
 pnpm validate || {

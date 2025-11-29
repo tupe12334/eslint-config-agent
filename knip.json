@@ -1,0 +1,26 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": ["index.js", "exports/ddd.js"],
+  "project": ["**/*.js"],
+  "ignore": [
+    "test/**",
+    "scripts/**",
+    "rules/**/examples/**",
+    "rules/**/*.spec.js",
+    "rules/error-only-exports/**",
+    "rules/no-default-class-export/**",
+    "coverage/**",
+    "eslint.config.js",
+    ".github/**"
+  ],
+  "ignoreDependencies": [
+    "@eslint/eslintrc",
+    "@typescript-eslint/eslint-plugin",
+    "@typescript-eslint/parser",
+    "@typescript-eslint/rule-tester",
+    "eslint-plugin-preact"
+  ],
+  "ignoreBinaries": ["claude"],
+  "ignoreExportsUsedInFile": true,
+  "includeEntryExports": true
+}
