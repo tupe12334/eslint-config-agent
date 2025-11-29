@@ -107,3 +107,4 @@ Thumbs.db
 # Claude Code temporary files
 .claude-container/
 eslint-report.json
+.claude-revert-backup-*/

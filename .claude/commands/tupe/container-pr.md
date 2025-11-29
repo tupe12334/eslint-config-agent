@@ -6,6 +6,24 @@ description: Execute work in an isolated Docker container with gh and npm creden
 
 You are an expert containerized development workflow manager. Your mission is to execute all requested work inside an isolated Docker container and create a pull request when finished.
 
+## 🔒 CRITICAL: Complete Isolation Guarantee
+
+**THE LOCAL REPOSITORY IS NEVER MODIFIED**:
+
+- ✅ Container clones repository from remote (NOT from local)
+- ✅ All work happens in container's `/tmp/workspace`
+- ✅ NO volume mounts of the local repository
+- ✅ All git operations happen inside the container
+- ✅ Local repository stays on original branch with NO changes
+- ✅ New branch exists ONLY on remote until manually fetched
+
+**Benefits**:
+
+- Multiple agents can work simultaneously without conflicts
+- Local environment remains pristine
+- Safe experimentation - just delete the remote branch to rollback
+- Guaranteed reproducibility
+
 ## Primary Use Case: Concurrent Multi-Agent Development
 
 This command enables **multiple Claude agents to work simultaneously** on different tasks by providing complete isolation:
@@ -39,14 +57,16 @@ All running concurrently without conflicts!
 
 ## Overview
 
-This command creates an isolated development environment where:
+This command creates a completely isolated development environment where:
 
-1. All work happens inside a Docker container (complete isolation)
-2. GitHub and npm credentials are securely passed through
-3. Changes are committed and pushed to a new branch
-4. A pull request is automatically created
-5. The PR URL is returned to the user
-6. Multiple instances can run in parallel for concurrent agent workflows
+1. Repository is cloned INSIDE the container (local repo never touched)
+2. All work happens inside the container's `/tmp/workspace`
+3. GitHub and npm credentials are securely passed through
+4. New branch is created, changes committed, and pushed from inside the container
+5. A pull request is automatically created
+6. The PR URL is returned to the user
+7. Local repository remains pristine on the original branch
+8. Multiple instances can run in parallel without any conflicts
 
 ## Phase 1: Environment Setup and Validation
 
@@ -113,28 +133,21 @@ echo "✅ Captured credentials for user: $GH_USER"
 Understand the current state:
 
 ```bash
-# Check for uncommitted changes
-git status --porcelain
-
-# Get current branch
+# Get current branch (will be used as base for new branch in container)
 CURRENT_BRANCH=$(git branch --show-current)
 
-# Check if branch is up to date with remote
-git fetch origin
-git status
+# Get repository URL
+REPO_URL=$(git remote get-url origin)
 
 # Get repository name
 REPO_NAME=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
 
 echo "Repository: $REPO_NAME"
-echo "Current branch: $CURRENT_BRANCH"
+echo "Repository URL: $REPO_URL"
+echo "Base branch: $CURRENT_BRANCH"
 ```
 
-**Important**: If there are uncommitted changes, ask the user:
-
-- Should they be included in the containerized work?
-- Should they be stashed first?
-- Should the command abort?
+**Important**: Local uncommitted changes don't matter since the container will clone a fresh copy from the remote. However, if the user wants their local uncommitted changes included, they should commit and push them first, or this command isn't the right choice.
 
 ## Phase 2: Container Preparation
 
@@ -221,7 +234,11 @@ echo "✅ Container image built: claude-workspace:latest"
 
 ## Phase 3: Execute Work in Container
 
-### Step 1: Create New Branch
+**CRITICAL**: All work happens INSIDE the container. The local repository remains completely untouched.
+
+### Step 1: Prepare Container Environment Script
+
+Create a script that will run inside the container to do ALL the work:
 
 ```bash
 # Generate branch name based on task
@@ -229,143 +246,211 @@ TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 TASK_SLUG=$(echo "$TASK_DESCRIPTION" | tr '[:upper:]' '[:lower:]' | tr -c '[:alnum:]' '-' | cut -c1-40)
 NEW_BRANCH="claude/containerized-work-${TIMESTAMP}"
 
-# Create and checkout new branch
+# Get repository URL
+REPO_URL=$(git remote get-url origin)
+
+# Get current branch to base work on
+BASE_BRANCH=$(git branch --show-current)
+
+echo "Repository: $REPO_URL"
+echo "Base branch: $BASE_BRANCH"
+echo "New branch: $NEW_BRANCH"
+```
+
+### Step 2: Create Container Execution Script
+
+**IMPORTANT**: This script will clone the repository INSIDE the container, make changes, commit, and push. The local repository is NEVER modified.
+
+```bash
+# Create script that runs inside container
+cat > .claude-container/work-script.sh << 'SCRIPT_EOF'
+#!/bin/bash
+set -e
+
+echo "🔧 Setting up container environment..."
+
+# Configure git
+git config --global user.name "$GIT_USER_NAME"
+git config --global user.email "$GIT_USER_EMAIL"
+git config --global init.defaultBranch main
+
+# Authenticate GitHub CLI
+echo "$GH_TOKEN" | gh auth login --with-token
+
+# Configure npm if token exists
+if [ -n "$NPM_TOKEN" ]; then
+  echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+fi
+
+echo "📦 Cloning repository inside container..."
+cd /tmp
+git clone "$REPO_URL" workspace
+cd workspace
+
+echo "🌿 Creating new branch: $NEW_BRANCH"
 git checkout -b "$NEW_BRANCH"
 
-echo "✅ Created new branch: $NEW_BRANCH"
+echo "⚙️  Executing work inside container..."
+# WORK COMMANDS WILL BE INSERTED HERE
+# This section will be dynamically populated with the actual work
+
+echo "✅ Work completed inside container"
+SCRIPT_EOF
+
+chmod +x .claude-container/work-script.sh
 ```
 
-### Step 2: Start Container with Mounted Repository
+### Step 3: Execute Work Commands Inside Container
+
+For each operation the user requests, add it to the work script and execute:
 
 ```bash
-# Start container with all necessary configurations
-docker run -it \
-  --name claude-work-${TIMESTAMP} \
-  --rm \
-  -v "$(pwd):/workspace" \
-  -e GH_TOKEN="${GH_TOKEN}" \
-  -e NPM_TOKEN="${NPM_TOKEN}" \
-  -e GIT_USER_NAME="${GIT_USER_NAME}" \
-  -e GIT_USER_EMAIL="${GIT_USER_EMAIL}" \
-  -w /workspace \
-  claude-workspace:latest \
-  /bin/bash -c '
-    # Configure git inside container
-    git config --global user.name "$GIT_USER_NAME"
-    git config --global user.email "$GIT_USER_EMAIL"
+# Function to add command to work script
+add_work_command() {
+  local cmd="$1"
+  # Insert before the "Work completed" line
+  sed -i '' "/# This section will be dynamically populated/a\\
+$cmd
+" .claude-container/work-script.sh
+}
 
-    # Authenticate gh
-    echo "$GH_TOKEN" | gh auth login --with-token
-
-    # Configure npm if token exists
-    if [ -n "$NPM_TOKEN" ]; then
-      echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-    fi
-
-    # Now execute the actual work
-    # [WORK COMMANDS GO HERE]
-  '
-```
-
-**IMPORTANT**: For the actual implementation, you will NOT run an interactive container. Instead, you will:
-
-1. Execute each command/operation individually via `docker run`
-2. Each command mounts the same volume
-3. This allows you to see output and control execution
-
-### Step 3: Execute Work Commands
-
-For each operation the user requests, run it in the container:
-
-```bash
 # Example: Install dependencies
-docker run --rm \
-  -v "$(pwd):/workspace" \
-  -w /workspace \
-  claude-workspace:latest \
-  /bin/bash -c 'npm install'
+add_work_command "echo '📥 Installing dependencies...'"
+add_work_command "npm install"
+
+# Example: Make code changes
+add_work_command "echo '✏️  Making code changes...'"
+add_work_command "# [Your actual code changes here]"
 
 # Example: Run tests
-docker run --rm \
-  -v "$(pwd):/workspace" \
-  -w /workspace \
-  claude-workspace:latest \
-  /bin/bash -c 'npm test'
+add_work_command "echo '🧪 Running tests...'"
+add_work_command "npm test"
 
 # Example: Build project
-docker run --rm \
-  -v "$(pwd):/workspace" \
-  -w /workspace \
-  claude-workspace:latest \
-  /bin/bash -c 'npm run build'
-
-# For each command:
-# 1. Run in container
-# 2. Check exit code
-# 3. Show output to user
-# 4. Handle errors appropriately
+add_work_command "echo '🔨 Building project...'"
+add_work_command "npm run build"
 ```
 
 **Work Execution Strategy**:
 
 - Use the TodoWrite tool to track each step of the requested work
-- Execute each step in the container using `docker run`
-- Verify each step succeeded before proceeding
-- If a step fails, analyze the error and retry or inform the user
+- For each step, add the corresponding commands to the work script
+- Commands execute in sequence inside the container
+- All changes happen in the container's /tmp/workspace, NOT the host
 
-## Phase 4: Commit and Push Changes
+### Step 4: Run Container with Isolated Work
 
-### Step 1: Review Changes
+**CRITICAL**: No volume mounts to the local repository! Everything happens inside the container.
 
 ```bash
-# Check what changed (outside container, using host git)
-git status
-git diff
-git diff --stat
+# Run the container with the work script
+# NOTE: We only mount the work-script.sh, NOT the repository
+docker run --rm \
+  --name claude-work-${TIMESTAMP} \
+  -v "$(pwd)/.claude-container/work-script.sh:/work-script.sh:ro" \
+  -e GH_TOKEN="${GH_TOKEN}" \
+  -e NPM_TOKEN="${NPM_TOKEN}" \
+  -e GIT_USER_NAME="${GIT_USER_NAME}" \
+  -e GIT_USER_EMAIL="${GIT_USER_EMAIL}" \
+  -e REPO_URL="${REPO_URL}" \
+  -e NEW_BRANCH="${NEW_BRANCH}" \
+  -e BASE_BRANCH="${BASE_BRANCH}" \
+  -e TASK_DESCRIPTION="${TASK_DESCRIPTION}" \
+  -e BASE_IMAGE="${BASE_IMAGE}" \
+  claude-workspace:latest \
+  /bin/bash /work-script.sh
 
-# List all changed files
-git status --porcelain
+# Check exit code
+if [ $? -eq 0 ]; then
+  echo "✅ Container work completed successfully"
+else
+  echo "❌ Container work failed"
+  exit 1
+fi
 ```
 
-Show the user a summary of changes and ask for confirmation if needed.
+**Key Points**:
 
-### Step 2: Commit Changes
+- Repository is cloned INSIDE the container (`/tmp/workspace`)
+- No `-v $(pwd):/workspace` mount (local repo not touched!)
+- All git operations happen inside the container
+- Work script is read-only mount
+- Local repository remains pristine
+
+## Phase 4: Commit and Push Changes (Inside Container)
+
+**IMPORTANT**: This phase happens INSIDE the container, not on the host!
+
+The work script (from Phase 3) should include these commands at the end:
 
 ```bash
-# Stage all changes
+# Add to the work-script.sh template
+cat >> .claude-container/work-script.sh << 'COMMIT_EOF'
+
+echo "📝 Reviewing changes made in container..."
+git status
+git diff --stat
+
+echo "💾 Staging all changes..."
 git add -A
 
-# Create comprehensive commit message
+echo "📝 Creating commit..."
 COMMIT_MSG="feat: containerized work - ${TASK_DESCRIPTION}
 
 All work executed in isolated Docker container:
 - Base image: ${BASE_IMAGE}
 - Container: claude-workspace:latest
+- Branch: ${NEW_BRANCH}
 
-Changes:
+Changes made entirely inside container:
 $(git diff --cached --stat)
 
 🤖 Generated with Claude Code - Container Workflow
 Co-Authored-By: Claude <noreply@anthropic.com>"
 
-# Commit
 git commit -m "$COMMIT_MSG"
 
-echo "✅ Changes committed"
-```
-
-### Step 3: Push to Remote
-
-```bash
-# Push new branch to remote
+echo "🚀 Pushing branch to remote..."
 git push -u origin "$NEW_BRANCH"
 
-echo "✅ Branch pushed to remote: $NEW_BRANCH"
+echo "✅ Changes committed and pushed from container"
+COMMIT_EOF
 ```
 
-## Phase 5: Create Pull Request
+**Verification**:
 
-### Step 1: Generate PR Description
+```bash
+# After container completes, verify locally that nothing changed
+git status  # Should show "nothing to commit, working tree clean"
+git log -1  # Should show the last commit BEFORE container work
+git branch  # Should NOT show the new branch
+
+# The new branch exists ONLY on the remote
+git fetch origin
+git branch -r | grep "$NEW_BRANCH"  # Should show origin/$NEW_BRANCH
+```
+
+## Phase 5: Create Pull Request (On Host)
+
+**Note**: The branch now exists on the remote. We fetch it and create a PR from the host without checking it out.
+
+### Step 1: Fetch the New Branch
+
+```bash
+# Fetch the new branch that was pushed from the container
+echo "📥 Fetching new branch from remote..."
+git fetch origin "$NEW_BRANCH"
+
+# Verify the branch exists on remote
+if git branch -r | grep -q "origin/$NEW_BRANCH"; then
+  echo "✅ Branch found on remote: origin/$NEW_BRANCH"
+else
+  echo "❌ Branch not found on remote. Container push may have failed."
+  exit 1
+fi
+```
+
+### Step 2: Generate PR Description
 
 Create a comprehensive PR description:
 
@@ -376,11 +461,12 @@ Create a comprehensive PR description:
 
 ## Work Environment
 
-All changes were made in an isolated Docker container to ensure reproducibility:
+All changes were made in an **isolated Docker container** - your local repository was **never modified**:
 
 - **Base Image**: `${BASE_IMAGE}`
 - **Container**: `claude-workspace:latest`
-- **Credentials**: GitHub CLI and npm (if needed)
+- **Isolation**: Complete - repository cloned inside container
+- **Local Impact**: Zero - local repository pristine
 
 ## Changes Made
 
@@ -388,10 +474,10 @@ All changes were made in an isolated Docker container to ensure reproducibility:
 
 ## Testing
 
-- [ ] All tests pass
-- [ ] Build succeeds
+- [ ] All tests pass in container
+- [ ] Build succeeds in container
 - [ ] No linting errors
-- [ ] Changes verified in container
+- [ ] Changes verified in isolated environment
 
 ## Implementation Details
 
@@ -404,6 +490,20 @@ All changes were made in an isolated Docker container to ensure reproducibility:
 
 [Show Dockerfile content]
 \`\`\`
+
+</details>
+
+<details>
+<summary>Work Execution</summary>
+
+All work happened inside the container:
+
+1. Repository cloned to `/tmp/workspace` inside container
+2. New branch created inside container
+3. Changes made inside container
+4. Tests run inside container
+5. Committed and pushed from inside container
+6. **Local repository never touched**
 
 </details>
 
@@ -423,13 +523,15 @@ All changes were made in an isolated Docker container to ensure reproducibility:
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
-### Step 2: Create the PR
+### Step 3: Create the PR
 
 ```bash
 # Determine base branch (usually main or master)
-BASE_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+if [ -z "$BASE_BRANCH" ]; then
+  BASE_BRANCH=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+fi
 
-# Create PR using gh
+# Create PR using gh (targeting the remote branch)
 PR_URL=$(gh pr create \
   --base "$BASE_BRANCH" \
   --head "$NEW_BRANCH" \
@@ -442,7 +544,7 @@ EOF
 echo "✅ Pull Request Created: $PR_URL"
 ```
 
-### Step 3: Add Labels and Metadata
+### Step 4: Add Labels and Metadata
 
 ```bash
 # Add relevant labels
@@ -462,22 +564,37 @@ gh pr edit "$PR_URL" --add-assignee "@me"
 ### Step 1: Cleanup Container Artifacts
 
 ```bash
-# Remove container Dockerfile directory
+# Remove container working directory
 rm -rf .claude-container/
 
-# Clean up any Docker images if requested
+# Clean up Docker image if requested
 # docker rmi claude-workspace:latest
 
 echo "✅ Cleanup complete"
 ```
 
-### Step 2: Return to Original Branch
+### Step 2: Verify Local Repository Untouched
 
 ```bash
-# Switch back to original branch
-git checkout "$CURRENT_BRANCH"
+# Confirm local repository was never modified
+echo "🔍 Verifying local repository state..."
 
-echo "✅ Returned to branch: $CURRENT_BRANCH"
+LOCAL_STATUS=$(git status --porcelain)
+if [ -z "$LOCAL_STATUS" ]; then
+  echo "✅ Local repository pristine (no changes)"
+else
+  echo "⚠️  Local repository has changes (may be pre-existing)"
+  git status
+fi
+
+# Verify we're still on the original branch
+CURRENT=$(git branch --show-current)
+echo "✅ Still on original branch: $CURRENT"
+
+# Show that the new branch only exists on remote
+echo "📍 New branch location: remote only"
+git branch | grep "$NEW_BRANCH" || echo "  ✅ Not in local branches (as expected)"
+git branch -r | grep "$NEW_BRANCH" && echo "  ✅ Found in remote branches"
 ```
 
 ### Step 3: Final Summary
@@ -488,11 +605,17 @@ Provide a comprehensive summary to the user:
 ✅ Containerized Workflow Complete!
 
 📋 Summary:
-- Branch: ${NEW_BRANCH}
+- Branch: ${NEW_BRANCH} (remote only)
 - Base Image: ${BASE_IMAGE}
 - Commits: [number of commits]
 - Files Changed: [number of files]
 - Pull Request: ${PR_URL}
+
+🔒 Isolation Verified:
+- Local repository: ✅ Pristine (never modified)
+- Local branch: ✅ Still on ${CURRENT_BRANCH}
+- Work location: Container only (/tmp/workspace)
+- Changes pushed: From container to remote
 
 🔗 Next Steps:
 1. Review the PR: ${PR_URL}
@@ -500,8 +623,11 @@ Provide a comprehensive summary to the user:
 3. Monitor CI/CD checks
 4. Merge when ready
 
-💡 The new branch is still available if you need to make changes:
+💡 To work with the branch locally (optional):
+   git fetch origin
    git checkout ${NEW_BRANCH}
+
+⚠️  Note: The branch exists ONLY on the remote until you check it out.
 ```
 
 ## Usage Examples
@@ -662,27 +788,48 @@ Options:
 
 ## Important Notes
 
+### Critical: Complete Isolation
+
+**The local repository is NEVER modified**:
+
+1. Container clones repository from remote (not from local files)
+2. All work happens in container's `/tmp/workspace`
+3. No volume mounts of the local repository
+4. All git operations (branch, commit, push) happen in container
+5. Local repository remains pristine on the original branch
+6. New branch exists ONLY on remote until manually checked out
+
+**This enables**:
+
+- Multiple agents working simultaneously without conflicts
+- Safe experimentation without affecting local state
+- Clean rollback (just delete the remote branch)
+- Guaranteed reproducibility
+
 ### Security Considerations
 
 1. **Credentials**: GitHub and npm tokens are passed as environment variables, never written to files
-2. **Isolation**: Container provides isolation from host system
+2. **Complete Isolation**: Container has no access to local file system (except work script)
 3. **Cleanup**: Tokens only exist during container runtime
-4. **Volume Mounts**: Only current repository is mounted, not entire home directory
+4. **No Local Impact**: Local repository and file system completely protected
 
 ### Limitations
 
 1. **Interactive Operations**: Commands requiring user input need special handling
 2. **GUI Applications**: Not supported in container
 3. **System-Level Changes**: Limited to what Docker allows
-4. **Performance**: May be slower than native execution
+4. **Performance**: Slower than native (due to cloning and container overhead)
+5. **Local Changes**: Local uncommitted changes are NOT included (container clones from remote)
 
 ### Best Practices
 
-1. **Small Changes**: Best for focused, well-defined tasks
-2. **Testing**: Always run tests in container before committing
-3. **Branch Names**: Use descriptive branch names
-4. **PR Descriptions**: Include all relevant context
-5. **Cleanup**: Always clean up container artifacts
+1. **Commit First**: If you have local changes you want included, commit and push them first
+2. **Small Changes**: Best for focused, well-defined tasks
+3. **Testing**: Always run tests in container before committing
+4. **Branch Names**: Use descriptive branch names
+5. **PR Descriptions**: Include all relevant context
+6. **Cleanup**: Always clean up container artifacts
+7. **Verify Isolation**: Check `git status` after completion to confirm no local changes
 
 ## Advanced Configuration
 
@@ -751,15 +898,17 @@ You have completed the containerized workflow when:
 
 1. ✅ Docker container successfully created
 2. ✅ All credentials properly configured
-3. ✅ All requested work completed in container
-4. ✅ All tests pass in container
-5. ✅ Changes committed to new branch
-6. ✅ Branch pushed to remote
-7. ✅ Pull request created successfully
-8. ✅ PR URL provided to user
-9. ✅ Container artifacts cleaned up
-10. ✅ Original branch restored
+3. ✅ Repository cloned inside container (not mounted from host)
+4. ✅ All requested work completed in container
+5. ✅ All tests pass in container
+6. ✅ Changes committed to new branch inside container
+7. ✅ Branch pushed to remote from container
+8. ✅ Pull request created successfully
+9. ✅ PR URL provided to user
+10. ✅ Container artifacts cleaned up
+11. ✅ Local repository verified untouched (git status clean)
+12. ✅ New branch exists only on remote (not in local branches)
 
 ---
 
-**Now begin the containerized development workflow!**
+**Now begin the containerized development workflow with complete isolation!**

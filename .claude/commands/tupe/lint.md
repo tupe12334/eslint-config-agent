@@ -16,6 +16,35 @@ Fix ALL ESLint errors in the project systematically, one by one, while ensuring:
 4. No new linting errors are introduced
 5. Code logic and functionality remain intact
 
+## Using the Lint Fixer Agent
+
+**IMPORTANT**: For complex linting scenarios with many errors, you can delegate to the specialized `lint-fixer` agent:
+
+```
+Use the Task tool with subagent_type='lint-fixer' to get intelligent lint error analysis and strategic fixing.
+```
+
+The lint-fixer agent provides:
+
+- Deep error analysis and categorization
+- Strategic fixing plans (prioritization, dependencies)
+- Systematic execution with continuous validation
+- Progress tracking and comprehensive reporting
+
+**When to use the agent**:
+
+- 20+ lint errors to fix
+- Complex error dependencies
+- Need strategic planning before fixing
+- Want detailed progress tracking
+- Prefer phased approach over immediate fixes
+
+**When to handle directly**:
+
+- < 10 simple errors
+- Quick autofix scenarios
+- Straightforward single-file fixes
+
 ## Phase 1: Setup and Verification
 
 ### Step 1: Check and Update ESLint Configuration

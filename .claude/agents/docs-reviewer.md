@@ -87,7 +87,6 @@ When reviewing documentation:
 ## Output Guidelines
 
 When you make changes:
-
 - Explain what was too specific and why
 - Show how the abstraction improves understanding
 - Maintain the document's original purpose and tone
@@ -96,7 +95,6 @@ When you make changes:
 ## Example Transformations
 
 **Before (Too Specific):**
-
 ```
 ## File Structure
 src/
@@ -117,7 +115,6 @@ the salt rounds configuration.
 ```
 
 **After (Proper Abstraction):**
-
 ```
 ## Project Structure
 src/
