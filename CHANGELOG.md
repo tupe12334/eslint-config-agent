@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [1.8.8](https://github.com/tupe12334/eslint-config/compare/v1.8.7...v1.8.8) (2025-11-29)
+
+### Features
+
+* **config:** use defineConfig wrapper for main configuration ([a8c91e0](https://github.com/tupe12334/eslint-config/commit/a8c91e035d4bafedf1d237c0a4948919537e9850))
+
 ## [1.8.7](https://github.com/tupe12334/eslint-config/compare/v1.8.6...v1.8.7) (2025-11-22)
 
 ### Features
