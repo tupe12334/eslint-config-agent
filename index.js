@@ -1,21 +1,21 @@
 import js from '@eslint/js'
-import tseslint from 'typescript-eslint'
 import reactHooks from 'eslint-plugin-react-hooks'
-import globals from 'globals'
-import allRules from './rules/index.js'
-import { noRecordLiteralTypesConfigs } from './rules/no-record-literal-types/index.js'
-import { noInlineUnionTypesConfigs } from './rules/no-inline-union-types/index.js'
-import { plugins } from './plugins/index.js'
-import { testFilesConfig } from './configs/test-files.js'
-import { storybookConfig } from './configs/storybook.js'
+import { defineConfig } from 'eslint/config'
+import tseslint from 'typescript-eslint'
+import { basePluginsConfig } from './configs/base-plugins.js'
 import { configFilesConfig } from './configs/config-files.js'
 import { examplesConfig } from './configs/examples.js'
-import { basePluginsConfig } from './configs/base-plugins.js'
-import { typescriptConfig } from './configs/typescript.js'
-import { tsxConfig } from './configs/tsx.js'
 import { javascriptConfig } from './configs/javascript.js'
 import { jsxConfig } from './configs/jsx.js'
 import { overridesConfig } from './configs/overrides.js'
+import { storybookConfig } from './configs/storybook.js'
+import { testFilesConfig } from './configs/test-files.js'
+import { tsxConfig } from './configs/tsx.js'
+import { typescriptConfig } from './configs/typescript.js'
+import { plugins } from './plugins/index.js'
+import allRules from './rules/index.js'
+import { noInlineUnionTypesConfigs } from './rules/no-inline-union-types/index.js'
+import { noRecordLiteralTypesConfigs } from './rules/no-record-literal-types/index.js'
 
 // Shared rules for both JS and TS files
 const sharedRules = {
@@ -95,7 +95,7 @@ const tsOnlyRestrictedSyntax = [
   ...allRules.noTrivialTypeAliasesConfigs,
 ]
 
-const config = [
+const config = defineConfig([
   // Global plugin definitions
   {
     plugins,
@@ -151,6 +151,6 @@ const config = [
 
   // Final overrides (index files, switch case, className, length rules)
   ...overridesConfig(sharedRestrictedSyntax, tsOnlyRestrictedSyntax),
-]
+])
 
 export default config

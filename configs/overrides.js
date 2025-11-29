@@ -108,6 +108,7 @@ export const overridesConfig = (
       '**/configs/**/*.{js,ts}',
       '*.config.{js,ts}',
       'eslint.config.{js,ts}',
+      'index.js',
     ],
     rules: {
       'max-lines-per-function': allRules.maxFunctionLinesError,
