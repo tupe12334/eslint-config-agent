@@ -28,14 +28,6 @@ The project uses pnpm as the package manager. Dependencies are already installed
 
 **Note**: The test suite uses `scripts/test-runner.js` which categorizes test files and validates expected error/warning counts for each category.
 
-### Release Management
-
-- `pnpm release` - Interactive release process (recommended)
-- `pnpm release:patch` - Patch version release (1.0.0 → 1.0.1)
-- `pnpm release:minor` - Minor version release (1.0.0 → 1.1.0)
-- `pnpm release:major` - Major version release (1.0.0 → 2.0.0)
-- `pnpm release:dry` - Test release process without publishing
-
 ## Architecture
 
 The project follows the modern ESLint flat configuration format:
@@ -57,24 +49,14 @@ You must test any changes to the ESLint configuration. Run `pnpm test` for compr
 
 ## Release Process
 
-This package uses `release-it` with automated version management and changelog generation.
+This package uses `release-it` with automated version management and changelog generation via CI/CD only.
 
-### Local Releases
+### CI/CD Releases
 
-Before any local release:
-
-1. Copy `.env.example` to `.env` and add your NPM_TOKEN
-2. Ensure all tests pass: `pnpm test:ci` and `pnpm validate`
-3. Working directory must be clean (all changes committed)
-4. Use conventional commit messages for better changelog generation
-
-### CI Releases
-
-The project includes GitHub Actions for automated releases:
+All releases are handled through GitHub Actions:
 
 - **Automatic**: Push to main branch triggers a patch release
 - **Manual**: Use "Actions" > "Release" workflow with choice of patch/minor/major
-- **Requirements**: NPM_TOKEN secret must be configured in GitHub repository settings
 
 Required GitHub Secrets:
 
