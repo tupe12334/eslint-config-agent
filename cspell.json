@@ -38,7 +38,8 @@
     "decrementer",
     "kiro",
     "commitlint",
-    "knip"
+    "knip",
+    "infile"
   ],
   "ignorePaths": [
     "node_modules",

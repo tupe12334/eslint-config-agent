@@ -1,7 +1,7 @@
 {
   "git": {
     "commit": true,
-    "commitMessage": "Release v${version}",
+    "commitMessage": "chore(release): bump version to ${version}",
     "tag": true,
     "tagName": "v${version}",
     "push": true,
