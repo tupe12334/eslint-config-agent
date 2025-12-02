@@ -1,3 +1,8 @@
 import config from './index.js'
 
-export default config
+export default [
+  {
+    ignores: ['**/*.json'],
+  },
+  ...config,
+]

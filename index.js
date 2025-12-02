@@ -96,6 +96,10 @@ const tsOnlyRestrictedSyntax = [
 ]
 
 const config = defineConfig([
+  // Global ignores for non-JS/TS files
+  {
+    ignores: ['**/*.json', '**/*.md', '**/*.yaml', '**/*.yml'],
+  },
   // Global plugin definitions
   {
     plugins,
