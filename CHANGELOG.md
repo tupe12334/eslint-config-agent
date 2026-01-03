@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## 1.9.0 (2026-01-03)
+
+* chore: update eslint-plugin-error to v1.3.0 ([0afa4fd](https://github.com/tupe12334/eslint-config/commit/0afa4fd))
+* chore(release): remove manual release scripts, CI/CD only ([cefdabc](https://github.com/tupe12334/eslint-config/commit/cefdabc))
+* fix(config): add global ignores for non-JS/TS files ([0cc3036](https://github.com/tupe12334/eslint-config/commit/0cc3036))
+* fix(release): update release commit message format and husky hooks ([1b9ae74](https://github.com/tupe12334/eslint-config/commit/1b9ae74))
+* feat: Add smart session revert command and related documentation ([daee5a1](https://github.com/tupe12334/eslint-config/commit/daee5a1))
+* feat(config): add commitlint, knip, and commit-msg hook for package setup ([a2d88b7](https://github.com/tupe12334/eslint-config/commit/a2d88b7))
+
 ## [1.8.8](https://github.com/tupe12334/eslint-config/compare/v1.8.7...v1.8.8) (2025-11-29)
 
 ### Features
