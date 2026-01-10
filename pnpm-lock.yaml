@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       eslint-plugin-ddd:
-        specifier: ^0.5.0
-        version: 0.5.0(eslint@9.37.0(jiti@2.6.1))
+        specifier: ^0.5.2
+        version: 0.5.2(eslint@9.37.0(jiti@2.6.1))
       eslint-plugin-default:
         specifier: ^1.1.0
         version: 1.1.0(eslint@9.37.0(jiti@2.6.1))
@@ -1835,9 +1835,9 @@ packages:
     peerDependencies:
       eslint: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
 
-  eslint-plugin-ddd@0.5.0:
-    resolution: {integrity: sha512-wpuBV/MHRw/OMYW1/WrExAtwKBEp40dZ+PB6Ch4KLV6IOcTKu07zSnhulc5k0EZIAuX/JQ1GLEWa3XQCcrRwbg==}
-    engines: {node: '>=16.0.0'}
+  eslint-plugin-ddd@0.5.2:
+    resolution: {integrity: sha512-w1hekrMULAlGpTHsTUfCT1CD8O59O8qHECFc8KSghCXiNcl33kI3UglEm/iAzPOTGQenyaX7IZXiPU5jQ4unFw==}
+    engines: {node: '>=20.0.0'}
     peerDependencies:
       eslint: '>=9.0.0'
 
@@ -5452,7 +5452,7 @@ snapshots:
       lodash.memoize: 4.1.2
       semver: 7.3.5
 
-  eslint-plugin-ddd@0.5.0(eslint@9.37.0(jiti@2.6.1)):
+  eslint-plugin-ddd@0.5.2(eslint@9.37.0(jiti@2.6.1)):
     dependencies:
       eslint: 9.37.0(jiti@2.6.1)
 
