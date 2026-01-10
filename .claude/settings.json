@@ -16,7 +16,11 @@
       "Bash(pnpm remove:*)",
       "Bash(node:*)",
       "Bash(npx eslint:*)",
-      "Bash(npx @typescript-eslint/parser:*)"
+      "Bash(npx @typescript-eslint/parser:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run watch:*)",
+      "Bash(gh run view:*)",
+      "Bash(npm view:*)"
     ],
     "deny": [],
     "ask": []
