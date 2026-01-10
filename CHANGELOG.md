@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## <small>1.9.1 (2026-01-10)</small>
+
+* feat(config): add PreToolUse hooks for Bash commands ([b3ead67](https://github.com/tupe12334/eslint-config/commit/b3ead67))
+
 ## 1.9.0 (2026-01-03)
 
 * chore: update eslint-plugin-error to v1.3.0 ([0afa4fd](https://github.com/tupe12334/eslint-config/commit/0afa4fd))
