@@ -61,12 +61,12 @@
   "author": "tupe12334",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tupe12334/eslint-config.git"
+    "url": "git+https://github.com/tupe12334/eslint-config-agent.git"
   },
   "bugs": {
-    "url": "https://github.com/tupe12334/eslint-config/issues"
+    "url": "https://github.com/tupe12334/eslint-config-agent/issues"
   },
-  "homepage": "https://github.com/tupe12334/eslint-config#readme",
+  "homepage": "https://github.com/tupe12334/eslint-config-agent#readme",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

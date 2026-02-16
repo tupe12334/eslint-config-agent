@@ -9,11 +9,7 @@
     "requireUpstream": false
   },
   "npm": {
-    "publish": true,
-    "publishPath": ".",
-    "access": "public",
-    "otp": false,
-    "skipChecks": true
+    "publish": false
   },
   "github": {
     "release": true,
