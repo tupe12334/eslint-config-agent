@@ -29,7 +29,10 @@
       "Bash(git restore:*)",
       "WebFetch(domain:docs.npmjs.com)",
       "WebFetch(domain:ankush.one)",
-      "WebFetch(domain:philna.sh)"
+      "WebFetch(domain:philna.sh)",
+      "Bash(pnpm format:check:*)",
+      "Bash(pnpm spell:*)",
+      "Bash(pnpm test:ci:*)"
     ],
     "deny": [],
     "ask": []
