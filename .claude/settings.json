@@ -20,7 +20,9 @@
       "Bash(gh run list:*)",
       "Bash(gh run watch:*)",
       "Bash(gh run view:*)",
-      "Bash(npm view:*)"
+      "Bash(npm view:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [],
     "ask": []
