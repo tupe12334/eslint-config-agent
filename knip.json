@@ -17,8 +17,7 @@
     "@eslint/eslintrc",
     "@typescript-eslint/eslint-plugin",
     "@typescript-eslint/parser",
-    "@typescript-eslint/rule-tester",
-    "eslint-plugin-preact"
+    "@typescript-eslint/rule-tester"
   ],
   "ignoreBinaries": ["claude"],
   "ignoreExportsUsedInFile": true,
