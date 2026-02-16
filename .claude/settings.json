@@ -24,7 +24,9 @@
       "Bash(git push:*)",
       "WebFetch(domain:github.com)",    
       "Bash(git --no-pager diff:*)",
-      "Bash(pnpm install:*)"
+      "Bash(pnpm install:*)",
+      "Bash(pnpm knip:*)",
+      "Bash(git restore:*)"
     ],
     "deny": [],
     "ask": []
