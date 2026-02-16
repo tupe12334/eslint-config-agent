@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-agent",
-  "version": "1.9.3",
+  "version": "2.0.0",
   "description": "ESLint configuration package with TypeScript support",
   "main": "index.js",
   "type": "module",
