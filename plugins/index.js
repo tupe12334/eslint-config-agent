@@ -17,16 +17,9 @@ import errorPlugin from 'eslint-plugin-error'
 import defaultPlugin from 'eslint-plugin-default'
 import noOptionalChainingPlugin from 'eslint-plugin-no-optional-chaining'
 import dddPlugin from 'eslint-plugin-ddd'
+import preactPlugin from 'eslint-plugin-preact'
 import allRules from '../rules/index.js'
 import { noDefaultClassExportRule } from '../rules/no-default-class-export/index.js'
-
-// Conditionally import preact plugin if available
-let preactPlugin = null
-try {
-  preactPlugin = (await import('eslint-plugin-preact')).default
-} catch {
-  // eslint-plugin-preact is not available
-}
 
 // Centralized plugin configuration
 export const plugins = {
@@ -42,7 +35,7 @@ export const plugins = {
   default: defaultPlugin,
   'no-optional-chaining': noOptionalChainingPlugin,
   ddd: dddPlugin,
-  ...(preactPlugin && { preact: preactPlugin }),
+  preact: preactPlugin,
   custom: {
     rules: {
       'no-default-class-export': noDefaultClassExportRule,
