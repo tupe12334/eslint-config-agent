@@ -1,4 +1,5 @@
 import js from '@eslint/js'
+import earlyReturn from 'eslint-plugin-early-return'
 import reactHooks from 'eslint-plugin-react-hooks'
 import { defineConfig } from 'eslint/config'
 import tseslint from 'typescript-eslint'
@@ -121,6 +122,7 @@ const config = defineConfig([
       ]),
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  earlyReturn.configs.recommended,
 
   // Base plugin strict configs (error, default, guard-clauses)
   ...basePluginsConfig,

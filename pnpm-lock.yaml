@@ -14,6 +14,9 @@ importers:
       eslint-plugin-default:
         specifier: ^1.1.0
         version: 1.1.0(eslint@9.37.0(jiti@2.6.1))
+      eslint-plugin-early-return:
+        specifier: ^1.0.0
+        version: 1.0.0(eslint@9.37.0(jiti@2.6.1))
       eslint-plugin-error:
         specifier: ^1.3.0
         version: 1.3.0(eslint@9.37.0(jiti@2.6.1))
@@ -1846,6 +1849,12 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: ^9.0.0
+
+  eslint-plugin-early-return@1.0.0:
+    resolution: {integrity: sha512-J0yKw+lszlkpKnXt3u7Ms2KtUy2wlT+5Je7g8Jewr4kM8ignC9i/xeyHz3INKSUVfhInR8TXGutmgM0z+3n2SA==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      eslint: '>=9.0.0'
 
   eslint-plugin-error@1.3.0:
     resolution: {integrity: sha512-GyLqOvjNNQIB21jQkDDw2FmdCjwO76HozT3hFxHuc2deJATXnE7xg7XLfFPVfNFrFIvb98+wyJUpH4QB6iDjDg==}
@@ -5457,6 +5466,10 @@ snapshots:
       eslint: 9.37.0(jiti@2.6.1)
 
   eslint-plugin-default@1.1.0(eslint@9.37.0(jiti@2.6.1)):
+    dependencies:
+      eslint: 9.37.0(jiti@2.6.1)
+
+  eslint-plugin-early-return@1.0.0(eslint@9.37.0(jiti@2.6.1)):
     dependencies:
       eslint: 9.37.0(jiti@2.6.1)
 

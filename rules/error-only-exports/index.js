@@ -119,26 +119,28 @@ export const errorOnlyExportsRule = {
         // Only check on program exit to ensure we've seen all exports
       },
       'Program:exit'(node) {
-        if (isErrorOnlyFile(context)) {
-          // Check if the file already has the eslint-disable comment
-          const sourceCode = context.sourceCode || context.getSourceCode()
-          const comments = sourceCode.getAllComments()
+        if (!isErrorOnlyFile(context)) {
+          return
+        }
 
-          const hasDisableComment = comments.some(
-            comment =>
-              comment.value.includes('eslint-disable ddd/require-spec-file') ||
-              comment.value.includes(
-                'eslint-disable-next-line ddd/require-spec-file'
-              )
-          )
+        // Check if the file already has the eslint-disable comment
+        const sourceCode = context.sourceCode || context.getSourceCode()
+        const comments = sourceCode.getAllComments()
 
-          // Only report if the disable comment is not present
-          if (!hasDisableComment) {
-            context.report({
-              node,
-              messageId: 'errorOnlyFile',
-            })
-          }
+        const hasDisableComment = comments.some(
+          comment =>
+            comment.value.includes('eslint-disable ddd/require-spec-file') ||
+            comment.value.includes(
+              'eslint-disable-next-line ddd/require-spec-file'
+            )
+        )
+
+        // Only report if the disable comment is not present
+        if (!hasDisableComment) {
+          context.report({
+            node,
+            messageId: 'errorOnlyFile',
+          })
         }
       },
     }
