@@ -1,0 +1,18 @@
+name: Issue
+plural: issues
+identifier: uuid
+features:
+  displayNumber: true
+  status: true
+  priority: true
+  assets: true
+  orgSync: true
+  move: true
+  duplicate: true
+statuses:
+- open
+- planning
+- in-progress
+- closed
+defaultStatus: open
+priorityLevels: 3

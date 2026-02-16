@@ -1,0 +1,11 @@
+name: Doc
+plural: docs
+identifier: slug
+features:
+  displayNumber: false
+  status: false
+  priority: false
+  assets: false
+  orgSync: true
+  move: true
+  duplicate: true
