@@ -22,7 +22,9 @@
       "Bash(gh run view:*)",
       "Bash(npm view:*)",
       "Bash(git push:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",    
+      "Bash(git --no-pager diff:*)",
+      "Bash(pnpm install:*)"
     ],
     "deny": [],
     "ask": []
