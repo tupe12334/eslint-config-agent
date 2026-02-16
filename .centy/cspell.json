@@ -1,17 +1,17 @@
 {
-  "version": "0.2",
+  "ignorePaths": [".centy-manifest.json"],
   "language": "en",
+  "version": "0.2",
   "words": [
-    "centy",
-    "displayNumber",
-    "createdAt",
-    "updatedAt",
-    "priorityLevels",
     "allowedStates",
-    "stateColors",
-    "priorityColors",
+    "centy",
     "centyVersion",
-    "schemaVersion"
-  ],
-  "ignorePaths": [".centy-manifest.json"]
+    "createdAt",
+    "displayNumber",
+    "priorityColors",
+    "priorityLevels",
+    "schemaVersion",
+    "stateColors",
+    "updatedAt"
+  ]
 }
