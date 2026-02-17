@@ -86,15 +86,6 @@ export const overridesConfig = (
     },
   },
 
-  // className requirement for JSX files
-  {
-    files: ['**/*.{tsx,jsx}'],
-    ignores: ['**/*.stories.{js,jsx,ts,tsx}'],
-    rules: {
-      'custom/jsx-classname-required': 'error',
-    },
-  },
-
   // Function and file length rules - strict error thresholds
   {
     files: ['**/*.{ts,tsx,js,jsx}'],

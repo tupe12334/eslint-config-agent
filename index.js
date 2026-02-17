@@ -1,5 +1,6 @@
 import js from '@eslint/js'
 import earlyReturn from 'eslint-plugin-early-return'
+import jsxClassname from 'eslint-plugin-jsx-classname'
 import reactHooks from 'eslint-plugin-react-hooks'
 import { defineConfig } from 'eslint/config'
 import tseslint from 'typescript-eslint'
@@ -141,7 +142,14 @@ const config = defineConfig([
   // Examples files configuration
   ...examplesConfig,
 
-  // Final overrides (index files, switch case, className, length rules)
+  // className requirement for JSX files (strict: errors + rejects Tailwind-only classNames)
+  {
+    ...jsxClassname.configs.strict,
+    files: ['**/*.{tsx,jsx}'],
+    ignores: ['**/*.stories.{js,jsx,ts,tsx}'],
+  },
+
+  // Final overrides (index files, switch case, length rules)
   ...overridesConfig(sharedRestrictedSyntax, tsOnlyRestrictedSyntax),
 ])
 

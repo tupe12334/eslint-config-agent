@@ -22,7 +22,6 @@ import { noTypeAssertionsConfig } from './no-type-assertions/index.js'
 import { noExportSpecifiersConfig } from './no-empty-exports/index.js'
 import { noClassPropertyDefaultsConfig } from './no-class-property-defaults/index.js'
 import { noDefaultClassExportRules } from './no-default-class-export/index.js'
-import { jsxClassNameRequiredRule } from './jsx-classname-required/index.js'
 import { noNullishCoalescingConfig } from './nullish-coalescing/index.js'
 import { switchStatementsReturnTypeConfigs } from './switch-statements-return-type/index.js'
 import { switchCaseFunctionsReturnTypeConfigs } from './switch-case-functions-return-type/index.js'
@@ -49,7 +48,6 @@ const allRules = {
   noExportSpecifiersConfig,
   noClassPropertyDefaultsConfig,
   noDefaultClassExportRules,
-  jsxClassNameRequiredRule,
   noNullishCoalescingConfig,
   switchStatementsReturnTypeConfigs,
   switchCaseFunctionsReturnTypeConfigs,
@@ -79,7 +77,6 @@ export {
   noExportSpecifiersConfig,
   noClassPropertyDefaultsConfig,
   noDefaultClassExportRules,
-  jsxClassNameRequiredRule,
   noNullishCoalescingConfig,
   switchStatementsReturnTypeConfigs,
   switchCaseFunctionsReturnTypeConfigs,

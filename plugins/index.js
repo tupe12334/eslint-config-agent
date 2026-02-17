@@ -18,7 +18,6 @@ import defaultPlugin from 'eslint-plugin-default'
 import noOptionalChainingPlugin from 'eslint-plugin-no-optional-chaining'
 import dddPlugin from 'eslint-plugin-ddd'
 import preactPlugin from 'eslint-plugin-preact'
-import allRules from '../rules/index.js'
 import { noDefaultClassExportRule } from '../rules/no-default-class-export/index.js'
 
 // Centralized plugin configuration
@@ -39,7 +38,6 @@ export const plugins = {
   custom: {
     rules: {
       'no-default-class-export': noDefaultClassExportRule,
-      'jsx-classname-required': allRules.jsxClassNameRequiredRule,
     },
   },
 }
