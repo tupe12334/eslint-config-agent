@@ -32,7 +32,8 @@
       "WebFetch(domain:philna.sh)",
       "Bash(pnpm format:check:*)",
       "Bash(pnpm spell:*)",
-      "Bash(pnpm test:ci:*)"
+      "Bash(pnpm test:ci:*)",       
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []
