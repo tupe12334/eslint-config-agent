@@ -70,7 +70,6 @@ const tsOnlyRestrictedSyntax = [
   ...noRecordLiteralTypesConfigs,
   ...noInlineUnionTypesConfigs,
   allRules.noTypeAssertionsConfig,
-  allRules.noClassPropertyDefaultsConfig,
   {
     selector: 'TSAsExpression:has(> TSIndexedAccessType > TSTypeQuery)',
     message:

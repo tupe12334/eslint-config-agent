@@ -79,7 +79,6 @@ export const overridesConfig = (
             'Type assertions with indexed access types like "as (typeof X)[number]" are not allowed. Use a named type instead.',
         },
         allRules.noTypeAssertionsConfig,
-        allRules.noClassPropertyDefaultsConfig,
         allRules.noProcessEnvPropertiesConfig,
         allRules.noExportSpecifiersConfig,
       ],

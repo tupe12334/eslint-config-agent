@@ -20,7 +20,6 @@ import {
 import { noProcessEnvPropertiesConfig } from './no-process-env-properties/index.js'
 import { noTypeAssertionsConfig } from './no-type-assertions/index.js'
 import { noExportSpecifiersConfig } from './no-empty-exports/index.js'
-import { noClassPropertyDefaultsConfig } from './no-class-property-defaults/index.js'
 import { noDefaultClassExportRules } from './no-default-class-export/index.js'
 import { noNullishCoalescingConfig } from './nullish-coalescing/index.js'
 import { switchStatementsReturnTypeConfigs } from './switch-statements-return-type/index.js'
@@ -46,7 +45,6 @@ const allRules = {
   noProcessEnvPropertiesConfig,
   noTypeAssertionsConfig,
   noExportSpecifiersConfig,
-  noClassPropertyDefaultsConfig,
   noDefaultClassExportRules,
   noNullishCoalescingConfig,
   switchStatementsReturnTypeConfigs,
@@ -75,7 +73,6 @@ export {
   noProcessEnvPropertiesConfig,
   noTypeAssertionsConfig,
   noExportSpecifiersConfig,
-  noClassPropertyDefaultsConfig,
   noDefaultClassExportRules,
   noNullishCoalescingConfig,
   switchStatementsReturnTypeConfigs,
