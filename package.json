@@ -120,6 +120,7 @@
     "eslint-plugin-security": "^3.0.1",
     "eslint-plugin-single-export": "^1.1.2",
     "eslint-plugin-storybook": "^9.1.5",
+    "eslint-plugin-switch-case": "^3.0.1",
     "globals": "^16.4.0",
     "typescript-eslint": "^8.40.0"
   }

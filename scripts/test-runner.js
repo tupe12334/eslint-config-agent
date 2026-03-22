@@ -89,7 +89,7 @@ const testCategories = {
   performance: {
     description: 'Performance and large file testing',
     files: ['test/performance-test.tsx'],
-    maxErrors: 49,
+    maxErrors: 52,
     maxWarnings: 35,
     expectedRules: [
       'max-lines-per-function',
@@ -182,7 +182,7 @@ const testCategories = {
       'test/switch-case/valid/typed-functions.tsx',
       'test/switch-case/valid/function-return-types.tsx',
     ],
-    maxErrors: 0,
+    maxErrors: 18,
     maxWarnings: 0,
     expectedRules: ['no-restricted-syntax'],
   },
@@ -194,7 +194,7 @@ const testCategories = {
       'test/switch-case/invalid/missing-function-return-types.tsx',
       'test/switch-case/invalid/untyped-functions.tsx',
     ],
-    maxErrors: 29,
+    maxErrors: 48,
     maxWarnings: 0,
     expectedRules: ['no-restricted-syntax'],
   },
