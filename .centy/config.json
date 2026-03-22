@@ -1,5 +1,5 @@
 {
-  "allowedStates": ["open", "planning", "in-progress", "closed"],
+  "cleanup": {},
   "customFields": [],
   "defaults": {},
   "hooks": [],
