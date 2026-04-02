@@ -33,7 +33,9 @@
       "Bash(pnpm format:check:*)",
       "Bash(pnpm spell:*)",
       "Bash(pnpm test:ci:*)",       
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(git stash:*)",
+      "Bash(gh workflow:*)"
     ],
     "deny": [],
     "ask": []
