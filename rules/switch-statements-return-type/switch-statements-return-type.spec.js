@@ -17,7 +17,7 @@ export class TestError extends Error {
 }
 
 // Configure RuleTester for Node.js test environment (modern best practice)
-RuleTester.afterAll = () => {} // No cleanup needed for simple tests
+RuleTester.afterAll = () => {} // eslint-disable-line @typescript-eslint/no-empty-function -- intentional no-op for RuleTester setup
 RuleTester.describe = (name, fn) => {
   console.log(`\n📝 ${name}`)
   fn()
