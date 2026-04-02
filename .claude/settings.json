@@ -35,7 +35,8 @@
       "Bash(pnpm test:ci:*)",       
       "Bash(ls:*)",
       "Bash(git stash:*)",
-      "Bash(gh workflow:*)"
+      "Bash(gh workflow:*)",
+      "Bash(gh api:*)"
     ],
     "deny": [],
     "ask": []
