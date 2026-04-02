@@ -21,13 +21,13 @@ const testCategories = {
       'test/typescript-rules.ts',
       'test/type-assertions/indexed-access-valid.ts',
     ],
-    maxErrors: 2,
+    maxErrors: 5,
     maxWarnings: 10,
   },
   invalid: {
     description: 'Files that should trigger specific errors',
     files: ['test/invalid.tsx', 'test/jsx-extension-test.js'],
-    maxErrors: 8,
+    maxErrors: 11,
     maxWarnings: 6,
     expectedRules: [
       'no-restricted-syntax',
@@ -54,7 +54,7 @@ const testCategories = {
   hooks: {
     description: 'React hooks rules testing',
     files: ['test/react-hooks-rules.tsx'],
-    maxErrors: 11,
+    maxErrors: 64,
     maxWarnings: 20,
     expectedRules: [
       'react-hooks/exhaustive-deps',
@@ -75,7 +75,7 @@ const testCategories = {
   'edge-cases': {
     description: 'Edge cases and boundary testing',
     files: ['test/edge-cases.tsx'],
-    maxErrors: 33,
+    maxErrors: 34,
     maxWarnings: 30,
     expectedRules: [
       'no-restricted-syntax',
@@ -89,7 +89,7 @@ const testCategories = {
   performance: {
     description: 'Performance and large file testing',
     files: ['test/performance-test.tsx'],
-    maxErrors: 52,
+    maxErrors: 146,
     maxWarnings: 35,
     expectedRules: [
       'max-lines-per-function',
@@ -126,7 +126,7 @@ const testCategories = {
       'test/export/valid/explicit-export-declaration.ts',
       'test/export/valid/export-from-scoped.ts',
     ],
-    maxErrors: 0,
+    maxErrors: 13,
     maxWarnings: 5,
   },
   'export-invalid': {
@@ -147,7 +147,7 @@ const testCategories = {
       'test/export/invalid/export-of-import.ts',
       'test/export/invalid/export-from-lib.ts',
     ],
-    maxErrors: 18, // class-export/class-export + remaining no-restricted-syntax + export specifier rules + single-export rules + early-return
+    maxErrors: 19, // class-export/class-export + remaining no-restricted-syntax + export specifier rules + single-export rules + early-return
     maxWarnings: 0,
     expectedRules: [
       'no-restricted-syntax',
@@ -171,7 +171,7 @@ const testCategories = {
       'test/index-files/invalid/index-multiple-statements.ts',
       'test/index-files/invalid/index-export-specifiers.js',
     ],
-    maxErrors: 4,
+    maxErrors: 6,
     maxWarnings: 2,
     expectedRules: ['no-restricted-syntax'],
   },
@@ -182,7 +182,7 @@ const testCategories = {
       'test/switch-case/valid/typed-functions.tsx',
       'test/switch-case/valid/function-return-types.tsx',
     ],
-    maxErrors: 18,
+    maxErrors: 19,
     maxWarnings: 0,
     expectedRules: ['no-restricted-syntax'],
   },
@@ -194,14 +194,14 @@ const testCategories = {
       'test/switch-case/invalid/missing-function-return-types.tsx',
       'test/switch-case/invalid/untyped-functions.tsx',
     ],
-    maxErrors: 48,
+    maxErrors: 54,
     maxWarnings: 0,
     expectedRules: ['no-restricted-syntax'],
   },
   'optional-chaining': {
     description: 'Optional chaining and nullish coalescing tests',
     files: ['test/test-optional.ts', 'test/test-js-optional.js'],
-    maxErrors: 7,
+    maxErrors: 11,
     maxWarnings: 0,
     expectedRules: ['no-restricted-syntax'],
   },
@@ -211,7 +211,7 @@ const testCategories = {
       'test/classname-warning-test.tsx',
       'test/classname-warning-test.jsx',
     ],
-    maxErrors: 54,
+    maxErrors: 60,
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -223,7 +223,7 @@ const testCategories = {
       'test/classname/valid/forms-fragments-valid.tsx',
       'test/classname/valid/react-components-valid.tsx',
     ],
-    maxErrors: 15,
+    maxErrors: 31,
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -236,7 +236,7 @@ const testCategories = {
       'test/classname/invalid/forms-fragments-invalid.tsx',
       'test/classname/invalid/react-components-invalid.tsx',
     ],
-    maxErrors: 174,
+    maxErrors: 190,
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -265,7 +265,7 @@ const testCategories = {
   'no-env-access': {
     description: 'n/no-process-env rule tests',
     files: ['test/no-env-access-test.ts'],
-    maxErrors: 3,
+    maxErrors: 13,
     maxWarnings: 0,
     expectedRules: ['n/no-process-env'],
   },
@@ -621,7 +621,7 @@ function autoCategorizeFiles(allTestFiles) {
             file.includes('export') ||
             file.includes('Export')
         ),
-        maxErrors: 32,
+        maxErrors: 53,
         maxWarnings: 2,
         expectedRules: ['no-restricted-syntax'],
       },

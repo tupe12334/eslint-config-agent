@@ -108,7 +108,20 @@ const config = defineConfig([
   },
   reactHooks.configs['recommended-latest'],
   js.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.strictTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+  },
+  {
+    files: ['**/*.{js,jsx,mjs,cjs}'],
+    ...tseslint.configs.disableTypeChecked,
+  },
   earlyReturn.configs.recommended,
   { plugins: { 'switch-case': switchCase }, ...switchCase.configs.recommended },
 
