@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## 3.0.0 (2026-04-02)
+
+* feat: add centy configuration and update claude agent/command definitions ([6f656c5](https://github.com/tupe12334/eslint-config-agent/commit/6f656c5))
+* feat: move peerDependencies to dependencies for single-install experience ([80f5998](https://github.com/tupe12334/eslint-config-agent/commit/80f5998))
+* feat(ci): migrate to OIDC trusted publishing and single CI/CD workflow ([d69b81a](https://github.com/tupe12334/eslint-config-agent/commit/d69b81a))
+* feat(commands): add tupe Claude slash commands and update centy config ([5a8f4a0](https://github.com/tupe12334/eslint-config-agent/commit/5a8f4a0))
+* feat(config): add eslint-plugin-early-return recommended config ([1fc0e45](https://github.com/tupe12334/eslint-config-agent/commit/1fc0e45))
+* feat(config): add git diff and pnpm install permissions to settings ([d544eb7](https://github.com/tupe12334/eslint-config-agent/commit/d544eb7))
+* feat(config): add git push and WebFetch permissions to settings ([8485f43](https://github.com/tupe12334/eslint-config-agent/commit/8485f43))
+* feat(config): add pnpm knip and git restore permissions to settings ([ffac7cd](https://github.com/tupe12334/eslint-config-agent/commit/ffac7cd))
+* feat(manifest): update centyVersion to 0.8.4 and clean up timestamps ([d735642](https://github.com/tupe12334/eslint-config-agent/commit/d735642))
+* feat(rules): add eslint-plugin-switch-case with recommended config ([d938695](https://github.com/tupe12334/eslint-config-agent/commit/d938695))
+* feat(rules): remove no-class-property-defaults rule ([0f606c5](https://github.com/tupe12334/eslint-config-agent/commit/0f606c5))
+* feat(rules): replace tseslint recommended with strict-type-checked and stylistic-type-checked ([651ed7b](https://github.com/tupe12334/eslint-config-agent/commit/651ed7b))
+* feat(settings): add 'Bash(ls:*)' permission to settings ([2a23685](https://github.com/tupe12334/eslint-config-agent/commit/2a23685))
+* feat(settings): add additional Bash commands for formatting and testing ([27175fd](https://github.com/tupe12334/eslint-config-agent/commit/27175fd))
+* feat(settings): add additional WebFetch permissions to settings ([cac497c](https://github.com/tupe12334/eslint-config-agent/commit/cac497c))
+* feat(settings): add git stash and GitHub workflow permissions ([255513e](https://github.com/tupe12334/eslint-config-agent/commit/255513e))
+* fix(rules): suppress no-empty-function in RuleTester no-op callbacks ([56ca34f](https://github.com/tupe12334/eslint-config-agent/commit/56ca34f))
+* chore: remove eslint-plugin-preact from knip ignoreDependencies ([032a085](https://github.com/tupe12334/eslint-config-agent/commit/032a085))
+* chore: remove kiro settings configuration files ([80baec6](https://github.com/tupe12334/eslint-config-agent/commit/80baec6))
+* chore(config): remove empty hooks array from config.json ([750cc28](https://github.com/tupe12334/eslint-config-agent/commit/750cc28))
+* chore(release): bump version to 2.0.0 ([982c1d9](https://github.com/tupe12334/eslint-config-agent/commit/982c1d9))
+* chore(release): bump version to 2.1.0 ([5dc4711](https://github.com/tupe12334/eslint-config-agent/commit/5dc4711))
+* refactor(classname): replace custom rule with eslint-plugin-jsx-classname strict config ([9da02c0](https://github.com/tupe12334/eslint-config-agent/commit/9da02c0))
+
 ## <small>1.9.3 (2026-01-10)</small>
 
 * chore: update eslint-plugin-ddd to v0.5.2 ([27e8654](https://github.com/tupe12334/eslint-config/commit/27e8654))
