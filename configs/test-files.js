@@ -24,8 +24,6 @@ const sharedRules = {
   'no-continue': 'off',
   // Additional built-in error handling rules
   'prefer-promise-reject-errors': 'error',
-  // Optional chaining restriction
-  'no-optional-chaining/no-optional-chaining': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS

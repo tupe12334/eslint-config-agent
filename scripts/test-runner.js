@@ -31,7 +31,6 @@ const testCategories = {
     maxWarnings: 6,
     expectedRules: [
       'no-restricted-syntax',
-      'no-optional-chaining/no-optional-chaining',
       'react/jsx-filename-extension',
       'jsx-classname/require-classname',
       '@typescript-eslint/no-explicit-any',

@@ -15,7 +15,6 @@ import requiredExportsPlugin from 'eslint-plugin-required-exports'
 import storybookPlugin from 'eslint-plugin-storybook'
 import errorPlugin from 'eslint-plugin-error'
 import defaultPlugin from 'eslint-plugin-default'
-import noOptionalChainingPlugin from 'eslint-plugin-no-optional-chaining'
 import dddPlugin from 'eslint-plugin-ddd'
 import preactPlugin from 'eslint-plugin-preact'
 import { noDefaultClassExportRule } from '../rules/no-default-class-export/index.js'
@@ -32,7 +31,6 @@ export const plugins = {
   storybook: storybookPlugin,
   error: errorPlugin,
   default: defaultPlugin,
-  'no-optional-chaining': noOptionalChainingPlugin,
   ddd: dddPlugin,
   preact: preactPlugin,
   custom: {
