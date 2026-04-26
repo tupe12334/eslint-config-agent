@@ -6,6 +6,7 @@
  */
 
 import reactPlugin from 'eslint-plugin-react'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import importPlugin from 'eslint-plugin-import'
 import securityPlugin from 'eslint-plugin-security'
 import nPlugin from 'eslint-plugin-n'
@@ -22,6 +23,7 @@ import { noDefaultClassExportRule } from '../rules/no-default-class-export/index
 // Centralized plugin configuration
 export const plugins = {
   react: reactPlugin,
+  'react-hooks': reactHooksPlugin,
   import: importPlugin,
   security: securityPlugin,
   n: nPlugin,

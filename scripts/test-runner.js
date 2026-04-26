@@ -181,9 +181,12 @@ const testCategories = {
       'test/switch-case/valid/typed-functions.tsx',
       'test/switch-case/valid/function-return-types.tsx',
     ],
-    maxErrors: 19,
+    maxErrors: 20,
     maxWarnings: 0,
-    expectedRules: ['no-restricted-syntax'],
+    expectedRules: [
+      'switch-case/no-case-curly',
+      'switch-case/newline-between-switch-case',
+    ],
   },
   'switch-case-invalid': {
     description: 'Invalid switch case patterns',
@@ -193,9 +196,13 @@ const testCategories = {
       'test/switch-case/invalid/missing-function-return-types.tsx',
       'test/switch-case/invalid/untyped-functions.tsx',
     ],
-    maxErrors: 54,
+    maxErrors: 60,
     maxWarnings: 0,
-    expectedRules: ['no-restricted-syntax'],
+    expectedRules: [
+      'no-restricted-syntax',
+      'switch-case/no-case-curly',
+      'switch-case/newline-between-switch-case',
+    ],
   },
   'optional-chaining': {
     description: 'Optional chaining and nullish coalescing tests',

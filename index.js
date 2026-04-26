@@ -97,15 +97,27 @@ const tsOnlyRestrictedSyntax = [
 ]
 
 const config = defineConfig([
-  // Global ignores for non-JS/TS files
+  // Global ignores for non-JS/TS files and build outputs
   {
-    ignores: ['**/*.json', '**/*.md', '**/*.yaml', '**/*.yml'],
+    ignores: [
+      '**/*.json',
+      '**/*.md',
+      '**/*.yaml',
+      '**/*.yml',
+      'dist/**',
+      'coverage/**',
+    ],
   },
   // Global plugin definitions
   {
     plugins,
   },
-  reactHooks.configs['recommended-latest'],
+  {
+    rules: {
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+    },
+  },
   js.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,

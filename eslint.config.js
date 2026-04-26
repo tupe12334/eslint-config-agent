@@ -2,7 +2,7 @@ import config from './index.js'
 
 export default [
   {
-    ignores: ['**/*.json'],
+    ignores: ['**/*.json', 'dist/**', 'coverage/**'],
   },
   ...config,
 ]

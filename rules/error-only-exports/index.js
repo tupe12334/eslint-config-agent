@@ -35,7 +35,7 @@ function extendsError(node) {
  * @returns True if file only exports error classes
  */
 function isErrorOnlyFile(context) {
-  const sourceCode = context.sourceCode || context.getSourceCode()
+  const sourceCode = context.sourceCode
   const ast = sourceCode.ast
 
   let hasExports = false
@@ -128,7 +128,7 @@ export const errorOnlyExportsRule = {
         }
 
         // Check if the file already has the eslint-disable comment
-        const sourceCode = context.sourceCode || context.getSourceCode()
+        const sourceCode = context.sourceCode
         const comments = sourceCode.getAllComments()
 
         const hasDisableComment = comments.some(
