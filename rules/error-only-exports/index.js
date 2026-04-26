@@ -7,8 +7,8 @@
 
 /**
  * Check if a class declaration extends Error or another Error class
- * @param {object} node - The AST node to check
- * @returns {boolean} True if the node extends Error
+ * @param node - The AST node to check
+ * @returns True if the node extends Error
  */
 function extendsError(node) {
   if (!node.superClass) {
@@ -31,8 +31,8 @@ function extendsError(node) {
 
 /**
  * Check if the file only contains error class exports
- * @param {object} context - The ESLint rule context
- * @returns {boolean} True if file only exports error classes
+ * @param context - The ESLint rule context
+ * @returns True if file only exports error classes
  */
 function isErrorOnlyFile(context) {
   const sourceCode = context.sourceCode || context.getSourceCode()

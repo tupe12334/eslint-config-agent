@@ -122,7 +122,7 @@ const config = defineConfig([
     ...tseslint.configs.disableTypeChecked,
   },
   earlyReturn.configs.recommended,
-  jsdoc.configs['flat/recommended'],
+  jsdoc.configs['flat/recommended-typescript-error'],
   { plugins: { 'switch-case': switchCase }, ...switchCase.configs.recommended },
 
   // Base plugin strict configs (error, default, guard-clauses)
