@@ -83,6 +83,7 @@
     "@typescript-eslint/rule-tester": "^8.46.1",
     "cspell": "^9.3.1",
     "eslint": "^9.37.0",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-class-export": "^1.0.1",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-n": "^17.23.1",
