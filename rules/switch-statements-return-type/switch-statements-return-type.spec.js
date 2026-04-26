@@ -4,7 +4,7 @@ import { switchStatementsReturnTypeConfigs } from './index.js'
 /**
  * Test suite for switch-statements-return-type rules
  *
- * This uses the modern 2024 approach with @typescript-eslint/rule-tester v8
+ * This uses the modern 2024 approach with `@typescript-eslint/rule-tester` v8
  * and ESLint v9 flat config for testing TypeScript ESLint rules.
  */
 
