@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [3.0.2](https://github.com/tupe12334/eslint-config-agent/compare/v3.0.0...v3.0.2) (2026-04-26)
+
+### Features
+
+* **jsdoc:** upgrade to recommended-typescript-error config ([2ecc02e](https://github.com/tupe12334/eslint-config-agent/commit/2ecc02e9031d42263c01f926a1adfed2424355b6))
+* **plugins:** add eslint-plugin-jsdoc recommended config ([ff9fb97](https://github.com/tupe12334/eslint-config-agent/commit/ff9fb97dbaa88db3486b08904a31d9002bdec59d))
+* **settings:** add additional WebFetch domains to permissions ([3a94e18](https://github.com/tupe12334/eslint-config-agent/commit/3a94e18b5128c6901b72e88218e12928d965dbc3))
+* **settings:** add GitHub API permission to settings ([529c09d](https://github.com/tupe12334/eslint-config-agent/commit/529c09da004e2e369e3f639edbe6401d11f944b0))
+
+### Bug Fixes
+
+* **ci:** publish to npm after workflow_dispatch releases ([4267e8a](https://github.com/tupe12334/eslint-config-agent/commit/4267e8a3be526c8700ca843c9c6f421e5a6608ea))
+* **deps:** downgrade cspell to v9.8.0 for Node 20 compatibility ([ececdb2](https://github.com/tupe12334/eslint-config-agent/commit/ececdb297843f3317a431aa3075a148659e7659e))
+* **jsdoc:** add missing parameters and fix tag formatting ([07bafcc](https://github.com/tupe12334/eslint-config-agent/commit/07bafcc6cb307e3646a29305ad70c848836ba766))
+* **jsdoc:** escape inline [@typescript](https://github.com/typescript) tag in spec file comments ([f4918e5](https://github.com/tupe12334/eslint-config-agent/commit/f4918e5b3f9f3192884ddf99aa05328f98a4a5a6))
+* **knip:** update configuration for knip v6 compatibility ([75967d6](https://github.com/tupe12334/eslint-config-agent/commit/75967d6a224910ca7c3f78b70e86e5d77074f3a8))
+
 ## 3.0.0 (2026-04-02)
 
 * feat: add centy configuration and update claude agent/command definitions ([6f656c5](https://github.com/tupe12334/eslint-config-agent/commit/6f656c5))
