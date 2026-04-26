@@ -83,6 +83,10 @@ export const examplesConfig = [
       // Relax file/function length limits for concise examples
       'max-lines-per-function': 'off',
       'max-lines': 'off',
+      // Examples don't need JSDoc
+      'jsdoc/require-jsdoc': 'off',
+      'jsdoc/require-param': 'off',
+      'jsdoc/require-returns': 'off',
     },
   },
 ]

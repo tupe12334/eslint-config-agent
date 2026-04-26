@@ -20,6 +20,9 @@ export const configFilesConfig = [
       'max-lines-per-function': 'off', // Allow long functions in config files
       'max-lines': 'off', // Allow long files in config files
       'ddd/require-spec-file': 'off', // Config files don't need spec files
+      'jsdoc/require-jsdoc': 'off', // Config files don't need JSDoc
+      'jsdoc/require-param': 'off',
+      'jsdoc/require-returns': 'off',
     },
   },
 ]

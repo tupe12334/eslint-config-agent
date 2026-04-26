@@ -2,6 +2,7 @@ import js from '@eslint/js'
 import earlyReturn from 'eslint-plugin-early-return'
 import switchCase from 'eslint-plugin-switch-case'
 import jsxClassname from 'eslint-plugin-jsx-classname'
+import jsdoc from 'eslint-plugin-jsdoc'
 import reactHooks from 'eslint-plugin-react-hooks'
 import { defineConfig } from 'eslint/config'
 import tseslint from 'typescript-eslint'
@@ -121,6 +122,7 @@ const config = defineConfig([
     ...tseslint.configs.disableTypeChecked,
   },
   earlyReturn.configs.recommended,
+  jsdoc.configs['flat/recommended'],
   { plugins: { 'switch-case': switchCase }, ...switchCase.configs.recommended },
 
   // Base plugin strict configs (error, default, guard-clauses)
