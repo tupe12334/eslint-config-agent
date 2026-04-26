@@ -9,7 +9,6 @@
  * - ❌ process.env.PORT
  * - ✅ validate(process.env)
  * - ✅ const { NODE_ENV } = process.env
- *
  * @see https://eslint.org/docs/latest/rules/no-restricted-syntax
  */
 

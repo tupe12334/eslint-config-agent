@@ -3,7 +3,6 @@
  *
  * This rule disallows the use of process.env to encourage centralized configuration
  * management instead of scattered environment variable access throughout the codebase.
- *
  * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-process-env.md
  */
 

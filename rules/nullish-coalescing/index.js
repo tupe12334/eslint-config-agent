@@ -13,7 +13,6 @@
  * - ❌ const name = user?.name ?? 'Anonymous'
  * - ✅ const result = value !== null && value !== undefined ? value : 'default'
  * - ✅ const name = user?.name !== undefined ? user.name : 'Anonymous'
- *
  * @see https://eslint.org/docs/latest/rules/no-restricted-syntax
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing
  */

@@ -3,7 +3,6 @@
  *
  * This plugin enforces consistent class export patterns to improve code organization
  * and import consistency across the codebase.
- *
  * @see https://www.npmjs.com/package/eslint-plugin-class-export
  */
 

@@ -5,7 +5,6 @@
  * smaller, more maintainable functions.
  *
  * Warnings at >50 lines, errors at >70 lines
- *
  * @see https://eslint.org/docs/latest/rules/max-lines-per-function
  */
 

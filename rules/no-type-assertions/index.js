@@ -10,7 +10,6 @@
  * - ❌ obj as { name: string }
  * - ✅ { mode: 'prod' } as const
  * - ✅ ['a', 'b'] as const
- *
  * @see https://eslint.org/docs/latest/rules/no-restricted-syntax
  */
 

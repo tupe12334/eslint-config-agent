@@ -54,7 +54,6 @@
  * // Type references with generics
  * type ListOfUsers = Array<User>;
  * ```
- *
  * @see https://eslint.org/docs/latest/rules/no-restricted-syntax
  * @see ./examples/invalid.js for more invalid examples
  * @see ./examples/valid.js for more valid examples

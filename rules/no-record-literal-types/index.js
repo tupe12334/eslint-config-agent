@@ -16,7 +16,6 @@
  * - ✅ interface UserInfo { name: string; age: string; }
  * - ✅ type Status = { active: boolean; }
  * - ✅ Record<string, unknown> (generic keys are allowed)
- *
  * @see https://eslint.org/docs/latest/rules/no-restricted-syntax
  * @see https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type
  */

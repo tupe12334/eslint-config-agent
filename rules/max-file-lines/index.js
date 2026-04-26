@@ -5,7 +5,6 @@
  * smaller, more maintainable files and better separation of concerns.
  *
  * Warnings at >70 lines, errors at >100 lines
- *
  * @see https://eslint.org/docs/latest/rules/max-lines
  */
 

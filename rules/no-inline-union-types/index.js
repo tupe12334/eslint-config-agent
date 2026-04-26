@@ -11,7 +11,6 @@
  * - ✅ type Status = 'active' | 'inactive'; function foo(status: Status) {}
  * - ✅ type Role = 'admin' | 'user'; interface User { role: Role; }
  * - ✅ type Mode = 'dev' | 'prod'; class Config { mode: Mode; }
- *
  * @see https://eslint.org/docs/latest/rules/no-restricted-syntax
  */
 

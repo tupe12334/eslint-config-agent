@@ -2,7 +2,6 @@
  * Rule configuration for no-trailing-spaces
  *
  * This rule disallows trailing whitespace (spaces and tabs) at the end of lines.
- *
  * @see https://eslint.org/docs/latest/rules/no-trailing-spaces
  */
 
