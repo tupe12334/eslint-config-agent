@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [3.0.4](https://github.com/tupe12334/eslint-config-agent/compare/v3.0.3...v3.0.4) (2026-06-03)
+
+### Bug Fixes
+
+* **deps:** patch high-severity vulnerabilities in storybook and semver ([a38efe1](https://github.com/tupe12334/eslint-config-agent/commit/a38efe1223090dcfea9002e4ba5849e9e92afeaf))
+* **deps:** remove redundant devDep and clean knip config ([61f7c97](https://github.com/tupe12334/eslint-config-agent/commit/61f7c97c3461ddd6ed6c9869b75fdbc869a3e454))
+
 ## [3.0.3](https://github.com/tupe12334/eslint-config-agent/compare/v3.0.0...v3.0.3) (2026-04-26)
 
 ### Features
