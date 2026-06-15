@@ -135,6 +135,22 @@ const config = defineConfig([
   },
   earlyReturn.configs.recommended,
   jsdoc.configs['flat/recommended-typescript-error'],
+  // The jsdoc recommended preset only requires JSDoc on FunctionDeclaration by
+  // default. Treat class declarations the same as functions so exported
+  // classes are also required to be documented.
+  {
+    rules: {
+      'jsdoc/require-jsdoc': [
+        'error',
+        {
+          require: {
+            ClassDeclaration: true,
+            FunctionDeclaration: true,
+          },
+        },
+      ],
+    },
+  },
   { plugins: { 'switch-case': switchCase }, ...switchCase.configs.recommended },
 
   // Base plugin strict configs (error, default, guard-clauses)
