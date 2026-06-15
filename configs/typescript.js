@@ -38,6 +38,15 @@ export const typescriptConfig = (
       ...sharedRules,
       ...allRules.typescriptEslintRules,
       'no-undef': 'off', // TypeScript handles this
+      'jsdoc/require-jsdoc': [
+        'error',
+        {
+          require: {
+            ClassDeclaration: true,
+            FunctionDeclaration: true,
+          },
+        },
+      ],
       'custom/no-default-class-export': 'error',
       'single-export/single-export': 'error',
       'required-exports/required-exports': [
