@@ -57,7 +57,7 @@ This configuration enforces patterns that:
 
 ### Prerequisites
 
-- **Node.js**: 18.x or higher
+- **Node.js**: 20.x or higher
 - **ESLint**: 9.x
 - **TypeScript**: 4.5+ (optional, for TypeScript projects)
 
@@ -74,27 +74,22 @@ pnpm add -D eslint-config-agent
 yarn add -D eslint-config-agent
 ```
 
-### Install peer dependencies
+### Dependencies are bundled
 
-The configuration requires several peer dependencies. Install them based on your project needs:
-
-```bash
-# Required peer dependencies
-npm install --save-dev eslint@^9.34.0 @eslint/js@^9.34.0 @typescript-eslint/eslint-plugin@^8.40.0 @typescript-eslint/parser@^8.40.0 typescript-eslint@^8.40.0 eslint-plugin-react@^7.37.5 eslint-plugin-react-hooks@^5.2.0 eslint-plugin-import@^2.32.0 globals@^16.3.0 @eslint/eslintrc@^3.3.1
-
-# For Preact projects (optional)
-npm install --save-dev eslint-plugin-preact@^0.1.0
-```
-
-Or use your package manager's peer dependency command:
+There is **no separate peer-dependency step**. ESLint and every plugin this
+configuration uses (`@typescript-eslint/*`, `typescript-eslint`,
+`eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-import`,
+`eslint-plugin-preact`, `globals`, and the rest) ship as regular dependencies
+of `eslint-config-agent`. Installing the package pulls them in automatically,
+so the config works out of the box.
 
 ```bash
-# Auto-install peer dependencies with npm 7+
-npx install-peerdeps --dev eslint-config-agent
-
-# With pnpm
-pnpm install --save-dev $(pnpm info eslint-config-agent peerDependencies --json | jq -r 'to_entries[] | "\(.key)@\(.value)"')
+# That's it — the single install above is all you need
+npm install --save-dev eslint-config-agent
 ```
+
+> **Note:** If your project already depends on ESLint or any of these plugins,
+> your package manager will deduplicate them against the versions bundled here.
 
 ## Usage
 
