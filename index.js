@@ -42,6 +42,11 @@ const sharedRules = {
   'no-continue': 'off',
   // Additional built-in error handling rules
   'prefer-promise-reject-errors': 'error',
+  // Require strict equality (=== / !==). Loose equality performs implicit type
+  // coercion, exactly the kind of "clever" shortcut this config exists to
+  // prevent. Enforcing it in the shared config means consumers no longer have
+  // to re-add it on top of the package.
+  eqeqeq: ['error', 'always'],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
