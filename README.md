@@ -204,6 +204,15 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **📚 Self-Documenting**: Code that explains its intent without extensive comments
 - **🛠️ Maintainable**: Patterns that remain clear even as the codebase grows
 
+### Import Hygiene
+
+- **`import/no-duplicates`**: Collapses multiple import statements from the same
+  module into one, so dependencies on a module are visible in a single place.
+- **`import/no-mutable-exports`**: Forbids exporting mutable bindings
+  (`export let` / `export var`). Mutable exports create shared mutable state
+  across modules — a subtle, hard-to-trace footgun that AI assistants often
+  reach for. Export `const` (or a getter) instead.
+
 ### Framework-Specific Features
 
 #### React Support

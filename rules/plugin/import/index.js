@@ -21,4 +21,9 @@ export const importRules = {
   'import/newline-after-import': 'off',
   'import/first': 'error',
   'import/prefer-default-export': 'off',
+  // Import hygiene: collapse duplicate import statements from the same module
+  // and forbid exporting mutable bindings (export let/var), which create
+  // shared mutable state across modules and are a common AI-generated footgun.
+  'import/no-duplicates': 'error',
+  'import/no-mutable-exports': 'error',
 }
