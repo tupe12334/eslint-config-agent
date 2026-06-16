@@ -108,6 +108,16 @@ const config = defineConfig([
       'coverage/**',
     ],
   },
+  // Flag `eslint-disable` directives that no longer suppress anything. Stale
+  // suppressions hide the fact that a rule is now satisfied (or was renamed)
+  // and quietly widen the set of unchecked code over time, which runs against
+  // this config's explicit-over-clever goal. Reporting them as errors keeps
+  // every suppression honest and removable.
+  {
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error',
+    },
+  },
   // Global plugin definitions
   {
     plugins,

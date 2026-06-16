@@ -297,6 +297,18 @@ If you have files that only export simple Error classes or other boilerplate wit
    ]
    ```
 
+### Honest Suppressions
+
+The config sets `linterOptions.reportUnusedDisableDirectives` to `error`. An `eslint-disable` comment that no longer suppresses anything is reported as an error instead of being silently ignored.
+
+This keeps every suppression honest: once a rule is satisfied (or renamed), the stale directive surfaces immediately so it can be removed, rather than quietly widening the set of unchecked code over time. It pairs naturally with the config's explicit-over-clever philosophy.
+
+```typescript
+// eslint-disable-next-line ddd/require-spec-file -- once the spec exists this
+// directive is unused, and ESLint now flags it so you delete it.
+export const value = 1
+```
+
 ### Configuration Philosophy
 
 This configuration focuses on enforcing patterns that improve long-term maintainability while reducing noise from less impactful rules. The ruleset is carefully curated to balance developer productivity with code quality.
