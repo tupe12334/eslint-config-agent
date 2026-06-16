@@ -30,6 +30,9 @@ export const tsxConfig = (
       },
     },
     settings: {
+      react: {
+        version: 'detect',
+      },
       'import/resolver': {
         typescript: {},
       },

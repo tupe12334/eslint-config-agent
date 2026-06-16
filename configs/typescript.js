@@ -30,6 +30,9 @@ export const typescriptConfig = (
       },
     },
     settings: {
+      react: {
+        version: 'detect',
+      },
       'import/resolver': {
         typescript: {},
       },
