@@ -63,13 +63,30 @@ const testCategories = {
   imports: {
     description: 'Import/export patterns testing',
     files: ['test/import-export-rules.ts'],
-    maxErrors: 19, // import/group-exports + import/no-namespace + import/first errors + export specifier rules + early-return
+    maxErrors: 20, // import/group-exports + import/no-namespace + import/first + import/no-duplicates + export specifier rules + early-return
     maxWarnings: 0,
     expectedRules: [
       'import/group-exports',
       'import/no-namespace',
       'import/first',
+      'import/no-duplicates',
     ],
+  },
+  'import-hygiene-invalid': {
+    description: 'Duplicate imports and mutable exports should be flagged',
+    files: [
+      'test/import-hygiene/invalid/duplicate-imports.ts',
+      'test/import-hygiene/invalid/mutable-export.ts',
+    ],
+    maxErrors: 3,
+    maxWarnings: 0,
+    expectedRules: ['import/no-duplicates', 'import/no-mutable-exports'],
+  },
+  'import-hygiene-valid': {
+    description: 'Merged imports and immutable exports should be clean',
+    files: ['test/import-hygiene/valid/clean-imports.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
   },
   'edge-cases': {
     description: 'Edge cases and boundary testing',

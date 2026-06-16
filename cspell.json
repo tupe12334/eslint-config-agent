@@ -39,7 +39,8 @@
     "kiro",
     "commitlint",
     "knip",
-    "infile"
+    "infile",
+    "footgun"
   ],
   "ignorePaths": [
     "node_modules",
