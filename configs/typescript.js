@@ -1,7 +1,7 @@
 /**
  * TypeScript File Configurations
  *
- * Handles all TypeScript (.ts) file-specific rules.
+ * Handles all TypeScript (.ts, .mts, .cts) file-specific rules.
  * Plugin registration removed - all plugins registered globally in index.js.
  */
 
@@ -15,7 +15,7 @@ export const typescriptConfig = (
 ) => [
   // TypeScript files - Base config
   {
-    files: ['**/*.ts'],
+    files: ['**/*.ts', '**/*.mts', '**/*.cts'],
     ignores: [
       '**/node_modules/**',
       '**/dist/**',

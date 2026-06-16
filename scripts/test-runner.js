@@ -292,6 +292,19 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['n/no-process-env'],
   },
+  'mts-cts-coverage': {
+    description:
+      'ESM/CommonJS TypeScript (.mts/.cts) files get the TypeScript rule set',
+    files: [
+      'test/mts-cts/valid.mts',
+      'test/mts-cts/valid.cts',
+      'test/mts-cts/invalid.mts',
+      'test/mts-cts/invalid.cts',
+    ],
+    maxErrors: 4,
+    maxWarnings: 0,
+    expectedRules: ['no-restricted-syntax'],
+  },
 }
 
 async function findTestFiles() {
@@ -307,7 +320,7 @@ async function findTestFiles() {
         const stats = await stat(fullPath)
         const relativeFilePath = join(relativePath, entry)
 
-        if (stats.isFile() && /\.(ts|tsx|js|jsx)$/.test(entry)) {
+        if (stats.isFile() && /\.(ts|tsx|js|jsx|mts|cts)$/.test(entry)) {
           files.push(relativeFilePath)
         } else if (stats.isDirectory()) {
           await scanDirectory(fullPath, relativeFilePath)
