@@ -42,6 +42,13 @@ const sharedRules = {
   'no-continue': 'off',
   // Additional built-in error handling rules
   'prefer-promise-reject-errors': 'error',
+  // Disallow nested ternaries. A ternary inside another ternary is the
+  // archetypal "clever but unreadable" construct this config exists to
+  // prevent: it collapses branching logic into a single dense expression that
+  // is hard to scan and easy to get wrong, and it is one of the shortcuts AI
+  // assistants reach for most. Forcing an `if`/`else` or an early return keeps
+  // the control flow explicit.
+  'no-nested-ternary': 'error',
   // Require strict equality (=== / !==). Loose equality performs implicit type
   // coercion, exactly the kind of "clever" shortcut this config exists to
   // prevent. Enforcing it in the shared config means consumers no longer have
