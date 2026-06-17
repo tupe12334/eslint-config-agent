@@ -61,6 +61,15 @@ const sharedRules = {
   // caller still holds. Both undermine this config's explicit-over-clever,
   // immutability-leaning stance, so treat parameters as read-only here.
   'no-param-reassign': ['error', { props: true }],
+  // Disallow shorthand type coercions such as `!!value`, `+str`, `1 * x`,
+  // `'' + n` and `~str.indexOf(...)`. These are the sibling of the loose
+  // equality `eqeqeq` already bans here: terse tricks that hide an implicit
+  // type conversion behind punctuation, exactly the "clever but unreadable"
+  // shortcut this config exists to prevent and one AI assistants reach for
+  // often. Requiring the explicit form (`Boolean(value)`, `Number(str)`,
+  // `String(n)`) keeps the intended conversion legible. The rule is
+  // auto-fixable, so consumers can adopt it with `eslint --fix`.
+  'no-implicit-coercion': ['error', { allow: [] }],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
