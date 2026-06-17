@@ -26,13 +26,17 @@ export const importRules = {
   // shared mutable state across modules and are a common AI-generated footgun.
   'import/no-duplicates': 'error',
   'import/no-mutable-exports': 'error',
-  // Forbid circular dependencies between modules. Cycles cause subtle,
-  // order-dependent runtime bugs (a module observing a half-initialized
-  // import as `undefined`) that are notoriously hard to trace, and they
-  // signal tangled module boundaries — exactly the kind of implicit
-  // structure this config exists to surface. `maxDepth: Infinity` follows
-  // the full import graph so deep cycles are caught too.
-  'import/no-cycle': ['error', { maxDepth: Infinity }],
+  // Forbid circular import dependencies (A imports B imports A). Cycles cause
+  // order-dependent runtime bugs where a module reads a not-yet-initialized
+  // binding from its partner and silently sees `undefined`, defeat tree
+  // shaking, and are a reliable signal of tangled, hard-to-follow module
+  // boundaries. They are also a frequent AI-generated footgun, since an
+  // assistant editing one file cannot see the import graph it closes. Detect
+  // them statically. `maxDepth: Infinity` follows the full import graph so deep
+  // cycles are caught too; `ignoreExternal` skips traversal into node_modules
+  // for performance, since cycles inside dependencies are not the consumer's
+  // to fix.
+  'import/no-cycle': ['error', { maxDepth: Infinity, ignoreExternal: true }],
   // A module importing itself is always a mistake (usually a copy-paste or a
   // bad auto-import) and produces a degenerate cycle; flag it explicitly.
   'import/no-self-import': 'error',

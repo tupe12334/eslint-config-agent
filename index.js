@@ -42,11 +42,34 @@ const sharedRules = {
   'no-continue': 'off',
   // Additional built-in error handling rules
   'prefer-promise-reject-errors': 'error',
+  // Disallow nested ternaries. A ternary inside another ternary is the
+  // archetypal "clever but unreadable" construct this config exists to
+  // prevent: it collapses branching logic into a single dense expression that
+  // is hard to scan and easy to get wrong, and it is one of the shortcuts AI
+  // assistants reach for most. Forcing an `if`/`else` or an early return keeps
+  // the control flow explicit.
+  'no-nested-ternary': 'error',
   // Require strict equality (=== / !==). Loose equality performs implicit type
   // coercion, exactly the kind of "clever" shortcut this config exists to
   // prevent. Enforcing it in the shared config means consumers no longer have
   // to re-add it on top of the package.
   eqeqeq: ['error', 'always'],
+  // Disallow reassigning function parameters and mutating their properties.
+  // Reassigning a parameter decouples it from the caller's argument and hides the
+  // function's real inputs; mutating a parameter's properties causes
+  // action-at-a-distance bugs where a callee silently rewrites an object the
+  // caller still holds. Both undermine this config's explicit-over-clever,
+  // immutability-leaning stance, so treat parameters as read-only here.
+  'no-param-reassign': ['error', { props: true }],
+  // Disallow shorthand type coercions such as `!!value`, `+str`, `1 * x`,
+  // `'' + n` and `~str.indexOf(...)`. These are the sibling of the loose
+  // equality `eqeqeq` already bans here: terse tricks that hide an implicit
+  // type conversion behind punctuation, exactly the "clever but unreadable"
+  // shortcut this config exists to prevent and one AI assistants reach for
+  // often. Requiring the explicit form (`Boolean(value)`, `Number(str)`,
+  // `String(n)`) keeps the intended conversion legible. The rule is
+  // auto-fixable, so consumers can adopt it with `eslint --fix`.
+  'no-implicit-coercion': ['error', { allow: [] }],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
