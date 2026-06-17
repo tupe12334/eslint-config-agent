@@ -88,6 +88,26 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'import-cycle-invalid': {
+    description: 'Circular and self imports should be flagged',
+    files: [
+      'test/import-cycle/invalid/module-a.ts',
+      'test/import-cycle/invalid/module-b.ts',
+      'test/import-cycle/invalid/self-import.ts',
+    ],
+    maxErrors: 3,
+    maxWarnings: 0,
+    expectedRules: ['import/no-cycle', 'import/no-self-import'],
+  },
+  'import-cycle-valid': {
+    description: 'Acyclic one-directional imports should be clean',
+    files: [
+      'test/import-cycle/valid/leaf.ts',
+      'test/import-cycle/valid/uses-leaf.ts',
+    ],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
   'edge-cases': {
     description: 'Edge cases and boundary testing',
     files: ['test/edge-cases.tsx'],

@@ -36,6 +36,13 @@ export const tsxConfig = (
       'import/resolver': {
         typescript: {},
       },
+      // Tell eslint-plugin-import to parse TypeScript dependency files with the
+      // TS parser. Without this, the resolver finds the file but the plugin
+      // cannot read its imports/exports, so cross-file rules like
+      // import/no-cycle silently never fire on .ts/.tsx code.
+      'import/parsers': {
+        '@typescript-eslint/parser': ['.ts', '.tsx', '.mts', '.cts'],
+      },
     },
     rules: {
       ...sharedRules,

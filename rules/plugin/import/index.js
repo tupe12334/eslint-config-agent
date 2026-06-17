@@ -32,7 +32,12 @@ export const importRules = {
   // shaking, and are a reliable signal of tangled, hard-to-follow module
   // boundaries. They are also a frequent AI-generated footgun, since an
   // assistant editing one file cannot see the import graph it closes. Detect
-  // them statically. `ignoreExternal` skips traversal into node_modules for
-  // performance, since cycles inside dependencies are not the consumer's to fix.
-  'import/no-cycle': ['error', { ignoreExternal: true }],
+  // them statically. `maxDepth: Infinity` follows the full import graph so deep
+  // cycles are caught too; `ignoreExternal` skips traversal into node_modules
+  // for performance, since cycles inside dependencies are not the consumer's
+  // to fix.
+  'import/no-cycle': ['error', { maxDepth: Infinity, ignoreExternal: true }],
+  // A module importing itself is always a mistake (usually a copy-paste or a
+  // bad auto-import) and produces a degenerate cycle; flag it explicitly.
+  'import/no-self-import': 'error',
 }

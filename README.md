@@ -212,6 +212,13 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   (`export let` / `export var`). Mutable exports create shared mutable state
   across modules — a subtle, hard-to-trace footgun that AI assistants often
   reach for. Export `const` (or a getter) instead.
+- **`import/no-cycle`**: Forbids circular dependencies between modules. Cycles
+  cause order-dependent runtime bugs (a module observing a half-initialized
+  import as `undefined`) and signal tangled module boundaries. The TypeScript
+  parser is wired into `import/parsers` so this analysis also works across
+  `.ts`/`.tsx` files, not just plain JavaScript.
+- **`import/no-self-import`**: Forbids a module importing itself, a degenerate
+  cycle that is always a mistake.
 
 ### Framework-Specific Features
 
