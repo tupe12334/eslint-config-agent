@@ -267,6 +267,22 @@ src/
 └── config.ts         # ⚠️ Excluded (config file)
 ```
 
+**Spec file naming — `.spec` vs `.test`:**
+
+The sibling that satisfies the requirement for a source file must be named
+`<name>.spec.<ext>` (for example, `url-manager.ts` → `url-manager.spec.ts`). A
+`<name>.test.<ext>` sibling is **not** accepted as that source file's spec, even
+though `.test.*` files are themselves excluded from needing a spec of their own.
+
+In other words, `.test.*` and `.spec.*` are both treated as test files (so they
+never require their _own_ spec), but only the `.spec.*` name counts when checking
+that a source file has a corresponding test. If your project uses the `.test.*`
+convention, you have two options:
+
+1. **Rename** test files to `<name>.spec.<ext>`, or
+2. **Scope the rule down** for the affected paths (see
+   [Adopting in an Existing Project](#adopting-in-an-existing-project) below).
+
 **Disabling for specific files:**
 
 If you have files that only export simple Error classes or other boilerplate without testable logic, you can:
@@ -327,6 +343,63 @@ For troubleshooting common issues and frequently asked questions, see [FAQ.md](F
 For development setup, testing guidelines, and contribution instructions, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 For version history and changelog information, see [CHANGELOG.md](CHANGELOG.md) or the [releases page](https://github.com/tupe12334/eslint-config/releases).
+
+## Adopting in an Existing Project
+
+On a brand-new project this config is "zero config" — you start clean and stay
+clean. On an **established codebase**, the strict ruleset is intentionally
+opinionated and will typically surface a large batch of pre-existing violations
+the first time you run it (missing spec files, `?.`/`??` usage, missing JSDoc,
+literal error messages, and so on). That is expected — it is the gap between the
+old standard and this one, not a bug.
+
+Rather than block CI on a green-field cleanup or weaken the config permanently,
+adopt it **gradually**. The recommended on-ramp is to keep the full ruleset but
+temporarily demote the rules that produce the most pre-existing noise to `warn`,
+so CI stays green while the warnings are burned down over time and promoted back
+to `error`.
+
+```javascript
+import baseConfig from 'eslint-config-agent'
+
+export default [
+  ...baseConfig,
+  {
+    // Migration on-ramp: demote the highest-volume rules to warnings so an
+    // existing codebase can adopt the config without a CI-blocking cleanup.
+    // Remove entries here as each rule is driven to zero, then enjoy the full
+    // strictness with nothing left to relax.
+    rules: {
+      'ddd/require-spec-file': 'warn',
+      'jsdoc/require-jsdoc': 'warn',
+      'error/no-literal-error-message': 'warn',
+    },
+  },
+]
+```
+
+Keep your CI lint step at `eslint .` (which fails only on errors) during
+migration, and switch it to `eslint . --max-warnings 0` once the warnings are
+cleared. To scope the relaxation to only the legacy parts of the tree, attach
+the override to a `files` glob instead of applying it globally:
+
+```javascript
+import baseConfig from 'eslint-config-agent'
+
+export default [
+  ...baseConfig,
+  {
+    files: ['src/legacy/**/*.{ts,tsx}'],
+    rules: {
+      'ddd/require-spec-file': 'warn',
+    },
+  },
+]
+```
+
+This way new code is held to the full standard immediately while the legacy
+surface is tightened incrementally. For migrating from a legacy `.eslintrc`
+config format to flat config, see [MIGRATION.md](MIGRATION.md).
 
 ## License
 

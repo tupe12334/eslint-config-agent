@@ -114,6 +114,42 @@ Then run:
 - `npm run lint:fix` - Fix auto-fixable issues
 - `npm run lint:ci` - Strict checking for CI/CD
 
+### **Q: I get `Missing spec file: "<name>.spec.ts"` but I already have `<name>.test.ts` — why?**
+
+A: The `ddd/require-spec-file` rule looks for a sibling named `<name>.spec.<ext>`
+to satisfy a source file's spec requirement. A `<name>.test.<ext>` sibling is
+**not** accepted as that source file's spec, even though `.test.*` files are
+themselves excluded from needing a spec of their own.
+
+If your project uses the `.test.*` convention, either rename the test files to
+`<name>.spec.<ext>`, or demote/scope the rule in your own config:
+
+```javascript
+import baseConfig from 'eslint-config-agent'
+
+export default [
+  ...baseConfig,
+  {
+    rules: {
+      // Projects on the .test.* convention can relax this rule.
+      'ddd/require-spec-file': 'off',
+    },
+  },
+]
+```
+
+See the "Spec File Requirements (DDD)" section of the README for details.
+
+### **Q: Adopting this on an existing project floods me with errors. How do I migrate gradually?**
+
+A: That batch of violations is expected — it's the gap between the old standard
+and this one. Rather than block CI on a one-shot cleanup, demote the
+highest-volume rules to `warn` (optionally scoped to legacy paths with a `files`
+glob), keep CI at `eslint .` so it fails only on errors, then burn the warnings
+down and promote the rules back to `error`. The README's
+[Adopting in an Existing Project](README.md#adopting-in-an-existing-project)
+section has a copy-paste recipe.
+
 ### **Q: Can I use this with Prettier?**
 
 A: Yes! This configuration focuses on code quality rules and doesn't conflict with Prettier's formatting rules. You can use both together safely.
