@@ -26,4 +26,13 @@ export const importRules = {
   // shared mutable state across modules and are a common AI-generated footgun.
   'import/no-duplicates': 'error',
   'import/no-mutable-exports': 'error',
+  // Forbid circular import dependencies (A imports B imports A). Cycles cause
+  // order-dependent runtime bugs where a module reads a not-yet-initialized
+  // binding from its partner and silently sees `undefined`, defeat tree
+  // shaking, and are a reliable signal of tangled, hard-to-follow module
+  // boundaries. They are also a frequent AI-generated footgun, since an
+  // assistant editing one file cannot see the import graph it closes. Detect
+  // them statically. `ignoreExternal` skips traversal into node_modules for
+  // performance, since cycles inside dependencies are not the consumer's to fix.
+  'import/no-cycle': ['error', { ignoreExternal: true }],
 }
