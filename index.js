@@ -49,6 +49,18 @@ const sharedRules = {
   // assistants reach for most. Forcing an `if`/`else` or an early return keeps
   // the control flow explicit.
   'no-nested-ternary': 'error',
+  // Disallow ternaries whose branches are themselves a boolean literal
+  // (`cond ? true : false`, `cond ? false : true`) or that re-test a value
+  // they could simply fall through to (`a ? a : b`). These are the flat
+  // sibling of the nested ternaries `no-nested-ternary` already bans here:
+  // punctuation-heavy expressions that dress up a plain boolean (or the
+  // condition itself) as a branch, exactly the "clever but unreadable"
+  // shortcut this config exists to prevent and one AI assistants reach for
+  // often. The explicit form — the condition itself, a negation, or a real
+  // `if` — keeps the intent legible. The rule is auto-fixable, so consumers
+  // can adopt it with `eslint --fix`. `defaultAssignment: false` extends the
+  // check to the `a ? a : b` default-value idiom as well.
+  'no-unneeded-ternary': ['error', { defaultAssignment: false }],
   // Require strict equality (=== / !==). Loose equality performs implicit type
   // coercion, exactly the kind of "clever" shortcut this config exists to
   // prevent. Enforcing it in the shared config means consumers no longer have
