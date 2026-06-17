@@ -70,6 +70,16 @@ const sharedRules = {
   // `String(n)`) keeps the intended conversion legible. The rule is
   // auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-implicit-coercion': ['error', { allow: [] }],
+  // Require `const` for bindings that are never reassigned. This is the local
+  // counterpart to the `no-param-reassign` rule above: together they extend
+  // this config's immutability-leaning stance from parameters to every
+  // variable. A `let` that is never reassigned misleads the reader into
+  // expecting mutation that never comes, while `const` documents the binding's
+  // fixed intent up front — exactly the explicit-over-clever signal this
+  // config exists to enforce. `destructuring: 'all'` only flags a destructuring
+  // pattern when *every* binding it introduces could be `const`, so legitimate
+  // mixed const/let destructuring is left alone. The rule is auto-fixable.
+  'prefer-const': ['error', { destructuring: 'all' }],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
