@@ -54,6 +54,13 @@ const sharedRules = {
   // prevent. Enforcing it in the shared config means consumers no longer have
   // to re-add it on top of the package.
   eqeqeq: ['error', 'always'],
+  // Disallow reassigning function parameters and mutating their properties.
+  // Reassigning a parameter decouples it from the caller's argument and hides the
+  // function's real inputs; mutating a parameter's properties causes
+  // action-at-a-distance bugs where a callee silently rewrites an object the
+  // caller still holds. Both undermine this config's explicit-over-clever,
+  // immutability-leaning stance, so treat parameters as read-only here.
+  'no-param-reassign': ['error', { props: true }],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
