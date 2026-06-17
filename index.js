@@ -70,6 +70,16 @@ const sharedRules = {
   // `String(n)`) keeps the intended conversion legible. The rule is
   // auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-implicit-coercion': ['error', { allow: [] }],
+  // Disallow `var`. Function-scoped, hoisted bindings are a long-standing
+  // footgun: they leak out of the block they appear to belong to and read as
+  // initialized `undefined` before their declaration runs, producing
+  // order-dependent bugs that `let`/`const` make impossible. `var` is exactly
+  // the kind of legacy shortcut an AI assistant trained on old code reaches
+  // for, so banning it here keeps every binding block-scoped and its lifetime
+  // legible — the explicit-over-clever stance this config exists to enforce,
+  // and the foundation the `prefer-const` direction builds on. The rule is
+  // auto-fixable, so consumers can adopt it with `eslint --fix`.
+  'no-var': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
