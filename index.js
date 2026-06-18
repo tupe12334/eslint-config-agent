@@ -109,6 +109,19 @@ const sharedRules = {
   // explicit-over-clever, AI-safety stance. It is also the foundation the
   // `prefer-const` rule builds on. The rule is auto-fixable.
   'no-var': 'error',
+  // Disallow "yoda" conditions — comparisons that put the literal on the left,
+  // such as `if (0 === count)` or `if ('done' === status)`. They reverse the
+  // natural reading order ("if zero equals count" instead of "if count equals
+  // zero"), forcing the reader to mentally flip every comparison, and the only
+  // thing they buy is guarding a typo'd `=` that the already-enabled `eqeqeq`
+  // (plus `no-cond-assign` from the recommended set) and TypeScript itself
+  // already prevent. That makes them pure readability tax, exactly the "clever
+  // but unreadable" shortcut this config exists to remove, and the natural
+  // companion to `eqeqeq` enabled above. `exceptRange: true` still permits the
+  // genuinely clearer range idiom (`if (0 <= x && x < limit)`), which reads
+  // like a number line. The rule is auto-fixable, so consumers can adopt it
+  // with `eslint --fix`.
+  yoda: ['error', 'never', { exceptRange: true }],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
