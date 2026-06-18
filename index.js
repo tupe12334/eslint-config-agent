@@ -109,6 +109,16 @@ const sharedRules = {
   // explicit-over-clever, AI-safety stance. It is also the foundation the
   // `prefer-const` rule builds on. The rule is auto-fixable.
   'no-var': 'error',
+  // Require the `default` clause of a `switch` to be written last. A `default`
+  // placed before later `case`s still matches only when no `case` does, so its
+  // position no longer reflects its precedence — and a `default` in the middle
+  // that omits `break` silently falls through into the cases below it. Both are
+  // exactly the kind of "looks one way, behaves another" footgun this config
+  // exists to surface, and the disconnect is one an AI assistant emitting a
+  // switch can easily introduce. Pinning `default` to the end keeps the
+  // control flow legible and complements the explicit-return switch-case rules
+  // this config already ships.
+  'default-case-last': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
