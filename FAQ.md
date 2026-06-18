@@ -44,7 +44,11 @@ npm install --save-dev eslint@^9.34.0
 
 ### **Q: Does this work with monorepos?**
 
-A: Yes! Place the `eslint.config.js` at the root of each package, or use a shared config:
+A: Yes! The config's built-in ignores are recursive (`**/dist/**`, `**/build/**`,
+`**/coverage/**`, `**/.next/**`, `**/out/**`), so generated output inside nested
+packages is skipped automatically — you don't get lint errors on compiled code
+under `packages/*/dist`. Place the `eslint.config.js` at the root of each package,
+or use a shared config:
 
 ```javascript
 // packages/shared/eslint.config.js

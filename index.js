@@ -125,15 +125,26 @@ const tsOnlyRestrictedSyntax = [
 ]
 
 const config = defineConfig([
-  // Global ignores for non-JS/TS files and build outputs
+  // Global ignores for non-JS/TS files and build outputs.
+  //
+  // Build-output globs are prefixed with `**/` so they match nested package
+  // directories, not just the repository root. A bare `dist/**` only ignores
+  // a top-level `dist/`, which means in a monorepo every `packages/*/dist/**`
+  // (and the same for `build`, `coverage`, etc.) is still linted and floods
+  // adopters with errors on generated code. The recursive form ignores those
+  // outputs wherever they appear, matching the monorepo support this config
+  // documents.
   {
     ignores: [
       '**/*.json',
       '**/*.md',
       '**/*.yaml',
       '**/*.yml',
-      'dist/**',
-      'coverage/**',
+      '**/dist/**',
+      '**/build/**',
+      '**/coverage/**',
+      '**/.next/**',
+      '**/out/**',
     ],
   },
   // Flag `eslint-disable` directives that no longer suppress anything. Stale
