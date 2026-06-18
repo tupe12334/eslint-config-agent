@@ -6,7 +6,8 @@
   "type": "module",
   "exports": {
     ".": "./index.js",
-    "./ddd": "./exports/ddd.js"
+    "./ddd": "./exports/ddd.js",
+    "./recommended": "./exports/recommended.js"
   },
   "files": [
     "index.js",
@@ -32,6 +33,7 @@
     "test:invalid": "eslint test/invalid.tsx test/long-function.tsx test/jsx-extension-test.js",
     "test:hooks": "eslint test/react-hooks-rules.tsx",
     "test:imports": "eslint test/import-export-rules.ts",
+    "test:recommended": "node scripts/test-recommended.js",
     "test:edge": "eslint test/edge-cases.tsx",
     "test:performance": "eslint test/performance-test.tsx",
     "test:comprehensive": "node scripts/test-runner.js",
