@@ -109,6 +109,16 @@ const sharedRules = {
   // explicit-over-clever, AI-safety stance. It is also the foundation the
   // `prefer-const` rule builds on. The rule is auto-fixable.
   'no-var': 'error',
+  // Require object literal shorthand for properties and methods, so
+  // `{ value: value }` collapses to `{ value }` and `{ run: function () {} }`
+  // to `{ run() {} }`. The longhand forms carry no extra meaning — they are
+  // pure boilerplate that an AI assistant trained on older code routinely
+  // emits, and the duplicated `value: value` name is a common spot for a
+  // copy-paste typo that the shorthand removes entirely. Enforcing one
+  // canonical object form keeps literals legible and consistent, matching
+  // this config's explicit-over-clever, low-noise stance. The rule is
+  // auto-fixable, so consumers can adopt it with `eslint --fix`.
+  'object-shorthand': ['error', 'always'],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
