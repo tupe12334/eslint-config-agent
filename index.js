@@ -109,6 +109,15 @@ const sharedRules = {
   // explicit-over-clever, AI-safety stance. It is also the foundation the
   // `prefer-const` rule builds on. The rule is auto-fixable.
   'no-var': 'error',
+  // Disallow an `if` statement as the only statement inside an `else` block;
+  // require `else if` instead. A lonely `if` nested in an `else` adds a level
+  // of indentation that hides what is really a flat chain of conditions, the
+  // same needless nesting the `no-else-return` and `no-nested-ternary` rules
+  // already fight here and a shape AI assistants emit when they mechanically
+  // wrap each new branch instead of extending the chain. Collapsing it to
+  // `else if` keeps the branching legible and the nesting flat. The rule is
+  // auto-fixable, so consumers can adopt it with `eslint --fix`.
+  'no-lonely-if': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
