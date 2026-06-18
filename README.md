@@ -204,6 +204,17 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **📚 Self-Documenting**: Code that explains its intent without extensive comments
 - **🛠️ Maintainable**: Patterns that remain clear even as the codebase grows
 
+### Control Flow & Readability
+
+- **`no-else-return`** (`allowElseIf: false`): Forbids an `else`/`else if` block
+  when the preceding `if` already exits via `return`. Once the `if` branch
+  returns, the `else` only adds nesting that hides the real control flow.
+  Removing it flattens the code into guard-clause style — the same goal as the
+  bundled `early-return` plugin. Auto-fixable with `eslint --fix`.
+- **`no-nested-ternary`**: Forbids a ternary inside another ternary, the
+  archetypal "clever but unreadable" construct. Use `if`/`else` or an early
+  return instead.
+
 ### Import Hygiene
 
 - **`import/no-duplicates`**: Collapses multiple import statements from the same

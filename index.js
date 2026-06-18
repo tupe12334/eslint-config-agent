@@ -42,6 +42,15 @@ const sharedRules = {
   'no-continue': 'off',
   // Additional built-in error handling rules
   'prefer-promise-reject-errors': 'error',
+  // Disallow an `else`/`else if` block when the preceding `if` already exits
+  // the function via `return`. The `else` is dead weight: once the `if` branch
+  // returns, the code after it is unreachable from that path, so wrapping the
+  // remainder in `else` only adds a level of nesting that hides the real
+  // control flow. This is the built-in companion to the `early-return` plugin
+  // already enabled here — both push code toward flat, guard-clause style
+  // instead of the deeply-nested if/else trees AI assistants tend to emit. The
+  // rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
+  'no-else-return': ['error', { allowElseIf: false }],
   // Disallow nested ternaries. A ternary inside another ternary is the
   // archetypal "clever but unreadable" construct this config exists to
   // prevent: it collapses branching logic into a single dense expression that
