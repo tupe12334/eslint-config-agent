@@ -70,6 +70,15 @@ const sharedRules = {
   // `String(n)`) keeps the intended conversion legible. The rule is
   // auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-implicit-coercion': ['error', { allow: [] }],
+  // Disallow `var`. `var` declarations are function-scoped and hoisted, so
+  // they leak out of the block they appear to belong to and read as
+  // initialized `undefined` before their declaration runs — producing
+  // order-dependent bugs that block-scoped `let`/`const` make impossible.
+  // `var` is exactly the legacy shortcut an AI assistant trained on older
+  // code reaches for, which puts it squarely in scope for this config's
+  // explicit-over-clever, AI-safety stance. It is also the foundation the
+  // `prefer-const` rule builds on. The rule is auto-fixable.
+  'no-var': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
