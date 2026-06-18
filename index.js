@@ -109,6 +109,17 @@ const sharedRules = {
   // explicit-over-clever, AI-safety stance. It is also the foundation the
   // `prefer-const` rule builds on. The rule is auto-fixable.
   'no-var': 'error',
+  // Require object spread (`{ ...a, ...b }`) instead of `Object.assign({}, ...)`
+  // for building a new object. `Object.assign` with an object-literal first
+  // argument is the copy/merge idiom, but dropping that `{}` silently turns it
+  // into an in-place mutation of the first source — the exact action-at-a-
+  // distance footgun this config already guards against with `no-param-reassign`
+  // and `prefer-const`. Object spread has no such failure mode and reads as "a
+  // new object from these" at a glance, matching the explicit-over-clever stance
+  // here. The rule only flags the object-literal-first-arg form, leaving
+  // `Object.assign(target, src)` (deliberate mutation) alone, and is
+  // auto-fixable so consumers can adopt it with `eslint --fix`.
+  'prefer-object-spread': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
