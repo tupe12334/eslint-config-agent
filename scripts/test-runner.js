@@ -111,12 +111,13 @@ const testCategories = {
   'edge-cases': {
     description: 'Edge cases and boundary testing',
     files: ['test/edge-cases.tsx'],
-    maxErrors: 34,
+    maxErrors: 37,
     maxWarnings: 30,
     expectedRules: [
       'no-restricted-syntax',
       'max-lines',
       '@typescript-eslint/no-explicit-any',
+      'no-else-return',
       'guard-clauses/prefer-guard-at-function-start',
       'guard-clauses/no-else-return',
       'guard-clauses/prefer-early-continue',
@@ -634,10 +635,9 @@ async function generateTestReport(allResults, standaloneResult = null) {
   if (overallPassed) {
     console.log('🎉 ALL TESTS PASSED!')
     return true
-  } else {
-    console.log('💥 SOME TESTS FAILED!')
-    return false
   }
+  console.log('💥 SOME TESTS FAILED!')
+  return false
 }
 
 function autoCategorizeFiles(allTestFiles) {
