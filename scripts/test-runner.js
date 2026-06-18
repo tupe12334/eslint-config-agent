@@ -580,7 +580,7 @@ async function runStandaloneTests(testFiles) {
 }
 
 async function generateTestReport(allResults, standaloneResult = null) {
-  console.log('\n' + '='.repeat(80))
+  console.log(`\n${'='.repeat(80)}`)
   console.log('📊 TEST REPORT SUMMARY')
   console.log('='.repeat(80))
 
@@ -629,7 +629,7 @@ async function generateTestReport(allResults, standaloneResult = null) {
     console.log(`   ${chunk.join(', ')}`)
   }
 
-  console.log('\n' + '='.repeat(80))
+  console.log(`\n${'='.repeat(80)}`)
 
   if (overallPassed) {
     console.log('🎉 ALL TESTS PASSED!')
