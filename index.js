@@ -61,6 +61,15 @@ const sharedRules = {
   // caller still holds. Both undermine this config's explicit-over-clever,
   // immutability-leaning stance, so treat parameters as read-only here.
   'no-param-reassign': ['error', { props: true }],
+  // Require `const` for bindings that are never reassigned. This is the
+  // local-binding counterpart to `no-param-reassign`: together they extend the
+  // config's immutability-leaning stance from parameters to every variable. A
+  // `let` that is never reassigned misleads readers into expecting a mutation
+  // that never comes; `const` documents fixed intent up front. The rule is
+  // auto-fixable (`eslint --fix`), so adoption is cheap. `destructuring: 'all'`
+  // only flags a destructuring pattern when every introduced binding could be
+  // `const`, leaving mixed const/let destructuring alone.
+  'prefer-const': ['error', { destructuring: 'all' }],
   // Disallow shorthand type coercions such as `!!value`, `+str`, `1 * x`,
   // `'' + n` and `~str.indexOf(...)`. These are the sibling of the loose
   // equality `eqeqeq` already bans here: terse tricks that hide an implicit
