@@ -1,10 +1,11 @@
 /**
  * Integration test for the `prefer-const` rule shipped by eslint-config-agent.
  *
- * The shared config must flag a `let` binding that is never reassigned and
- * accept both `const` and a `let` that is genuinely reassigned. This guards
+ * The shared config must flag a `let` that is never reassigned, accept a
+ * `const` binding, and leave a genuinely reassigned `let` alone. This guards
  * against accidental removal of the rule and documents the intended behavior.
- * Run as a standalone node script by scripts/test-runner.js (exit code 0 = pass).
+ * Run as a standalone node script by scripts/test-runner.js (exit code 0 =
+ * pass).
  */
 import assert from 'assert'
 import { ESLint } from 'eslint'
@@ -24,9 +25,9 @@ const preferConstMessages = async code => {
 
 console.log('Testing prefer-const rule from the shipped config...')
 
-// A `let` that is never reassigned must be flagged.
+// A never-reassigned `let` must be flagged.
 const neverReassigned = await preferConstMessages(
-  'export const run = () => {\n  let value = 1\n  return value\n}\n'
+  'export const make = () => {\n  let value = 1\n  return value\n}\n'
 )
 assert.ok(
   neverReassigned.length > 0,
@@ -40,7 +41,7 @@ assert.strictEqual(
 
 // A `const` binding must pass.
 const constBinding = await preferConstMessages(
-  'export const run = () => {\n  const value = 1\n  return value\n}\n'
+  'export const make = () => {\n  const value = 1\n  return value\n}\n'
 )
 assert.strictEqual(
   constBinding.length,
@@ -48,14 +49,14 @@ assert.strictEqual(
   'Did not expect a `const` binding to be flagged by prefer-const'
 )
 
-// A `let` that IS reassigned must pass.
+// A genuinely reassigned `let` must pass.
 const reassigned = await preferConstMessages(
-  'export const run = () => {\n  let value = 1\n  value = 2\n  return value\n}\n'
+  'export const make = () => {\n  let value = 1\n  value = 2\n  return value\n}\n'
 )
 assert.strictEqual(
   reassigned.length,
   0,
-  'Did not expect a genuinely reassigned `let` to be flagged by prefer-const'
+  'Did not expect a reassigned `let` to be flagged by prefer-const'
 )
 
 console.log('✅ All tests passed!')

@@ -42,6 +42,15 @@ const sharedRules = {
   'no-continue': 'off',
   // Additional built-in error handling rules
   'prefer-promise-reject-errors': 'error',
+  // Disallow an `else`/`else if` block when the preceding `if` already exits
+  // the function via `return`. The `else` is dead weight: once the `if` branch
+  // returns, the code after it is unreachable from that path, so wrapping the
+  // remainder in `else` only adds a level of nesting that hides the real
+  // control flow. This is the built-in companion to the `early-return` plugin
+  // already enabled here — both push code toward flat, guard-clause style
+  // instead of the deeply-nested if/else trees AI assistants tend to emit. The
+  // rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
+  'no-else-return': ['error', { allowElseIf: false }],
   // Disallow nested ternaries. A ternary inside another ternary is the
   // archetypal "clever but unreadable" construct this config exists to
   // prevent: it collapses branching logic into a single dense expression that
@@ -49,6 +58,18 @@ const sharedRules = {
   // assistants reach for most. Forcing an `if`/`else` or an early return keeps
   // the control flow explicit.
   'no-nested-ternary': 'error',
+  // Disallow ternaries whose branches are themselves a boolean literal
+  // (`cond ? true : false`, `cond ? false : true`) or that re-test a value
+  // they could simply fall through to (`a ? a : b`). These are the flat
+  // sibling of the nested ternaries `no-nested-ternary` already bans here:
+  // punctuation-heavy expressions that dress up a plain boolean (or the
+  // condition itself) as a branch, exactly the "clever but unreadable"
+  // shortcut this config exists to prevent and one AI assistants reach for
+  // often. The explicit form — the condition itself, a negation, or a real
+  // `if` — keeps the intent legible. The rule is auto-fixable, so consumers
+  // can adopt it with `eslint --fix`. `defaultAssignment: false` extends the
+  // check to the `a ? a : b` default-value idiom as well.
+  'no-unneeded-ternary': ['error', { defaultAssignment: false }],
   // Require strict equality (=== / !==). Loose equality performs implicit type
   // coercion, exactly the kind of "clever" shortcut this config exists to
   // prevent. Enforcing it in the shared config means consumers no longer have
@@ -61,6 +82,15 @@ const sharedRules = {
   // caller still holds. Both undermine this config's explicit-over-clever,
   // immutability-leaning stance, so treat parameters as read-only here.
   'no-param-reassign': ['error', { props: true }],
+  // Require `const` for bindings that are never reassigned. This is the
+  // local-binding counterpart to `no-param-reassign`: together they extend the
+  // config's immutability-leaning stance from parameters to every variable. A
+  // `let` that is never reassigned misleads readers into expecting a mutation
+  // that never comes; `const` documents fixed intent up front. The rule is
+  // auto-fixable (`eslint --fix`), so adoption is cheap. `destructuring: 'all'`
+  // only flags a destructuring pattern when every introduced binding could be
+  // `const`, leaving mixed const/let destructuring alone.
+  'prefer-const': ['error', { destructuring: 'all' }],
   // Disallow shorthand type coercions such as `!!value`, `+str`, `1 * x`,
   // `'' + n` and `~str.indexOf(...)`. These are the sibling of the loose
   // equality `eqeqeq` already bans here: terse tricks that hide an implicit
@@ -70,16 +100,44 @@ const sharedRules = {
   // `String(n)`) keeps the intended conversion legible. The rule is
   // auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-implicit-coercion': ['error', { allow: [] }],
-  // Require `const` for bindings that are never reassigned. This is the local
-  // counterpart to the `no-param-reassign` rule above: together they extend
-  // this config's immutability-leaning stance from parameters to every
-  // variable. A `let` that is never reassigned misleads the reader into
-  // expecting mutation that never comes, while `const` documents the binding's
-  // fixed intent up front — exactly the explicit-over-clever signal this
-  // config exists to enforce. `destructuring: 'all'` only flags a destructuring
-  // pattern when *every* binding it introduces could be `const`, so legitimate
-  // mixed const/let destructuring is left alone. The rule is auto-fixable.
-  'prefer-const': ['error', { destructuring: 'all' }],
+  // Disallow `var`. `var` declarations are function-scoped and hoisted, so
+  // they leak out of the block they appear to belong to and read as
+  // initialized `undefined` before their declaration runs — producing
+  // order-dependent bugs that block-scoped `let`/`const` make impossible.
+  // `var` is exactly the legacy shortcut an AI assistant trained on older
+  // code reaches for, which puts it squarely in scope for this config's
+  // explicit-over-clever, AI-safety stance. It is also the foundation the
+  // `prefer-const` rule builds on. The rule is auto-fixable.
+  'no-var': 'error',
+  // Disallow chained assignment expressions such as `a = b = c = 0`. Chaining
+  // collapses several writes into one expression: the value flows right-to-left
+  // through bindings that have nothing to do with each other, so a reader has to
+  // unwind the chain to see how many variables changed and to what. It also
+  // quietly couples those variables — touching the chain later risks rewriting
+  // more than intended — which runs against the immutability-leaning stance the
+  // `prefer-const`, `no-param-reassign` and `no-var` rules above already set
+  // here. It is exactly the terse, "clever" shortcut this config exists to
+  // prevent and one AI assistants emit when packing initialization onto a single
+  // line. Writing each assignment on its own statement keeps the data flow
+  // explicit.
+  'no-multi-assign': 'error',
+  // Require a `return` from every array-method callback that is expected to
+  // produce one (`map`, `filter`, `reduce`, `every`, `some`, `find`, `sort`,
+  // `flatMap`, ...). A callback that falls off the end returns `undefined`, so
+  // `arr.map(x => { doSomething(x) })` silently yields an array of `undefined`
+  // and `arr.filter(x => { x.active })` keeps every element — the kind of
+  // quiet, wrong-result bug that type checking will not catch and that AI
+  // assistants emit when they reach for a brace body and forget the `return`.
+  // Unlike most rules here this is a correctness check, not a style
+  // preference, which is why it is not covered by `eslint:recommended` and is
+  // enabled explicitly. `checkForEach: true` flags the inverse mistake —
+  // returning a value from `forEach`, where the result is discarded — which
+  // usually means `map` was intended. The rule is not auto-fixable because
+  // only the author knows what each callback should return.
+  'array-callback-return': [
+    'error',
+    { allowImplicit: false, checkForEach: true },
+  ],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
@@ -135,15 +193,26 @@ const tsOnlyRestrictedSyntax = [
 ]
 
 const config = defineConfig([
-  // Global ignores for non-JS/TS files and build outputs
+  // Global ignores for non-JS/TS files and build outputs.
+  //
+  // Build-output globs are prefixed with `**/` so they match nested package
+  // directories, not just the repository root. A bare `dist/**` only ignores
+  // a top-level `dist/`, which means in a monorepo every `packages/*/dist/**`
+  // (and the same for `build`, `coverage`, etc.) is still linted and floods
+  // adopters with errors on generated code. The recursive form ignores those
+  // outputs wherever they appear, matching the monorepo support this config
+  // documents.
   {
     ignores: [
       '**/*.json',
       '**/*.md',
       '**/*.yaml',
       '**/*.yml',
-      'dist/**',
-      'coverage/**',
+      '**/dist/**',
+      '**/build/**',
+      '**/coverage/**',
+      '**/.next/**',
+      '**/out/**',
     ],
   },
   // Flag `eslint-disable` directives that no longer suppress anything. Stale
