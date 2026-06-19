@@ -121,6 +121,18 @@ const sharedRules = {
   // line. Writing each assignment on its own statement keeps the data flow
   // explicit.
   'no-multi-assign': 'error',
+  // Disallow renaming an import, export or destructured binding to the same
+  // name (`import { foo as foo }`, `export { bar as bar }`, `const { baz: baz }
+  // = obj`). The `as`/`:` clause reads as if it changes something, so a reader
+  // pauses to compare both sides only to find they are identical — pure
+  // punctuation noise that dresses up a plain binding as a rename. It is
+  // exactly the kind of redundant ceremony an AI assistant emits when it
+  // mechanically spells out an alias it does not actually need, which puts it
+  // squarely in scope for this config's explicit-over-clever, no-dead-weight
+  // stance alongside the `no-else-return` and `no-unneeded-ternary` rules
+  // above. Dropping the redundant clause leaves the shorter, unambiguous form.
+  // The rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
+  'no-useless-rename': 'error',
   // Require a `return` from every array-method callback that is expected to
   // produce one (`map`, `filter`, `reduce`, `every`, `some`, `find`, `sort`,
   // `flatMap`, ...). A callback that falls off the end returns `undefined`, so

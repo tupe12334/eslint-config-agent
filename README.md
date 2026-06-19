@@ -250,6 +250,12 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **`no-nested-ternary`**: Forbids a ternary inside another ternary, the
   archetypal "clever but unreadable" construct. Use `if`/`else` or an early
   return instead.
+- **`no-useless-rename`**: Forbids renaming an import, export or destructured
+  binding to the same name (`import { foo as foo }`, `export { bar as bar }`,
+  `const { baz: baz } = obj`). The `as`/`:` clause reads as if it changes
+  something, so a reader compares both sides only to find them identical — pure
+  punctuation noise. Drop the redundant clause for the shorter, unambiguous
+  form. Auto-fixable with `eslint --fix`.
 
 ### Import Hygiene
 
