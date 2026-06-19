@@ -109,6 +109,18 @@ const sharedRules = {
   // explicit-over-clever, AI-safety stance. It is also the foundation the
   // `prefer-const` rule builds on. The rule is auto-fixable.
   'no-var': 'error',
+  // Disallow chained assignment expressions such as `a = b = c = 0`. Chaining
+  // collapses several writes into one expression: the value flows right-to-left
+  // through bindings that have nothing to do with each other, so a reader has to
+  // unwind the chain to see how many variables changed and to what. It also
+  // quietly couples those variables — touching the chain later risks rewriting
+  // more than intended — which runs against the immutability-leaning stance the
+  // `prefer-const`, `no-param-reassign` and `no-var` rules above already set
+  // here. It is exactly the terse, "clever" shortcut this config exists to
+  // prevent and one AI assistants emit when packing initialization onto a single
+  // line. Writing each assignment on its own statement keeps the data flow
+  // explicit.
+  'no-multi-assign': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
