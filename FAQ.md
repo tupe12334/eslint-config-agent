@@ -66,7 +66,7 @@ A: This configuration helps AI assistants generate more maintainable and debugga
 
 ### **Q: How do I contribute or report issues?**
 
-A: Please use the [GitHub repository](https://github.com/tupe12334/eslint-config) for issues and contributions.
+A: Please use the [GitHub repository](https://github.com/tupe12334/eslint-config-agent) for issues and contributions.
 
 For development setup, testing guidelines, and contribution instructions, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -162,7 +162,7 @@ A: Yes! This configuration focuses on code quality rules and doesn't conflict wi
 
 If you don't find your answer here:
 
-1. Check the [GitHub Issues](https://github.com/tupe12334/eslint-config/issues) for similar problems
+1. Check the [GitHub Issues](https://github.com/tupe12334/eslint-config-agent/issues) for similar problems
 2. Review the [CONTRIBUTING.md](CONTRIBUTING.md) for development setup
 3. Create a new issue with:
    - Your ESLint version
