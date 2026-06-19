@@ -255,6 +255,13 @@ const testCategories = {
       'switch-case/newline-between-switch-case',
     ],
   },
+  'switch-exhaustiveness-invalid': {
+    description: 'Non-exhaustive switch over a closed union must be flagged',
+    files: ['test/switch-exhaustiveness/invalid/missing-union-case.tsx'],
+    maxErrors: 5,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/switch-exhaustiveness-check'],
+  },
   'optional-chaining': {
     description: 'Optional chaining and nullish coalescing tests',
     files: ['test/test-optional.ts', 'test/test-js-optional.js'],
@@ -629,7 +636,9 @@ async function generateTestReport(allResults, standaloneResult = null) {
     totalErrors += results.totalErrors
     totalWarnings += results.totalWarnings
 
-    results.rulesCovered.forEach(rule => allRulesCovered.add(rule))
+    results.rulesCovered.forEach(rule => {
+      allRulesCovered.add(rule)
+    })
   }
 
   // Report standalone test results
@@ -685,7 +694,9 @@ function autoCategorizeFiles(allTestFiles) {
   // Find files that aren't in any predefined category
   const categorizedFiles = new Set()
   for (const category of Object.values(autoCategories)) {
-    category.files.forEach(file => categorizedFiles.add(file))
+    category.files.forEach(file => {
+      categorizedFiles.add(file)
+    })
   }
 
   for (const file of allTestFiles) {
@@ -780,7 +791,9 @@ async function runComprehensiveTests() {
     // Discover all test files
     const allTestFiles = await findTestFiles()
     console.log(`📁 Discovered ${allTestFiles.length} test files:`)
-    allTestFiles.forEach(file => console.log(`   - ${file}`))
+    allTestFiles.forEach(file => {
+      console.log(`   - ${file}`)
+    })
 
     // Separate standalone test files from lint test files
     const standaloneTestFiles = allTestFiles.filter(
