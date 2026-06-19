@@ -518,6 +518,16 @@ If you have files that only export simple Error classes or other boilerplate wit
    ]
    ```
 
+### Language Safety
+
+- **`no-var`**: Forbids `var`. Function-scoped, hoisted bindings leak out of the
+  block they appear to belong to and read as `undefined` before their
+  declaration runs, producing order-dependent bugs that `let`/`const` make
+  impossible. `var` is exactly the legacy shortcut an AI assistant trained on
+  older code reaches for, so banning it keeps every binding block-scoped and
+  its lifetime legible. The rule is auto-fixable, so existing code can adopt it
+  with `eslint --fix`.
+
 ### Honest Suppressions
 
 The config sets `linterOptions.reportUnusedDisableDirectives` to `error`. An `eslint-disable` comment that no longer suppresses anything is reported as an error instead of being silently ignored.
