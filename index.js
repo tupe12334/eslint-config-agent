@@ -153,6 +153,20 @@ const sharedRules = {
     'error',
     { allowImplicit: false, checkForEach: true },
   ],
+  // Disallow loops whose body always exits on the first iteration. A `for` /
+  // `while` / `do...while` whose every path ends in `return`, `break` or
+  // `throw` can never reach a second pass, so the loop is a lie: it reads as
+  // "iterate" but runs at most once. This is the classic "find the first
+  // match" mistake — `for (const x of xs) { if (cond) return x; return null }`
+  // — where a misplaced `return`/`break` collapses the search into a single
+  // check, silently ignoring every element after the first. Like
+  // `array-callback-return` above this is a correctness rule, not a style
+  // preference: it surfaces a wrong-result bug that type checking cannot catch
+  // and that AI assistants emit when they flatten a search into a loop and lose
+  // track of which exit belongs where. It is not part of `eslint:recommended`,
+  // so it is enabled explicitly here. Not auto-fixable — only the author knows
+  // whether the loop or the misplaced exit is wrong.
+  'no-unreachable-loop': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
