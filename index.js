@@ -121,6 +121,27 @@ const sharedRules = {
   // line. Writing each assignment on its own statement keeps the data flow
   // explicit.
   'no-multi-assign': 'error',
+  // Disallow the comma operator (`a = (doFirst(), doSecond())`,
+  // `return cleanup(), value`). The comma operator evaluates each operand and
+  // quietly discards every result but the last, so several side effects are
+  // smuggled into a single expression where a reader expects one value. It is
+  // the flat sibling of the chained-assignment ban above (`no-multi-assign`):
+  // both pack multiple statements onto one line and hide how much actually
+  // happens, exactly the terse, "clever but unreadable" shortcut this config
+  // exists to prevent and one AI assistants reach for when collapsing control
+  // flow into an expression. It is also a frequent source of real bugs — a
+  // stray comma turns an intended `[a, b]` into a discarded `a` whose value
+  // silently becomes `b`. Writing each effect as its own statement keeps the
+  // evaluation order and the discarded results explicit. The rule leaves the
+  // legitimate comma uses alone — `for` loop headers, function arguments,
+  // array/object literals and variable declaration lists are all unaffected,
+  // so adopters see signal, not noise. `allowInParentheses: false` closes the
+  // rule's default escape hatch: by default `no-sequences` treats a sequence
+  // wrapped in explicit parens (`(a(), b())`) as deliberate and lets it
+  // through, but a parenthesized comma operator still smuggles side effects
+  // into an expression, which is precisely the construct this config exists to
+  // surface — so it is flagged too.
+  'no-sequences': ['error', { allowInParentheses: false }],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
