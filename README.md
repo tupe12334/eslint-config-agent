@@ -230,6 +230,11 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   `.ts`/`.tsx` files, not just plain JavaScript.
 - **`import/no-self-import`**: Forbids a module importing itself, a degenerate
   cycle that is always a mistake.
+- **`import/no-empty-named-blocks`**: Forbids empty named import blocks
+  (`import {} from 'mod'`). An empty block is the residue of deleting the last
+  named binding — the statement imports nothing yet still reads as if it pulls
+  names in, leaving a dead dependency edge behind. Use a bare side-effect
+  import (`import 'mod'`) or remove the line. Auto-fixable.
 
 ### Framework-Specific Features
 

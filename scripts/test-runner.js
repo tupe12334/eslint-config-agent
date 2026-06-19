@@ -108,6 +108,19 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'import-empty-named-invalid': {
+    description: 'Empty named import blocks should be flagged',
+    files: ['test/import-empty-named/invalid/empty-named-block.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['import/no-empty-named-blocks'],
+  },
+  'import-empty-named-valid': {
+    description: 'Named imports with bindings should be clean',
+    files: ['test/import-empty-named/valid/clean.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
   'edge-cases': {
     description: 'Edge cases and boundary testing',
     files: ['test/edge-cases.tsx'],
