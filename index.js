@@ -100,6 +100,21 @@ const sharedRules = {
   // `String(n)`) keeps the intended conversion legible. The rule is
   // auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-implicit-coercion': ['error', { allow: [] }],
+  // Require `Object.hasOwn(obj, key)` over the legacy ways of asking the same
+  // question. The two forms it replaces are each a footgun: calling
+  // `obj.hasOwnProperty(key)` directly breaks the moment `obj` has a `null`
+  // prototype (`Object.create(null)`, many map-like objects) or shadows the
+  // method with an own `hasOwnProperty` field — it throws or returns the wrong
+  // answer — which is why `no-prototype-builtins` already bans it; and the safe
+  // workaround, `Object.prototype.hasOwnProperty.call(obj, key)`, is a long,
+  // punctuation-heavy incantation that hides a one-word intent behind prototype
+  // plumbing. `Object.hasOwn` is the single explicit, prototype-safe spelling of
+  // "does this object own this key", so it fits this config's
+  // explicit-over-clever, correctness-leaning stance and removes the boilerplate
+  // adopters would otherwise reach for. It is auto-fixable (`eslint --fix`) and
+  // available on every supported runtime (Node >= 20, ES2022), so adoption is
+  // free.
+  'prefer-object-has-own': 'error',
   // Disallow `var`. `var` declarations are function-scoped and hoisted, so
   // they leak out of the block they appear to belong to and read as
   // initialized `undefined` before their declaration runs — producing
