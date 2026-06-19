@@ -526,6 +526,66 @@ This way new code is held to the full standard immediately while the legacy
 surface is tightened incrementally. For migrating from a legacy `.eslintrc`
 config format to flat config, see [MIGRATION.md](MIGRATION.md).
 
+### Type-aware linting and the project service
+
+This config turns on **type-aware** rules (`typescript-eslint`'s
+`strictTypeChecked` + `stylisticTypeChecked` presets) for `.ts`, `.tsx`, `.mts`,
+and `.cts` files. To read type information it enables
+`parserOptions.projectService: true`, which asks TypeScript for the program that
+owns each linted file. Pure JavaScript files are linted without type information,
+so this only affects TypeScript projects.
+
+Because of that, every TypeScript file you lint must be covered by a
+`tsconfig.json`. When a file is not part of any project, ESLint fails to parse it
+with:
+
+```text
+Parsing error: <file> was not found by the project service.
+Consider either including it in the tsconfig.json or to the "allowDefaultProject"
+option in the project service.
+```
+
+This most often hits stray files that live outside your `tsconfig.json`'s
+`include` — `eslint.config.js`, `vite.config.ts`, `*.config.*`, or one-off
+scripts. Three ways to resolve it, in order of preference:
+
+1. **Add the file to your `tsconfig.json` `include`.** Best when the file really
+   belongs to the project (most app/source files).
+2. **Allow a few loose config files through the default project.** Append an
+   override after the base config so the project service falls back to an
+   inferred program for a small allow-list:
+
+   ```javascript
+   import baseConfig from 'eslint-config-agent'
+
+   export default [
+     ...baseConfig,
+     {
+       languageOptions: {
+         parserOptions: {
+           // Lint these files even though they are outside tsconfig include.
+           projectService: {
+             allowDefaultProject: [
+               '*.config.js',
+               '*.config.ts',
+               'eslint.config.js',
+             ],
+           },
+           tsconfigRootDir: import.meta.dirname,
+         },
+       },
+     },
+   ]
+   ```
+
+   `allowDefaultProject` only accepts a short list of files that are **not**
+   already in a `tsconfig.json`; globbing whole directories through it is
+   rejected by `typescript-eslint`.
+
+3. **Ignore the file** if it should not be linted at all — add it to the
+   `ignores` array of an override (see [Project-Specific
+   Ignores](#project-specific-ignores)).
+
 ## License
 
 **MIT License** - See [LICENSE](LICENSE) file for details.

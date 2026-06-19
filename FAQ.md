@@ -30,6 +30,50 @@ npm ls eslint
 npm install --save-dev eslint@^9.34.0
 ```
 
+### "Parsing error: `<file>` was not found by the project service"
+
+**Cause:** This config enables **type-aware** linting
+(`parserOptions.projectService: true`), so every `.ts`/`.tsx`/`.mts`/`.cts`
+file it checks must belong to a `tsconfig.json`. Files outside your
+`tsconfig.json` `include` — typically `eslint.config.js`, `*.config.ts`, or
+one-off scripts — trigger:
+
+```text
+Parsing error: <file> was not found by the project service.
+Consider either including it in the tsconfig.json or to the "allowDefaultProject"
+option in the project service.
+```
+
+**Solution:** Either add the file to your `tsconfig.json` `include`, or allow a
+short list of loose config files through the default project by appending an
+override after the base config:
+
+```javascript
+import baseConfig from 'eslint-config-agent'
+
+export default [
+  ...baseConfig,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: {
+          allowDefaultProject: [
+            '*.config.js',
+            '*.config.ts',
+            'eslint.config.js',
+          ],
+        },
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+]
+```
+
+See the [Type-aware linting and the project
+service](README.md#type-aware-linting-and-the-project-service) section of the
+README for details.
+
 ### VS Code not using flat config
 
 **Solution:** Add to your VS Code settings:
