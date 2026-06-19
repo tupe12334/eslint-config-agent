@@ -138,6 +138,19 @@ const sharedRules = {
     'error',
     { allowImplicit: false, checkForEach: true },
   ],
+  // Disallow computed keys that wrap a literal that could be written plainly —
+  // `{ ['name']: x }`, `{ [42]: y }`, or `class { ['method']() {} }`. The
+  // bracket syntax exists for keys that must be computed at runtime; using it
+  // for a static string or number adds punctuation and a layer of indirection
+  // that buys nothing and only makes the reader pause to confirm the key is
+  // constant after all. It is the same "clever but pointless" clutter the
+  // `no-unneeded-ternary` and `no-implicit-coercion` rules already ban here,
+  // and one AI assistants emit when they template object keys mechanically.
+  // The plain form (`{ name: x }`, `{ method() {} }`) states intent directly.
+  // The rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
+  // `enforceForClassMembers: true` extends the check from object literals to
+  // class members so both surfaces stay consistent.
+  'no-useless-computed-key': ['error', { enforceForClassMembers: true }],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
