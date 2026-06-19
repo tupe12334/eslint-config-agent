@@ -37,6 +37,14 @@ const relaxedOverrides = {
     'error/no-generic-error': 'off',
     'error/require-custom-error': 'off',
     'error/no-literal-error-message': 'off',
+    // Don't force a JSDoc block on every exported function and class. This is
+    // one of the highest-volume rules on an existing codebase — the README's
+    // migration on-ramp lists it alongside `ddd/require-spec-file` and
+    // `error/no-literal-error-message` (both already relaxed here) as a rule to
+    // demote during adoption, so the recommended preset should bundle it too.
+    // The jsdoc *content* rules stay on, so any JSDoc that IS written is still
+    // validated — only the "you must document everything" requirement is lifted.
+    'jsdoc/require-jsdoc': 'off',
     // Allow default parameter values.
     'default/no-default-params': 'off',
     // Allow `type` aliases, not just `interface` declarations.
