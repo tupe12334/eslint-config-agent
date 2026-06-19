@@ -330,6 +330,15 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   named binding — the statement imports nothing yet still reads as if it pulls
   names in, leaving a dead dependency edge behind. Use a bare side-effect
   import (`import 'mod'`) or remove the line. Auto-fixable.
+- **`@typescript-eslint/consistent-type-imports`**: Forces `import type { … }`
+  for imports used only as types (TypeScript files). A type-only import is
+  erased at compile time, so writing it as a value import leaves a binding that
+  looks like a runtime dependency — it can drag a module (and its side effects)
+  into the emitted JS even though nothing uses the value, and it breaks under
+  `verbatimModuleSyntax` / `isolatedModules`. Splitting type and value imports
+  keeps the emitted module graph honest and every import's intent legible. Uses
+  `fixStyle: 'separate-type-imports'` (a distinct `import type` statement rather
+  than the inline `import { type X }` form). Auto-fixable.
 
 ### Bundled Custom Rules
 
