@@ -119,6 +119,35 @@ const sharedRules = {
   // this config's explicit-over-clever, low-noise stance. The rule is
   // auto-fixable, so consumers can adopt it with `eslint --fix`.
   'object-shorthand': ['error', 'always'],
+  // Disallow chained assignment expressions such as `a = b = c = 0`. Chaining
+  // collapses several writes into one expression: the value flows right-to-left
+  // through bindings that have nothing to do with each other, so a reader has to
+  // unwind the chain to see how many variables changed and to what. It also
+  // quietly couples those variables — touching the chain later risks rewriting
+  // more than intended — which runs against the immutability-leaning stance the
+  // `prefer-const`, `no-param-reassign` and `no-var` rules above already set
+  // here. It is exactly the terse, "clever" shortcut this config exists to
+  // prevent and one AI assistants emit when packing initialization onto a single
+  // line. Writing each assignment on its own statement keeps the data flow
+  // explicit.
+  'no-multi-assign': 'error',
+  // Require a `return` from every array-method callback that is expected to
+  // produce one (`map`, `filter`, `reduce`, `every`, `some`, `find`, `sort`,
+  // `flatMap`, ...). A callback that falls off the end returns `undefined`, so
+  // `arr.map(x => { doSomething(x) })` silently yields an array of `undefined`
+  // and `arr.filter(x => { x.active })` keeps every element — the kind of
+  // quiet, wrong-result bug that type checking will not catch and that AI
+  // assistants emit when they reach for a brace body and forget the `return`.
+  // Unlike most rules here this is a correctness check, not a style
+  // preference, which is why it is not covered by `eslint:recommended` and is
+  // enabled explicitly. `checkForEach: true` flags the inverse mistake —
+  // returning a value from `forEach`, where the result is discarded — which
+  // usually means `map` was intended. The rule is not auto-fixable because
+  // only the author knows what each callback should return.
+  'array-callback-return': [
+    'error',
+    { allowImplicit: false, checkForEach: true },
+  ],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS

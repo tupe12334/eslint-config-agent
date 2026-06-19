@@ -40,4 +40,13 @@ export const importRules = {
   // A module importing itself is always a mistake (usually a copy-paste or a
   // bad auto-import) and produces a degenerate cycle; flag it explicitly.
   'import/no-self-import': 'error',
+  // Forbid empty named import blocks (`import {} from 'mod'`). An empty block
+  // is the residue of deleting the last named binding from an import: the
+  // statement now pulls in nothing yet still reads as if it imports names,
+  // which misleads readers and quietly keeps a dead dependency edge alive. A
+  // bare side-effect import (`import 'mod'`) — or removing the line — states
+  // the real intent. This is a frequent leftover from AI-assisted edits that
+  // rewrite an import list one binding at a time, putting it squarely in scope
+  // for this config's explicit-over-clever stance. The rule is auto-fixable.
+  'import/no-empty-named-blocks': 'error',
 }
