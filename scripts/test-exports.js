@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable import/order, security/detect-non-literal-fs-filename */
 
 /**
  * Public `exports` surface guard.
@@ -41,7 +40,7 @@ const projectRoot = join(__dirname, '..')
 
 // The public entry points the README documents. Keep in sync with the README
 // usage section and `package.json#exports`.
-const EXPECTED_ENTRY_POINTS = ['.', './ddd', './recommended']
+const EXPECTED_ENTRY_POINTS = ['.', './ddd', './recommended', './incremental']
 
 async function readPackageJson() {
   const raw = await readFile(join(projectRoot, 'package.json'), 'utf8')
