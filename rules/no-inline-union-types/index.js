@@ -7,7 +7,9 @@
  * Examples:
  * - ❌ function foo(status: 'active' | 'inactive') {}
  * - ❌ interface User { role: 'admin' | 'user'; }
+ * - ❌ interface User { id: string | number; }
  * - ❌ class Config { mode: 'dev' | 'prod'; }
+ * - ❌ class Config { value: string | number; }
  * - ✅ type Status = 'active' | 'inactive'; function foo(status: Status) {}
  * - ✅ type Role = 'admin' | 'user'; interface User { role: Role; }
  * - ✅ type Mode = 'dev' | 'prod'; class Config { mode: Mode; }
@@ -20,20 +22,20 @@ const rule = 'error'
 const selectorGeneral =
   'TSTypeAnnotation > TSUnionType:not(PropertyDefinition > .typeAnnotation > .typeAnnotation):not(TSPropertySignature > .typeAnnotation > .typeAnnotation)'
 
-// Interface properties with literal unions
+// Interface properties with inline unions (literal or otherwise)
 const selectorInterfaceProperty =
-  'TSPropertySignature > TSTypeAnnotation > TSUnionType:has(TSLiteralType)'
+  'TSPropertySignature > TSTypeAnnotation > TSUnionType'
 
-// Class properties with literal unions
+// Class properties with inline unions (literal or otherwise)
 const selectorClassProperty =
-  'PropertyDefinition > TSTypeAnnotation > TSUnionType:has(TSLiteralType)'
+  'PropertyDefinition > TSTypeAnnotation > TSUnionType'
 
 const messageGeneral =
   'Use a named type declaration instead of inline union types.'
 const messageProperty =
-  'Interface properties with literal unions should use a named type declaration.'
+  'Interface properties with inline unions should use a named type declaration.'
 const messageClassProperty =
-  'Class properties with literal unions should use a named type declaration.'
+  'Class properties with inline unions should use a named type declaration.'
 
 /**
  * Export the complete rule configurations for no-restricted-syntax
