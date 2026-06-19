@@ -115,7 +115,10 @@ you. It keeps the core quality rules but disables the most opinionated ones
 (`ddd/require-spec-file`, `single-export`, `required-exports`, the custom
 `error/*` rules, `default/no-default-params`, `@typescript-eslint/consistent-type-definitions`,
 and the `no-restricted-syntax` bans on optional chaining / nullish coalescing /
-type assertions), so idiomatic TypeScript passes during incremental adoption.
+type assertions), so idiomatic TypeScript passes during incremental adoption. It
+also downgrades the function/file length limits (`max-lines-per-function`,
+`max-lines`) from errors to warnings — the same 70/100-line thresholds, but they
+no longer fail a CI lint run while a long-function backlog is burned down.
 
 ```javascript
 import recommended from 'eslint-config-agent/recommended'
