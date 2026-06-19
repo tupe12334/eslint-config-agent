@@ -272,6 +272,13 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   instead of a fresh object — while the literal is unambiguous. The
   object-creation sibling of the bundled wrapper-constructor and coercion bans.
   Auto-fixable with `eslint --fix`.
+- **`no-promise-executor-return`**: Forbids returning a value from a `Promise`
+  executor — the function passed to `new Promise(...)`. The constructor discards
+  the return value, so `new Promise((resolve) => resolve(work()))` (or an async
+  executor whose returned promise is never awaited) runs its work unobserved and
+  lets rejections go unhandled. A correctness check, like the bundled
+  `array-callback-return`. Use a block body that calls `resolve`/`reject`
+  without returning.
 
 ### Import Hygiene
 

@@ -42,6 +42,23 @@ const sharedRules = {
   'no-continue': 'off',
   // Additional built-in error handling rules
   'prefer-promise-reject-errors': 'error',
+  // Disallow returning a value from a `Promise` executor — the function passed
+  // to `new Promise((resolve, reject) => { ... })`. The executor's return value
+  // is discarded by the Promise constructor, so `new Promise(() => readfile())`
+  // or `new Promise((resolve) => resolve(x))` written with an implicit return
+  // body silently throws the value away. When the returned value is itself a
+  // promise (an async executor, a `.then(...)` chain) this is a real bug: the
+  // work runs unobserved, rejections become unhandled, and the outer promise
+  // settles on a different schedule than the author expects. This is a
+  // correctness check, not a style preference — the same class of "the callback
+  // returns into a void" mistake that `array-callback-return` above guards
+  // against, and exactly the kind of quiet, wrong-behavior bug that type
+  // checking will not catch and that AI assistants emit when they reach for a
+  // brace body inside `new Promise`. It is not in `eslint:recommended`, so it is
+  // enabled explicitly here. The rule is not auto-fixable because only the
+  // author knows whether the value should be dropped or the surrounding control
+  // flow reworked.
+  'no-promise-executor-return': 'error',
   // Disallow an `else`/`else if` block when the preceding `if` already exits
   // the function via `return`. The `else` is dead weight: once the `if` branch
   // returns, the code after it is unreachable from that path, so wrapping the
