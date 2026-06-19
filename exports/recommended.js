@@ -45,6 +45,25 @@ const relaxedOverrides = {
     // nullish coalescing (`??`), type assertions and switch-default bans live.
     // Relaxing it lets idiomatic TypeScript through during adoption.
     'no-restricted-syntax': 'off',
+    // Downgrade the function/file length limits from `error` to `warn`. The
+    // strict default promotes these to hard errors (>70 lines per function,
+    // >100 lines per file) in its final override layer, which is one of the
+    // largest sources of failures when pointing this config at an existing
+    // codebase: long legacy functions and files cannot be split safely in a
+    // single adoption pass. Keeping them as warnings preserves the signal — the
+    // limits still surface in `eslint` output and can be burned down over time —
+    // without breaking a `pnpm lint` / CI run that treats errors as fatal. The
+    // thresholds (70 / 100) are kept identical to the strict config; only the
+    // severity changes. Re-enable as errors with your own override layer once
+    // the backlog is cleared.
+    'max-lines-per-function': [
+      'warn',
+      { max: 70, skipBlankLines: true, skipComments: true },
+    ],
+    'max-lines': [
+      'warn',
+      { max: 100, skipBlankLines: true, skipComments: true },
+    ],
   },
 }
 
