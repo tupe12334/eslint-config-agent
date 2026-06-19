@@ -272,6 +272,53 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   names in, leaving a dead dependency edge behind. Use a bare side-effect
   import (`import 'mod'`) or remove the line. Auto-fixable.
 
+### Bundled Custom Rules
+
+Beyond the third-party plugins, the package ships a set of in-house rules that
+encode its explicit-over-clever stance. Most are implemented as
+[`no-restricted-syntax`](https://eslint.org/docs/latest/rules/no-restricted-syntax)
+selectors and applied automatically by the shared config; two
+(`custom/no-default-class-export` and `custom/require-spec-file-tsx`) are real
+plugin rules exposed under the `custom` namespace. You do not need to enable any
+of them by hand — they come on with the config — but they are listed here so you
+know what is enforcing each error.
+
+#### Type-system rules (TypeScript files)
+
+| Rule                      | What it enforces                                                                                                                                                     |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `no-type-assertions`      | Bans `as` type assertions (and the `as (typeof X)[number]` indexed-access form). `as const` is the only allowed assertion — use a real type otherwise.               |
+| `no-inline-union-types`   | Requires a named type alias instead of an inline union (including interface and class properties), so unions carry a name that documents their intent.               |
+| `no-record-literal-types` | Bans `Record<...>` keyed by string literals. Use a named interface or type with explicit keys instead.                                                               |
+| `no-trivial-type-aliases` | Bans aliases that add no meaning — primitive aliases, direct type references, and bare literal aliases. Unions, generics, mapped and conditional types stay allowed. |
+
+#### Control-flow & switch rules
+
+| Rule                                | What it enforces                                                                                               |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `nullish-coalescing`                | Bans the `??` operator in favor of explicit null/undefined checks that spell out the intended branch.          |
+| `switch-case-explicit-return`       | Bans a bare `return;` inside a `switch` case — each case must return an explicit value.                        |
+| `switch-statements-return-type`     | Requires an explicit return type on any function, arrow, or function expression that contains a `switch` (TS). |
+| `switch-case-functions-return-type` | Requires an explicit return type on the functions produced for switch-case branches (TS).                      |
+
+#### Export & module rules
+
+| Rule                             | What it enforces                                                                                                  |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `no-empty-exports`               | Bans the `export { ... }` specifier syntax; use a direct, single export per file instead.                         |
+| `custom/no-default-class-export` | Disallows `export default class` in favor of a named class export, so the class keeps a stable, searchable name.  |
+| `no-process-env-properties`      | Bans direct `process.env.X` access. Read `process.env` as a whole object (for example, validate it once) instead. |
+
+#### Spec-file & size rules
+
+| Rule                           | What it enforces                                                                                                  |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `custom/require-spec-file-tsx` | Requires a `.spec` sibling for `.tsx`/`.jsx` components, mirroring `ddd/require-spec-file` for React/Preact code. |
+| `error-only-exports`           | Exempts files that export only `Error` subclasses from the spec-file requirement (no testable logic to cover).    |
+| `max-file-lines`               | `max-lines`: warns above 70 lines, errors above 100 (comments and blank lines skipped).                           |
+| `max-function-lines`           | `max-lines-per-function`: warns above 50 lines, errors above 70 (comments and blank lines skipped).               |
+| `no-trailing-spaces`           | Flags trailing whitespace so diffs stay clean and invisible characters never sneak into source.                   |
+
 ### Framework-Specific Features
 
 #### React Support
