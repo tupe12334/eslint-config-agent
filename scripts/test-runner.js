@@ -354,6 +354,21 @@ async function findTestFiles() {
         const stats = await stat(fullPath)
         const relativeFilePath = join(relativePath, entry)
 
+        // The `test/recommended/` directory holds fixtures for the relaxed
+        // `recommended` preset, which intentionally disables several strict
+        // rules (single-export, consistent-type-definitions, the
+        // no-restricted-syntax bans, ...). Those fixtures must be linted with
+        // the relaxed preset, not the strict default config this runner loads,
+        // and they already have dedicated coverage in
+        // `scripts/test-recommended.js` (the `test:recommended` script). If we
+        // let the generic scan pick them up, they land in the catch-all
+        // `auto-misc-tests` category (max 0 errors/warnings) and get linted
+        // with the strict config, so the relaxed-away violations are reported
+        // as errors and fail the whole suite. Skip the directory here.
+        if (stats.isDirectory() && entry === 'recommended') {
+          continue
+        }
+
         if (stats.isFile() && /\.(ts|tsx|js|jsx|mts|cts)$/.test(entry)) {
           files.push(relativeFilePath)
         } else if (stats.isDirectory()) {
