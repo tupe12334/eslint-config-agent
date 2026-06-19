@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable import/order */
+/* eslint-disable import/order, security/detect-object-injection */
 
 /**
  * Smoke test for the `eslint-config-agent/recommended` preset.
@@ -13,6 +13,8 @@
 import { ESLint } from 'eslint'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import strictFlatConfig from '../index.js'
+import recommendedFlatConfig from '../exports/recommended.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -23,6 +25,33 @@ async function countErrors(configFile) {
   const eslint = new ESLint({ overrideConfigFile: configFile })
   const results = await eslint.lintFiles([sample])
   return results.reduce((total, result) => total + result.errorCount, 0)
+}
+
+// Resolve a rule's effective severity across a flat-config array: later blocks
+// win, so walk the whole array and keep the last block that sets the rule
+// globally (no `files` scope). Returns the normalized severity string, or
+// `undefined` if no global block configures it.
+function effectiveSeverity(flatConfig, ruleId) {
+  const severities = new Map([
+    [0, 'off'],
+    [1, 'warn'],
+    [2, 'error'],
+    ['off', 'off'],
+    ['warn', 'warn'],
+    ['error', 'error'],
+  ])
+  let resolved
+  for (const block of flatConfig) {
+    if (block === null || typeof block !== 'object') continue
+    if (block.files !== undefined) continue
+    const rules = block.rules
+    if (rules === undefined || rules === null) continue
+    const setting = rules[ruleId]
+    if (setting === undefined) continue
+    const level = Array.isArray(setting) ? setting[0] : setting
+    resolved = severities.has(level) ? severities.get(level) : String(level)
+  }
+  return resolved
 }
 
 async function main() {
@@ -47,6 +76,33 @@ async function main() {
     process.exit(1)
   }
   console.log('✅ recommended preset relaxes the strict rules as expected.')
+
+  // Regression guard: the recommended preset must relax `jsdoc/require-jsdoc`
+  // (a documented migration-on-ramp rule) to `off`, while the strict default
+  // config still enforces it. Asserted at the config level because the rule is
+  // suppressed for everything under test/, so a fixture file cannot exercise it.
+  const strictJsdoc = effectiveSeverity(strictFlatConfig, 'jsdoc/require-jsdoc')
+  const relaxedJsdoc = effectiveSeverity(
+    recommendedFlatConfig,
+    'jsdoc/require-jsdoc'
+  )
+
+  console.log(`strict jsdoc/require-jsdoc:      ${strictJsdoc}`)
+  console.log(`recommended jsdoc/require-jsdoc: ${relaxedJsdoc}`)
+
+  if (strictJsdoc !== 'error') {
+    console.error(
+      `❌ Expected the strict config to enforce jsdoc/require-jsdoc (error); got "${strictJsdoc}".`
+    )
+    process.exit(1)
+  }
+  if (relaxedJsdoc !== 'off') {
+    console.error(
+      `❌ Expected the recommended preset to disable jsdoc/require-jsdoc (off); got "${relaxedJsdoc}".`
+    )
+    process.exit(1)
+  }
+  console.log('✅ recommended preset relaxes jsdoc/require-jsdoc as expected.')
 }
 
 main().catch(error => {

@@ -112,10 +112,13 @@ load without a wall of errors.
 
 The `eslint-config-agent/recommended` preset bundles those common overrides for
 you. It keeps the core quality rules but disables the most opinionated ones
-(`ddd/require-spec-file`, `single-export`, `required-exports`, the custom
-`error/*` rules, `default/no-default-params`, `@typescript-eslint/consistent-type-definitions`,
-and the `no-restricted-syntax` bans on optional chaining / nullish coalescing /
-type assertions), so idiomatic TypeScript passes during incremental adoption.
+(`ddd/require-spec-file`, `jsdoc/require-jsdoc`, `single-export`,
+`required-exports`, the custom `error/*` rules, `default/no-default-params`,
+`@typescript-eslint/consistent-type-definitions`, and the `no-restricted-syntax`
+bans on optional chaining / nullish coalescing / type assertions), so idiomatic
+TypeScript passes during incremental adoption. The jsdoc _content_ rules stay
+on, so JSDoc you do write is still validated — only the requirement to document
+every function and class is lifted.
 
 ```javascript
 import recommended from 'eslint-config-agent/recommended'
