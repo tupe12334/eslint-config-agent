@@ -398,7 +398,7 @@ For troubleshooting common issues and frequently asked questions, see [FAQ.md](F
 
 For development setup, testing guidelines, and contribution instructions, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-For version history and changelog information, see [CHANGELOG.md](CHANGELOG.md) or the [releases page](https://github.com/tupe12334/eslint-config/releases).
+For version history and changelog information, see [CHANGELOG.md](CHANGELOG.md) or the [releases page](https://github.com/tupe12334/eslint-config-agent/releases).
 
 ## Adopting in an Existing Project
 
@@ -464,9 +464,9 @@ config format to flat config, see [MIGRATION.md](MIGRATION.md).
 ## Links & Resources
 
 - **📦 [npm Package](https://www.npmjs.com/package/eslint-config-agent)**
-- **🐙 [GitHub Repository](https://github.com/tupe12334/eslint-config)**
-- **📋 [Issues & Bug Reports](https://github.com/tupe12334/eslint-config/issues)**
-- **🔄 [Releases & Changelog](https://github.com/tupe12334/eslint-config/releases)**
+- **🐙 [GitHub Repository](https://github.com/tupe12334/eslint-config-agent)**
+- **📋 [Issues & Bug Reports](https://github.com/tupe12334/eslint-config-agent/issues)**
+- **🔄 [Releases & Changelog](https://github.com/tupe12334/eslint-config-agent/releases)**
 - **📖 [ESLint Flat Config Documentation](https://eslint.org/docs/latest/use/configure/configuration-files)**
 
 ## Support
