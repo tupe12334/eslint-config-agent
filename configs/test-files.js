@@ -104,6 +104,12 @@ export const testFilesConfig = [
       'default/no-localhost': ['error', { allowInTests: true }],
       'default/no-hardcoded-urls': ['error', { allowInTests: true }],
       'default/no-default-params': 'off', // Allow default parameters in test files for demonstration purposes
+      // Test and rule-tester spec files routinely embed source snippets inside
+      // string literals as fixtures (e.g. `code: 'const x = `${y}`'`), where a
+      // literal `${...}` is the intended payload, not a mis-quoted template.
+      // Keep no-template-curly-in-string on for real source but off here so the
+      // fixtures are not flagged.
+      'no-template-curly-in-string': 'off',
       // Disable error plugin rules in test files
       'error/no-generic-error': 'off',
       'error/require-custom-error': 'off',
