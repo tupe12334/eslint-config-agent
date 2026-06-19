@@ -44,7 +44,11 @@ npm install --save-dev eslint@^9.34.0
 
 ### **Q: Does this work with monorepos?**
 
-A: Yes! Place the `eslint.config.js` at the root of each package, or use a shared config:
+A: Yes! The config's built-in ignores are recursive (`**/dist/**`, `**/build/**`,
+`**/coverage/**`, `**/.next/**`, `**/out/**`), so generated output inside nested
+packages is skipped automatically — you don't get lint errors on compiled code
+under `packages/*/dist`. Place the `eslint.config.js` at the root of each package,
+or use a shared config:
 
 ```javascript
 // packages/shared/eslint.config.js
@@ -62,7 +66,7 @@ A: This configuration helps AI assistants generate more maintainable and debugga
 
 ### **Q: How do I contribute or report issues?**
 
-A: Please use the [GitHub repository](https://github.com/tupe12334/eslint-config) for issues and contributions.
+A: Please use the [GitHub repository](https://github.com/tupe12334/eslint-config-agent) for issues and contributions.
 
 For development setup, testing guidelines, and contribution instructions, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -114,6 +118,42 @@ Then run:
 - `npm run lint:fix` - Fix auto-fixable issues
 - `npm run lint:ci` - Strict checking for CI/CD
 
+### **Q: I get `Missing spec file: "<name>.spec.ts"` but I already have `<name>.test.ts` — why?**
+
+A: The `ddd/require-spec-file` rule looks for a sibling named `<name>.spec.<ext>`
+to satisfy a source file's spec requirement. A `<name>.test.<ext>` sibling is
+**not** accepted as that source file's spec, even though `.test.*` files are
+themselves excluded from needing a spec of their own.
+
+If your project uses the `.test.*` convention, either rename the test files to
+`<name>.spec.<ext>`, or demote/scope the rule in your own config:
+
+```javascript
+import baseConfig from 'eslint-config-agent'
+
+export default [
+  ...baseConfig,
+  {
+    rules: {
+      // Projects on the .test.* convention can relax this rule.
+      'ddd/require-spec-file': 'off',
+    },
+  },
+]
+```
+
+See the "Spec File Requirements (DDD)" section of the README for details.
+
+### **Q: Adopting this on an existing project floods me with errors. How do I migrate gradually?**
+
+A: That batch of violations is expected — it's the gap between the old standard
+and this one. Rather than block CI on a one-shot cleanup, demote the
+highest-volume rules to `warn` (optionally scoped to legacy paths with a `files`
+glob), keep CI at `eslint .` so it fails only on errors, then burn the warnings
+down and promote the rules back to `error`. The README's
+[Adopting in an Existing Project](README.md#adopting-in-an-existing-project)
+section has a copy-paste recipe.
+
 ### **Q: Can I use this with Prettier?**
 
 A: Yes! This configuration focuses on code quality rules and doesn't conflict with Prettier's formatting rules. You can use both together safely.
@@ -122,7 +162,7 @@ A: Yes! This configuration focuses on code quality rules and doesn't conflict wi
 
 If you don't find your answer here:
 
-1. Check the [GitHub Issues](https://github.com/tupe12334/eslint-config/issues) for similar problems
+1. Check the [GitHub Issues](https://github.com/tupe12334/eslint-config-agent/issues) for similar problems
 2. Review the [CONTRIBUTING.md](CONTRIBUTING.md) for development setup
 3. Create a new issue with:
    - Your ESLint version

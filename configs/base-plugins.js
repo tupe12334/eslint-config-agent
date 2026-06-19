@@ -46,6 +46,29 @@ export const basePluginsConfig = [
       ],
     },
   },
+  // Require spec files for .tsx/.jsx source files too.
+  //
+  // `ddd/require-spec-file` only inspects `.js`/`.ts` files, so React/Preact
+  // components — the code this config primarily targets — were silently exempt
+  // from the spec requirement. This custom rule covers the JSX extensions with
+  // the same heuristic, completing the "spec file for every source file"
+  // promise. Its excludePatterns mirror the JSX-relevant entries of the `ddd`
+  // list above (index/stories files are exempt; `.spec`/`.test` files are
+  // skipped by the rule itself).
+  {
+    rules: {
+      'custom/require-spec-file-tsx': [
+        'error',
+        {
+          excludePatterns: [
+            '**/index.tsx',
+            '**/index.jsx',
+            '**/*.stories.{tsx,jsx}',
+          ],
+        },
+      ],
+    },
+  },
   // Disable DDD for config infrastructure files
   {
     files: [
@@ -60,6 +83,7 @@ export const basePluginsConfig = [
     ],
     rules: {
       'ddd/require-spec-file': 'off',
+      'custom/require-spec-file-tsx': 'off',
     },
   },
 ]

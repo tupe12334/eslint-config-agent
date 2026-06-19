@@ -103,6 +103,42 @@ import config from 'eslint-config-agent'
 export default config
 ```
 
+### Recommended (relaxed) preset
+
+The default export is intentionally strict — it assumes a greenfield project
+that follows every convention from day one. Existing codebases often can't, and
+end up copy-pasting the same block of rule overrides just to get the config to
+load without a wall of errors.
+
+The `eslint-config-agent/recommended` preset bundles those common overrides for
+you. It keeps the core quality rules but disables the most opinionated ones
+(`ddd/require-spec-file`, `single-export`, `required-exports`, the custom
+`error/*` rules, `default/no-default-params`, `@typescript-eslint/consistent-type-definitions`,
+and the `no-restricted-syntax` bans on optional chaining / nullish coalescing /
+type assertions), so idiomatic TypeScript passes during incremental adoption.
+
+```javascript
+import recommended from 'eslint-config-agent/recommended'
+
+export default recommended
+```
+
+Re-enable any individual rule by appending your own override layer:
+
+```javascript
+import recommended from 'eslint-config-agent/recommended'
+
+export default [
+  ...recommended,
+  {
+    rules: {
+      // Opt back into a stricter rule once your code is ready for it
+      'ddd/require-spec-file': 'warn',
+    },
+  },
+]
+```
+
 ### Advanced Configuration
 
 #### Extending with Custom Rules
@@ -204,6 +240,17 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **📚 Self-Documenting**: Code that explains its intent without extensive comments
 - **🛠️ Maintainable**: Patterns that remain clear even as the codebase grows
 
+### Control Flow & Readability
+
+- **`no-else-return`** (`allowElseIf: false`): Forbids an `else`/`else if` block
+  when the preceding `if` already exits via `return`. Once the `if` branch
+  returns, the `else` only adds nesting that hides the real control flow.
+  Removing it flattens the code into guard-clause style — the same goal as the
+  bundled `early-return` plugin. Auto-fixable with `eslint --fix`.
+- **`no-nested-ternary`**: Forbids a ternary inside another ternary, the
+  archetypal "clever but unreadable" construct. Use `if`/`else` or an early
+  return instead.
+
 ### Import Hygiene
 
 - **`import/no-duplicates`**: Collapses multiple import statements from the same
@@ -219,6 +266,58 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   `.ts`/`.tsx` files, not just plain JavaScript.
 - **`import/no-self-import`**: Forbids a module importing itself, a degenerate
   cycle that is always a mistake.
+- **`import/no-empty-named-blocks`**: Forbids empty named import blocks
+  (`import {} from 'mod'`). An empty block is the residue of deleting the last
+  named binding — the statement imports nothing yet still reads as if it pulls
+  names in, leaving a dead dependency edge behind. Use a bare side-effect
+  import (`import 'mod'`) or remove the line. Auto-fixable.
+
+### Bundled Custom Rules
+
+Beyond the third-party plugins, the package ships a set of in-house rules that
+encode its explicit-over-clever stance. Most are implemented as
+[`no-restricted-syntax`](https://eslint.org/docs/latest/rules/no-restricted-syntax)
+selectors and applied automatically by the shared config; two
+(`custom/no-default-class-export` and `custom/require-spec-file-tsx`) are real
+plugin rules exposed under the `custom` namespace. You do not need to enable any
+of them by hand — they come on with the config — but they are listed here so you
+know what is enforcing each error.
+
+#### Type-system rules (TypeScript files)
+
+| Rule                      | What it enforces                                                                                                                                                     |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `no-type-assertions`      | Bans `as` type assertions (and the `as (typeof X)[number]` indexed-access form). `as const` is the only allowed assertion — use a real type otherwise.               |
+| `no-inline-union-types`   | Requires a named type alias instead of an inline union (including interface and class properties), so unions carry a name that documents their intent.               |
+| `no-record-literal-types` | Bans `Record<...>` keyed by string literals. Use a named interface or type with explicit keys instead.                                                               |
+| `no-trivial-type-aliases` | Bans aliases that add no meaning — primitive aliases, direct type references, and bare literal aliases. Unions, generics, mapped and conditional types stay allowed. |
+
+#### Control-flow & switch rules
+
+| Rule                                | What it enforces                                                                                               |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `nullish-coalescing`                | Bans the `??` operator in favor of explicit null/undefined checks that spell out the intended branch.          |
+| `switch-case-explicit-return`       | Bans a bare `return;` inside a `switch` case — each case must return an explicit value.                        |
+| `switch-statements-return-type`     | Requires an explicit return type on any function, arrow, or function expression that contains a `switch` (TS). |
+| `switch-case-functions-return-type` | Requires an explicit return type on the functions produced for switch-case branches (TS).                      |
+
+#### Export & module rules
+
+| Rule                             | What it enforces                                                                                                  |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `no-empty-exports`               | Bans the `export { ... }` specifier syntax; use a direct, single export per file instead.                         |
+| `custom/no-default-class-export` | Disallows `export default class` in favor of a named class export, so the class keeps a stable, searchable name.  |
+| `no-process-env-properties`      | Bans direct `process.env.X` access. Read `process.env` as a whole object (for example, validate it once) instead. |
+
+#### Spec-file & size rules
+
+| Rule                           | What it enforces                                                                                                  |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `custom/require-spec-file-tsx` | Requires a `.spec` sibling for `.tsx`/`.jsx` components, mirroring `ddd/require-spec-file` for React/Preact code. |
+| `error-only-exports`           | Exempts files that export only `Error` subclasses from the spec-file requirement (no testable logic to cover).    |
+| `max-file-lines`               | `max-lines`: warns above 70 lines, errors above 100 (comments and blank lines skipped).                           |
+| `max-function-lines`           | `max-lines-per-function`: warns above 50 lines, errors above 70 (comments and blank lines skipped).               |
+| `no-trailing-spaces`           | Flags trailing whitespace so diffs stay clean and invisible characters never sneak into source.                   |
 
 ### Framework-Specific Features
 
@@ -244,6 +343,10 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - All TypeScript/JavaScript source files (`.ts`, `.js`, `.tsx`, `.jsx`)
 - Implementation files that contain business logic
 
+> `.ts`/`.js` files are checked by `ddd/require-spec-file`; `.tsx`/`.jsx`
+> components are checked by the bundled `custom/require-spec-file-tsx` rule, so
+> React/Preact components are held to the same spec-file requirement.
+
 **What files are excluded:**
 
 - Test files themselves (`.spec.ts`, `.test.js`, etc.)
@@ -266,6 +369,22 @@ src/
 │   └── index.ts      # ⚠️ Excluded (index file)
 └── config.ts         # ⚠️ Excluded (config file)
 ```
+
+**Spec file naming — `.spec` vs `.test`:**
+
+The sibling that satisfies the requirement for a source file must be named
+`<name>.spec.<ext>` (for example, `url-manager.ts` → `url-manager.spec.ts`). A
+`<name>.test.<ext>` sibling is **not** accepted as that source file's spec, even
+though `.test.*` files are themselves excluded from needing a spec of their own.
+
+In other words, `.test.*` and `.spec.*` are both treated as test files (so they
+never require their _own_ spec), but only the `.spec.*` name counts when checking
+that a source file has a corresponding test. If your project uses the `.test.*`
+convention, you have two options:
+
+1. **Rename** test files to `<name>.spec.<ext>`, or
+2. **Scope the rule down** for the affected paths (see
+   [Adopting in an Existing Project](#adopting-in-an-existing-project) below).
 
 **Disabling for specific files:**
 
@@ -326,7 +445,64 @@ For troubleshooting common issues and frequently asked questions, see [FAQ.md](F
 
 For development setup, testing guidelines, and contribution instructions, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-For version history and changelog information, see [CHANGELOG.md](CHANGELOG.md) or the [releases page](https://github.com/tupe12334/eslint-config/releases).
+For version history and changelog information, see [CHANGELOG.md](CHANGELOG.md) or the [releases page](https://github.com/tupe12334/eslint-config-agent/releases).
+
+## Adopting in an Existing Project
+
+On a brand-new project this config is "zero config" — you start clean and stay
+clean. On an **established codebase**, the strict ruleset is intentionally
+opinionated and will typically surface a large batch of pre-existing violations
+the first time you run it (missing spec files, `?.`/`??` usage, missing JSDoc,
+literal error messages, and so on). That is expected — it is the gap between the
+old standard and this one, not a bug.
+
+Rather than block CI on a green-field cleanup or weaken the config permanently,
+adopt it **gradually**. The recommended on-ramp is to keep the full ruleset but
+temporarily demote the rules that produce the most pre-existing noise to `warn`,
+so CI stays green while the warnings are burned down over time and promoted back
+to `error`.
+
+```javascript
+import baseConfig from 'eslint-config-agent'
+
+export default [
+  ...baseConfig,
+  {
+    // Migration on-ramp: demote the highest-volume rules to warnings so an
+    // existing codebase can adopt the config without a CI-blocking cleanup.
+    // Remove entries here as each rule is driven to zero, then enjoy the full
+    // strictness with nothing left to relax.
+    rules: {
+      'ddd/require-spec-file': 'warn',
+      'jsdoc/require-jsdoc': 'warn',
+      'error/no-literal-error-message': 'warn',
+    },
+  },
+]
+```
+
+Keep your CI lint step at `eslint .` (which fails only on errors) during
+migration, and switch it to `eslint . --max-warnings 0` once the warnings are
+cleared. To scope the relaxation to only the legacy parts of the tree, attach
+the override to a `files` glob instead of applying it globally:
+
+```javascript
+import baseConfig from 'eslint-config-agent'
+
+export default [
+  ...baseConfig,
+  {
+    files: ['src/legacy/**/*.{ts,tsx}'],
+    rules: {
+      'ddd/require-spec-file': 'warn',
+    },
+  },
+]
+```
+
+This way new code is held to the full standard immediately while the legacy
+surface is tightened incrementally. For migrating from a legacy `.eslintrc`
+config format to flat config, see [MIGRATION.md](MIGRATION.md).
 
 ## License
 
@@ -335,9 +511,9 @@ For version history and changelog information, see [CHANGELOG.md](CHANGELOG.md) 
 ## Links & Resources
 
 - **📦 [npm Package](https://www.npmjs.com/package/eslint-config-agent)**
-- **🐙 [GitHub Repository](https://github.com/tupe12334/eslint-config)**
-- **📋 [Issues & Bug Reports](https://github.com/tupe12334/eslint-config/issues)**
-- **🔄 [Releases & Changelog](https://github.com/tupe12334/eslint-config/releases)**
+- **🐙 [GitHub Repository](https://github.com/tupe12334/eslint-config-agent)**
+- **📋 [Issues & Bug Reports](https://github.com/tupe12334/eslint-config-agent/issues)**
+- **🔄 [Releases & Changelog](https://github.com/tupe12334/eslint-config-agent/releases)**
 - **📖 [ESLint Flat Config Documentation](https://eslint.org/docs/latest/use/configure/configuration-files)**
 
 ## Support
