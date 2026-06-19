@@ -250,6 +250,12 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **`no-nested-ternary`**: Forbids a ternary inside another ternary, the
   archetypal "clever but unreadable" construct. Use `if`/`else` or an early
   return instead.
+- **`no-unreachable-loop`**: Forbids a loop whose body always exits on the
+  first iteration (every path ends in `return`, `break` or `throw`). Such a
+  loop reads as "iterate every element" but runs at most once — the classic
+  "find the first match" bug where a misplaced `return`/`break` silently
+  ignores every element after the first. A correctness check, like
+  `array-callback-return`, not a style preference.
 
 ### Import Hygiene
 
