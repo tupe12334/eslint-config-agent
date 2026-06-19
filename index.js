@@ -136,6 +136,19 @@ const sharedRules = {
   // line. Writing each assignment on its own statement keeps the data flow
   // explicit.
   'no-multi-assign': 'error',
+  // Disallow the `Object` constructor (`new Object()` and `Object()`) in favor
+  // of the `{}` object literal. The constructor form is a strictly more verbose,
+  // more indirect way to do exactly what the literal does — and a trap: passing
+  // a single non-object argument makes `Object(x)` return *that* value (or a
+  // wrapper), so the call quietly stops creating a fresh object at all. The
+  // literal has no such ambiguity. This is the object-creation sibling of the
+  // wrapper-constructor and coercion bans this config already sets (`Number`,
+  // `String`, `!!x`): prefer the plain literal/value over a constructor call
+  // dressed up as one. `new Object()` is also a legacy idiom an AI assistant
+  // trained on older code reaches for, which puts it squarely in this config's
+  // explicit-over-clever, AI-safety scope. The rule is auto-fixable, so
+  // consumers can adopt it with `eslint --fix`.
+  'no-object-constructor': 'error',
   // Require a `return` from every array-method callback that is expected to
   // produce one (`map`, `filter`, `reduce`, `every`, `some`, `find`, `sort`,
   // `flatMap`, ...). A callback that falls off the end returns `undefined`, so

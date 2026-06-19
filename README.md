@@ -250,6 +250,12 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **`no-nested-ternary`**: Forbids a ternary inside another ternary, the
   archetypal "clever but unreadable" construct. Use `if`/`else` or an early
   return instead.
+- **`no-object-constructor`**: Forbids the `Object` constructor (`new Object()`
+  and `Object()`) in favor of the `{}` literal. The constructor form is more
+  verbose and a trap — `Object(x)` with a non-object argument returns that value
+  instead of a fresh object — while the literal is unambiguous. The
+  object-creation sibling of the bundled wrapper-constructor and coercion bans.
+  Auto-fixable with `eslint --fix`.
 
 ### Import Hygiene
 
