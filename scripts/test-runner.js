@@ -339,6 +339,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['no-restricted-syntax'],
   },
+  'require-array-sort-compare': {
+    description:
+      'Comparator-less numeric sorts are flagged; comparator and string-array sorts pass',
+    files: [
+      'test/sort-compare/invalid-number-sort.ts',
+      'test/sort-compare/valid-number-sort.ts',
+    ],
+    maxErrors: 2,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/require-array-sort-compare'],
+  },
 }
 
 async function findTestFiles() {
@@ -629,7 +640,9 @@ async function generateTestReport(allResults, standaloneResult = null) {
     totalErrors += results.totalErrors
     totalWarnings += results.totalWarnings
 
-    results.rulesCovered.forEach(rule => allRulesCovered.add(rule))
+    results.rulesCovered.forEach(rule => {
+      allRulesCovered.add(rule)
+    })
   }
 
   // Report standalone test results
@@ -685,7 +698,9 @@ function autoCategorizeFiles(allTestFiles) {
   // Find files that aren't in any predefined category
   const categorizedFiles = new Set()
   for (const category of Object.values(autoCategories)) {
-    category.files.forEach(file => categorizedFiles.add(file))
+    category.files.forEach(file => {
+      categorizedFiles.add(file)
+    })
   }
 
   for (const file of allTestFiles) {
@@ -780,7 +795,9 @@ async function runComprehensiveTests() {
     // Discover all test files
     const allTestFiles = await findTestFiles()
     console.log(`📁 Discovered ${allTestFiles.length} test files:`)
-    allTestFiles.forEach(file => console.log(`   - ${file}`))
+    allTestFiles.forEach(file => {
+      console.log(`   - ${file}`)
+    })
 
     // Separate standalone test files from lint test files
     const standaloneTestFiles = allTestFiles.filter(
