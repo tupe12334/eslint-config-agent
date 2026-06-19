@@ -213,6 +213,17 @@ const config = defineConfig([
       '**/coverage/**',
       '**/.next/**',
       '**/out/**',
+      // Storybook's static build output. This config ships first-class
+      // Storybook support (`eslint-plugin-storybook` + `configs/storybook.js`),
+      // so adopters routinely run `storybook build`, which emits compiled,
+      // minified bundles into `storybook-static/`. Linting that generated
+      // output is never useful and floods the report, so ignore it like the
+      // other build dirs above.
+      '**/storybook-static/**',
+      // Turborepo's local task cache. In the monorepos this config targets,
+      // `turbo` writes hashed cache artifacts into `.turbo/`; they are
+      // generated, not source, and must not be linted.
+      '**/.turbo/**',
     ],
   },
   // Flag `eslint-disable` directives that no longer suppress anything. Stale
