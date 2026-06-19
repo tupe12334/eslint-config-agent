@@ -285,12 +285,12 @@ know what is enforcing each error.
 
 #### Type-system rules (TypeScript files)
 
-| Rule                      | What it enforces                                                                                                                                                     |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `no-type-assertions`      | Bans `as` type assertions (and the `as (typeof X)[number]` indexed-access form). `as const` is the only allowed assertion — use a real type otherwise.               |
-| `no-inline-union-types`   | Requires a named type alias instead of an inline union (including interface and class properties), so unions carry a name that documents their intent.               |
-| `no-record-literal-types` | Bans `Record<...>` keyed by string literals. Use a named interface or type with explicit keys instead.                                                               |
-| `no-trivial-type-aliases` | Bans aliases that add no meaning — primitive aliases, direct type references, and bare literal aliases. Unions, generics, mapped and conditional types stay allowed. |
+| Rule                      | What it enforces                                                                                                                                                                                                |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `no-type-assertions`      | Bans `as` type assertions (and the `as (typeof X)[number]` indexed-access form). `as const` is the only allowed assertion — use a real type otherwise.                                                          |
+| `no-inline-union-types`   | Requires a named type alias instead of an inline union (in function signatures and in interface/class properties, whether the members are literals or not), so unions carry a name that documents their intent. |
+| `no-record-literal-types` | Bans `Record<...>` keyed by string literals. Use a named interface or type with explicit keys instead.                                                                                                          |
+| `no-trivial-type-aliases` | Bans aliases that add no meaning — primitive aliases, direct type references, and bare literal aliases. Unions, generics, mapped and conditional types stay allowed.                                            |
 
 #### Control-flow & switch rules
 
