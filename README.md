@@ -155,6 +155,43 @@ export default [
 ]
 ```
 
+### Incremental (warn-level) preset
+
+The `recommended` preset above _turns rules off_. When you instead want to keep
+**every** rule reporting but stop them from failing CI — so you can see the full
+backlog and burn it down gradually — use the `incremental` preset. It is the
+full `eslint-config-agent` ruleset with every error-level rule downgraded to a
+warning, so `eslint` exits `0` and `pnpm lint` stays green while still surfacing
+everything:
+
+```javascript
+import incremental from 'eslint-config-agent/incremental'
+
+export default incremental
+```
+
+This replaces the `config.map(toWarnings)` helper that adopting projects used to
+copy-paste by hand. To enforce a rule as a hard error before the rest of the
+backlog is cleared, append your own override layer — it wins over the warned
+defaults:
+
+```javascript
+import incremental from 'eslint-config-agent/incremental'
+
+export default [
+  ...incremental,
+  // Rules you are ready to enforce as hard errors today:
+  {
+    rules: {
+      eqeqeq: ['error', 'always'],
+    },
+  },
+]
+```
+
+Keep your CI lint step at `eslint .` during migration; switch it to
+`eslint . --max-warnings 0` once the warnings are cleared.
+
 ### Advanced Configuration
 
 #### Extending with Custom Rules
@@ -502,6 +539,11 @@ export default [
   },
 ]
 ```
+
+To demote **every** rule at once instead of hand-picking the noisiest ones, use
+the [`incremental` preset](#incremental-warn-level-preset)
+(`import incremental from 'eslint-config-agent/incremental'`) — it ships the
+`config.map(toWarnings)` pattern so you don't have to copy-paste it.
 
 Keep your CI lint step at `eslint .` (which fails only on errors) during
 migration, and switch it to `eslint . --max-warnings 0` once the warnings are
