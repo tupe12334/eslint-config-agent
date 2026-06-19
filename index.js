@@ -51,6 +51,18 @@ const sharedRules = {
   // instead of the deeply-nested if/else trees AI assistants tend to emit. The
   // rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-else-return': ['error', { allowElseIf: false }],
+  // Disallow a `return;` (or `return undefined;`) that is the last statement of
+  // a function and so changes nothing — control already falls off the end and
+  // yields `undefined`. A redundant trailing `return` reads as if it guards
+  // something or hands back a meaningful value when it does neither; it is dead
+  // punctuation that hides the real control flow, exactly what this config's
+  // explicit-over-clever stance exists to surface. It is the natural companion
+  // to the `no-else-return` rule just above and to the `early-return` plugin
+  // already enabled here: that pair flattens branching by removing unneeded
+  // `else` blocks, and this removes the now-pointless `return` they often leave
+  // behind. The rule is auto-fixable, so consumers can adopt it with
+  // `eslint --fix`.
+  'no-useless-return': 'error',
   // Disallow nested ternaries. A ternary inside another ternary is the
   // archetypal "clever but unreadable" construct this config exists to
   // prevent: it collapses branching logic into a single dense expression that
