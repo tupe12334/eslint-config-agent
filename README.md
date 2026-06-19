@@ -19,7 +19,7 @@ In an age where AI coding assistants and code generators are increasingly common
 - **🔍 Explicit Over Clever**: Forces clear, readable patterns instead of "clever" but obscure code
 - **🚀 Production-Ready**: Battle-tested configuration used in production environments
 - **🔒 Type Safety First**: Enforces explicit null/undefined checks instead of optional chaining
-- **⚡ Modern ESLint**: Built for ESLint 9+ with flat configuration format
+- **⚡ Modern ESLint**: Built for ESLint 9 with flat configuration format
 - **🎯 Framework Agnostic**: Works seamlessly with React, Preact, and pure TypeScript
 - **📦 Zero Config**: Works out of the box with sensible defaults
 - **🔧 Extensible**: Easy to customize and extend for your specific needs
@@ -49,7 +49,7 @@ This configuration enforces patterns that:
 - **🔐 Strict Standards**: Enforces explicit null/undefined checks, requires strict equality (`===`/`!==`), and disallows optional chaining and nullish coalescing for better code clarity
 - **📏 Code Quality**: Function length limits (100 lines), trailing space detection, and consistent formatting
 - **🧪 DDD by Default**: Requires spec files for all source files to ensure comprehensive test coverage
-- **🚀 Modern ESLint**: Uses the latest flat configuration format (ESLint 9+)
+- **🚀 Modern ESLint**: Uses the latest flat configuration format (ESLint 9)
 - **📋 Comprehensive Testing**: 12+ test categories with automated validation
 - **🔄 CI/CD Ready**: Zero-warning configuration for production builds
 
@@ -58,8 +58,24 @@ This configuration enforces patterns that:
 ### Prerequisites
 
 - **Node.js**: 20.x or higher
-- **ESLint**: 9.x
+- **ESLint**: 9.x (see [ESLint version compatibility](#eslint-version-compatibility) below)
 - **TypeScript**: 4.5+ (optional, for TypeScript projects)
+
+#### ESLint version compatibility
+
+This package targets **ESLint 9.x** and is **not yet compatible with ESLint 10**.
+
+Several of the bundled plugins still call APIs that ESLint 10 removed (for
+example `context.getFilename()`), so running the config under ESLint 10 fails at
+lint time with errors such as:
+
+```text
+TypeError: Error while loading rule 'default/no-localhost':
+context.getFilename is not a function
+```
+
+If you are on ESLint 10, pin ESLint to the latest 9.x release until ESLint 10
+support lands. Progress is tracked in the project issues.
 
 ### Install the package
 
