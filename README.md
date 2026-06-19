@@ -155,8 +155,10 @@ The `eslint-config-agent/recommended` preset bundles those common overrides for
 you. It keeps the core quality rules but disables the most opinionated ones
 (`ddd/require-spec-file`, `single-export`, `required-exports`, the custom
 `error/*` rules, `default/no-default-params`, `@typescript-eslint/consistent-type-definitions`,
-and the `no-restricted-syntax` bans on optional chaining / nullish coalescing /
-type assertions), so idiomatic TypeScript passes during incremental adoption.
+`jsx-classname/require-classname` (which otherwise errors on Tailwind-only
+`className`s), and the `no-restricted-syntax` bans on optional chaining /
+nullish coalescing / type assertions), so idiomatic TypeScript and
+React/Preact + Tailwind code passes during incremental adoption.
 
 ```javascript
 import recommended from 'eslint-config-agent/recommended'

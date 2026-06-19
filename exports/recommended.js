@@ -41,6 +41,15 @@ const relaxedOverrides = {
     'default/no-default-params': 'off',
     // Allow `type` aliases, not just `interface` declarations.
     '@typescript-eslint/consistent-type-definitions': 'off',
+    // Don't require a semantic `className` on every HTML element, and don't
+    // reject Tailwind-only class lists. The strict default enables
+    // `jsx-classname/require-classname` with `{ ignoreTailwind: true }`, which
+    // errors both on elements with no `className` and on elements whose
+    // `className` contains only Tailwind utilities (e.g.
+    // `<div className="flex gap-2" />`). That makes the config impossible to
+    // adopt incrementally in any React/Preact + Tailwind codebase — by far the
+    // most common modern setup — so relax it for the recommended preset.
+    'jsx-classname/require-classname': 'off',
     // The most divisive layer: this is where optional chaining (`?.`),
     // nullish coalescing (`??`), type assertions and switch-default bans live.
     // Relaxing it lets idiomatic TypeScript through during adoption.
