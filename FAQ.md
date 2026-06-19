@@ -44,7 +44,11 @@ npm install --save-dev eslint@^9.34.0
 
 ### **Q: Does this work with monorepos?**
 
-A: Yes! Place the `eslint.config.js` at the root of each package, or use a shared config:
+A: Yes! The config's built-in ignores are recursive (`**/dist/**`, `**/build/**`,
+`**/coverage/**`, `**/.next/**`, `**/out/**`), so generated output inside nested
+packages is skipped automatically — you don't get lint errors on compiled code
+under `packages/*/dist`. Place the `eslint.config.js` at the root of each package,
+or use a shared config:
 
 ```javascript
 // packages/shared/eslint.config.js
@@ -62,7 +66,7 @@ A: This configuration helps AI assistants generate more maintainable and debugga
 
 ### **Q: How do I contribute or report issues?**
 
-A: Please use the [GitHub repository](https://github.com/tupe12334/eslint-config) for issues and contributions.
+A: Please use the [GitHub repository](https://github.com/tupe12334/eslint-config-agent) for issues and contributions.
 
 For development setup, testing guidelines, and contribution instructions, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -158,7 +162,7 @@ A: Yes! This configuration focuses on code quality rules and doesn't conflict wi
 
 If you don't find your answer here:
 
-1. Check the [GitHub Issues](https://github.com/tupe12334/eslint-config/issues) for similar problems
+1. Check the [GitHub Issues](https://github.com/tupe12334/eslint-config-agent/issues) for similar problems
 2. Review the [CONTRIBUTING.md](CONTRIBUTING.md) for development setup
 3. Create a new issue with:
    - Your ESLint version

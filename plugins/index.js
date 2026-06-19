@@ -19,6 +19,7 @@ import defaultPlugin from 'eslint-plugin-default'
 import dddPlugin from 'eslint-plugin-ddd'
 import preactPlugin from 'eslint-plugin-preact'
 import { noDefaultClassExportRule } from '../rules/no-default-class-export/index.js'
+import { requireSpecFileTsxRule } from '../rules/require-spec-file-tsx/index.js'
 
 // Centralized plugin configuration
 export const plugins = {
@@ -38,6 +39,7 @@ export const plugins = {
   custom: {
     rules: {
       'no-default-class-export': noDefaultClassExportRule,
+      'require-spec-file-tsx': requireSpecFileTsxRule,
     },
   },
 }
