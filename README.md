@@ -103,6 +103,31 @@ import config from 'eslint-config-agent'
 export default config
 ```
 
+### Available presets (entry points)
+
+The package ships three entry points via its `package.json#exports` map. Import
+whichever one matches how much strictness your project is ready for:
+
+| Import specifier                  | Strictness | When to use                                                                                                                                           |
+| --------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eslint-config-agent`             | Strict     | The full, opinionated config. Best for greenfield projects that adopt every convention.                                                               |
+| `eslint-config-agent/recommended` | Relaxed    | The strict config with the most divisive rules pre-disabled. Best for incremental adoption.                                                           |
+| `eslint-config-agent/ddd`         | Strict     | Backward-compatible alias of the default export (the DDD `require-spec-file` rules now ship in the base config). Equivalent to `eslint-config-agent`. |
+
+```javascript
+// Strict (default)
+import config from 'eslint-config-agent'
+
+// Relaxed, for incremental adoption
+import recommended from 'eslint-config-agent/recommended'
+
+// Backward-compatible alias of the default export
+import ddd from 'eslint-config-agent/ddd'
+```
+
+Each export is a flat-config array, so you can spread it and append your own
+override layers (see [Advanced Configuration](#advanced-configuration)).
+
 ### Recommended (relaxed) preset
 
 The default export is intentionally strict — it assumes a greenfield project
