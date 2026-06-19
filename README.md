@@ -260,6 +260,10 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - All TypeScript/JavaScript source files (`.ts`, `.js`, `.tsx`, `.jsx`)
 - Implementation files that contain business logic
 
+> `.ts`/`.js` files are checked by `ddd/require-spec-file`; `.tsx`/`.jsx`
+> components are checked by the bundled `custom/require-spec-file-tsx` rule, so
+> React/Preact components are held to the same spec-file requirement.
+
 **What files are excluded:**
 
 - Test files themselves (`.spec.ts`, `.test.js`, etc.)
