@@ -142,6 +142,23 @@ const sharedRules = {
   // into an expression, which is precisely the construct this config exists to
   // surface — so it is flagged too.
   'no-sequences': ['error', { allowInParentheses: false }],
+  // Require a `return` from every array-method callback that is expected to
+  // produce one (`map`, `filter`, `reduce`, `every`, `some`, `find`, `sort`,
+  // `flatMap`, ...). A callback that falls off the end returns `undefined`, so
+  // `arr.map(x => { doSomething(x) })` silently yields an array of `undefined`
+  // and `arr.filter(x => { x.active })` keeps every element — the kind of
+  // quiet, wrong-result bug that type checking will not catch and that AI
+  // assistants emit when they reach for a brace body and forget the `return`.
+  // Unlike most rules here this is a correctness check, not a style
+  // preference, which is why it is not covered by `eslint:recommended` and is
+  // enabled explicitly. `checkForEach: true` flags the inverse mistake —
+  // returning a value from `forEach`, where the result is discarded — which
+  // usually means `map` was intended. The rule is not auto-fixable because
+  // only the author knows what each callback should return.
+  'array-callback-return': [
+    'error',
+    { allowImplicit: false, checkForEach: true },
+  ],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
