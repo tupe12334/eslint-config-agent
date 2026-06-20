@@ -37,6 +37,19 @@ const relaxedOverrides = {
     'error/no-generic-error': 'off',
     'error/require-custom-error': 'off',
     'error/no-literal-error-message': 'off',
+    // Don't require a JSDoc block on every exported function and class. The
+    // strict default enables `jsdoc/require-jsdoc` at `error` for every
+    // `FunctionDeclaration` and `ClassDeclaration` (see `index.js` and
+    // `configs/typescript.js`), so adopting the config on an existing codebase
+    // produces a wall of `Missing JSDoc comment` errors on day one. This is the
+    // third of the three highest-volume on-ramp rules the README calls out —
+    // alongside `ddd/require-spec-file` and `error/no-literal-error-message`,
+    // both already relaxed above — so relax it here to match the preset's
+    // stated incremental-adoption purpose. Only the "document everything"
+    // requirement is lifted: the jsdoc *content* rules (`check-param-names`,
+    // `require-returns`, ...) stay enabled, so any JSDoc that is actually
+    // written is still validated.
+    'jsdoc/require-jsdoc': 'off',
     // Allow default parameter values.
     'default/no-default-params': 'off',
     // Allow `type` aliases, not just `interface` declarations.

@@ -156,7 +156,10 @@ load without a wall of errors.
 The `eslint-config-agent/recommended` preset bundles those common overrides for
 you. It keeps the core quality rules but disables the most opinionated ones
 (`ddd/require-spec-file`, `single-export`, `required-exports`, the custom
-`error/*` rules, `default/no-default-params`, `@typescript-eslint/consistent-type-definitions`,
+`error/*` rules, `jsdoc/require-jsdoc` (so existing code is not forced to
+document every exported function and class up front — the jsdoc _content_ rules
+stay on, so any JSDoc you do write is still validated),
+`default/no-default-params`, `@typescript-eslint/consistent-type-definitions`,
 `jsx-classname/require-classname` (which otherwise errors on Tailwind-only
 `className`s), and the `no-restricted-syntax` bans on optional chaining /
 nullish coalescing / type assertions), so idiomatic TypeScript and
