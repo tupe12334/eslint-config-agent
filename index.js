@@ -42,6 +42,23 @@ const sharedRules = {
   'no-continue': 'off',
   // Additional built-in error handling rules
   'prefer-promise-reject-errors': 'error',
+  // Disallow returning a value from a `Promise` executor — the function passed
+  // to `new Promise((resolve, reject) => { ... })`. The executor's return value
+  // is discarded by the Promise constructor, so `new Promise(() => readfile())`
+  // or `new Promise((resolve) => resolve(x))` written with an implicit return
+  // body silently throws the value away. When the returned value is itself a
+  // promise (an async executor, a `.then(...)` chain) this is a real bug: the
+  // work runs unobserved, rejections become unhandled, and the outer promise
+  // settles on a different schedule than the author expects. This is a
+  // correctness check, not a style preference — the same class of "the callback
+  // returns into a void" mistake that `array-callback-return` above guards
+  // against, and exactly the kind of quiet, wrong-behavior bug that type
+  // checking will not catch and that AI assistants emit when they reach for a
+  // brace body inside `new Promise`. It is not in `eslint:recommended`, so it is
+  // enabled explicitly here. The rule is not auto-fixable because only the
+  // author knows whether the value should be dropped or the surrounding control
+  // flow reworked.
+  'no-promise-executor-return': 'error',
   // Disallow an `else`/`else if` block when the preceding `if` already exits
   // the function via `return`. The `else` is dead weight: once the `if` branch
   // returns, the code after it is unreachable from that path, so wrapping the
@@ -51,6 +68,18 @@ const sharedRules = {
   // instead of the deeply-nested if/else trees AI assistants tend to emit. The
   // rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-else-return': ['error', { allowElseIf: false }],
+  // Disallow a `return;` (or `return undefined;`) that is the last statement of
+  // a function and so changes nothing — control already falls off the end and
+  // yields `undefined`. A redundant trailing `return` reads as if it guards
+  // something or hands back a meaningful value when it does neither; it is dead
+  // punctuation that hides the real control flow, exactly what this config's
+  // explicit-over-clever stance exists to surface. It is the natural companion
+  // to the `no-else-return` rule just above and to the `early-return` plugin
+  // already enabled here: that pair flattens branching by removing unneeded
+  // `else` blocks, and this removes the now-pointless `return` they often leave
+  // behind. The rule is auto-fixable, so consumers can adopt it with
+  // `eslint --fix`.
+  'no-useless-return': 'error',
   // Disallow nested ternaries. A ternary inside another ternary is the
   // archetypal "clever but unreadable" construct this config exists to
   // prevent: it collapses branching logic into a single dense expression that
@@ -100,6 +129,21 @@ const sharedRules = {
   // `String(n)`) keeps the intended conversion legible. The rule is
   // auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-implicit-coercion': ['error', { allow: [] }],
+  // Require `Object.hasOwn(obj, key)` over the legacy ways of asking the same
+  // question. The two forms it replaces are each a footgun: calling
+  // `obj.hasOwnProperty(key)` directly breaks the moment `obj` has a `null`
+  // prototype (`Object.create(null)`, many map-like objects) or shadows the
+  // method with an own `hasOwnProperty` field — it throws or returns the wrong
+  // answer — which is why `no-prototype-builtins` already bans it; and the safe
+  // workaround, `Object.prototype.hasOwnProperty.call(obj, key)`, is a long,
+  // punctuation-heavy incantation that hides a one-word intent behind prototype
+  // plumbing. `Object.hasOwn` is the single explicit, prototype-safe spelling of
+  // "does this object own this key", so it fits this config's
+  // explicit-over-clever, correctness-leaning stance and removes the boilerplate
+  // adopters would otherwise reach for. It is auto-fixable (`eslint --fix`) and
+  // available on every supported runtime (Node >= 20, ES2022), so adoption is
+  // free.
+  'prefer-object-has-own': 'error',
   // Disallow `var`. `var` declarations are function-scoped and hoisted, so
   // they leak out of the block they appear to belong to and read as
   // initialized `undefined` before their declaration runs — producing
@@ -109,6 +153,16 @@ const sharedRules = {
   // explicit-over-clever, AI-safety stance. It is also the foundation the
   // `prefer-const` rule builds on. The rule is auto-fixable.
   'no-var': 'error',
+  // Require object literal shorthand for properties and methods, so
+  // `{ value: value }` collapses to `{ value }` and `{ run: function () {} }`
+  // to `{ run() {} }`. The longhand forms carry no extra meaning — they are
+  // pure boilerplate that an AI assistant trained on older code routinely
+  // emits, and the duplicated `value: value` name is a common spot for a
+  // copy-paste typo that the shorthand removes entirely. Enforcing one
+  // canonical object form keeps literals legible and consistent, matching
+  // this config's explicit-over-clever, low-noise stance. The rule is
+  // auto-fixable, so consumers can adopt it with `eslint --fix`.
+  'object-shorthand': ['error', 'always'],
   // Disallow chained assignment expressions such as `a = b = c = 0`. Chaining
   // collapses several writes into one expression: the value flows right-to-left
   // through bindings that have nothing to do with each other, so a reader has to
@@ -121,6 +175,33 @@ const sharedRules = {
   // line. Writing each assignment on its own statement keeps the data flow
   // explicit.
   'no-multi-assign': 'error',
+  // Disallow the `Object` constructor (`new Object()` and `Object()`) in favor
+  // of the `{}` object literal. The constructor form is a strictly more verbose,
+  // more indirect way to do exactly what the literal does — and a trap: passing
+  // a single non-object argument makes `Object(x)` return *that* value (or a
+  // wrapper), so the call quietly stops creating a fresh object at all. The
+  // literal has no such ambiguity. This is the object-creation sibling of the
+  // wrapper-constructor and coercion bans this config already sets (`Number`,
+  // `String`, `!!x`): prefer the plain literal/value over a constructor call
+  // dressed up as one. `new Object()` is also a legacy idiom an AI assistant
+  // trained on older code reaches for, which puts it squarely in this config's
+  // explicit-over-clever, AI-safety scope. The rule is auto-fixable, so
+  // consumers can adopt it with `eslint --fix`.
+  'no-object-constructor': 'error',
+  // Require object spread (`{ ...a, ...b }`) over `Object.assign({}, a, b)` when
+  // the call is building a brand-new object (its first argument is an object
+  // literal). The `Object.assign({}, ...)` form is a more indirect, punctuation-
+  // heavy spelling of the same intent: a reader has to recognize the empty `{}`
+  // accumulator and the mutate-and-return semantics just to conclude "this makes
+  // a fresh, merged object", which the spread states directly. It is the
+  // object-merging sibling of the `no-object-constructor` ban right above —
+  // both reject an indirect construction idiom in favor of the plain literal —
+  // and of `object-shorthand`, which already pushes object literals toward their
+  // most legible form. `Object.assign` onto an existing target (`Object.assign(
+  // target, src)`) mutates and is left alone, so only the new-object case is
+  // flagged. The rule is auto-fixable, so consumers can adopt it with
+  // `eslint --fix`.
+  'prefer-object-spread': 'error',
   // Require a `return` from every array-method callback that is expected to
   // produce one (`map`, `filter`, `reduce`, `every`, `some`, `find`, `sort`,
   // `flatMap`, ...). A callback that falls off the end returns `undefined`, so
@@ -138,6 +219,19 @@ const sharedRules = {
     'error',
     { allowImplicit: false, checkForEach: true },
   ],
+  // Disallow computed keys that wrap a literal that could be written plainly —
+  // `{ ['name']: x }`, `{ [42]: y }`, or `class { ['method']() {} }`. The
+  // bracket syntax exists for keys that must be computed at runtime; using it
+  // for a static string or number adds punctuation and a layer of indirection
+  // that buys nothing and only makes the reader pause to confirm the key is
+  // constant after all. It is the same "clever but pointless" clutter the
+  // `no-unneeded-ternary` and `no-implicit-coercion` rules already ban here,
+  // and one AI assistants emit when they template object keys mechanically.
+  // The plain form (`{ name: x }`, `{ method() {} }`) states intent directly.
+  // The rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
+  // `enforceForClassMembers: true` extends the check from object literals to
+  // class members so both surfaces stay consistent.
+  'no-useless-computed-key': ['error', { enforceForClassMembers: true }],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
@@ -213,6 +307,17 @@ const config = defineConfig([
       '**/coverage/**',
       '**/.next/**',
       '**/out/**',
+      // Storybook's static build output. This config ships first-class
+      // Storybook support (`eslint-plugin-storybook` + `configs/storybook.js`),
+      // so adopters routinely run `storybook build`, which emits compiled,
+      // minified bundles into `storybook-static/`. Linting that generated
+      // output is never useful and floods the report, so ignore it like the
+      // other build dirs above.
+      '**/storybook-static/**',
+      // Turborepo's local task cache. In the monorepos this config targets,
+      // `turbo` writes hashed cache artifacts into `.turbo/`; they are
+      // generated, not source, and must not be linted.
+      '**/.turbo/**',
     ],
   },
   // Flag `eslint-disable` directives that no longer suppress anything. Stale

@@ -121,6 +121,13 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'security-in-tests': {
+    description:
+      'Noisy eslint-plugin-security heuristics are relaxed for test/spec files',
+    files: ['test/security/security-in-tests.spec.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
   'edge-cases': {
     description: 'Edge cases and boundary testing',
     files: ['test/edge-cases.tsx'],
@@ -345,6 +352,17 @@ const testCategories = {
     maxErrors: 4,
     maxWarnings: 0,
     expectedRules: ['no-restricted-syntax'],
+  },
+  'require-array-sort-compare': {
+    description:
+      'Comparator-less numeric sorts are flagged; comparator and string-array sorts pass',
+    files: [
+      'test/sort-compare/invalid-number-sort.ts',
+      'test/sort-compare/valid-number-sort.ts',
+    ],
+    maxErrors: 2,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/require-array-sort-compare'],
   },
 }
 
