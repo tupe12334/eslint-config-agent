@@ -129,6 +129,14 @@ const sharedRules = {
   // `String(n)`) keeps the intended conversion legible. The rule is
   // auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-implicit-coercion': ['error', { allow: [] }],
+  // Require an explicit radix argument to `parseInt`. Omitting it is a classic
+  // foot-gun: the base is inferred from the string, so leading-zero or
+  // `0x`-prefixed input can be parsed in an unexpected base and silently
+  // produce the wrong number. The omission is invisible at the call site,
+  // exactly the kind of implicit behavior this config bans elsewhere
+  // (`eqeqeq`, `no-implicit-coercion`). Forcing `parseInt(str, 10)` makes the
+  // intended base explicit and the parse deterministic.
+  radix: ['error', 'always'],
   // Require `Object.hasOwn(obj, key)` over the legacy ways of asking the same
   // question. The two forms it replaces are each a footgun: calling
   // `obj.hasOwnProperty(key)` directly breaks the moment `obj` has a `null`
