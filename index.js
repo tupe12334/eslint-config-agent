@@ -284,6 +284,19 @@ const sharedRules = {
   // and not the `Function` constructor). The rule is not auto-fixable because
   // only the author can restate the string body as real code.
   'no-new-func': 'error',
+  // Disallow stray `console` calls, allowing only `console.warn` and
+  // `console.error`. A bare `console.log` is almost always leftover debugging:
+  // it slips through review, ships to production, leaks internal state into logs
+  // and slows hot paths, all without any type error or runtime failure to flag
+  // it — exactly the quiet, wrong-to-ship mistake this config exists to catch
+  // and one AI assistants emit liberally while "checking what a value is." The
+  // `allow: ['warn', 'error']` exception keeps intentional diagnostics — the two
+  // `console` channels meant for surfacing problems — available, so the rule
+  // targets only the throwaway logging. Consumers that genuinely build a CLI can
+  // relax it for their entry points; for everyone else it is a zero-config
+  // guard. The rule is not auto-fixable because only the author knows whether a
+  // given `console.log` should be deleted or promoted to a real log channel.
+  'no-console': ['error', { allow: ['warn', 'error'] }],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS

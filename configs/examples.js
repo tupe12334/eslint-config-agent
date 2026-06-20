@@ -83,10 +83,21 @@ export const examplesConfig = [
       // Relax file/function length limits for concise examples
       'max-lines-per-function': 'off',
       'max-lines': 'off',
+      // Example fixtures demonstrate rule behavior and use `console.log` as
+      // illustrative sample code, so the shared `no-console` ban does not apply.
+      'no-console': 'off',
       // Examples don't need JSDoc
       'jsdoc/require-jsdoc': 'off',
       'jsdoc/require-param': 'off',
       'jsdoc/require-returns': 'off',
+    },
+  },
+  {
+    // JavaScript example fixtures (the `.ts` block above only matches `.ts`).
+    // They likewise use `console.log` as sample code.
+    files: ['**/rules/**/examples/**/*.js'],
+    rules: {
+      'no-console': 'off',
     },
   },
 ]
