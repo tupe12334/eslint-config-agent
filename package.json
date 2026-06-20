@@ -25,7 +25,8 @@
     "./incremental": {
       "types": "./exports/incremental.d.ts",
       "default": "./exports/incremental.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "index.js",
