@@ -108,6 +108,30 @@ export const testFilesConfig = [
       'error/no-generic-error': 'off',
       'error/require-custom-error': 'off',
       'error/no-throw-literal': 'off',
+      // Relax the noisy `eslint-plugin-security` heuristics for test code.
+      //
+      // These rules exist to harden *shipped* code against attacker-controlled
+      // input, but their detection is purely syntactic and fires constantly on
+      // perfectly safe test setup: a fixture path built from a temp dir
+      // (`detect-non-literal-fs-filename`), indexing a lookup table by a loop
+      // variable (`detect-object-injection`), compiling a pattern from a test
+      // input (`detect-non-literal-regexp`), spawning a helper binary in an
+      // integration test (`detect-child-process`), or `require`-ing a module
+      // resolved at runtime in a fixture loader (`detect-non-literal-require`).
+      // None of these are vulnerabilities in test files — the inputs are the
+      // test's own literals, not untrusted data, and the code never reaches
+      // production — so they are false positives that force adopters to litter
+      // specs with `eslint-disable` comments (this package's own
+      // `scripts/test-runner.js` already does exactly that). Turning them off
+      // for tests mirrors the `error/*` relaxations above; the genuinely
+      // value-adding security rules (`detect-unsafe-regex` for ReDoS,
+      // `detect-eval-with-expression`, `detect-buffer-noassert`, the timing and
+      // bidi-character checks) stay enabled everywhere.
+      'security/detect-non-literal-fs-filename': 'off',
+      'security/detect-object-injection': 'off',
+      'security/detect-non-literal-regexp': 'off',
+      'security/detect-child-process': 'off',
+      'security/detect-non-literal-require': 'off',
       // Allow multiple exports in test files for testing import/export patterns
       'no-restricted-syntax': [
         'warn',
