@@ -241,6 +241,21 @@ const sharedRules = {
     'error',
     { allowImplicit: false, checkForEach: true },
   ],
+  // Only allow throwing real `Error` objects — reject `throw 'boom'`,
+  // `throw { code: 500 }`, `throw 42` and any other non-Error value. A thrown
+  // string or plain object carries no stack trace, so the failure surfaces with
+  // no record of where it came from, and it breaks every `catch (e)` that does
+  // `e instanceof Error` or reads `e.message`/`e.stack` — the consumer's error
+  // handling silently misfires. Throwing a bare literal is exactly the terse
+  // shortcut an AI assistant emits when it wants to bail out fast, which puts it
+  // squarely in this config's correctness-over-clever, AI-safety scope, and it
+  // pairs with the bundled `error/*` rules that already shape how errors are
+  // declared. Unlike most rules here it catches an outright correctness
+  // mistake, not a style preference, which is why it is enabled explicitly —
+  // `eslint:recommended` does not turn it on. The rule is not auto-fixable
+  // because only the author knows which `Error` subclass the literal should
+  // become.
+  'no-throw-literal': 'error',
   // Disallow comparing a variable to itself (`x === x`, `x !== x`,
   // `i < i`, ...). A self-comparison is either a plain bug — the author meant
   // to compare against a different operand and the result is a constant

@@ -387,6 +387,12 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   lets rejections go unhandled. A correctness check, like the bundled
   `array-callback-return`. Use a block body that calls `resolve`/`reject`
   without returning.
+- **`no-throw-literal`**: Forbids throwing a non-`Error` value — `throw 'boom'`,
+  `throw { code: 500 }`, `throw 42`. A thrown literal carries no stack trace and
+  breaks every `catch` that relies on `instanceof Error` or reads
+  `.message`/`.stack`, so the consumer's error handling silently misfires. A
+  correctness check, like the bundled `array-callback-return`. Throw a real
+  `Error` (or a subclass) instead.
 
 ### Import Hygiene
 
