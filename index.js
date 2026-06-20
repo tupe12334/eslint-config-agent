@@ -175,6 +175,21 @@ const sharedRules = {
   // line. Writing each assignment on its own statement keeps the data flow
   // explicit.
   'no-multi-assign': 'error',
+  // Disallow assignment inside a `return` statement (`return foo = bar`). An
+  // assignment in return position does two things at once — it mutates a
+  // binding *and* yields that value as the function's result — so a reader
+  // cannot tell whether the `=` was deliberate or a typo for the `===` this
+  // config already requires via `eqeqeq`. It is the return-position sibling of
+  // the chained assignments `no-multi-assign` above already bans: a terse,
+  // "clever" construct that fuses a side effect into an expression and hides
+  // the real control flow, exactly the shortcut this config exists to prevent
+  // and one AI assistants emit when collapsing a compute-then-return into a
+  // single line. The explicit form — assign on its own statement, then
+  // `return` the variable — keeps both intents legible. `'always'` forbids the
+  // construct even when wrapped in parentheses, since the parenthesized form is
+  // just as easy to misread. The rule is not auto-fixable because only the
+  // author knows whether the assignment or a comparison was intended.
+  'no-return-assign': ['error', 'always'],
   // Disallow the `Object` constructor (`new Object()` and `Object()`) in favor
   // of the `{}` object literal. The constructor form is a strictly more verbose,
   // more indirect way to do exactly what the literal does — and a trap: passing
