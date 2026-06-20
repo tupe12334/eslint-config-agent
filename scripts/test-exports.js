@@ -40,7 +40,13 @@ const projectRoot = join(__dirname, '..')
 
 // The public entry points the README documents. Keep in sync with the README
 // usage section and `package.json#exports`.
-const EXPECTED_ENTRY_POINTS = ['.', './ddd', './recommended', './incremental']
+const EXPECTED_ENTRY_POINTS = [
+  '.',
+  './ddd',
+  './recommended',
+  './recommended-incremental',
+  './incremental',
+]
 
 async function readPackageJson() {
   const raw = await readFile(join(projectRoot, 'package.json'), 'utf8')

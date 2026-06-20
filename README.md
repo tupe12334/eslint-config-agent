@@ -121,14 +121,16 @@ export default config
 
 ### Available presets (entry points)
 
-The package ships three entry points via its `package.json#exports` map. Import
-whichever one matches how much strictness your project is ready for:
+The package ships several entry points via its `package.json#exports` map.
+Import whichever one matches how much strictness your project is ready for:
 
-| Import specifier                  | Strictness | When to use                                                                                                                                           |
-| --------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `eslint-config-agent`             | Strict     | The full, opinionated config. Best for greenfield projects that adopt every convention.                                                               |
-| `eslint-config-agent/recommended` | Relaxed    | The strict config with the most divisive rules pre-disabled. Best for incremental adoption.                                                           |
-| `eslint-config-agent/ddd`         | Strict     | Backward-compatible alias of the default export (the DDD `require-spec-file` rules now ship in the base config). Equivalent to `eslint-config-agent`. |
+| Import specifier                              | Strictness     | When to use                                                                                                                                           |
+| --------------------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eslint-config-agent`                         | Strict         | The full, opinionated config. Best for greenfield projects that adopt every convention.                                                               |
+| `eslint-config-agent/recommended`             | Relaxed        | The strict config with the most divisive rules pre-disabled. Best for incremental adoption.                                                           |
+| `eslint-config-agent/incremental`             | Warn-level     | The full ruleset with every error downgraded to a warning, so CI stays green while the whole backlog is still reported.                               |
+| `eslint-config-agent/recommended-incremental` | Relaxed + warn | The gentlest on-ramp: the divisive rules disabled _and_ everything else downgraded to a warning. Best for large legacy codebases.                     |
+| `eslint-config-agent/ddd`                     | Strict         | Backward-compatible alias of the default export (the DDD `require-spec-file` rules now ship in the base config). Equivalent to `eslint-config-agent`. |
 
 ```javascript
 // Strict (default)
@@ -218,6 +220,45 @@ export default [
 
 Keep your CI lint step at `eslint .` during migration; switch it to
 `eslint . --max-warnings 0` once the warnings are cleared.
+
+### Recommended + incremental (relaxed, warn-level) preset
+
+`recommended` and `incremental` each solve half of the first-run problem on an
+existing codebase: `recommended` turns the most divisive rules **off** but keeps
+everything else at **error** level (a real backlog still fails CI), while
+`incremental` downgrades **everything** to a **warning** but keeps the divisive
+rules firing as a wall of warnings on idiomatic TypeScript and
+React/Preact + Tailwind code.
+
+The `recommended-incremental` preset combines both — the divisive rules disabled
+_and_ every surviving rule downgraded to a warning. It is the gentlest on-ramp
+for a large legacy codebase: `eslint` exits `0`, the noisiest rules are silent,
+and the remaining quality rules surface as warnings you can burn down before
+tightening back up:
+
+```javascript
+import recommendedIncremental from 'eslint-config-agent/recommended-incremental'
+
+export default recommendedIncremental
+```
+
+As with the other presets, append your own override layer to enforce a rule as a
+hard error before the rest of the backlog is cleared — it wins over the warned
+defaults:
+
+```javascript
+import recommendedIncremental from 'eslint-config-agent/recommended-incremental'
+
+export default [
+  ...recommendedIncremental,
+  // Rules you are ready to enforce as hard errors today:
+  {
+    rules: {
+      eqeqeq: ['error', 'always'],
+    },
+  },
+]
+```
 
 ### Advanced Configuration
 
