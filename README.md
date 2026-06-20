@@ -59,7 +59,7 @@ This configuration enforces patterns that:
 
 - **Node.js**: 20.x or higher
 - **ESLint**: 9.x (see [ESLint version compatibility](#eslint-version-compatibility) below)
-- **TypeScript**: 4.5+ (optional, for TypeScript projects)
+- **TypeScript**: 4.8.4 or higher (optional, only for TypeScript projects — see [TypeScript version compatibility](#typescript-version-compatibility) below)
 
 #### ESLint version compatibility
 
@@ -76,6 +76,25 @@ context.getFilename is not a function
 
 If you are on ESLint 10, pin ESLint to the latest 9.x release until ESLint 10
 support lands. Progress is tracked in the project issues.
+
+#### TypeScript version compatibility
+
+For TypeScript projects, the bundled `@typescript-eslint` parser supports
+**TypeScript 4.8.4 or higher**. TypeScript itself is _not_ bundled — the parser
+loads whatever `typescript` your project already has installed, so it is declared
+as an optional `peerDependency`.
+
+If your project pins an older TypeScript (for example a legacy `4.2.x`), linting
+fails up front with an opaque parser crash on **every** file rather than a clear
+version message:
+
+```text
+Parsing error: ts9__default.default.isTokenKind is not a function
+```
+
+If you hit this, upgrade your project's `typescript` to `>=4.8.4` (any recent
+4.9 / 5.x release works). Installing this package will also surface a peer
+dependency warning when the resolved TypeScript is too old.
 
 ### Install the package
 
@@ -106,6 +125,11 @@ npm install --save-dev eslint-config-agent
 
 > **Note:** If your project already depends on ESLint or any of these plugins,
 > your package manager will deduplicate them against the versions bundled here.
+>
+> The one exception is `typescript`: it is an _optional_ peer dependency (the
+> parser uses your project's own TypeScript), so TypeScript projects must have
+> `typescript >=4.8.4` installed. See
+> [TypeScript version compatibility](#typescript-version-compatibility) above.
 
 ## Usage
 
