@@ -241,6 +241,22 @@ const sharedRules = {
     'error',
     { allowImplicit: false, checkForEach: true },
   ],
+  // Disallow comparing a variable to itself (`x === x`, `x !== x`,
+  // `i < i`, ...). A self-comparison is either a plain bug — the author meant
+  // to compare against a different operand and the result is a constant
+  // `true`/`false` that quietly disables a branch — or the deliberate
+  // `value !== value` trick for detecting `NaN`. Both belong to the same
+  // family the `eqeqeq`, `no-implicit-coercion` and `no-unneeded-ternary`
+  // rules above already target: a punctuation-heavy expression whose real
+  // intent is hidden, exactly the "clever but unreadable" shortcut this config
+  // exists to prevent and one AI assistants emit when stitching together
+  // conditions. Unlike most rules here this also catches an outright
+  // correctness mistake, which is why it is enabled explicitly —
+  // `eslint:recommended` does not turn it on. The explicit form
+  // (`Number.isNaN(value)` for the NaN case, the intended operand otherwise)
+  // keeps the check legible. The rule is not auto-fixable because only the
+  // author knows which operand was meant.
+  'no-self-compare': 'error',
   // Disallow computed keys that wrap a literal that could be written plainly —
   // `{ ['name']: x }`, `{ [42]: y }`, or `class { ['method']() {} }`. The
   // bracket syntax exists for keys that must be computed at runtime; using it
