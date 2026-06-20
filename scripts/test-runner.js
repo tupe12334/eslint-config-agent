@@ -121,6 +121,13 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'security-in-tests': {
+    description:
+      'Noisy eslint-plugin-security heuristics are relaxed for test/spec files',
+    files: ['test/security/security-in-tests.spec.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
   'edge-cases': {
     description: 'Edge cases and boundary testing',
     files: ['test/edge-cases.tsx'],
@@ -629,7 +636,9 @@ async function generateTestReport(allResults, standaloneResult = null) {
     totalErrors += results.totalErrors
     totalWarnings += results.totalWarnings
 
-    results.rulesCovered.forEach(rule => allRulesCovered.add(rule))
+    results.rulesCovered.forEach(rule => {
+      allRulesCovered.add(rule)
+    })
   }
 
   // Report standalone test results
@@ -685,7 +694,9 @@ function autoCategorizeFiles(allTestFiles) {
   // Find files that aren't in any predefined category
   const categorizedFiles = new Set()
   for (const category of Object.values(autoCategories)) {
-    category.files.forEach(file => categorizedFiles.add(file))
+    category.files.forEach(file => {
+      categorizedFiles.add(file)
+    })
   }
 
   for (const file of allTestFiles) {
@@ -780,7 +791,9 @@ async function runComprehensiveTests() {
     // Discover all test files
     const allTestFiles = await findTestFiles()
     console.log(`📁 Discovered ${allTestFiles.length} test files:`)
-    allTestFiles.forEach(file => console.log(`   - ${file}`))
+    allTestFiles.forEach(file => {
+      console.log(`   - ${file}`)
+    })
 
     // Separate standalone test files from lint test files
     const standaloneTestFiles = allTestFiles.filter(
