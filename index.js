@@ -219,6 +219,20 @@ const sharedRules = {
     'error',
     { allowImplicit: false, checkForEach: true },
   ],
+  // Disallow returning a value from a class constructor. A constructor's job is
+  // to initialize `this`; `return someObject` silently overrides the freshly
+  // constructed instance, so `new Thing()` hands back a different object than
+  // the one the class body just set up — and `return value` for a primitive is
+  // ignored outright, making the statement dead code that reads as if it does
+  // something. Both forms break the `new` contract every caller relies on and
+  // defeat `instanceof`, and in this config's class-heavy world (custom Error
+  // classes, single class export per module) that footgun matters more than
+  // usual. Like `array-callback-return` this is a correctness check, not a
+  // style preference, which is why `eslint:recommended` leaves it off and it is
+  // enabled explicitly here. An empty `return;` to bail out early stays
+  // allowed; only returning a value is flagged. The rule is not auto-fixable
+  // because only the author knows whether the value or the instance was meant.
+  'no-constructor-return': 'error',
   // Disallow computed keys that wrap a literal that could be written plainly —
   // `{ ['name']: x }`, `{ [42]: y }`, or `class { ['method']() {} }`. The
   // bracket syntax exists for keys that must be computed at runtime; using it
