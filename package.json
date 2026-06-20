@@ -3,16 +3,33 @@
   "version": "3.0.4",
   "description": "ESLint configuration package with TypeScript support",
   "main": "index.js",
+  "types": "./index.d.ts",
   "type": "module",
   "exports": {
-    ".": "./index.js",
-    "./ddd": "./exports/ddd.js",
-    "./recommended": "./exports/recommended.js",
-    "./recommended-incremental": "./exports/recommended-incremental.js",
-    "./incremental": "./exports/incremental.js"
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./ddd": {
+      "types": "./exports/ddd.d.ts",
+      "default": "./exports/ddd.js"
+    },
+    "./recommended": {
+      "types": "./exports/recommended.d.ts",
+      "default": "./exports/recommended.js"
+    },
+    "./recommended-incremental": {
+      "types": "./exports/recommended-incremental.d.ts",
+      "default": "./exports/recommended-incremental.js"
+    },
+    "./incremental": {
+      "types": "./exports/incremental.d.ts",
+      "default": "./exports/incremental.js"
+    }
   },
   "files": [
     "index.js",
+    "index.d.ts",
     "README.md",
     "CHANGELOG.md",
     "configs/",
@@ -39,6 +56,7 @@
     "test:recommended-incremental": "node scripts/test-recommended-incremental.js",
     "test:exports": "node scripts/test-exports.js",
     "test:incremental": "node scripts/test-incremental.js",
+    "test:types": "tsc -p test/types/tsconfig.json",
     "test:edge": "eslint test/edge-cases.tsx",
     "test:performance": "eslint test/performance-test.tsx",
     "test:comprehensive": "node scripts/test-runner.js",
@@ -95,7 +113,8 @@
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
     "release-it": "^20.2.0",
-    "storybook": "^10.4.2"
+    "storybook": "^10.4.2",
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.3.5",
