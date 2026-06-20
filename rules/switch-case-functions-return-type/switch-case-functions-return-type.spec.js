@@ -64,7 +64,7 @@ const createSwitchCaseFunctionRule = config => ({
   },
   create(context) {
     return {
-      [config.selector]: function (node) {
+      [config.selector](node) {
         context.report({
           node,
           messageId: 'requireReturnType',

@@ -19,7 +19,7 @@ In an age where AI coding assistants and code generators are increasingly common
 - **🔍 Explicit Over Clever**: Forces clear, readable patterns instead of "clever" but obscure code
 - **🚀 Production-Ready**: Battle-tested configuration used in production environments
 - **🔒 Type Safety First**: Enforces explicit null/undefined checks instead of optional chaining
-- **⚡ Modern ESLint**: Built for ESLint 9+ with flat configuration format
+- **⚡ Modern ESLint**: Built for ESLint 9 with flat configuration format
 - **🎯 Framework Agnostic**: Works seamlessly with React, Preact, and pure TypeScript
 - **📦 Zero Config**: Works out of the box with sensible defaults
 - **🔧 Extensible**: Easy to customize and extend for your specific needs
@@ -49,7 +49,7 @@ This configuration enforces patterns that:
 - **🔐 Strict Standards**: Enforces explicit null/undefined checks, requires strict equality (`===`/`!==`), and disallows optional chaining and nullish coalescing for better code clarity
 - **📏 Code Quality**: Function length limits (100 lines), trailing space detection, and consistent formatting
 - **🧪 DDD by Default**: Requires spec files for all source files to ensure comprehensive test coverage
-- **🚀 Modern ESLint**: Uses the latest flat configuration format (ESLint 9+)
+- **🚀 Modern ESLint**: Uses the latest flat configuration format (ESLint 9)
 - **📋 Comprehensive Testing**: 12+ test categories with automated validation
 - **🔄 CI/CD Ready**: Zero-warning configuration for production builds
 
@@ -58,8 +58,24 @@ This configuration enforces patterns that:
 ### Prerequisites
 
 - **Node.js**: 20.x or higher
-- **ESLint**: 9.x
+- **ESLint**: 9.x (see [ESLint version compatibility](#eslint-version-compatibility) below)
 - **TypeScript**: 4.5+ (optional, for TypeScript projects)
+
+#### ESLint version compatibility
+
+This package targets **ESLint 9.x** and is **not yet compatible with ESLint 10**.
+
+Several of the bundled plugins still call APIs that ESLint 10 removed (for
+example `context.getFilename()`), so running the config under ESLint 10 fails at
+lint time with errors such as:
+
+```text
+TypeError: Error while loading rule 'default/no-localhost':
+context.getFilename is not a function
+```
+
+If you are on ESLint 10, pin ESLint to the latest 9.x release until ESLint 10
+support lands. Progress is tracked in the project issues.
 
 ### Install the package
 
@@ -103,6 +119,31 @@ import config from 'eslint-config-agent'
 export default config
 ```
 
+### Available presets (entry points)
+
+The package ships three entry points via its `package.json#exports` map. Import
+whichever one matches how much strictness your project is ready for:
+
+| Import specifier                  | Strictness | When to use                                                                                                                                           |
+| --------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eslint-config-agent`             | Strict     | The full, opinionated config. Best for greenfield projects that adopt every convention.                                                               |
+| `eslint-config-agent/recommended` | Relaxed    | The strict config with the most divisive rules pre-disabled. Best for incremental adoption.                                                           |
+| `eslint-config-agent/ddd`         | Strict     | Backward-compatible alias of the default export (the DDD `require-spec-file` rules now ship in the base config). Equivalent to `eslint-config-agent`. |
+
+```javascript
+// Strict (default)
+import config from 'eslint-config-agent'
+
+// Relaxed, for incremental adoption
+import recommended from 'eslint-config-agent/recommended'
+
+// Backward-compatible alias of the default export
+import ddd from 'eslint-config-agent/ddd'
+```
+
+Each export is a flat-config array, so you can spread it and append your own
+override layers (see [Advanced Configuration](#advanced-configuration)).
+
 ### Recommended (relaxed) preset
 
 The default export is intentionally strict — it assumes a greenfield project
@@ -114,8 +155,10 @@ The `eslint-config-agent/recommended` preset bundles those common overrides for
 you. It keeps the core quality rules but disables the most opinionated ones
 (`ddd/require-spec-file`, `single-export`, `required-exports`, the custom
 `error/*` rules, `default/no-default-params`, `@typescript-eslint/consistent-type-definitions`,
-and the `no-restricted-syntax` bans on optional chaining / nullish coalescing /
-type assertions), so idiomatic TypeScript passes during incremental adoption.
+`jsx-classname/require-classname` (which otherwise errors on Tailwind-only
+`className`s), and the `no-restricted-syntax` bans on optional chaining /
+nullish coalescing / type assertions), so idiomatic TypeScript and
+React/Preact + Tailwind code passes during incremental adoption.
 
 ```javascript
 import recommended from 'eslint-config-agent/recommended'
@@ -138,6 +181,43 @@ export default [
   },
 ]
 ```
+
+### Incremental (warn-level) preset
+
+The `recommended` preset above _turns rules off_. When you instead want to keep
+**every** rule reporting but stop them from failing CI — so you can see the full
+backlog and burn it down gradually — use the `incremental` preset. It is the
+full `eslint-config-agent` ruleset with every error-level rule downgraded to a
+warning, so `eslint` exits `0` and `pnpm lint` stays green while still surfacing
+everything:
+
+```javascript
+import incremental from 'eslint-config-agent/incremental'
+
+export default incremental
+```
+
+This replaces the `config.map(toWarnings)` helper that adopting projects used to
+copy-paste by hand. To enforce a rule as a hard error before the rest of the
+backlog is cleared, append your own override layer — it wins over the warned
+defaults:
+
+```javascript
+import incremental from 'eslint-config-agent/incremental'
+
+export default [
+  ...incremental,
+  // Rules you are ready to enforce as hard errors today:
+  {
+    rules: {
+      eqeqeq: ['error', 'always'],
+    },
+  },
+]
+```
+
+Keep your CI lint step at `eslint .` during migration; switch it to
+`eslint . --max-warnings 0` once the warnings are cleared.
 
 ### Advanced Configuration
 
@@ -250,6 +330,12 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **`no-nested-ternary`**: Forbids a ternary inside another ternary, the
   archetypal "clever but unreadable" construct. Use `if`/`else` or an early
   return instead.
+- **`no-object-constructor`**: Forbids the `Object` constructor (`new Object()`
+  and `Object()`) in favor of the `{}` literal. The constructor form is more
+  verbose and a trap — `Object(x)` with a non-object argument returns that value
+  instead of a fresh object — while the literal is unambiguous. The
+  object-creation sibling of the bundled wrapper-constructor and coercion bans.
+  Auto-fixable with `eslint --fix`.
 
 ### Import Hygiene
 
@@ -271,6 +357,15 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   named binding — the statement imports nothing yet still reads as if it pulls
   names in, leaving a dead dependency edge behind. Use a bare side-effect
   import (`import 'mod'`) or remove the line. Auto-fixable.
+- **`@typescript-eslint/consistent-type-imports`**: Forces `import type { … }`
+  for imports used only as types (TypeScript files). A type-only import is
+  erased at compile time, so writing it as a value import leaves a binding that
+  looks like a runtime dependency — it can drag a module (and its side effects)
+  into the emitted JS even though nothing uses the value, and it breaks under
+  `verbatimModuleSyntax` / `isolatedModules`. Splitting type and value imports
+  keeps the emitted module graph honest and every import's intent legible. Uses
+  `fixStyle: 'separate-type-imports'` (a distinct `import type` statement rather
+  than the inline `import { type X }` form). Auto-fixable.
 
 ### Bundled Custom Rules
 
@@ -285,12 +380,12 @@ know what is enforcing each error.
 
 #### Type-system rules (TypeScript files)
 
-| Rule                      | What it enforces                                                                                                                                                     |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `no-type-assertions`      | Bans `as` type assertions (and the `as (typeof X)[number]` indexed-access form). `as const` is the only allowed assertion — use a real type otherwise.               |
-| `no-inline-union-types`   | Requires a named type alias instead of an inline union (including interface and class properties), so unions carry a name that documents their intent.               |
-| `no-record-literal-types` | Bans `Record<...>` keyed by string literals. Use a named interface or type with explicit keys instead.                                                               |
-| `no-trivial-type-aliases` | Bans aliases that add no meaning — primitive aliases, direct type references, and bare literal aliases. Unions, generics, mapped and conditional types stay allowed. |
+| Rule                      | What it enforces                                                                                                                                                                                                |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `no-type-assertions`      | Bans `as` type assertions (and the `as (typeof X)[number]` indexed-access form). `as const` is the only allowed assertion — use a real type otherwise.                                                          |
+| `no-inline-union-types`   | Requires a named type alias instead of an inline union (in function signatures and in interface/class properties, whether the members are literals or not), so unions carry a name that documents their intent. |
+| `no-record-literal-types` | Bans `Record<...>` keyed by string literals. Use a named interface or type with explicit keys instead.                                                                                                          |
+| `no-trivial-type-aliases` | Bans aliases that add no meaning — primitive aliases, direct type references, and bare literal aliases. Unions, generics, mapped and conditional types stay allowed.                                            |
 
 #### Control-flow & switch rules
 
@@ -423,6 +518,16 @@ If you have files that only export simple Error classes or other boilerplate wit
    ]
    ```
 
+### Language Safety
+
+- **`no-var`**: Forbids `var`. Function-scoped, hoisted bindings leak out of the
+  block they appear to belong to and read as `undefined` before their
+  declaration runs, producing order-dependent bugs that `let`/`const` make
+  impossible. `var` is exactly the legacy shortcut an AI assistant trained on
+  older code reaches for, so banning it keeps every binding block-scoped and
+  its lifetime legible. The rule is auto-fixable, so existing code can adopt it
+  with `eslint --fix`.
+
 ### Honest Suppressions
 
 The config sets `linterOptions.reportUnusedDisableDirectives` to `error`. An `eslint-disable` comment that no longer suppresses anything is reported as an error instead of being silently ignored.
@@ -481,6 +586,11 @@ export default [
 ]
 ```
 
+To demote **every** rule at once instead of hand-picking the noisiest ones, use
+the [`incremental` preset](#incremental-warn-level-preset)
+(`import incremental from 'eslint-config-agent/incremental'`) — it ships the
+`config.map(toWarnings)` pattern so you don't have to copy-paste it.
+
 Keep your CI lint step at `eslint .` (which fails only on errors) during
 migration, and switch it to `eslint . --max-warnings 0` once the warnings are
 cleared. To scope the relaxation to only the legacy parts of the tree, attach
@@ -503,6 +613,66 @@ export default [
 This way new code is held to the full standard immediately while the legacy
 surface is tightened incrementally. For migrating from a legacy `.eslintrc`
 config format to flat config, see [MIGRATION.md](MIGRATION.md).
+
+### Type-aware linting and the project service
+
+This config turns on **type-aware** rules (`typescript-eslint`'s
+`strictTypeChecked` + `stylisticTypeChecked` presets) for `.ts`, `.tsx`, `.mts`,
+and `.cts` files. To read type information it enables
+`parserOptions.projectService: true`, which asks TypeScript for the program that
+owns each linted file. Pure JavaScript files are linted without type information,
+so this only affects TypeScript projects.
+
+Because of that, every TypeScript file you lint must be covered by a
+`tsconfig.json`. When a file is not part of any project, ESLint fails to parse it
+with:
+
+```text
+Parsing error: <file> was not found by the project service.
+Consider either including it in the tsconfig.json or to the "allowDefaultProject"
+option in the project service.
+```
+
+This most often hits stray files that live outside your `tsconfig.json`'s
+`include` — `eslint.config.js`, `vite.config.ts`, `*.config.*`, or one-off
+scripts. Three ways to resolve it, in order of preference:
+
+1. **Add the file to your `tsconfig.json` `include`.** Best when the file really
+   belongs to the project (most app/source files).
+2. **Allow a few loose config files through the default project.** Append an
+   override after the base config so the project service falls back to an
+   inferred program for a small allow-list:
+
+   ```javascript
+   import baseConfig from 'eslint-config-agent'
+
+   export default [
+     ...baseConfig,
+     {
+       languageOptions: {
+         parserOptions: {
+           // Lint these files even though they are outside tsconfig include.
+           projectService: {
+             allowDefaultProject: [
+               '*.config.js',
+               '*.config.ts',
+               'eslint.config.js',
+             ],
+           },
+           tsconfigRootDir: import.meta.dirname,
+         },
+       },
+     },
+   ]
+   ```
+
+   `allowDefaultProject` only accepts a short list of files that are **not**
+   already in a `tsconfig.json`; globbing whole directories through it is
+   rejected by `typescript-eslint`.
+
+3. **Ignore the file** if it should not be linted at all — add it to the
+   `ignores` array of an override (see [Project-Specific
+   Ignores](#project-specific-ignores)).
 
 ## License
 
