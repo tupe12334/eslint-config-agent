@@ -201,6 +201,20 @@ const sharedRules = {
   // `enforceForClassMembers: true` extends the check from object literals to
   // class members so both surfaces stay consistent.
   'no-useless-computed-key': ['error', { enforceForClassMembers: true }],
+  // Disallow building functions from strings with the `Function` constructor —
+  // `new Function('a', 'b', 'return a + b')` or `Function(...)()`. This is `eval`
+  // wearing a different name: the body is an opaque string the parser, the type
+  // checker and every reader have to take on faith, it executes in the global
+  // scope (so it silently can't see the surrounding closure a reader would
+  // expect it to), and feeding it any untrusted input is a direct code-injection
+  // hole. There is a plain, safe equivalent for every legitimate use — an actual
+  // function literal — so the dynamic form buys nothing but risk. It sits
+  // squarely in this config's scope: a footgun an AI assistant reaches for when
+  // asked to "build a function dynamically," and one `eslint-plugin-security`
+  // does not cover (its eval rule, `detect-eval-with-expression`, flags `eval`
+  // and not the `Function` constructor). The rule is not auto-fixable because
+  // only the author can restate the string body as real code.
+  'no-new-func': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
