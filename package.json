@@ -9,7 +9,8 @@
     "./ddd": "./exports/ddd.js",
     "./recommended": "./exports/recommended.js",
     "./recommended-incremental": "./exports/recommended-incremental.js",
-    "./incremental": "./exports/incremental.js"
+    "./incremental": "./exports/incremental.js",
+    "./package.json": "./package.json"
   },
   "files": [
     "index.js",
