@@ -7,7 +7,9 @@
   "exports": {
     ".": "./index.js",
     "./ddd": "./exports/ddd.js",
-    "./recommended": "./exports/recommended.js"
+    "./recommended": "./exports/recommended.js",
+    "./recommended-incremental": "./exports/recommended-incremental.js",
+    "./incremental": "./exports/incremental.js"
   },
   "files": [
     "index.js",
@@ -34,7 +36,9 @@
     "test:hooks": "eslint test/react-hooks-rules.tsx",
     "test:imports": "eslint test/import-export-rules.ts",
     "test:recommended": "node scripts/test-recommended.js",
+    "test:recommended-incremental": "node scripts/test-recommended-incremental.js",
     "test:exports": "node scripts/test-exports.js",
+    "test:incremental": "node scripts/test-incremental.js",
     "test:edge": "eslint test/edge-cases.tsx",
     "test:performance": "eslint test/performance-test.tsx",
     "test:comprehensive": "node scripts/test-runner.js",

@@ -53,8 +53,9 @@ export const basePluginsConfig = [
   // from the spec requirement. This custom rule covers the JSX extensions with
   // the same heuristic, completing the "spec file for every source file"
   // promise. Its excludePatterns mirror the JSX-relevant entries of the `ddd`
-  // list above (index/stories files are exempt; `.spec`/`.test` files are
-  // skipped by the rule itself).
+  // list above (index/stories files are exempt; the error/exception file
+  // patterns are exempt; `.spec`/`.test` files are skipped by the rule
+  // itself).
   {
     rules: {
       'custom/require-spec-file-tsx': [
@@ -64,6 +65,13 @@ export const basePluginsConfig = [
             '**/index.tsx',
             '**/index.jsx',
             '**/*.stories.{tsx,jsx}',
+            // Mirror the ddd error/exception exemptions for JSX extensions so
+            // an error component (e.g. an error boundary) is not singled out
+            // for a spec file when its `.ts` equivalent is exempt.
+            '**/*-error.{tsx,jsx}',
+            '**/*.error.{tsx,jsx}',
+            '**/errors/**',
+            '**/exceptions/**',
           ],
         },
       ],
