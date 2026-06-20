@@ -185,6 +185,18 @@ const sharedRules = {
   // line. Writing each assignment on its own statement keeps the data flow
   // explicit.
   'no-multi-assign': 'error',
+  // Disallow `${...}` placeholders inside ordinary string literals
+  // (`'Hello ${name}'`, `"total: ${count}"`). Template-literal interpolation
+  // only works inside backticks; the moment the quotes are single or double,
+  // `${name}` is just literal text and the value is silently never inserted —
+  // a bug that type-checking cannot catch because the result is still a valid
+  // `string`. Mixing up the quote character is exactly the kind of silent
+  // mistake an AI assistant emits when stitching messages together, which puts
+  // it squarely in scope for this config's correctness-and-clarity stance. It
+  // is the natural companion to the explicit-conversion rules
+  // (`no-implicit-coercion`, `eqeqeq`) above: it keeps string building honest
+  // by forcing a real template literal whenever interpolation is intended.
+  'no-template-curly-in-string': 'error',
   // Disallow the `Object` constructor (`new Object()` and `Object()`) in favor
   // of the `{}` object literal. The constructor form is a strictly more verbose,
   // more indirect way to do exactly what the literal does — and a trap: passing
