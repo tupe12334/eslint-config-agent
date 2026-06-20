@@ -284,6 +284,24 @@ const sharedRules = {
   // and not the `Function` constructor). The rule is not auto-fixable because
   // only the author can restate the string body as real code.
   'no-new-func': 'error',
+  // Disallow extending the prototypes of built-in objects —
+  // `Array.prototype.last = ...`, `Object.prototype.keysOf = ...`,
+  // `String.prototype.trimStart = ...`. Monkey-patching a built-in mutates
+  // global state every other module (and every dependency) shares, so the
+  // effect is invisible at the call site and order-dependent: whoever loads
+  // first wins, and two libraries that patch the same prototype silently clash.
+  // Worse, an enumerable addition to `Object.prototype` or `Array.prototype`
+  // leaks into every `for...in` loop and `in` check in the program, quietly
+  // breaking unrelated code. The safe, explicit equivalent always exists — a
+  // standalone helper (`last(arr)`) or a local wrapper — so the patch buys a
+  // little call-site sugar at the cost of a process-wide footgun. It belongs to
+  // the same family as the `no-new-func` and `no-object-constructor` bans
+  // above: reject a clever, action-at-a-distance idiom in favor of a plain,
+  // local one. It is also a shortcut an AI assistant reaches for when asked to
+  // "add a method to arrays," and it is not in `eslint:recommended`, so it is
+  // enabled explicitly. The rule is not auto-fixable because only the author
+  // can move the behavior into a standalone function.
+  'no-extend-native': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
