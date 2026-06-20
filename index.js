@@ -349,6 +349,7 @@ const config = defineConfig([
   // outputs wherever they appear, matching the monorepo support this config
   // documents.
   {
+    name: 'agent/ignores',
     ignores: [
       '**/*.json',
       '**/*.md',
@@ -378,15 +379,18 @@ const config = defineConfig([
   // this config's explicit-over-clever goal. Reporting them as errors keeps
   // every suppression honest and removable.
   {
+    name: 'agent/linter-options',
     linterOptions: {
       reportUnusedDisableDirectives: 'error',
     },
   },
   // Global plugin definitions
   {
+    name: 'agent/plugins',
     plugins,
   },
   {
+    name: 'agent/react-hooks',
     rules: {
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
@@ -396,6 +400,7 @@ const config = defineConfig([
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   {
+    name: 'agent/typescript-parser-options',
     files: ['**/*.{ts,tsx,mts,cts}'],
     languageOptions: {
       parserOptions: {
@@ -406,6 +411,7 @@ const config = defineConfig([
   {
     files: ['**/*.{js,jsx,mjs,cjs}'],
     ...tseslint.configs.disableTypeChecked,
+    name: 'agent/javascript-disable-type-checked',
   },
   earlyReturn.configs.recommended,
   jsdoc.configs['flat/recommended-typescript-error'],
@@ -413,6 +419,7 @@ const config = defineConfig([
   // default. Treat class declarations the same as functions so exported
   // classes are also required to be documented.
   {
+    name: 'agent/jsdoc-require-class-jsdoc',
     rules: {
       'jsdoc/require-jsdoc': [
         'error',
@@ -425,7 +432,11 @@ const config = defineConfig([
       ],
     },
   },
-  { plugins: { 'switch-case': switchCase }, ...switchCase.configs.recommended },
+  {
+    plugins: { 'switch-case': switchCase },
+    ...switchCase.configs.recommended,
+    name: 'agent/switch-case',
+  },
 
   // Base plugin strict configs (error, default, guard-clauses)
   ...basePluginsConfig,
@@ -463,6 +474,7 @@ const config = defineConfig([
     ...jsxClassname.configs.strict,
     files: ['**/*.{tsx,jsx}'],
     ignores: ['**/*.stories.{js,jsx,ts,tsx}'],
+    name: 'agent/jsx-classname-strict',
   },
 
   // Final overrides (index files, switch case, length rules)
