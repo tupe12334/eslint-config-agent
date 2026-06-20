@@ -284,6 +284,27 @@ const sharedRules = {
   // and not the `Function` constructor). The rule is not auto-fixable because
   // only the author can restate the string body as real code.
   'no-new-func': 'error',
+  // Require a regex literal (`/\d+/`) instead of the `RegExp` constructor with
+  // a string argument (`new RegExp('\\d+')`, `RegExp('\\d+')`) when the pattern
+  // is a static string. The string form forces every backslash to be escaped
+  // twice — once for the string literal and once for the regex engine — so
+  // `\d` has to be written `\\d`, `\.` becomes `\\.`, and a single missed
+  // backslash silently changes what the pattern matches without any error.
+  // The literal needs none of that doubling and is checked for validity at
+  // parse time rather than when the constructor runs, so a malformed pattern
+  // surfaces immediately instead of throwing on first use. This is the
+  // regex-shaped sibling of the constructor bans this config already ships —
+  // `no-object-constructor`, `no-new-wrappers`, `no-new-func` — all of which
+  // reject a constructor call dressed up as a literal/value; reaching for
+  // `new RegExp('...')` on a constant pattern is exactly the legacy,
+  // double-escaping-prone idiom an AI assistant emits when asked to "build a
+  // regex." It is not in `eslint:recommended`, so it is enabled explicitly.
+  // `disallowRedundantWrapping: true` also flags `new RegExp(/foo/)` — wrapping
+  // a literal that is already a regex — which is pure redundancy. The dynamic
+  // `new RegExp(variable)` case, where the pattern genuinely is not known until
+  // runtime, is left untouched. The rule is auto-fixable for the simple cases,
+  // so consumers can adopt much of it with `eslint --fix`.
+  'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
