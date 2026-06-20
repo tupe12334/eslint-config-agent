@@ -171,6 +171,20 @@ const sharedRules = {
   // explicit-over-clever, AI-safety scope. The rule is auto-fixable, so
   // consumers can adopt it with `eslint --fix`.
   'no-object-constructor': 'error',
+  // Require object spread (`{ ...a, ...b }`) over `Object.assign({}, a, b)` when
+  // the call is building a brand-new object (its first argument is an object
+  // literal). The `Object.assign({}, ...)` form is a more indirect, punctuation-
+  // heavy spelling of the same intent: a reader has to recognize the empty `{}`
+  // accumulator and the mutate-and-return semantics just to conclude "this makes
+  // a fresh, merged object", which the spread states directly. It is the
+  // object-merging sibling of the `no-object-constructor` ban right above —
+  // both reject an indirect construction idiom in favor of the plain literal —
+  // and of `object-shorthand`, which already pushes object literals toward their
+  // most legible form. `Object.assign` onto an existing target (`Object.assign(
+  // target, src)`) mutates and is left alone, so only the new-object case is
+  // flagged. The rule is auto-fixable, so consumers can adopt it with
+  // `eslint --fix`.
+  'prefer-object-spread': 'error',
   // Require a `return` from every array-method callback that is expected to
   // produce one (`map`, `filter`, `reduce`, `every`, `some`, `find`, `sort`,
   // `flatMap`, ...). A callback that falls off the end returns `undefined`, so
