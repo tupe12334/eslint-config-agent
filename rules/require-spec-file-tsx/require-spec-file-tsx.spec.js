@@ -74,6 +74,25 @@ ruleTester.run('require-spec-file-tsx', requireSpecFileTsxRule, {
       filename: invalid('Lonely.tsx'),
       options: [{ excludePatterns: ['**/Lonely.tsx'] }],
     },
+    // Error/exception files are excluded by default, mirroring the
+    // ddd/require-spec-file exemptions for `.ts`/`.js`. These fixtures need not
+    // exist on disk: an excluded file short-circuits before the sibling lookup.
+    {
+      code: arrowComponentCode,
+      filename: invalid('AppBoundary.error.tsx'),
+    },
+    {
+      code: arrowComponentCode,
+      filename: invalid('app-error.jsx'),
+    },
+    {
+      code: arrowComponentCode,
+      filename: join(__dirname, 'examples', 'errors', 'Boundary.tsx'),
+    },
+    {
+      code: arrowComponentCode,
+      filename: join(__dirname, 'examples', 'exceptions', 'NotFound.jsx'),
+    },
   ],
   invalid: [
     // .tsx component with no sibling spec/test
