@@ -346,6 +346,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['no-restricted-syntax'],
   },
+  'require-array-sort-compare': {
+    description:
+      'Comparator-less numeric sorts are flagged; comparator and string-array sorts pass',
+    files: [
+      'test/sort-compare/invalid-number-sort.ts',
+      'test/sort-compare/valid-number-sort.ts',
+    ],
+    maxErrors: 2,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/require-array-sort-compare'],
+  },
 }
 
 async function findTestFiles() {
