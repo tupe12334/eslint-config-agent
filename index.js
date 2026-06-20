@@ -129,6 +129,16 @@ const sharedRules = {
   // `String(n)`) keeps the intended conversion legible. The rule is
   // auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-implicit-coercion': ['error', { allow: [] }],
+  // Require template literals instead of string concatenation. Building a
+  // string by chaining `+` (`'Hello ' + name + '!'`) scatters the literal
+  // text across operators, makes the final shape hard to read, and leans on
+  // the same implicit coercion `no-implicit-coercion` already bans whenever a
+  // non-string operand sneaks in. A template literal (`` `Hello ${name}!` ``)
+  // keeps the literal text and the interpolated values visually aligned, which
+  // is exactly the explicit, readable form this config favors and one AI
+  // assistants frequently skip. The rule is auto-fixable, so consumers can
+  // adopt it with `eslint --fix`.
+  'prefer-template': 'error',
   // Require `Object.hasOwn(obj, key)` over the legacy ways of asking the same
   // question. The two forms it replaces are each a footgun: calling
   // `obj.hasOwnProperty(key)` directly breaks the moment `obj` has a `null`
