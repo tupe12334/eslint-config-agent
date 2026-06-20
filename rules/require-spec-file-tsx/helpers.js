@@ -83,4 +83,11 @@ export const DEFAULT_EXCLUDE_PATTERNS = [
   '**/index.jsx',
   '**/*.stories.{tsx,jsx}',
   '**/*.d.ts',
+  // Error/exception files mirror the ddd/require-spec-file exemptions so a
+  // React/Preact error component (e.g. an error boundary) is treated the same
+  // as its `.ts` counterpart instead of being singled out for a spec file.
+  '**/*-error.{tsx,jsx}',
+  '**/*.error.{tsx,jsx}',
+  '**/errors/**',
+  '**/exceptions/**',
 ]
