@@ -262,6 +262,13 @@ const testCategories = {
       'switch-case/newline-between-switch-case',
     ],
   },
+  'switch-exhaustiveness-invalid': {
+    description: 'Non-exhaustive switch over a closed union must be flagged',
+    files: ['test/switch-exhaustiveness/invalid/missing-union-case.tsx'],
+    maxErrors: 5,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/switch-exhaustiveness-check'],
+  },
   'optional-chaining': {
     description: 'Optional chaining and nullish coalescing tests',
     files: ['test/test-optional.ts', 'test/test-js-optional.js'],
