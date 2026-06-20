@@ -88,6 +88,28 @@ async function main() {
 
   for (const subpath of subpaths) {
     const specifier = specifierFor(pkg.name, subpath)
+
+    // `./package.json` is a manifest passthrough, not a flat-config entry
+    // point. It exists so tooling can resolve the package manifest (e.g. to
+    // read its version) without tripping ERR_PACKAGE_PATH_NOT_EXPORTED. Verify
+    // it resolves to the manifest rather than checking it as a config array.
+    if (subpath === './package.json') {
+      try {
+        const mod = await import(specifier, { with: { type: 'json' } })
+        const manifest = mod.default
+        if (!manifest || manifest.name !== pkg.name) {
+          failures.push(
+            `${specifier} resolved but did not yield the package manifest (name "${manifest && manifest.name}").`
+          )
+          continue
+        }
+        console.log(`✅ ${specifier} → package manifest (${manifest.name})`)
+      } catch (error) {
+        failures.push(`${specifier} failed to load: ${error.message}`)
+      }
+      continue
+    }
+
     try {
       const mod = await import(specifier)
       const config = mod.default
