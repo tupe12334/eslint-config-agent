@@ -422,6 +422,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/return-await'],
   },
+  'no-floating-promises': {
+    description:
+      'A bare, unhandled promise-returning call is flagged; an awaited call passes',
+    files: [
+      'test/no-floating-promises/invalid-no-floating-promises.ts',
+      'test/no-floating-promises/valid-no-floating-promises.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-floating-promises'],
+  },
 }
 
 async function findTestFiles() {
