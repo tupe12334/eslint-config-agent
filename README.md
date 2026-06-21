@@ -398,6 +398,14 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **`no-nested-ternary`**: Forbids a ternary inside another ternary, the
   archetypal "clever but unreadable" construct. Use `if`/`else` or an early
   return instead.
+- **`consistent-return`**: Requires a function's `return` statements to be
+  consistent — either every `return` yields a value or none do. A branch that
+  returns a value while another falls through (or hits a bare `return;`)
+  silently yields `undefined` on those paths, so the caller gets `undefined`
+  where it expected the value and the bug surfaces far downstream. A
+  correctness check like the bundled `array-callback-return`, and the companion
+  to `no-else-return` / `no-useless-return`. Not auto-fixable: only the author
+  knows whether the branch should return a value or stop returning one.
 - **`no-object-constructor`**: Forbids the `Object` constructor (`new Object()`
   and `Object()`) in favor of the `{}` literal. The constructor form is more
   verbose and a trap — `Object(x)` with a non-object argument returns that value
