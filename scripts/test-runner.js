@@ -394,6 +394,14 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/consistent-type-exports'],
   },
+  'strict-boolean-expressions': {
+    description:
+      'Nullable values in a boolean position are flagged; explicit null/zero checks pass',
+    files: ['test/strict-boolean/invalid.ts', 'test/strict-boolean/valid.ts'],
+    maxErrors: 3,
+    maxWarnings: 4,
+    expectedRules: ['@typescript-eslint/strict-boolean-expressions'],
+  },
 }
 
 async function findTestFiles() {
