@@ -64,6 +64,25 @@ const sharedRules = {
   // author knows whether the value should be dropped or the surrounding control
   // flow reworked.
   'no-promise-executor-return': 'error',
+  // Disallow `await` inside a loop body. An `await` in a `for`/`for-of`/`while`
+  // loop pauses the loop on every iteration and only starts the next one after
+  // the current promise settles, so N independent async operations that could
+  // have run concurrently are instead serialized end-to-end: the loop takes the
+  // *sum* of the latencies instead of the *max*. On a list of network/DB calls
+  // that turns a sub-second batch into an N-times-slower stall — a quiet
+  // performance bug the type checker cannot see (the code is perfectly typed and
+  // correct, just slow) and exactly the shape an AI assistant emits when it
+  // mechanically drops an `await` into a `for` loop instead of reaching for
+  // `Promise.all`/`Promise.allSettled` over a `.map`. This is the throughput
+  // side of the async-hygiene family this config already builds with
+  // `no-floating-promises`, `promise-function-async` and `return-await`. When
+  // the iterations are genuinely dependent (each one needs the previous result,
+  // an ordered write, a deliberate rate limit), the serial `await` is correct —
+  // the rule has no auto-fix precisely because only the author knows that, so
+  // those loops opt out with an inline `// eslint-disable-next-line
+  // no-await-in-loop`. It is not in `eslint:recommended`, so it is enabled
+  // explicitly here.
+  'no-await-in-loop': 'error',
   // Disallow an `else`/`else if` block when the preceding `if` already exits
   // the function via `return`. The `else` is dead weight: once the `if` branch
   // returns, the code after it is unreachable from that path, so wrapping the
