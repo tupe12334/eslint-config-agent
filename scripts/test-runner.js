@@ -123,6 +123,22 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'import-useless-path-invalid': {
+    description: 'Redundant relative path segments should be flagged',
+    files: ['test/import-useless-path/invalid/redundant-segments.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['import/no-useless-path-segments'],
+  },
+  'import-useless-path-valid': {
+    description: 'Collapsed relative import paths should be clean',
+    files: [
+      'test/import-useless-path/valid/clean-path.ts',
+      'test/import-useless-path/valid/target.ts',
+    ],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
   'security-in-tests': {
     description:
       'Noisy eslint-plugin-security heuristics are relaxed for test/spec files',
