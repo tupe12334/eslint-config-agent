@@ -609,6 +609,16 @@ If you have files that only export simple Error classes or other boilerplate wit
   older code reaches for, so banning it keeps every binding block-scoped and
   its lifetime legible. The rule is auto-fixable, so existing code can adopt it
   with `eslint --fix`.
+- **`no-eval` / `no-implied-eval`**: Forbid executing code from strings. `eval`,
+  the `Function` constructor (see `no-new-func`), and the implied-eval forms — a
+  string first argument to `setTimeout`, `setInterval`, `setImmediate`, or
+  `execScript` — all hand an opaque string to the engine to compile and run,
+  invisible to the parser and type checker and an injection hole the moment any
+  part of that string comes from input. Every legitimate case has a plain, safe
+  equivalent (a real function literal), so the dynamic form buys nothing but
+  risk. `eslint-plugin-security` only flags `eval` with a _non-literal_
+  argument; these core rules close that gap, including `eval('literal')`. Not
+  auto-fixable, since only the author can restate the string as real code.
 
 ### Honest Suppressions
 

@@ -333,6 +333,28 @@ const sharedRules = {
   // and not the `Function` constructor). The rule is not auto-fixable because
   // only the author can restate the string body as real code.
   'no-new-func': 'error',
+  // Disallow `eval` outright — `eval('a + b')` or `eval(someExpression)`. It is
+  // the most direct version of the same footgun `no-new-func` bans: an opaque
+  // string the parser, the type checker and every reader take on faith, run
+  // with full access to the enclosing scope, and an outright code-injection hole
+  // the moment any part of that string is attributable to input. There is no
+  // legitimate use this config wants to leave open, and it is exactly the
+  // shortcut an AI assistant reaches for when asked to "run this dynamically."
+  // Note `eslint-plugin-security`'s `detect-eval-with-expression` only flags
+  // `eval` called with a *non-literal* argument, so it lets `eval('literal')`
+  // through; core `no-eval` closes that gap. The rule is not auto-fixable
+  // because only the author can restate the string as real code.
+  'no-eval': 'error',
+  // Disallow the implied-`eval` forms `no-eval` itself does not see: a string
+  // first argument to `setTimeout`, `setInterval`, `setImmediate` or
+  // `execScript` (`setTimeout('doThing()', 0)`). These hand a code string to the
+  // engine to compile and run later, with all the same opacity and injection
+  // risk as `eval`, only hidden behind an API whose string form looks harmless.
+  // The safe, legible equivalent — pass an actual function (`setTimeout(() =>
+  // doThing(), 0)`) — is always available, so the string form buys nothing. The
+  // rule is not auto-fixable because the engine cannot know the string is meant
+  // as code rather than data.
+  'no-implied-eval': 'error',
   // Require a regex literal (`/\d+/`) instead of the `RegExp` constructor with
   // a string argument (`new RegExp('\\d+')`, `RegExp('\\d+')`) when the pattern
   // is a static string. The string form forces every backslash to be escaped
