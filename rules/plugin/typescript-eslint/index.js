@@ -80,4 +80,23 @@ export const typescriptEslintRules = {
   // (`zod-utils`, `currency-fa`, `block-no-verify`) already re-add it by hand
   // on top of the base config.
   '@typescript-eslint/no-non-null-assertion': 'error',
+  // Forbid a declaration from shadowing a name in an outer scope. A shadowed
+  // identifier (a nested `value`, `index`, `result` or `error` that hides the
+  // outer binding of the same name) reads as if it refers to the outer one
+  // while it does not — a classic "I updated/returned the wrong variable" bug
+  // and a frequent source of confusing diffs during refactors. It is exactly
+  // the kind of accidental reuse an AI assistant introduces when it drops a new
+  // block into existing code without checking the surrounding names, which puts
+  // it squarely in this config's explicit-over-clever, bug-prevention stance.
+  //
+  // The core `no-shadow` rule is intentionally left `off` (see `sharedRules` in
+  // `index.js`): it false-positives on TypeScript-specific patterns such as a
+  // type and a value legitimately sharing a name, and enum members. The
+  // typescript-eslint version understands those cases, so it is the documented
+  // replacement rather than a second rule fighting the first. It needs no type
+  // information, so it adds no parser cost. This is why downstream repos
+  // (`zod-utils`, `block-no-verify`) already re-add `@typescript-eslint/no-shadow`
+  // by hand on top of the base config — promoting it into the shared rule set
+  // removes that copy-paste.
+  '@typescript-eslint/no-shadow': 'error',
 }
