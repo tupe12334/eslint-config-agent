@@ -422,6 +422,11 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   returns, the `else` only adds nesting that hides the real control flow.
   Removing it flattens the code into guard-clause style — the same goal as the
   bundled `early-return` plugin. Auto-fixable with `eslint --fix`.
+- **`no-lonely-if`**: Forbids an `if` statement as the only statement inside an
+  `else` block, requiring `else if` instead. The lone `if`-in-`else` adds an
+  indentation level that hides what is really a flat chain of conditions — the
+  same needless nesting `no-else-return` and the bundled `early-return` plugin
+  already push back on. Auto-fixable with `eslint --fix`.
 - **`no-nested-ternary`**: Forbids a ternary inside another ternary, the
   archetypal "clever but unreadable" construct. Use `if`/`else` or an early
   return instead.

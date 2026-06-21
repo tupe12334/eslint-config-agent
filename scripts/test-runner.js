@@ -157,6 +157,7 @@ const testCategories = {
       '@typescript-eslint/no-explicit-any',
       '@typescript-eslint/no-shadow',
       'no-else-return',
+      'no-lonely-if',
       'guard-clauses/prefer-guard-at-function-start',
       'guard-clauses/no-else-return',
       'guard-clauses/prefer-early-continue',

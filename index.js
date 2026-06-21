@@ -73,6 +73,15 @@ const sharedRules = {
   // instead of the deeply-nested if/else trees AI assistants tend to emit. The
   // rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-else-return': ['error', { allowElseIf: false }],
+  // Disallow an `if` statement as the *only* statement inside an `else` block,
+  // requiring `else if` instead. The lone `if`-in-`else` adds an indentation
+  // level that hides what is really a flat chain of conditions, the same
+  // needless nesting the `no-else-return` rule directly above and the bundled
+  // `early-return` plugin already push back on, and a shape AI assistants emit
+  // when they mechanically wrap each new branch instead of extending the chain.
+  // Collapsing it into an `else if` keeps the control flow flat and legible. The
+  // rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
+  'no-lonely-if': 'error',
   // Disallow a `return;` (or `return undefined;`) that is the last statement of
   // a function and so changes nothing — control already falls off the end and
   // yields `undefined`. A redundant trailing `return` reads as if it guards
