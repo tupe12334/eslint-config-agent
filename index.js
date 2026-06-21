@@ -186,6 +186,18 @@ const sharedRules = {
   // `String(n)`) keeps the intended conversion legible. The rule is
   // auto-fixable, so consumers can adopt it with `eslint --fix`.
   'no-implicit-coercion': ['error', { allow: [] }],
+  // Require an explicit radix argument to `parseInt` — `parseInt(str, 10)`,
+  // never `parseInt(str)`. With the base omitted, `parseInt` infers it from the
+  // string: a leading `0x` is read as hex and, depending on the engine, a
+  // leading `0` can be read as octal, so `parseInt('0x10')` is `16` and
+  // `parseInt(userInput)` silently parses in a base the author never chose. The
+  // wrong-number result type-checks fine (it is still a `number`) and only the
+  // data flow is broken — exactly the quiet, plausible-but-wrong shape this
+  // config exists to surface, and the same class of *implicit* behavior it
+  // already bans via `eqeqeq` and `no-implicit-coercion` directly above.
+  // Forcing the base makes the parse deterministic and the intent explicit. The
+  // rule is not auto-fixable because only the author knows which base was meant.
+  radix: ['error', 'always'],
   // Require template literals instead of string concatenation. Building a
   // string by chaining `+` (`'Hello ' + name + '!'`) scatters the literal
   // text across operators, makes the final shape hard to read, and leans on
