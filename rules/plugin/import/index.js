@@ -49,4 +49,16 @@ export const importRules = {
   // rewrite an import list one binding at a time, putting it squarely in scope
   // for this config's explicit-over-clever stance. The rule is auto-fixable.
   'import/no-empty-named-blocks': 'error',
+  // Forbid relative import paths that carry needless segments, e.g.
+  // `./foo/../bar` (which is just `./bar`), `./../sibling`, or a doubled
+  // `././mod`. Such paths resolve to the same module but read as if they point
+  // somewhere else, so a reader has to mentally collapse them to know what is
+  // actually imported, and they hide accidental traversals introduced by a bad
+  // auto-import or a copy-paste from another directory. Collapsing them to the
+  // shortest equivalent path keeps the import graph legible and matches this
+  // config's explicit-over-clever stance alongside the other import-hygiene
+  // rules above. `noUselessIndex` is left at its default (off) so explicit
+  // `/index` references are still allowed — only genuinely redundant `../`/`./`
+  // segments are flagged. The rule is auto-fixable.
+  'import/no-useless-path-segments': ['error', { commonjs: true }],
 }
