@@ -366,6 +366,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/require-array-sort-compare'],
   },
+  'prefer-readonly': {
+    description:
+      'A private member assigned only in the constructor is flagged; an already-readonly member passes',
+    files: [
+      'test/prefer-readonly/invalid-mutable-member.ts',
+      'test/prefer-readonly/valid-readonly-member.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/prefer-readonly'],
+  },
 }
 
 async function findTestFiles() {
