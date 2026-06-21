@@ -101,6 +101,12 @@ export const testFilesConfig = [
     rules: {
       'max-lines-per-function': 'off',
       'max-lines': 'off', // Ignore file length limits in test and spec files
+      // The shared config bans bare `console.log` in shipped source, but test
+      // and rule-tester spec files use `console.log` legitimately to report
+      // progress and assertions (this package's own `*.test.js` runners do
+      // exactly that), and fixtures embed it as sample code. Keep the rule on
+      // for real source and off here so test logging is not flagged.
+      'no-console': 'off',
       'default/no-localhost': ['error', { allowInTests: true }],
       'default/no-hardcoded-urls': ['error', { allowInTests: true }],
       'default/no-default-params': 'off', // Allow default parameters in test files for demonstration purposes

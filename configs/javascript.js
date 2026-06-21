@@ -70,6 +70,10 @@ export const javascriptConfig = (sharedRules, sharedRestrictedSyntax) => [
     },
     rules: {
       ...sharedRules,
+      // Build/CI tooling under `scripts/` is a console program: printing to
+      // stdout is its job, so the shared `no-console` ban (aimed at leftover
+      // debugging in shipped source) does not apply here.
+      'no-console': 'off',
       'no-restricted-syntax': ['error', ...sharedRestrictedSyntax],
     },
   },
