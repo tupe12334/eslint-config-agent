@@ -30,4 +30,23 @@ export const reactRules = {
     'error',
     { validStrategies: ['ternary', 'coerce'] },
   ],
+  // Forbid using an array index as a React `key` (`items.map((item, i) => <Row
+  // key={i} />)`). A key is React's identity for a list child across renders;
+  // when it is the position rather than something stable about the item, React
+  // maps the wrong previous element onto the wrong new one as soon as the list
+  // is reordered, filtered, or has an item inserted/removed at the front or
+  // middle. The visible result is a class of silent UI bugs that no type check
+  // can catch: text typed into one input jumps to another row, the wrong item
+  // animates, a checkbox's checked state sticks to the wrong record, and
+  // uncontrolled component state generally "smears" across siblings. The fix is
+  // to key by a stable, item-specific value (an id, a slug, a content hash),
+  // which states the intended identity explicitly. `key={index}` is exactly the
+  // shortcut an AI assistant reaches for when the item has no obvious id, so it
+  // is squarely in this config's bug-prevention, explicit-over-clever stance —
+  // the same correctness-not-style bar that turns on `jsx-no-leaked-render`
+  // above while leaving the cosmetic react rules off. Like the other react
+  // rules it only applies to `.jsx`/`.tsx` files, so non-React TypeScript
+  // packages are unaffected. This is why a downstream repo (`oss-il`) already
+  // re-adds it by hand on top of the base config.
+  'react/no-array-index-key': 'error',
 }
