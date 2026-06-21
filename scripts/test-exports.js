@@ -60,6 +60,34 @@ function specifierFor(packageName, subpath) {
   return `${packageName}${subpath.slice(1)}`
 }
 
+// `./package.json` must be exposed and resolve to this package's manifest, so
+// tooling can read it (e.g. `require.resolve('eslint-config-agent/package.json')`
+// or a JSON import) without crashing on ERR_PACKAGE_PATH_NOT_EXPORTED. It is a
+// data export, not a flat config, so it is verified here rather than in the
+// flat-config loop.
+async function verifyManifestExport(pkg, declared) {
+  if (!declared.includes('./package.json')) {
+    return [
+      '"./package.json" is missing from package.json#exports; tooling cannot resolve the manifest.',
+    ]
+  }
+
+  const specifier = `${pkg.name}/package.json`
+  try {
+    const mod = await import(specifier, { with: { type: 'json' } })
+    const manifest = mod.default
+    if (!manifest || manifest.name !== pkg.name) {
+      return [
+        `${specifier} resolved but did not yield this package's manifest (expected name "${pkg.name}").`,
+      ]
+    }
+    console.log(`✅ ${specifier} → package manifest (name "${manifest.name}")`)
+    return []
+  } catch (error) {
+    return [`${specifier} failed to load: ${error.message}`]
+  }
+}
+
 async function main() {
   const pkg = await readPackageJson()
   const declared = Object.keys(pkg.exports || {})
@@ -81,9 +109,11 @@ async function main() {
   }
 
   // (2) Verify every documented entry point plus every declared subpath. Using
-  // a set avoids importing the same specifier twice.
+  // a set avoids importing the same specifier twice. `./package.json` is a data
+  // export (the manifest), not a flat config, so it is handled separately below
+  // instead of being checked as a flat-config array.
   const subpaths = [...new Set([...EXPECTED_ENTRY_POINTS, ...declared])].filter(
-    subpath => declared.includes(subpath)
+    subpath => declared.includes(subpath) && subpath !== './package.json'
   )
 
   for (const subpath of subpaths) {
@@ -128,6 +158,9 @@ async function main() {
       failures.push(`${specifier} failed to load: ${error.message}`)
     }
   }
+
+  // (3) `./package.json` must resolve to this package's manifest.
+  failures.push(...(await verifyManifestExport(pkg, declared)))
 
   if (failures.length > 0) {
     console.error('\n❌ Public exports surface check failed:')
