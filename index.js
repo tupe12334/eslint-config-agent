@@ -80,6 +80,27 @@ const sharedRules = {
   // behind. The rule is auto-fixable, so consumers can adopt it with
   // `eslint --fix`.
   'no-useless-return': 'error',
+  // Require a function's `return` statements to be consistent: either every
+  // `return` yields a value or none of them do. A function that returns a value
+  // on one branch (`return result`) but falls through — or hits a bare
+  // `return;` — on another silently produces `undefined` on those paths. The
+  // caller then receives `undefined` where it expected the value, and the bug
+  // surfaces far from the function as a downstream "cannot read property of
+  // undefined" or a wrong-looking output rather than at the offending branch.
+  // The type checker does not always catch this: an inferred `T | undefined`
+  // return type is perfectly valid, so the accidental fall-through type-checks
+  // cleanly. This is exactly the quiet, plausible-but-wrong control-flow mistake
+  // an AI assistant emits when it adds an early-exit branch and forgets to carry
+  // a value through it — squarely the bug-prevention, explicit-over-clever
+  // stance this config exists to enforce, and the natural companion to the
+  // `array-callback-return` and `no-else-return`/`no-useless-return` rules
+  // already enabled here. It is not in `eslint:recommended`, so it is enabled
+  // explicitly. The rule is not auto-fixable because only the author knows
+  // whether the missing branch should return a value or the value-returning
+  // branch should stop returning one. A downstream repo
+  // (`unstorage-driver-query-string`) already re-adds it by hand on top of the
+  // base config; folding it in removes that per-repo boilerplate.
+  'consistent-return': 'error',
   // Disallow nested ternaries. A ternary inside another ternary is the
   // archetypal "clever but unreadable" construct this config exists to
   // prevent: it collapses branching logic into a single dense expression that
