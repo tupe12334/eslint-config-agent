@@ -398,6 +398,14 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **`no-nested-ternary`**: Forbids a ternary inside another ternary, the
   archetypal "clever but unreadable" construct. Use `if`/`else` or an early
   return instead.
+- **`prefer-template`**: Forbids building strings with `+` concatenation
+  (`'Hello ' + name + '!'`) in favor of a template literal
+  (`` `Hello ${name}!` ``). Chaining `+` scatters the literal text across
+  operators, hides where text ends and a value begins, and leans on the same
+  implicit coercion the bundled `no-implicit-coercion` ban already targets
+  whenever a non-string operand sneaks in. The template literal keeps the final
+  shape of the string visible at a glance — the same clarity goal as `eqeqeq`
+  and `no-implicit-coercion`. Auto-fixable with `eslint --fix`.
 - **`no-object-constructor`**: Forbids the `Object` constructor (`new Object()`
   and `Object()`) in favor of the `{}` literal. The constructor form is more
   verbose and a trap — `Object(x)` with a non-object argument returns that value
