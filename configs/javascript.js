@@ -1,24 +1,24 @@
 /**
  * JavaScript File Configurations
  *
- * Handles all JavaScript (.js) file-specific rules.
+ * Handles all JavaScript (.js, .mjs, .cjs) file-specific rules.
  * Plugin registration removed - all plugins registered globally in index.js.
  */
 
 import globals from 'globals'
 
 export const javascriptConfig = (sharedRules, sharedRestrictedSyntax) => [
-  // JavaScript files (not JSX)
+  // JavaScript files (not JSX). ESM/CommonJS variants (.mjs/.cjs) are covered
+  // too, mirroring the .ts/.mts/.cts symmetry on the TypeScript side, so the
+  // package's signature rules are not silently skipped for those files.
   {
-    files: ['**/*.js'],
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
     ignores: [
       '**/node_modules/**',
       '**/dist/**',
       '**/build/**',
       'pnpm-lock.yaml',
       '**/*.umd.js',
-      '**/*.cjs',
-      '**/*.mjs',
       '**/*.stories.{js,jsx,ts,tsx}',
       '**/rules/**/index.js',
     ],
