@@ -88,6 +88,28 @@ async function main() {
 
   for (const subpath of subpaths) {
     const specifier = specifierFor(pkg.name, subpath)
+
+    // `./package.json` is intentionally exposed so tooling can resolve the
+    // manifest (e.g. to read the version) without hitting
+    // ERR_PACKAGE_PATH_NOT_EXPORTED. It resolves to the JSON manifest, not a
+    // flat-config array, so it gets its own assertion.
+    if (subpath === './package.json') {
+      try {
+        const mod = await import(specifier, { with: { type: 'json' } })
+        const manifest = mod.default
+        if (!manifest || manifest.name !== pkg.name) {
+          failures.push(
+            `${specifier} resolved but did not return the package manifest (name "${manifest && manifest.name}").`
+          )
+          continue
+        }
+        console.log(`✅ ${specifier} → package manifest (${manifest.name})`)
+      } catch (error) {
+        failures.push(`${specifier} failed to load: ${error.message}`)
+      }
+      continue
+    }
+
     try {
       const mod = await import(specifier)
       const config = mod.default
