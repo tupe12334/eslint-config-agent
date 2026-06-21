@@ -279,6 +279,21 @@ const sharedRules = {
   // this config's explicit-over-clever, low-noise stance. The rule is
   // auto-fixable, so consumers can adopt it with `eslint --fix`.
   'object-shorthand': ['error', 'always'],
+  // Require the compound assignment shorthand (`x += 1`, `total *= rate`)
+  // wherever a variable is assigned the result of an operation on itself, so
+  // `x = x + 1` is rewritten to `x += 1`. The longhand form names the target
+  // twice — once on each side of the `=` — and that duplicated operand is a
+  // silent typo site: `total = totals + 1` reads as a self-update but quietly
+  // assigns from a *different* variable, a bug type checking cannot catch when
+  // both names are in scope. Collapsing to `+=` removes the
+  // second spelling of the name entirely, so the mismatch becomes impossible to
+  // write. This is the assignment sibling of the `object-shorthand` rule just
+  // above (which removes the same duplicated-name typo site in `{ value: value }`)
+  // and fits this config's explicit-over-clever, low-noise, correctness-leaning
+  // stance: one canonical spelling of "update this in place". The longhand is
+  // also exactly what an AI assistant trained on older code reaches for. The
+  // rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
+  'operator-assignment': ['error', 'always'],
   // Disallow chained assignment expressions such as `a = b = c = 0`. Chaining
   // collapses several writes into one expression: the value flows right-to-left
   // through bindings that have nothing to do with each other, so a reader has to
