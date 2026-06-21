@@ -140,4 +140,35 @@ export const typescriptEslintRules = {
   // `.tsx`, which is why downstream repos (`tools-view`) re-add it by hand on
   // top of the base config.
   '@typescript-eslint/promise-function-async': 'error',
+  // Forbid `+` operands whose types make the addition mean something other than
+  // a plain numeric add or a string-to-string join. `number + string`,
+  // `obj + ''`, `value + null`, `arr + 'x'` and `any + n` all type-check and run
+  // without error, but each silently coerces an operand: `count + label` becomes
+  // the string `"3x"`, `obj + ''` becomes `"[object Object]"`, and an `any` side
+  // disables the check entirely. The result is a plausible-but-wrong value the
+  // type system accepts because the `+` operator is overloaded for both numbers
+  // and strings — exactly the quiet correctness bug this config exists to
+  // surface, and one AI assistants emit when they build a message by adding
+  // values of mixed types. This is the type-aware completion of the
+  // string-building cluster already shipped in `sharedRules`: `prefer-template`
+  // and `no-useless-concat` govern string *literals* inside a `+`, and
+  // `no-implicit-coercion` bans the `'' + x` coercion idiom — this rule governs
+  // the operand *types* of the `+` itself, closing the gap those leave open. It
+  // is type-aware and runs under the `projectService` parser options already
+  // configured for `.ts`/`.tsx` files. Every `allow*` escape hatch is left off,
+  // matching this config's explicit-over-clever stance: an intended conversion
+  // should be spelled `String(n)` / `Number(s)` (the explicit form
+  // `no-implicit-coercion` already steers toward), not hidden in a `+`. The rule
+  // is not auto-fixable because only the author knows which operand was meant to
+  // be converted, or whether the wrong value is being added at all.
+  '@typescript-eslint/restrict-plus-operands': [
+    'error',
+    {
+      allowAny: false,
+      allowBoolean: false,
+      allowNullish: false,
+      allowNumberAndString: false,
+      allowRegExp: false,
+    },
+  ],
 }

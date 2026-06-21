@@ -133,13 +133,14 @@ const testCategories = {
   'edge-cases': {
     description: 'Edge cases and boundary testing',
     files: ['test/edge-cases.tsx'],
-    maxErrors: 38,
+    maxErrors: 40,
     maxWarnings: 30,
     expectedRules: [
       'no-restricted-syntax',
       'max-lines',
       '@typescript-eslint/no-explicit-any',
       '@typescript-eslint/no-shadow',
+      '@typescript-eslint/restrict-plus-operands',
       'no-else-return',
       'guard-clauses/prefer-guard-at-function-start',
       'guard-clauses/no-else-return',
@@ -271,6 +272,13 @@ const testCategories = {
     maxErrors: 5,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/switch-exhaustiveness-check'],
+  },
+  'restrict-plus-operands-invalid': {
+    description: 'Mixing operand types in a `+` expression must be flagged',
+    files: ['test/restrict-plus-operands/invalid/mixed-plus-operands.tsx'],
+    maxErrors: 5,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/restrict-plus-operands'],
   },
   'optional-chaining': {
     description: 'Optional chaining and nullish coalescing tests',
