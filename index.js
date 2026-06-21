@@ -80,6 +80,23 @@ const sharedRules = {
   // behind. The rule is auto-fixable, so consumers can adopt it with
   // `eslint --fix`.
   'no-useless-return': 'error',
+  // Disallow a value assigned to a variable that is never read before the
+  // variable is overwritten or its scope ends — a "dead store". Writing
+  // `let total = compute()` and then unconditionally reassigning `total = 0`
+  // (or returning before `total` is ever used) throws the first value away,
+  // and that wasted write is almost never deliberate: it usually means the
+  // author meant to *use* the value, assigned to the wrong variable, or left a
+  // half-finished branch behind. The result is code that reads as if a value
+  // flows through when it silently does not — exactly the quiet, wrong-behavior
+  // bug type checking will not catch (the types line up; only the data flow is
+  // broken) and one AI assistants emit when they stitch branches together or
+  // forget to thread a computed value into its use. It is the data-flow sibling
+  // of the `no-useless-return` rule just above: both surface statements that
+  // look load-bearing but change nothing. The rule relies on ESLint's code-path
+  // analysis (added in ESLint 9.14) and is not in `eslint:recommended`, so it
+  // is enabled explicitly here. It is not auto-fixable because only the author
+  // knows whether the dead store should be deleted or its value actually used.
+  'no-useless-assignment': 'error',
   // Disallow nested ternaries. A ternary inside another ternary is the
   // archetypal "clever but unreadable" construct this config exists to
   // prevent: it collapses branching logic into a single dense expression that
