@@ -64,6 +64,26 @@ export const typescriptEslintRules = {
     'error',
     { prefer: 'type-imports', fixStyle: 'separate-type-imports' },
   ],
+  // The export-side mirror of `consistent-type-imports`: force `export type
+  // { ... }` for any re-export that only carries types. The two rules guard the
+  // same invariant from opposite ends of a module — a binding that exists only
+  // in type space must never be smuggled through a value statement. A type-only
+  // name re-exported with a plain `export { ... }` is erased at compile time,
+  // so the value-shaped statement leaves a runtime export edge for something
+  // that has no runtime existence: bundlers keep the source module (and its
+  // side effects) alive in the emitted graph, and the re-export breaks outright
+  // under `verbatimModuleSyntax` / `isolatedModules`, which reject a value
+  // export of a type. Splitting type and value re-exports keeps the emitted
+  // module graph honest and the public value-vs-type surface of a barrel file
+  // legible — exactly the distinction an AI assistant blurs when it folds a
+  // type and a value into one `export { ... }` line. The rule is auto-fixable
+  // (`eslint --fix`), so adoption is cheap; this is why downstream repos
+  // (`block-no-verify`, `tools-view`) already re-add it by hand on top of the
+  // base config. Left at its default `fixMixedExportsWithInlineTypeSpecifier:
+  // false` so the fixer emits a separate `export type { ... }` statement rather
+  // than the inline `export { type X }` form, matching the
+  // `separate-type-imports` choice on the import side.
+  '@typescript-eslint/consistent-type-exports': 'error',
   // Forbid the non-null assertion operator (`value!`). A `!` silently tells the
   // compiler "trust me, this is never null/undefined" and is then erased at
   // build time, so a wrong assumption does not fail at the assertion — it

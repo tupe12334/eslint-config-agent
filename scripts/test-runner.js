@@ -331,7 +331,9 @@ const testCategories = {
   'record-literals': {
     description: 'Record literal type tests',
     files: ['test/test-record-literals.ts'],
-    maxErrors: 12,
+    // 12 Record/any findings, plus one @typescript-eslint/consistent-type-exports
+    // on the trailing value-export of the (type-only) names.
+    maxErrors: 13,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-explicit-any'],
   },
@@ -365,6 +367,14 @@ const testCategories = {
     maxErrors: 2,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/require-array-sort-compare'],
+  },
+  'consistent-type-exports': {
+    description:
+      'A type-only re-export written as a value export must be flagged (use `export type`)',
+    files: ['test/consistent-type-exports/invalid/value-export-of-type.ts'],
+    maxErrors: 2,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/consistent-type-exports'],
   },
 }
 

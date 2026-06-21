@@ -454,6 +454,15 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   keeps the emitted module graph honest and every import's intent legible. Uses
   `fixStyle: 'separate-type-imports'` (a distinct `import type` statement rather
   than the inline `import { type X }` form). Auto-fixable.
+- **`@typescript-eslint/consistent-type-exports`**: The export-side mirror of
+  `consistent-type-imports` — forces `export type { … }` for re-exports that
+  only carry types. A type-only name re-exported through a plain `export { … }`
+  is erased at compile time, so the value-shaped statement leaves a runtime
+  export edge for something with no runtime existence: bundlers keep the source
+  module (and its side effects) alive, and the re-export breaks under
+  `verbatimModuleSyntax` / `isolatedModules`. Splitting type and value
+  re-exports keeps the emitted module graph honest and a barrel file's
+  value-vs-type surface legible. Auto-fixable.
 
 ### Bundled Custom Rules
 
