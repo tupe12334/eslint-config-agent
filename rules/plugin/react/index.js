@@ -49,4 +49,24 @@ export const reactRules = {
   // packages are unaffected. This is why a downstream repo (`oss-il`) already
   // re-adds it by hand on top of the base config.
   'react/no-array-index-key': 'error',
+  // Forbid a freshly-constructed value as the `value` of a Context Provider:
+  // `<Ctx.Provider value={{ user, setUser }}>` or `value={[state, dispatch]}`
+  // or `value={() => ...}`. The object/array/function literal is rebuilt on
+  // every render of the providing component, so its identity changes every time
+  // even when the data inside is unchanged. React compares context values by
+  // reference, so a new reference forces *every* consumer of that context to
+  // re-render — including ones that `React.memo`/`useMemo` were added precisely
+  // to protect. The result is a silent, whole-subtree performance bug: the app
+  // is correct but does far more work than it should, and the cause (an inline
+  // literal three components up) is invisible at the consumer. The fix states
+  // the intent explicitly — hoist the value into a `useMemo`/`useCallback` (or a
+  // stable ref) so the reference only changes when the data does. An inline
+  // `value={{ ... }}` is exactly the shortcut an AI assistant emits when wiring
+  // up a provider, so it sits on the same correctness/perf-not-style bar that
+  // turns on `jsx-no-leaked-render` and `no-array-index-key` above while leaving
+  // the cosmetic react rules off. Like the other react rules it only applies to
+  // `.jsx`/`.tsx` files, so non-React TypeScript packages are unaffected. This
+  // is why a downstream repo (`oss-il`) already re-adds it by hand on top of the
+  // base config.
+  'react/jsx-no-constructed-context-values': 'error',
 }
