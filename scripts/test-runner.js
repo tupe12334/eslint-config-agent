@@ -149,7 +149,12 @@ const testCategories = {
   'edge-cases': {
     description: 'Edge cases and boundary testing',
     files: ['test/edge-cases.tsx'],
-    maxErrors: 38,
+    // 22 jsx-classname/require-classname + 7 @typescript-eslint/no-unsafe-return
+    // + 4 no-else-return + 1 each of @typescript-eslint/no-confusing-void-expression,
+    // no-constant-binary-expression, @typescript-eslint/no-unnecessary-condition,
+    // react/jsx-no-leaked-render, @typescript-eslint/no-shadow and
+    // @typescript-eslint/no-explicit-any.
+    maxErrors: 39,
     maxWarnings: 30,
     expectedRules: [
       'no-restricted-syntax',
