@@ -269,6 +269,14 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/switch-exhaustiveness-check'],
   },
+  'method-signature-style': {
+    description:
+      'Method-shorthand signatures must be flagged for the property style',
+    files: ['test/method-signature-style/invalid/method-shorthand.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/method-signature-style'],
+  },
   'optional-chaining': {
     description: 'Optional chaining and nullish coalescing tests',
     files: ['test/test-optional.ts', 'test/test-js-optional.js'],

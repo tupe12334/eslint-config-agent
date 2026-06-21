@@ -448,6 +448,14 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   keeps the emitted module graph honest and every import's intent legible. Uses
   `fixStyle: 'separate-type-imports'` (a distinct `import type` statement rather
   than the inline `import { type X }` form). Auto-fixable.
+- **`@typescript-eslint/method-signature-style`**: Requires the property style
+  (`foo: (x: number) => void`) over the method shorthand (`foo(x: number): void`)
+  for method signatures in interfaces and object types (TypeScript files). The
+  two are not equivalent to the compiler: method-shorthand signatures are
+  exempted from `strictFunctionTypes` and checked _bivariantly_ (a documented
+  unsoundness), whereas the property style is checked _contravariantly_ (sound),
+  so the shorthand can silently accept an incompatible callback or override that
+  the property style would reject. Configured with `'property'`. Auto-fixable.
 
 ### Bundled Custom Rules
 

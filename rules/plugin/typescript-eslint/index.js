@@ -80,4 +80,22 @@ export const typescriptEslintRules = {
   // (`zod-utils`, `currency-fa`, `block-no-verify`) already re-add it by hand
   // on top of the base config.
   '@typescript-eslint/no-non-null-assertion': 'error',
+  // Require the property style (`foo: (x: number) => void`) over the method
+  // shorthand (`foo(x: number): void`) for every method signature in an
+  // interface or object type. The two are NOT equivalent to the compiler:
+  // method-shorthand signatures are deliberately exempted from
+  // `strictFunctionTypes` and checked *bivariantly*, a documented TypeScript
+  // unsoundness, whereas the property style is checked *contravariantly*
+  // (sound). In practice that means a method-shorthand declaration silently
+  // accepts an incompatible callback/override that the property style would
+  // reject — a type hole that passes type-checking and only bites at runtime,
+  // which is exactly the explicit-over-clever, bug-prevention class of issue
+  // this config exists to close (it is the signature-side companion of the
+  // `no-non-null-assertion` and `require-array-sort-compare` rules above). The
+  // rule is deliberately left out of typescript-eslint's `strictTypeChecked`
+  // preset this config extends, so it must be turned on explicitly — which is
+  // why downstream repos (`zod-utils`, `tools-view`) already re-add it by hand
+  // on top of the base config. It is auto-fixable (`eslint --fix`), so adoption
+  // carries no manual cost.
+  '@typescript-eslint/method-signature-style': ['error', 'property'],
 }
