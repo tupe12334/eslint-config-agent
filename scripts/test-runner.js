@@ -355,6 +355,23 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['no-restricted-syntax'],
   },
+  'mjs-cjs-coverage': {
+    description:
+      'ESM/CommonJS JavaScript (.mjs/.cjs) files get the JavaScript rule set',
+    // The negative case uses `.cjs` rather than `.mjs`: the repo's lint-staged
+    // glob is `*.{js,jsx,mjs}`, so an intentionally-invalid `.mjs` fixture would
+    // trip the pre-commit hook (just as the `.mts/.cts` invalid fixtures avoid
+    // it by not matching the glob). `.cjs` is linted here through the exported
+    // config, proving the JavaScript rule set now applies to these extensions.
+    files: [
+      'test/mjs-cjs/valid.mjs',
+      'test/mjs-cjs/valid.cjs',
+      'test/mjs-cjs/invalid.cjs',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['no-restricted-syntax'],
+  },
   'require-array-sort-compare': {
     description:
       'Comparator-less numeric sorts are flagged; comparator and string-array sorts pass',
@@ -396,7 +413,10 @@ async function findTestFiles() {
           continue
         }
 
-        if (stats.isFile() && /\.(ts|tsx|js|jsx|mts|cts)$/.test(entry)) {
+        if (
+          stats.isFile() &&
+          /\.(ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(entry)
+        ) {
           files.push(relativeFilePath)
         } else if (stats.isDirectory()) {
           await scanDirectory(fullPath, relativeFilePath)
