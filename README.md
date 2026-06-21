@@ -460,6 +460,17 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   lets rejections go unhandled. A correctness check, like the bundled
   `array-callback-return`. Use a block body that calls `resolve`/`reject`
   without returning.
+- **`no-await-in-loop`**: Forbids `await` inside a loop body. Awaiting on every
+  iteration serializes work that could run concurrently, so the loop pays the
+  _sum_ of every promise's latency instead of the _max_ — a batch of
+  independent network/DB calls becomes an N-times slower stall. A quiet
+  performance bug the type checker cannot see, and the throughput side of the
+  async-hygiene family (`no-floating-promises`, `promise-function-async`,
+  `return-await`). Run the independent work with `Promise.all`/
+  `Promise.allSettled` over a `.map` instead. When the iterations are genuinely
+  dependent (each needs the previous result, an ordered write, a deliberate
+  rate limit) the serial `await` is correct, so the rule has no auto-fix — those
+  loops opt out with `// eslint-disable-next-line no-await-in-loop`.
 - **`no-throw-literal`**: Forbids throwing a non-`Error` value — `throw 'boom'`,
   `throw { code: 500 }`, `throw 42`. A thrown literal carries no stack trace and
   breaks every `catch` that relies on `instanceof Error` or reads
