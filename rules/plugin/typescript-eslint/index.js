@@ -140,4 +140,29 @@ export const typescriptEslintRules = {
   // `.tsx`, which is why downstream repos (`tools-view`) re-add it by hand on
   // top of the base config.
   '@typescript-eslint/promise-function-async': 'error',
+  // Require `return await promise` (never a bare `return promise`) inside a
+  // `try`/`catch`, and forbid the redundant `return await` everywhere else.
+  // A bare `return promise` from inside a `try` block hands the promise back to
+  // the caller *before* it settles, so the enclosing `try`/`catch` (and any
+  // `finally`) has already unwound by the time the promise rejects: the
+  // rejection sails straight past the local `catch` that was written precisely
+  // to handle it, and a `finally` meant to run after the work completes runs
+  // too early. The function "looks guarded" but isn't — the same looks-safe,
+  // fails-elsewhere mismatch this config already targets — and it is exactly
+  // what an AI assistant emits when it wraps an async call in `try`/`catch` but
+  // drops the `await` on the `return`. Inserting the `await` keeps the promise's
+  // lifetime inside the protected scope, so the `catch` fires and the `finally`
+  // ordering is correct; as a bonus the awaited frame stays on the async stack
+  // trace instead of being elided, so the error points at the real call site.
+  // This is the third side of the async-hygiene triangle this config already
+  // builds: `no-floating-promises` (handle the promise you get),
+  // `promise-function-async` (route every failure through the returned promise),
+  // and now `return-await` (keep that promise inside the handler that guards
+  // it). `'in-try-catch'` is the surgical mode — it only requires the `await`
+  // where omitting it actually changes `try`/`catch`/`finally` behavior and
+  // flags the redundant `return await` everywhere else, so it adds correctness
+  // without noise. The rule is auto-fixable (`eslint --fix`) and type-aware,
+  // running under the `projectService` parser options already configured for
+  // `.ts`/`.tsx`.
+  '@typescript-eslint/return-await': ['error', 'in-try-catch'],
 }

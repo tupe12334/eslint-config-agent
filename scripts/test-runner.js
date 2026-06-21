@@ -394,6 +394,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/consistent-type-exports'],
   },
+  'return-await': {
+    description:
+      'A bare return-in-try and a redundant return-await are flagged; an awaited try-return and a bare return outside try pass',
+    files: [
+      'test/return-await/invalid-return-await.ts',
+      'test/return-await/valid-return-await.ts',
+    ],
+    maxErrors: 2,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/return-await'],
+  },
 }
 
 async function findTestFiles() {
