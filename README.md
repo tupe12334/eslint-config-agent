@@ -179,7 +179,9 @@ load without a wall of errors.
 
 The `eslint-config-agent/recommended` preset bundles those common overrides for
 you. It keeps the core quality rules but disables the most opinionated ones
-(`ddd/require-spec-file`, `single-export`, `required-exports`, the custom
+(`ddd/require-spec-file` and its `.tsx`/`.jsx` counterpart
+`custom/require-spec-file-tsx`, so React/Preact components are not forced to
+ship a spec file up front either, `single-export`, `required-exports`, the custom
 `error/*` rules, `jsdoc/require-jsdoc` (so existing code is not forced to
 document every exported function and class up front — the jsdoc _content_ rules
 stay on, so any JSDoc you do write is still validated),

@@ -28,8 +28,16 @@ import config from '../index.js'
 const relaxedOverrides = {
   name: 'eslint-config-agent/recommended-overrides',
   rules: {
-    // Don't require a `*.spec.*` file alongside every source file.
+    // Don't require a `*.spec.*` file alongside every source file. The strict
+    // default splits this requirement across two rules: `ddd/require-spec-file`
+    // covers `.js`/`.ts` (the upstream `eslint-plugin-ddd` rule bails out on any
+    // other extension), and the bundled `custom/require-spec-file-tsx` covers
+    // `.tsx`/`.jsx` — i.e. the React/Preact components this config primarily
+    // targets. Relaxing only the first would still force a spec file beside
+    // every component, defeating the preset's purpose for its core audience, so
+    // both halves are disabled together here.
     'ddd/require-spec-file': 'off',
+    'custom/require-spec-file-tsx': 'off',
     // Allow multiple exports per module.
     'single-export/single-export': 'off',
     'required-exports/required-exports': 'off',

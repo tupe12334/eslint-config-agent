@@ -39,43 +39,59 @@ async function countErrors(configFile, sample) {
   return results.reduce((total, result) => total + result.errorCount, 0)
 }
 
-// Resolve the effective severity of `jsdoc/require-jsdoc` for a given source
-// path under a given config. ESLint normalizes severities to numbers (0 = off,
-// 1 = warn, 2 = error), wrapped in an array when the rule carries options.
-async function jsdocSeverity(configFile, sourcePath) {
+// Rules the recommended preset must relax, each checked at real source paths
+// (NOT under `test/`, where the test-files override already disables them) so
+// the check reflects what an adopting codebase actually sees. Issue #91 covers
+// `jsdoc/require-jsdoc`. The spec-file requirement is split across two rules —
+// `ddd/require-spec-file` (.js/.ts) and the bundled `custom/require-spec-file-tsx`
+// (.tsx/.jsx) — so the preset must relax the `.tsx`/`.jsx` half too, or
+// React/Preact components (the config's primary audience) still error with a
+// missing spec file.
+const RELAXED_RULE_CHECKS = [
+  { ruleId: 'jsdoc/require-jsdoc', paths: ['src/example.ts'] },
+  {
+    ruleId: 'custom/require-spec-file-tsx',
+    paths: ['src/example.tsx', 'src/example.jsx'],
+  },
+]
+
+// Resolve a rule's effective severity for a source path. ESLint normalizes
+// severities to numbers (0 = off, 1 = warn, 2 = error), wrapped in an array
+// when the rule carries options.
+async function ruleSeverity(configFile, ruleId, sourcePath) {
   const eslint = new ESLint({ overrideConfigFile: configFile })
   const resolved = await eslint.calculateConfigForFile(sourcePath)
-  const entry = resolved.rules['jsdoc/require-jsdoc']
+  // eslint-disable-next-line security/detect-object-injection -- ruleId comes from the hardcoded RELAXED_RULE_CHECKS table
+  const entry = resolved.rules[ruleId]
   if (entry === undefined) {
     return 0
   }
   return Array.isArray(entry) ? entry[0] : entry
 }
 
-// Regression guard for issue #91: the recommended preset must relax
-// `jsdoc/require-jsdoc`, which the strict default enables at `error` for every
-// exported function and class. Resolve the rule against a real source path
-// (NOT under `test/`, where the test-files override already disables it) so the
-// check reflects what an adopting codebase actually sees.
-async function assertJsdocRelaxed() {
-  const sourcePath = join(projectRoot, 'src/example.ts')
-  const strictSeverity = await jsdocSeverity(strictConfig, sourcePath)
-  const relaxedSeverity = await jsdocSeverity(recommendedConfig, sourcePath)
-
-  console.log('\njsdoc/require-jsdoc severity (src/example.ts)')
-  console.log(`  strict config:      ${strictSeverity}`)
-  console.log(`  recommended preset: ${relaxedSeverity}`)
-
+// The strict default must keep each rule at error (2); the recommended preset
+// must disable it (0).
+async function assertRulesRelaxed() {
   const failures = []
-  if (strictSeverity !== 2) {
-    failures.push(
-      `strict config should keep jsdoc/require-jsdoc at error (2); got ${strictSeverity}`
-    )
-  }
-  if (relaxedSeverity !== 0) {
-    failures.push(
-      `recommended preset should disable jsdoc/require-jsdoc (0); got ${relaxedSeverity}`
-    )
+  for (const { ruleId, paths } of RELAXED_RULE_CHECKS) {
+    for (const rel of paths) {
+      const sourcePath = join(projectRoot, rel)
+      const strict = await ruleSeverity(strictConfig, ruleId, sourcePath)
+      const relaxed = await ruleSeverity(recommendedConfig, ruleId, sourcePath)
+      console.log(
+        `\n${ruleId} (${rel}): strict=${strict} recommended=${relaxed}`
+      )
+      if (strict !== 2) {
+        failures.push(
+          `strict should keep ${ruleId} at error for ${rel}; got ${strict}`
+        )
+      }
+      if (relaxed !== 0) {
+        failures.push(
+          `recommended should disable ${ruleId} for ${rel}; got ${relaxed}`
+        )
+      }
+    }
   }
   if (failures.length === 0) {
     return
@@ -116,7 +132,7 @@ async function main() {
     process.exit(1)
   }
 
-  await assertJsdocRelaxed()
+  await assertRulesRelaxed()
 
   console.log('\n✅ recommended preset relaxes the strict rules as expected.')
 }
