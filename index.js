@@ -405,6 +405,28 @@ const sharedRules = {
   // and not the `Function` constructor). The rule is not auto-fixable because
   // only the author can restate the string body as real code.
   'no-new-func': 'error',
+  // Disallow `eval(...)`. It hands a string to the JavaScript engine to parse
+  // and run at runtime: the body is opaque to the parser, the type checker and
+  // every reader, it can reach and mutate the surrounding scope, and feeding it
+  // any untrusted input is the textbook code-injection hole. There is a plain,
+  // safe equivalent for every legitimate use, so the dynamic form buys nothing
+  // but risk. This is the direct-`eval` companion to the `no-new-func` ban right
+  // above (which catches `eval` wearing the `Function`-constructor disguise) —
+  // together they close the runtime-string-execution footgun an AI assistant
+  // reaches for when asked to "run this code dynamically." It is not in
+  // `eslint:recommended`, so it is enabled explicitly. Not auto-fixable: only
+  // the author can restate the string as real code.
+  'no-eval': 'error',
+  // Disallow the implied-`eval` forms: a string first argument to `setTimeout`,
+  // `setInterval`, `setImmediate`, or `execScript`. Passing a string there makes
+  // the engine `eval` it on the timer's behalf, so it carries every hazard of
+  // `no-eval` above while hiding behind an everyday timer API — `setTimeout('do()',
+  // 100)` reads as a scheduled call but is really deferred string execution. The
+  // safe form is already the idiomatic one: pass a function, `setTimeout(() =>
+  // do(), 100)`. This pairs with `no-eval` to cover the indirect channel the
+  // direct ban misses. Not auto-fixable: only the author can turn the string
+  // into the intended callback.
+  'no-implied-eval': 'error',
   // Disallow stray `console` calls, allowing only `console.warn` and
   // `console.error`. A bare `console.log` is almost always leftover debugging:
   // it slips through review, ships to production, leaks internal state into logs
