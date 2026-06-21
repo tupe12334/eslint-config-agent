@@ -99,4 +99,24 @@ export const typescriptEslintRules = {
   // by hand on top of the base config — promoting it into the shared rule set
   // removes that copy-paste.
   '@typescript-eslint/no-shadow': 'error',
+  // Forbid comparing a boolean against a boolean literal (`x === true`,
+  // `x !== false`, `x === false`, …). When the operand is already a `boolean`,
+  // the comparison adds nothing the value does not already say: `if (x === true)`
+  // is just `if (x)` and `if (x === false)` is just `if (!x)`. The redundant
+  // form is not merely noise — it actively misleads, because it reads as if `x`
+  // might be some non-boolean that needs narrowing, hiding the fact that the
+  // type is already exact, and `x !== true` vs `!x` diverge the moment the type
+  // widens to include `undefined`, so the literal compare becomes a latent bug
+  // during a refactor. Removing the comparison makes the condition state its
+  // intent directly — squarely in line with this config's explicit-over-clever
+  // stance — and it is exactly the redundant scaffolding an AI assistant emits
+  // when it spells out a comparison instead of using the boolean as-is. The
+  // rule is auto-fixable (`eslint --fix`), so adoption is cheap. It is type-aware
+  // (it must know the operand is a `boolean`), so it lives in the TypeScript-only
+  // rule set and runs under the `projectService` parser options already
+  // configured for `.ts`/`.tsx` files. The default options leave genuinely
+  // nullable operands (`boolean | null | undefined`) alone, where an explicit
+  // `=== true` is a real narrowing rather than redundant, so the rule only fires
+  // on the truly pointless cases and carries near-zero false-positive cost.
+  '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
 }

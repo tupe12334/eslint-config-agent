@@ -366,6 +366,19 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/require-array-sort-compare'],
   },
+  'no-unnecessary-boolean-literal-compare': {
+    description:
+      'Boolean-literal comparisons on plain booleans are flagged; direct use and nullable narrowing pass',
+    files: [
+      'test/no-unnecessary-boolean-literal-compare/invalid-literal-compare.ts',
+      'test/no-unnecessary-boolean-literal-compare/valid-direct-and-nullable.ts',
+    ],
+    maxErrors: 2,
+    maxWarnings: 0,
+    expectedRules: [
+      '@typescript-eslint/no-unnecessary-boolean-literal-compare',
+    ],
+  },
 }
 
 async function findTestFiles() {
