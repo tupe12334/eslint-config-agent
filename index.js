@@ -139,6 +139,22 @@ const sharedRules = {
   // assistants frequently skip. The rule is auto-fixable, so consumers can
   // adopt it with `eslint --fix`.
   'prefer-template': 'error',
+  // Disallow concatenating two string literals — `'Hello ' + 'World'`,
+  // `'a' + 'b' + 'c'`, or a literal split across lines with `+`. The operands
+  // are known at author time, so the `+` does nothing the source could not say
+  // directly: it is pure punctuation that hides a single constant string behind
+  // an operator and invites the reader to wonder whether a variable was meant.
+  // It is the static sibling of the `prefer-template` rule just above — that one
+  // pushes runtime interpolation onto template literals, this one removes the
+  // join entirely when there is no value to interpolate — and it leans on the
+  // same implicit-`+` surface the config already narrows with `prefer-template`,
+  // `no-implicit-coercion` and `@typescript-eslint/restrict-plus-operands`.
+  // Collapsing the pieces into one literal (or a template literal when the line
+  // length is the only reason for the split) is the explicit, readable form this
+  // config favors and one AI assistants frequently skip. The rule is not
+  // auto-fixable because only the author knows whether the two pieces were meant
+  // to be one literal or a refactor left a variable behind.
+  'no-useless-concat': 'error',
   // Require `Object.hasOwn(obj, key)` over the legacy ways of asking the same
   // question. The two forms it replaces are each a footgun: calling
   // `obj.hasOwnProperty(key)` directly breaks the moment `obj` has a `null`
