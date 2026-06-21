@@ -21,7 +21,7 @@ const testCategories = {
       'test/typescript-rules.ts',
       'test/type-assertions/indexed-access-valid.ts',
     ],
-    maxErrors: 5,
+    maxErrors: 6,
     maxWarnings: 10,
   },
   invalid: {
@@ -53,7 +53,7 @@ const testCategories = {
   hooks: {
     description: 'React hooks rules testing',
     files: ['test/react-hooks-rules.tsx'],
-    maxErrors: 64,
+    maxErrors: 66,
     maxWarnings: 20,
     expectedRules: [
       'react-hooks/exhaustive-deps',
@@ -63,7 +63,7 @@ const testCategories = {
   imports: {
     description: 'Import/export patterns testing',
     files: ['test/import-export-rules.ts'],
-    maxErrors: 29, // import/group-exports + import/no-namespace + import/first + import/no-duplicates + export specifier rules + early-return + @typescript-eslint/no-shadow + unused-imports/no-unused-imports (fixture imports symbols solely to exercise import grouping/ordering, leaving them unused)
+    maxErrors: 34, // import/group-exports + import/no-namespace + import/first + import/no-duplicates + export specifier rules + early-return + @typescript-eslint/no-shadow + unused-imports/no-unused-imports (fixture imports symbols solely to exercise import grouping/ordering, leaving them unused)
     maxWarnings: 0,
     expectedRules: [
       'import/group-exports',
@@ -133,7 +133,7 @@ const testCategories = {
   'edge-cases': {
     description: 'Edge cases and boundary testing',
     files: ['test/edge-cases.tsx'],
-    maxErrors: 38,
+    maxErrors: 47,
     maxWarnings: 30,
     expectedRules: [
       'no-restricted-syntax',
@@ -186,7 +186,7 @@ const testCategories = {
       'test/export/valid/explicit-export-declaration.ts',
       'test/export/valid/export-from-scoped.ts',
     ],
-    maxErrors: 13,
+    maxErrors: 18,
     maxWarnings: 5,
   },
   'export-invalid': {
@@ -207,7 +207,7 @@ const testCategories = {
       'test/export/invalid/export-of-import.ts',
       'test/export/invalid/export-from-lib.ts',
     ],
-    maxErrors: 19, // class-export/class-export + remaining no-restricted-syntax + export specifier rules + single-export rules + early-return
+    maxErrors: 26, // class-export/class-export + remaining no-restricted-syntax + export specifier rules + single-export rules + early-return
     maxWarnings: 0,
     expectedRules: [
       'no-restricted-syntax',
@@ -231,7 +231,7 @@ const testCategories = {
       'test/index-files/invalid/index-multiple-statements.ts',
       'test/index-files/invalid/index-export-specifiers.js',
     ],
-    maxErrors: 6,
+    maxErrors: 7,
     maxWarnings: 2,
     expectedRules: ['no-restricted-syntax'],
   },
@@ -257,7 +257,7 @@ const testCategories = {
       'test/switch-case/invalid/missing-function-return-types.tsx',
       'test/switch-case/invalid/untyped-functions.tsx',
     ],
-    maxErrors: 60,
+    maxErrors: 65,
     maxWarnings: 0,
     expectedRules: [
       'no-restricted-syntax',
@@ -285,7 +285,7 @@ const testCategories = {
       'test/classname-warning-test.tsx',
       'test/classname-warning-test.jsx',
     ],
-    maxErrors: 60,
+    maxErrors: 63,
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -297,7 +297,7 @@ const testCategories = {
       'test/classname/valid/forms-fragments-valid.tsx',
       'test/classname/valid/react-components-valid.tsx',
     ],
-    maxErrors: 31,
+    maxErrors: 36,
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -310,7 +310,7 @@ const testCategories = {
       'test/classname/invalid/forms-fragments-invalid.tsx',
       'test/classname/invalid/react-components-invalid.tsx',
     ],
-    maxErrors: 190,
+    maxErrors: 201,
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -393,6 +393,17 @@ const testCategories = {
     maxErrors: 2,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/consistent-type-exports'],
+  },
+  'explicit-module-boundary-types': {
+    description:
+      'An exported function with an inferred boundary is flagged; a fully annotated boundary passes',
+    files: [
+      'test/explicit-module-boundary-types/invalid-boundary.ts',
+      'test/explicit-module-boundary-types/valid-boundary.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/explicit-module-boundary-types'],
   },
 }
 
@@ -767,7 +778,7 @@ function autoCategorizeFiles(allTestFiles) {
             file.includes('export') ||
             file.includes('Export')
         ),
-        maxErrors: 53,
+        maxErrors: 60,
         maxWarnings: 2,
         expectedRules: ['no-restricted-syntax'],
       },

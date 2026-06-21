@@ -140,4 +140,24 @@ export const typescriptEslintRules = {
   // `.tsx`, which is why downstream repos (`tools-view`) re-add it by hand on
   // top of the base config.
   '@typescript-eslint/promise-function-async': 'error',
+  // Require an explicit return type and explicit parameter types on every
+  // function that forms a module boundary (anything exported, directly or via a
+  // barrel). The public surface of a module is a contract; when it is left to
+  // inference, a refactor deep inside an exported function can silently widen or
+  // change the type that consumers depend on, and the break only surfaces far
+  // away at a call site in another package — exactly where it is hardest to
+  // trace back. Writing the boundary types down turns the function's own body
+  // into the thing that is checked against its declared contract, keeps the
+  // exported API legible without reading the implementation, and stops an
+  // accidental signature change from leaking across the module edge. It pairs
+  // with the boundary discipline this config already ships (`required-exports`,
+  // `single-export`, jsdoc on exported declarations): those govern *what* a
+  // module exports, this governs the *types* of what it exports. The rule is
+  // syntactic (no type information required) so it adds no parser cost, and it
+  // is deliberately scoped to the public boundary rather than every internal
+  // helper, keeping the false-positive footprint small. It is exactly the
+  // shortcut an AI assistant takes when it leaves an exported function's return
+  // type to inference, which is why downstream repos (`tools-view`) already
+  // re-add it by hand on top of the base config.
+  '@typescript-eslint/explicit-module-boundary-types': 'error',
 }
