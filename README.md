@@ -404,6 +404,13 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   instead of a fresh object — while the literal is unambiguous. The
   object-creation sibling of the bundled wrapper-constructor and coercion bans.
   Auto-fixable with `eslint --fix`.
+- **`prefer-regex-literals`** (`disallowRedundantWrapping: true`): Forbids the
+  `RegExp` constructor for a static pattern (`new RegExp('\\d+')`) in favor of a
+  regex literal (`/\d+/`). The string form double-escapes every backslash, so a
+  single missed one silently changes the match with no error, and the pattern is
+  only validated when the constructor runs. The regex-shaped sibling of the
+  bundled `no-object-constructor` / `no-new-wrappers` / `no-new-func` bans.
+  `new RegExp(variable)` (a genuinely dynamic pattern) is left alone.
 - **`no-promise-executor-return`**: Forbids returning a value from a `Promise`
   executor — the function passed to `new Promise(...)`. The constructor discards
   the return value, so `new Promise((resolve) => resolve(work()))` (or an async

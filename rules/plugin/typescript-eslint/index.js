@@ -64,4 +64,20 @@ export const typescriptEslintRules = {
     'error',
     { prefer: 'type-imports', fixStyle: 'separate-type-imports' },
   ],
+  // Forbid the non-null assertion operator (`value!`). A `!` silently tells the
+  // compiler "trust me, this is never null/undefined" and is then erased at
+  // build time, so a wrong assumption does not fail at the assertion — it
+  // surfaces far away as a runtime "Cannot read properties of undefined" crash,
+  // often inside a *consumer's* app. That is the exact failure mode the type
+  // system exists to prevent, and `!` is the one operator that opts out of it
+  // with zero runtime guard. Forcing an explicit narrowing instead (a
+  // `if (x == null) throw`, a `?? fallback`, or a real type guard) keeps the
+  // null-safety guarantee honest and the failure loud and local. It is exactly
+  // the shortcut an AI assistant reaches for to silence a "possibly undefined"
+  // error without handling the case. The rule is deliberately left out of
+  // typescript-eslint's `strictTypeChecked` preset that this config extends, so
+  // it must be turned on explicitly — which is why several downstream repos
+  // (`zod-utils`, `currency-fa`, `block-no-verify`) already re-add it by hand
+  // on top of the base config.
+  '@typescript-eslint/no-non-null-assertion': 'error',
 }

@@ -111,6 +111,22 @@ const sharedRules = {
   // caller still holds. Both undermine this config's explicit-over-clever,
   // immutability-leaning stance, so treat parameters as read-only here.
   'no-param-reassign': ['error', { props: true }],
+  // Require every parameter with a default value to come after all parameters
+  // without one. A default can only ever take effect when the argument is
+  // `undefined`, so a default placed before a required parameter
+  // (`f(a = 1, b)`) is unreachable in practice: the caller cannot skip `a` to
+  // reach `b`, they must pass `f(undefined, x)` to use the default — at which
+  // point the default documents an API the call sites cannot actually use.
+  // It is almost always a mistake for the parameter order, not a deliberate
+  // signature, and exactly the kind of plausible-but-wrong shape an AI
+  // assistant emits when it bolts a default onto the first convenient
+  // parameter. This sits with the parameter-discipline rules already here
+  // (`no-param-reassign` directly above): keep a function's inputs honest and
+  // its signature meaningful. It is not in `eslint:recommended`, so it is
+  // enabled explicitly. The rule is not auto-fixable because reordering
+  // parameters would silently break every call site, so only the author can
+  // decide whether the default or the order was wrong.
+  'default-param-last': 'error',
   // Require `const` for bindings that are never reassigned. This is the
   // local-binding counterpart to `no-param-reassign`: together they extend the
   // config's immutability-leaning stance from parameters to every variable. A
@@ -139,6 +155,22 @@ const sharedRules = {
   // assistants frequently skip. The rule is auto-fixable, so consumers can
   // adopt it with `eslint --fix`.
   'prefer-template': 'error',
+  // Disallow concatenating two string literals — `'Hello ' + 'World'`,
+  // `'a' + 'b' + 'c'`, or a literal split across lines with `+`. The operands
+  // are known at author time, so the `+` does nothing the source could not say
+  // directly: it is pure punctuation that hides a single constant string behind
+  // an operator and invites the reader to wonder whether a variable was meant.
+  // It is the static sibling of the `prefer-template` rule just above — that one
+  // pushes runtime interpolation onto template literals, this one removes the
+  // join entirely when there is no value to interpolate — and it leans on the
+  // same implicit-`+` surface the config already narrows with `prefer-template`,
+  // `no-implicit-coercion` and `@typescript-eslint/restrict-plus-operands`.
+  // Collapsing the pieces into one literal (or a template literal when the line
+  // length is the only reason for the split) is the explicit, readable form this
+  // config favors and one AI assistants frequently skip. The rule is not
+  // auto-fixable because only the author knows whether the two pieces were meant
+  // to be one literal or a refactor left a variable behind.
+  'no-useless-concat': 'error',
   // Require `Object.hasOwn(obj, key)` over the legacy ways of asking the same
   // question. The two forms it replaces are each a footgun: calling
   // `obj.hasOwnProperty(key)` directly breaks the moment `obj` has a `null`
@@ -306,6 +338,27 @@ const sharedRules = {
   // rule is not auto-fixable because the engine cannot know the string is meant
   // as code rather than data.
   'no-implied-eval': 'error',
+  // Require a regex literal (`/\d+/`) instead of the `RegExp` constructor with
+  // a string argument (`new RegExp('\\d+')`, `RegExp('\\d+')`) when the pattern
+  // is a static string. The string form forces every backslash to be escaped
+  // twice — once for the string literal and once for the regex engine — so
+  // `\d` has to be written `\\d`, `\.` becomes `\\.`, and a single missed
+  // backslash silently changes what the pattern matches without any error.
+  // The literal needs none of that doubling and is checked for validity at
+  // parse time rather than when the constructor runs, so a malformed pattern
+  // surfaces immediately instead of throwing on first use. This is the
+  // regex-shaped sibling of the constructor bans this config already ships —
+  // `no-object-constructor`, `no-new-wrappers`, `no-new-func` — all of which
+  // reject a constructor call dressed up as a literal/value; reaching for
+  // `new RegExp('...')` on a constant pattern is exactly the legacy,
+  // double-escaping-prone idiom an AI assistant emits when asked to "build a
+  // regex." It is not in `eslint:recommended`, so it is enabled explicitly.
+  // `disallowRedundantWrapping: true` also flags `new RegExp(/foo/)` — wrapping
+  // a literal that is already a regex — which is pure redundancy. The dynamic
+  // `new RegExp(variable)` case, where the pattern genuinely is not known until
+  // runtime, is left untouched. The rule is auto-fixable for the simple cases,
+  // so consumers can adopt much of it with `eslint --fix`.
+  'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
