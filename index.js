@@ -412,6 +412,29 @@ const sharedRules = {
   // keeps the check legible. The rule is not auto-fixable because only the
   // author knows which operand was meant.
   'no-self-compare': 'error',
+  // Disallow optional chaining in positions where a short-circuit to
+  // `undefined` is immediately used in a way that throws at runtime — member
+  // access, a call, arithmetic, spread, `instanceof`, `in`, or destructuring on
+  // the result. `(obj?.foo).bar`, `(obj?.fn)()`, `(obj?.count) + 1` and
+  // `[...(obj?.list)]` all look guarded, but the `?.` only protects the link it
+  // sits on: the moment the chain yields `undefined`, the surrounding `.bar` /
+  // `()` / `+` / spread runs against `undefined` and throws a `TypeError`. The
+  // author wrote `?.` precisely because the left side can be nullish, so this is
+  // an outright correctness bug — the guard is defeated by the very expression
+  // wrapped around it — not a style preference. It is exactly the half-applied
+  // null-safety an AI assistant emits when it sprinkles `?.` onto one segment of
+  // a longer access, which puts it in this config's correctness-over-clever, AI-
+  // safety scope alongside `no-throw-literal` and `no-self-compare` above. The
+  // fix is to extend the optional chain over the whole access (`obj?.foo?.bar`)
+  // or to guard the result before using it; only the author knows which, so the
+  // rule is not auto-fixable. `eslint:recommended` does enable this, but this
+  // config does not extend that preset, so it is turned on explicitly here. The
+  // shared `web` app of the `animals-shop` repo enforced this rule manually; it
+  // belongs in the shared config so every consumer is covered.
+  'no-unsafe-optional-chaining': [
+    'error',
+    { disallowArithmeticOperators: true },
+  ],
   // Disallow computed keys that wrap a literal that could be written plainly —
   // `{ ['name']: x }`, `{ [42]: y }`, or `class { ['method']() {} }`. The
   // bracket syntax exists for keys that must be computed at runtime; using it
@@ -461,6 +484,24 @@ const sharedRules = {
   // direct ban misses. Not auto-fixable: only the author can turn the string
   // into the intended callback.
   'no-implied-eval': 'error',
+  // Disallow `javascript:` URLs — `href = 'javascript:void(0)'`,
+  // `window.location = 'javascript:doThing()'`, a `<a href="javascript:...">`.
+  // The string after the `javascript:` scheme is handed to the engine and run
+  // exactly as `eval` would run it, so it carries every hazard of `no-eval` and
+  // `no-implied-eval` above — opaque to the parser, the type checker and every
+  // reader, and a code-injection hole the moment any of it comes from untrusted
+  // input — while wearing the everyday disguise of a URL. It is the third
+  // channel in the string-executes-as-code family this config already bans:
+  // `no-eval` (direct), `no-new-func` (the `Function` constructor) and
+  // `no-implied-eval` (string-bodied timers); `no-script-url` closes the URL
+  // channel the other three miss. There is a plain, safe equivalent for every
+  // legitimate use — an `onClick`/event handler, `href="#"` with
+  // `preventDefault`, or a real function — so the `javascript:` form buys
+  // nothing but risk, and it is exactly the placeholder shortcut an AI assistant
+  // emits for a "do-nothing" link. It is not in `eslint:recommended`, so it is
+  // enabled explicitly. Not auto-fixable: only the author can replace the URL
+  // with the intended handler.
+  'no-script-url': 'error',
   // Disallow stray `console` calls, allowing only `console.warn` and
   // `console.error`. A bare `console.log` is almost always leftover debugging:
   // it slips through review, ships to production, leaks internal state into logs
