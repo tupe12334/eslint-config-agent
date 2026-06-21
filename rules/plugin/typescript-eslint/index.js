@@ -84,6 +84,26 @@ export const typescriptEslintRules = {
   // than the inline `export { type X }` form, matching the
   // `separate-type-imports` choice on the import side.
   '@typescript-eslint/consistent-type-exports': 'error',
+  // Forbid the inline `import { type X }` mixed-qualifier form and force a
+  // separate top-level `import type { X }` statement instead. This is the
+  // erase-side guarantee that completes the type-import trio already in this
+  // config (`consistent-type-imports` + `consistent-type-exports`): those two
+  // make every type-only import and re-export *declared* as type-only, and this
+  // one makes sure that declaration actually disappears from the emitted JS. An
+  // inline `import { type X }` still emits a runtime `import` statement for the
+  // module — the `type` qualifier only strips the binding, not the side-effect
+  // import — so a module imported solely for its types keeps its source (and any
+  // side effects) alive in the bundle, the exact runtime-graph leak the trio is
+  // meant to prevent. Rewriting it as a standalone `import type { X }` lets
+  // TypeScript drop the whole statement, and it is the form
+  // `consistent-type-imports` (configured here with
+  // `fixStyle: 'separate-type-imports'`) already produces, so the two rules
+  // reinforce one statement style rather than fighting. The rule is auto-fixable
+  // (`eslint --fix`), so adoption is free, and it is left out of
+  // typescript-eslint's `strictTypeChecked` preset that this config extends, so
+  // it must be turned on explicitly — which is why downstream repos (`zod-utils`)
+  // already re-add it by hand on top of the base config.
+  '@typescript-eslint/no-import-type-side-effects': 'error',
   // Forbid the non-null assertion operator (`value!`). A `!` silently tells the
   // compiler "trust me, this is never null/undefined" and is then erased at
   // build time, so a wrong assumption does not fail at the assertion — it
