@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [Unreleased]
+
+### Features
+
+* **presets:** add relaxed `recommended` preset for incremental adoption (#43), with follow-up relaxations of `jsx-classname/require-classname` (#94), `custom/require-spec-file-tsx` (#221), and `jsdoc/require-jsdoc` (#146)
+* **presets:** add `recommended-incremental` (relaxed + warn-level) preset (#143) and a `one-import` warn-level adoption preset (#112)
+* **types:** ship `.d.ts` declarations for all entry points (#148)
+* **exports:** publish the `toWarnings` severity-downgrade helper (#230) and guard the public exports surface against drift (#76)
+* **config:** lint `.mjs`/`.cjs` files with the JavaScript rule set (#192) and match nested config files in monorepos (#217)
+* **config:** require spec files for `.tsx`/`.jsx` components (#66), exempting error/exception files (#118)
+* **config:** name the top-level flat-config blocks (#150, #84)
+* **config:** enable a large batch of additional core, TypeScript, import, React, and stylistic rules in the shared rule set — including `prefer-const`, `no-var`, `object-shorthand`, `prefer-template`, `no-else-return`, `no-lonely-if`, `no-unneeded-ternary`, `no-multi-assign`, `no-return-assign`, `operator-assignment`, `radix`, `default-case-last`, `default-param-last`, `array-callback-return`, `no-await-in-loop`, `no-eval`/`no-implied-eval`, `no-new-func`, `no-throw-literal`, `no-console` (allow warn/error), `no-self-compare`, `no-template-curly-in-string`, `no-promise-executor-return`, `no-useless-return`/`no-useless-concat`/`no-useless-assignment`/`no-useless-computed-key`, `no-object-constructor`, `prefer-object-spread`, `prefer-object-has-own`, `prefer-regex-literals`, `unused-imports/no-unused-imports`, `import/no-useless-path-segments`/`import/no-empty-named-blocks`, `react/jsx-no-leaked-render`/`react/jsx-no-constructed-context-values`/`react/no-array-index-key`, and the TypeScript-aware `consistent-type-imports`/`consistent-type-exports`/`no-import-type-side-effects`/`no-shadow`/`no-loop-func`/`no-non-null-assertion`/`promise-function-async`/`return-await`/`require-array-sort-compare`/`switch-exhaustiveness-check`/`no-unsafe-optional-chaining` (#27, #29, #31, #35, #38, #39, #52, #68, #70, #74, #78, #84, #102, #110, #127, #129, #131, #133, #135, #137, #139, #145, #155, #163, #167, #169, #171, #173, #180, #182, #184, #188, #191, #204, #206, #210, #214, #224, #225, #226, #229, #232, #236, #239, #242, #243, #245, #249)
+* **config:** relax noisy `eslint-plugin-security` rules for test files (#141) and ignore `storybook-static`/`.turbo` build output (#106)
+* **docs:** document the bundled custom rules, the `ddd` entry point, type-aware project service requirement, ESLint 10 incompatibility, TypeScript >=4.8.4 optional peer, and `prefer-template` (#36, #90, #98, #104, #116, #120, #165, #215)
+
+### Bug Fixes
+
+* **no-inline-union-types:** flag non-literal unions in interface/class properties (#122)
+* **exports:** expose `./package.json` in the exports map (#156)
+* **test:** correct the edge-cases baseline so `pnpm test` passes (#234) and exclude recommended-preset fixtures from the comprehensive runner (#80)
+
 ## [3.0.4](https://github.com/tupe12334/eslint-config-agent/compare/v3.0.3...v3.0.4) (2026-06-03)
 
 ### Bug Fixes
