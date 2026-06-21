@@ -140,4 +140,29 @@ export const typescriptEslintRules = {
   // `.tsx`, which is why downstream repos (`tools-view`) re-add it by hand on
   // top of the base config.
   '@typescript-eslint/promise-function-async': 'error',
+  // Forbid an unsafe non-boolean value in a boolean position (an `if`, `while`,
+  // `&&`, `||`, `!`, or ternary test). With this rule's defaults a plain
+  // `string`/`number` truthiness check stays allowed; what it catches is the
+  // genuinely ambiguous coercion: a *nullable* value (`string | undefined`,
+  // `number | null`, a nullable boolean), an `any`, or a bare object in a
+  // condition. `if (maybeStr)` on a `string | undefined` silently folds two
+  // different states into one — an empty string `''` and a missing `undefined`
+  // both take the falsy branch — so the case the author meant to separate ("present
+  // but empty" vs "not there at all") slips through as a branch that quietly
+  // does the wrong thing; `if (maybeNum)` does the same to `0` vs `undefined`,
+  // and `if (obj)` blends a null-check with a truthiness-check. The rule forces
+  // the condition to say which it means: compare against `''`, `0`, or
+  // `null`/`undefined` explicitly. That implicit nullable coercion is exactly
+  // what an AI assistant leans on when it writes `if (value)` against a
+  // `string | undefined` without deciding what the empty string should do, so
+  // it sits squarely in this config's explicit-over-clever, surface-the-edge
+  // -case stance — the same intent behind the already-enabled `eqeqeq` and the
+  // `??` ban, applied to the condition itself. It is deliberately left out of
+  // the `strictTypeChecked` preset this config extends (too opinionated to be a
+  // default), so it must be turned on explicitly — which is why several
+  // downstream repos (`tools-view`, `zod-utils`, `currency-fa`,
+  // `block-no-verify`) already re-add it by hand on top of the base config.
+  // The rule is type-aware and runs under the `projectService` parser options
+  // already configured for `.ts`/`.tsx` files, so it adds no new setup.
+  '@typescript-eslint/strict-boolean-expressions': 'error',
 }
