@@ -461,6 +461,24 @@ const sharedRules = {
   // direct ban misses. Not auto-fixable: only the author can turn the string
   // into the intended callback.
   'no-implied-eval': 'error',
+  // Disallow `javascript:` URLs — `href = 'javascript:void(0)'`,
+  // `window.location = 'javascript:doThing()'`, a `<a href="javascript:...">`.
+  // The string after the `javascript:` scheme is handed to the engine and run
+  // exactly as `eval` would run it, so it carries every hazard of `no-eval` and
+  // `no-implied-eval` above — opaque to the parser, the type checker and every
+  // reader, and a code-injection hole the moment any of it comes from untrusted
+  // input — while wearing the everyday disguise of a URL. It is the third
+  // channel in the string-executes-as-code family this config already bans:
+  // `no-eval` (direct), `no-new-func` (the `Function` constructor) and
+  // `no-implied-eval` (string-bodied timers); `no-script-url` closes the URL
+  // channel the other three miss. There is a plain, safe equivalent for every
+  // legitimate use — an `onClick`/event handler, `href="#"` with
+  // `preventDefault`, or a real function — so the `javascript:` form buys
+  // nothing but risk, and it is exactly the placeholder shortcut an AI assistant
+  // emits for a "do-nothing" link. It is not in `eslint:recommended`, so it is
+  // enabled explicitly. Not auto-fixable: only the author can replace the URL
+  // with the intended handler.
+  'no-script-url': 'error',
   // Disallow stray `console` calls, allowing only `console.warn` and
   // `console.error`. A bare `console.log` is almost always leftover debugging:
   // it slips through review, ships to production, leaks internal state into logs
