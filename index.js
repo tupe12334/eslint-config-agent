@@ -140,6 +140,18 @@ const sharedRules = {
   // can adopt it with `eslint --fix`. `defaultAssignment: false` extends the
   // check to the `a ? a : b` default-value idiom as well.
   'no-unneeded-ternary': ['error', { defaultAssignment: false }],
+  // Require the `default` clause of a `switch` to come last. A `default` matches
+  // only when no `case` does, so its precedence is independent of where it sits
+  // — but a `default` written *before* later cases reads as if those cases were
+  // unreachable, and a mid-`switch` `default` that omits `break` silently falls
+  // through into the cases below it. Both are the "looks one way, behaves
+  // another" footgun this config exists to surface, and a shape an AI assistant
+  // emitting a `switch` can easily introduce. Pinning `default` to the end keeps
+  // its order-independent meaning legible. It sits with the bundled `switch-case`
+  // rules already enabled here. It is not in `eslint:recommended`, so it is
+  // enabled explicitly, and it is not auto-fixable because moving a clause that
+  // omits `break` could change behavior — only the author can reorder safely.
+  'default-case-last': 'error',
   // Require strict equality (=== / !==). Loose equality performs implicit type
   // coercion, exactly the kind of "clever" shortcut this config exists to
   // prevent. Enforcing it in the shared config means consumers no longer have
