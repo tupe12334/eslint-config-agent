@@ -63,7 +63,7 @@ const testCategories = {
   imports: {
     description: 'Import/export patterns testing',
     files: ['test/import-export-rules.ts'],
-    maxErrors: 21, // import/group-exports + import/no-namespace + import/first + import/no-duplicates + export specifier rules + early-return + @typescript-eslint/no-shadow
+    maxErrors: 29, // import/group-exports + import/no-namespace + import/first + import/no-duplicates + export specifier rules + early-return + @typescript-eslint/no-shadow + unused-imports/no-unused-imports (fixture imports symbols solely to exercise import grouping/ordering, leaving them unused)
     maxWarnings: 0,
     expectedRules: [
       'import/group-exports',
@@ -71,6 +71,7 @@ const testCategories = {
       'import/first',
       '@typescript-eslint/no-shadow',
       'import/no-duplicates',
+      'unused-imports/no-unused-imports',
     ],
   },
   'import-hygiene-invalid': {
