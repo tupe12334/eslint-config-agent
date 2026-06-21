@@ -97,6 +97,25 @@ const sharedRules = {
   // is enabled explicitly here. It is not auto-fixable because only the author
   // knows whether the dead store should be deleted or its value actually used.
   'no-useless-assignment': 'error',
+  // Disallow assignment inside a `return` statement — `return total = compute()`
+  // or `return (found = next)`. An `=` in the spot a reader expects a value (and
+  // where `==`/`===` belongs) does two things at once: it mutates a binding and
+  // hands back the assigned value, so the side effect hides in the returned
+  // expression where almost no one looks for it. It is most often a typo for a
+  // comparison (`return found === next`) or a leftover from refactoring a guard,
+  // and the code still type-checks because the assigned value has the right type
+  // — only the data flow is wrong, exactly the quiet, plausible-but-wrong shape
+  // this config exists to surface and one AI assistants emit when they fold an
+  // update into a `return`. It sits with the assignment-discipline rules already
+  // here — `no-param-reassign`, `no-multi-assign` and the `no-useless-assignment`
+  // dead-store check directly above — all of which keep where and how values are
+  // written explicit. `'always'` flags the assignment even when wrapped in
+  // parentheses, so the deliberate-looking `return (x = y)` form is rejected too;
+  // an author who truly means it can split the assignment onto its own line. It
+  // is not in `eslint:recommended`, so it is enabled explicitly here, and it is
+  // not auto-fixable because only the author knows whether a comparison or a
+  // separate statement was intended.
+  'no-return-assign': ['error', 'always'],
   // Disallow nested ternaries. A ternary inside another ternary is the
   // archetypal "clever but unreadable" construct this config exists to
   // prevent: it collapses branching logic into a single dense expression that
