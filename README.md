@@ -456,6 +456,12 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   `.message`/`.stack`, so the consumer's error handling silently misfires. A
   correctness check, like the bundled `array-callback-return`. Throw a real
   `Error` (or a subclass) instead.
+- **`default-case-last`**: Requires the `default` clause of a `switch` to come
+  last. `default` matches only when no `case` does, so a `default` placed before
+  later cases reads as if those cases were unreachable, and a mid-`switch`
+  `default` that omits `break` silently falls through into the cases below it.
+  Pinning `default` to the end keeps its order-independent meaning legible. Not
+  auto-fixable: moving a clause that omits `break` could change behavior.
 
 ### Import Hygiene
 
