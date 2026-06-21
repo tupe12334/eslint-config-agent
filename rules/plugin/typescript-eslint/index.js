@@ -99,4 +99,25 @@ export const typescriptEslintRules = {
   // by hand on top of the base config — promoting it into the shared rule set
   // removes that copy-paste.
   '@typescript-eslint/no-shadow': 'error',
+  // Require any function that returns a `Promise` to be declared `async`. A
+  // plain (non-`async`) function that returns a promise can still throw
+  // *synchronously* — anything that runs before the promise is constructed (an
+  // argument access, a guard clause, a `JSON.parse`) throws on the call stack,
+  // not into the returned promise. A caller that does `fn().catch(...)` or
+  // `await fn()` only guards the *rejection* path, so that synchronous throw
+  // escapes the intended handler and crashes far from its source — the exact
+  // mismatch between "looks async, fails sync" that the type checker cannot see
+  // (the signature is `Promise<T>` either way). Marking the function `async`
+  // moves every error path into the promise, so one `.catch`/`try-await`
+  // contract covers the whole function. This is the type-aware completion of
+  // already-enabled `@typescript-eslint/no-floating-promises` (handle the
+  // promise you get): this rule makes the returned promise the *only* way the
+  // function can fail, that one makes sure the caller actually handles it —
+  // together they close the async-hygiene loop. It is exactly the shortcut an
+  // AI assistant takes when it returns a
+  // `.then()` chain from a non-`async` helper. The rule is type-aware and runs
+  // under the `projectService` parser options already configured for `.ts`/
+  // `.tsx`, which is why downstream repos (`tools-view`) re-add it by hand on
+  // top of the base config.
+  '@typescript-eslint/promise-function-async': 'error',
 }
