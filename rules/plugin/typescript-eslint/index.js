@@ -99,4 +99,25 @@ export const typescriptEslintRules = {
   // by hand on top of the base config — promoting it into the shared rule set
   // removes that copy-paste.
   '@typescript-eslint/no-shadow': 'error',
+  // Require a private (or `#`-private) class member that is never reassigned
+  // after initialization to be declared `readonly`. A field that is only ever
+  // set in the constructor but left mutable invites exactly the bug this config
+  // exists to prevent: some later method (or an AI assistant extending the
+  // class) reassigns it, silently changing state that the rest of the class —
+  // and its tests — assumed was fixed. Marking it `readonly` turns that
+  // accidental mutation into a compile-time error and documents the intent
+  // ("this is set once") at the declaration site, which is squarely in line
+  // with this config's explicit-over-clever, immutability-leaning stance.
+  //
+  // The rule is type-aware (it must prove the member is never written outside
+  // the constructor), so it lives in the TypeScript-only rule set and relies on
+  // the `projectService` parser options already configured for `.ts`/`.tsx`
+  // files. It only narrows `private`/`#private` members — public and protected
+  // fields are part of the subclass/consumer contract and are left untouched —
+  // so the false-positive cost is near zero, and it is auto-fixable
+  // (`eslint --fix` inserts the `readonly` keyword). It is not part of
+  // typescript-eslint's `strictTypeChecked`/`stylisticTypeChecked` presets this
+  // config extends, so it must be enabled explicitly — which is why a downstream
+  // repo (`tools-view`) already re-adds it by hand on top of the base config.
+  '@typescript-eslint/prefer-readonly': 'error',
 }

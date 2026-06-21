@@ -63,7 +63,7 @@ const testCategories = {
   imports: {
     description: 'Import/export patterns testing',
     files: ['test/import-export-rules.ts'],
-    maxErrors: 21, // import/group-exports + import/no-namespace + import/first + import/no-duplicates + export specifier rules + early-return + @typescript-eslint/no-shadow
+    maxErrors: 22, // import/group-exports + import/no-namespace + import/first + import/no-duplicates + export specifier rules + early-return + @typescript-eslint/no-shadow + @typescript-eslint/prefer-readonly (set-once `config` member)
     maxWarnings: 0,
     expectedRules: [
       'import/group-exports',
@@ -71,6 +71,7 @@ const testCategories = {
       'import/first',
       '@typescript-eslint/no-shadow',
       'import/no-duplicates',
+      '@typescript-eslint/prefer-readonly',
     ],
   },
   'import-hygiene-invalid': {
@@ -365,6 +366,17 @@ const testCategories = {
     maxErrors: 2,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/require-array-sort-compare'],
+  },
+  'prefer-readonly': {
+    description:
+      'Set-once private members are flagged; readonly/reassigned/public members pass',
+    files: [
+      'test/prefer-readonly/invalid-mutable-private.ts',
+      'test/prefer-readonly/valid-readonly-private.ts',
+    ],
+    maxErrors: 2,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/prefer-readonly'],
   },
 }
 
@@ -736,7 +748,10 @@ function autoCategorizeFiles(allTestFiles) {
             file.includes('export') ||
             file.includes('Export')
         ),
-        maxErrors: 53,
+        // Headroom raised from 53 to 56 to cover the set-once private members
+        // the newly enabled @typescript-eslint/prefer-readonly flags in the
+        // auto-discovered export fixtures.
+        maxErrors: 56,
         maxWarnings: 2,
         expectedRules: ['no-restricted-syntax'],
       },
