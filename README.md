@@ -248,6 +248,39 @@ export default [
 Keep your CI lint step at `eslint .` during migration; switch it to
 `eslint . --max-warnings 0` once the warnings are cleared.
 
+#### The `toWarnings` helper (for custom compositions)
+
+The `incremental` preset downgrades **the whole ruleset**. If you instead
+assemble your own flat config — for example, warn-level the shared ruleset but
+keep a handful of rules as hard errors from day one — you previously had to
+copy-paste the per-block downgrade helper into every repo. That helper now ships
+as a named export so you can import it directly:
+
+```javascript
+import config from 'eslint-config-agent'
+import { toWarnings } from 'eslint-config-agent/to-warnings'
+
+export default [
+  // The shared ruleset, every error downgraded to a warning…
+  ...config.map(toWarnings),
+  // …except these, which you enforce as hard errors today (this layer wins):
+  {
+    rules: {
+      eqeqeq: ['error', 'always'],
+      'no-debugger': 'error',
+    },
+  },
+]
+```
+
+`toWarnings` takes a single flat-config block and returns it with every
+error-level rule (both `'error'` and the `['error', …options]` tuple form)
+rewritten to `'warn'`. Blocks without a `rules` object (such as `ignores`-only
+blocks) and rules already set to `'off'`/`'warn'` are returned untouched. It is
+the exact helper the `incremental` and `recommended-incremental` presets use
+internally, so a hand-rolled `config.map(toWarnings)` behaves identically to
+importing the `incremental` preset.
+
 ### Recommended + incremental (relaxed, warn-level) preset
 
 `recommended` and `incremental` each solve half of the first-run problem on an

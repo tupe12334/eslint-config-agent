@@ -110,6 +110,36 @@ async function main() {
       continue
     }
 
+    // `./to-warnings` is a helper module, not a flat-config entry point: it
+    // exposes the named `toWarnings` severity-downgrade function the warn-level
+    // presets use internally, so consumers composing their own config can apply
+    // it without copy-pasting. Verify the named export exists and actually
+    // downgrades an error rule rather than checking for a default config array.
+    if (subpath === './to-warnings') {
+      try {
+        const mod = await import(specifier)
+        if (typeof mod.toWarnings !== 'function') {
+          failures.push(
+            `${specifier} resolved but does not export a \`toWarnings\` function (got ${typeof mod.toWarnings}).`
+          )
+          continue
+        }
+        const downgraded = mod.toWarnings({ rules: { eqeqeq: 'error' } })
+        if (downgraded.rules.eqeqeq !== 'warn') {
+          failures.push(
+            `${specifier} \`toWarnings\` did not downgrade an "error" rule to "warn" (got ${JSON.stringify(downgraded.rules.eqeqeq)}).`
+          )
+          continue
+        }
+        console.log(
+          `✅ ${specifier} → toWarnings() helper (downgrades error → warn)`
+        )
+      } catch (error) {
+        failures.push(`${specifier} failed to load: ${error.message}`)
+      }
+      continue
+    }
+
     try {
       const mod = await import(specifier)
       const config = mod.default
