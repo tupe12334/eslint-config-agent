@@ -7,10 +7,10 @@ export const configFilesConfig = [
   // Configuration files - allow hardcoded values for configuration purposes
   {
     files: [
-      '*.config.{js,ts}',
-      'eslint.config.{js,ts}',
+      '*.config.{js,ts,mjs,cjs}',
+      'eslint.config.{js,ts,mjs,cjs}',
       'index.js',
-      '**/configs/**/*.{js,ts}',
+      '**/configs/**/*.{js,ts,mjs,cjs}',
     ],
     rules: {
       'default/no-localhost': 'off',
