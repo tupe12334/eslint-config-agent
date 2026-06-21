@@ -111,6 +111,22 @@ const sharedRules = {
   // caller still holds. Both undermine this config's explicit-over-clever,
   // immutability-leaning stance, so treat parameters as read-only here.
   'no-param-reassign': ['error', { props: true }],
+  // Require every parameter with a default value to come after all parameters
+  // without one. A default can only ever take effect when the argument is
+  // `undefined`, so a default placed before a required parameter
+  // (`f(a = 1, b)`) is unreachable in practice: the caller cannot skip `a` to
+  // reach `b`, they must pass `f(undefined, x)` to use the default — at which
+  // point the default documents an API the call sites cannot actually use.
+  // It is almost always a mistake for the parameter order, not a deliberate
+  // signature, and exactly the kind of plausible-but-wrong shape an AI
+  // assistant emits when it bolts a default onto the first convenient
+  // parameter. This sits with the parameter-discipline rules already here
+  // (`no-param-reassign` directly above): keep a function's inputs honest and
+  // its signature meaningful. It is not in `eslint:recommended`, so it is
+  // enabled explicitly. The rule is not auto-fixable because reordering
+  // parameters would silently break every call site, so only the author can
+  // decide whether the default or the order was wrong.
+  'default-param-last': 'error',
   // Require `const` for bindings that are never reassigned. This is the
   // local-binding counterpart to `no-param-reassign`: together they extend the
   // config's immutability-leaning stance from parameters to every variable. A
