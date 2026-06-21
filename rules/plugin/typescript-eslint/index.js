@@ -139,6 +139,29 @@ export const typescriptEslintRules = {
   // by hand on top of the base config — promoting it into the shared rule set
   // removes that copy-paste.
   '@typescript-eslint/no-shadow': 'error',
+  // Forbid declaring a function inside a loop when that function closes over a
+  // binding that changes between iterations. A function created in a loop
+  // captures its outer variables *by reference*, not by value, so every closure
+  // shares the one binding and, by the time any of them runs, sees that
+  // binding's final value — not the per-iteration value the author plainly
+  // intended. The textbook bug is registering handlers/timers in a loop
+  // (`for (let i = 0; ...) el.onclick = () => use(i)` over a `var i`, or pushing
+  // `() => row` closures while a loop reassigns `row`): every callback fires with
+  // the last value. The function "looks like it captures this iteration" but does
+  // not — the same looks-right-fails-at-runtime mismatch this config exists to
+  // catch, and exactly the shortcut an AI assistant emits when it lifts a closure
+  // into a loop body without checking what the closure captures. The fix is
+  // explicit: bind the per-iteration value (a block-scoped `const` inside the
+  // loop, a parameter, or `.map`/`.forEach` whose callback gets a fresh binding),
+  // which the rule's safe forms allow. It is not in `eslint:recommended` or in
+  // typescript-eslint's `strictTypeChecked`/`stylisticTypeChecked` presets this
+  // config extends, so it must be enabled explicitly. The typescript-eslint
+  // extension is used in place of the core `no-loop-func` because it understands
+  // TypeScript scoping — a reference to a type, an `enum`, or a `const` that
+  // cannot change across iterations is not flagged — so it keeps the rule's
+  // signal without the false positives the core rule raises in typed code. It
+  // needs no type information, so it adds no parser cost.
+  '@typescript-eslint/no-loop-func': 'error',
   // Require any function that returns a `Promise` to be declared `async`. A
   // plain (non-`async`) function that returns a promise can still throw
   // *synchronously* — anything that runs before the promise is constructed (an

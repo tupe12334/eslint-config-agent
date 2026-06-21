@@ -422,6 +422,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/return-await'],
   },
+  'no-loop-func': {
+    description:
+      'A closure created in a loop over a reassigned variable is flagged; capturing a fresh per-iteration const passes',
+    files: [
+      'test/no-loop-func/invalid-no-loop-func.ts',
+      'test/no-loop-func/valid-no-loop-func.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-loop-func'],
+  },
 }
 
 async function findTestFiles() {
