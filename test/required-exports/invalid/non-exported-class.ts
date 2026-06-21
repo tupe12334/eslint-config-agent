@@ -1,7 +1,7 @@
 // Test: Non-exported class (should trigger error)
 
 class NonExportedClass {
-  private name: string;
+  private readonly name: string;
 
   constructor(name: string) {
     this.name = name;

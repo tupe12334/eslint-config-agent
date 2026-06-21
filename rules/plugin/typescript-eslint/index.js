@@ -99,4 +99,24 @@ export const typescriptEslintRules = {
   // by hand on top of the base config — promoting it into the shared rule set
   // removes that copy-paste.
   '@typescript-eslint/no-shadow': 'error',
+  // Require `readonly` on every private class member that is only ever assigned
+  // in its declaration or the constructor. A field that is conceptually fixed
+  // after construction but left writable reads as if it might change later, so
+  // a stray reassignment elsewhere in the class compiles silently and the
+  // reader can no longer trust the value is settled — the immutability gap is
+  // invisible until something mutates it by accident. Marking it `readonly`
+  // turns that accidental write into a compile error and states the contract at
+  // the declaration site, which is the same explicit-over-clever,
+  // immutability-leaning stance the core `prefer-const` and `no-param-reassign`
+  // rules already set for variables and parameters — this extends it to class
+  // state. It is exactly the annotation an AI assistant omits when it generates
+  // a class, leaving every field mutable by default. The rule is type-aware
+  // (it must see the whole class to prove a member is never reassigned), so it
+  // lives in the TypeScript-only rule set rather than `sharedRules`, and it is
+  // deliberately left out of typescript-eslint's `strictTypeChecked` preset
+  // this config extends, so it must be turned on explicitly — which is why
+  // downstream repos (`block-no-verify`, `tools-view`) already re-add it by
+  // hand on top of the base config. The rule is auto-fixable (`eslint --fix`),
+  // so adoption is cheap.
+  '@typescript-eslint/prefer-readonly': 'error',
 }

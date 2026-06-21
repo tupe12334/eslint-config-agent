@@ -448,6 +448,15 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   keeps the emitted module graph honest and every import's intent legible. Uses
   `fixStyle: 'separate-type-imports'` (a distinct `import type` statement rather
   than the inline `import { type X }` form). Auto-fixable.
+- **`@typescript-eslint/prefer-readonly`**: Requires `readonly` on every private
+  class member that is only ever assigned in its declaration or the constructor
+  (TypeScript files). A field that is fixed after construction but left writable
+  reads as if it might change, so a stray reassignment elsewhere in the class
+  compiles silently; marking it `readonly` turns that accidental write into a
+  compile error and states the immutability contract at the declaration site —
+  the class-state counterpart to `prefer-const` and `no-param-reassign`. Left
+  out of typescript-eslint's `strictTypeChecked` preset, so the config turns it
+  on explicitly. Auto-fixable.
 
 ### Bundled Custom Rules
 
