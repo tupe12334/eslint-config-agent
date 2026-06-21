@@ -26,6 +26,10 @@
       "types": "./exports/incremental.d.ts",
       "default": "./exports/incremental.js"
     },
+    "./to-warnings": {
+      "types": "./exports/to-warnings.d.ts",
+      "default": "./exports/to-warnings.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [

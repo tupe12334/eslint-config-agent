@@ -248,6 +248,33 @@ export default [
 Keep your CI lint step at `eslint .` during migration; switch it to
 `eslint . --max-warnings 0` once the warnings are cleared.
 
+#### The `toWarnings` helper
+
+The `incremental` preset warn-levels the **whole** ruleset. When you instead
+want to compose your own flat config — warn-level the shared ruleset but keep a
+handful of rules as hard errors from day one — import the same
+`toWarnings` severity-downgrade helper the incremental presets use internally,
+instead of copy-pasting it:
+
+```javascript
+import config from 'eslint-config-agent'
+import { toWarnings } from 'eslint-config-agent/to-warnings'
+
+export default [
+  ...config.map(toWarnings),
+  // Rules you are ready to enforce as hard errors today:
+  {
+    rules: {
+      eqeqeq: ['error', 'always'],
+    },
+  },
+]
+```
+
+`toWarnings` takes a single flat-config block and returns it with every
+error-level rule downgraded to a warning. Blocks without a `rules` object are
+returned untouched, and `off`/`warn` rules are left exactly as they are.
+
 ### Recommended + incremental (relaxed, warn-level) preset
 
 `recommended` and `incremental` each solve half of the first-run problem on an
