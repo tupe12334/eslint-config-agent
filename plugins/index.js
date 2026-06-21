@@ -18,6 +18,7 @@ import errorPlugin from 'eslint-plugin-error'
 import defaultPlugin from 'eslint-plugin-default'
 import dddPlugin from 'eslint-plugin-ddd'
 import preactPlugin from 'eslint-plugin-preact'
+import unusedImportsPlugin from 'eslint-plugin-unused-imports'
 import { noDefaultClassExportRule } from '../rules/no-default-class-export/index.js'
 import { requireSpecFileTsxRule } from '../rules/require-spec-file-tsx/index.js'
 
@@ -36,6 +37,7 @@ export const plugins = {
   default: defaultPlugin,
   ddd: dddPlugin,
   preact: preactPlugin,
+  'unused-imports': unusedImportsPlugin,
   custom: {
     rules: {
       'no-default-class-export': noDefaultClassExportRule,

@@ -445,6 +445,15 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   named binding — the statement imports nothing yet still reads as if it pulls
   names in, leaving a dead dependency edge behind. Use a bare side-effect
   import (`import 'mod'`) or remove the line. Auto-fixable.
+- **`unused-imports/no-unused-imports`**: Forbids imports that are never
+  referenced. The core `no-unused-vars` rules are turned off in this config, so
+  nothing else flagged dead imports — yet an unused `import` is pure noise: it
+  has no runtime effect, slows resolution/bundling, and implies a dependency
+  that does not exist. AI assistants frequently leave these behind after editing
+  a file. Provided by `eslint-plugin-unused-imports`, which (unlike the base
+  rule) auto-fixes them — an unused import is always safe to delete. Scoped to
+  imports only; unused locals and parameters are intentionally left untouched.
+  Auto-fixable.
 - **`@typescript-eslint/consistent-type-imports`**: Forces `import type { … }`
   for imports used only as types (TypeScript files). A type-only import is
   erased at compile time, so writing it as a value import leaves a binding that

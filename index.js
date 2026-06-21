@@ -3,7 +3,6 @@ import earlyReturn from 'eslint-plugin-early-return'
 import switchCase from 'eslint-plugin-switch-case'
 import jsxClassname from 'eslint-plugin-jsx-classname'
 import jsdoc from 'eslint-plugin-jsdoc'
-import reactHooks from 'eslint-plugin-react-hooks'
 import { defineConfig } from 'eslint/config'
 import tseslint from 'typescript-eslint'
 import { basePluginsConfig } from './configs/base-plugins.js'
@@ -31,6 +30,12 @@ const sharedRules = {
   quotes: 'off',
   'no-unused-vars': 'off',
   '@typescript-eslint/no-unused-vars': 'off',
+  // The core/`@typescript-eslint` `no-unused-vars` rules are disabled above, so
+  // nothing flagged dead imports. `eslint-plugin-unused-imports` fills that gap
+  // and, unlike the base rules, auto-fixes them: an unused `import` is pure dead
+  // weight (no runtime effect, just noise and slower builds) and is always safe
+  // to delete. Scoped to imports only — unused locals/args are left alone here.
+  'unused-imports/no-unused-imports': 'error',
   'max-lines-per-function': allRules.maxFunctionLinesWarning,
   'max-lines': allRules.maxFileLinesWarning,
   semi: 'off',
