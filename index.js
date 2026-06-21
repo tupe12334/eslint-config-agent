@@ -515,6 +515,19 @@ const sharedRules = {
   // guard. The rule is not auto-fixable because only the author knows whether a
   // given `console.log` should be deleted or promoted to a real log channel.
   'no-console': ['error', { allow: ['warn', 'error'] }],
+  // Disallow the `debugger` statement. A `debugger` left in source pauses
+  // execution under an attached devtools/inspector and is otherwise a no-op, so
+  // it is purely a debugging artifact that should never reach a commit — the
+  // statement-shaped sibling of the throwaway `console.log` that `no-console`
+  // directly above already bans. It is invisible to the type checker and most
+  // code review, ships silently, and is exactly the leftover an AI assistant
+  // emits while "stepping through" a problem. `eslint-config-agent` does not
+  // extend `eslint:recommended` (where this rule lives), so it must be enabled
+  // explicitly. The rule is auto-fixable — `eslint --fix` deletes the
+  // statement — so adoption is cheap. Several of my repos (e.g.
+  // `tupe12334/animals-shop`) re-add `no-debugger: 'error'` by hand on top of
+  // the shared config; porting it here removes that copy-paste.
+  'no-debugger': 'error',
   // Require a regex literal (`/\d+/`) instead of the `RegExp` constructor with
   // a string argument (`new RegExp('\\d+')`, `RegExp('\\d+')`) when the pattern
   // is a static string. The string form forces every backslash to be escaped
