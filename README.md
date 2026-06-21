@@ -671,6 +671,14 @@ If you have files that only export simple Error classes or other boilerplate wit
   older code reaches for, so banning it keeps every binding block-scoped and
   its lifetime legible. The rule is auto-fixable, so existing code can adopt it
   with `eslint --fix`.
+- **`radix`** (`'always'`): Requires an explicit base for `parseInt` —
+  `parseInt(str, 10)`, never `parseInt(str)`. With the base omitted it is
+  inferred from the string, so a leading `0x` is parsed as hex and
+  `parseInt(userInput)` silently uses a base the author never chose. The
+  wrong-number result still type-checks, so only the data flow is broken — the
+  same class of _implicit_ behavior the config already bans via `eqeqeq` and
+  `no-implicit-coercion`. Not auto-fixable: only the author knows the intended
+  base.
 
 ### Honest Suppressions
 
