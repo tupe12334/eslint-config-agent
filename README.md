@@ -483,6 +483,15 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   `default` that omits `break` silently falls through into the cases below it.
   Pinning `default` to the end keeps its order-independent meaning legible. Not
   auto-fixable: moving a clause that omits `break` could change behavior.
+- **`no-extra-bind`**: Forbids `.bind()` on a function that never references
+  `this` (and binds no arguments) — `(() => x).bind(obj)`,
+  `function () { return 1 }.bind(this)`, `handler.bind(this)` where `handler`
+  ignores `this`. The bind allocates a new wrapper on every evaluation and
+  returns one that behaves identically to the original, so it is pure overhead
+  that also misleads the reader into thinking the receiver matters — the same
+  "looks meaningful but is dead" clutter `no-useless-return` /
+  `no-useless-concat` already remove, and the reflexive `.bind(this)` an AI
+  assistant appends to a callback by habit. Auto-fixable with `eslint --fix`.
 
 ### Import Hygiene
 
