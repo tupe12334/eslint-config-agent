@@ -264,6 +264,21 @@ const sharedRules = {
   // auto-fixable because only the author knows whether the two pieces were meant
   // to be one literal or a refactor left a variable behind.
   'no-useless-concat': 'error',
+  // Disallow `.bind()` on a function that never references `this` (and has no
+  // bound arguments) — `function () { return 1 }.bind(this)`,
+  // `(() => x).bind(obj)`, `handler.bind(this)` where `handler` ignores `this`.
+  // The `.bind()` does nothing: it allocates a new wrapper function on every
+  // evaluation and returns one that behaves identically to the original, so the
+  // call is pure overhead that also misleads the reader into thinking the
+  // receiver matters when it does not. It is the same "looks meaningful but is
+  // dead" clutter the `no-useless-return`, `no-useless-assignment` and
+  // `no-useless-concat` rules already remove here, and exactly the reflexive
+  // `.bind(this)` an AI assistant appends to a callback by habit, whether or not
+  // the body uses `this`. Dropping the bind leaves the explicit, allocation-free
+  // form this config favors. The rule is auto-fixable, so consumers can adopt it
+  // with `eslint --fix`; it is not in `eslint:recommended`, so it is enabled
+  // explicitly here.
+  'no-extra-bind': 'error',
   // Require `Object.hasOwn(obj, key)` over the legacy ways of asking the same
   // question. The two forms it replaces are each a footgun: calling
   // `obj.hasOwnProperty(key)` directly breaks the moment `obj` has a `null`
