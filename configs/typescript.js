@@ -58,6 +58,29 @@ export const typescriptConfig = (
         },
       ],
       'custom/no-default-class-export': 'error',
+      // Require an explicit return type on every function, not just the
+      // exported ones `explicit-module-boundary-types` would cover. Inferred
+      // return types are computed bottom-up from the body, so a refactor deep
+      // inside a helper can silently widen or change what it returns — a `null`
+      // branch added here, a `Promise` introduced there — and nothing flags it
+      // until that drift surfaces far away at a call site (or type-checks fine
+      // and ships as a runtime bug). Writing the type down inverts the check:
+      // the function body is now verified against the contract the author
+      // declared, so the mistake fails at the function itself instead of
+      // leaking outward. This is exactly the shortcut an AI assistant takes
+      // when it emits a helper and lets inference "figure out" the return type,
+      // which puts it squarely in this config's explicit-over-clever,
+      // fail-locally stance. It is type-aware but cheap (it reads the function
+      // signature, no whole-program analysis) and is in neither
+      // `eslint:recommended` nor typescript-eslint's `strictTypeChecked` /
+      // `stylisticTypeChecked` presets this config extends, so it must be
+      // enabled explicitly — which is why `tools-view` re-adds it by hand on
+      // top of the base config. It is scoped to `.ts`/`.mts`/`.cts` (this
+      // file's `files`) and deliberately NOT applied to `.tsx`: requiring an
+      // explicit return type on every JSX component is high-noise for little
+      // gain, so React function components stay exempt, matching how
+      // `tools-view` enables it on `src/**/*.ts` only.
+      '@typescript-eslint/explicit-function-return-type': 'error',
       'single-export/single-export': 'error',
       'required-exports/required-exports': [
         'error',
