@@ -49,6 +49,19 @@ export const reactRules = {
   // packages are unaffected. This is why a downstream repo (`oss-il`) already
   // re-adds it by hand on top of the base config.
   'react/no-array-index-key': 'error',
+  // Forbid the `dangerouslySetInnerHTML` prop. Setting inner HTML directly from
+  // a string bypasses React's XSS defenses: any server-sourced or user-supplied
+  // content rendered this way can execute arbitrary scripts in the browser.
+  // `dangerouslySetInnerHTML` is intentionally verbose — its name is a warning —
+  // but AI assistants still reach for it when they need to inject a server HTML
+  // fragment or render a rich-text field, without thinking through whether the
+  // content is safe. The only legitimate uses (known-safe static markup, a
+  // sanitized string from a DOMPurify-style pass) should be reviewed explicitly;
+  // the rule forces that review by making every usage a lint error, which the
+  // engineer must suppress with an `eslint-disable` comment that makes the
+  // intentional decision visible in code review. The rule is not auto-fixable,
+  // so each suppression is a deliberate act.
+  'react/no-danger': 'error',
   // Forbid a freshly-constructed value as the `value` of a Context Provider:
   // `<Ctx.Provider value={{ user, setUser }}>` or `value={[state, dispatch]}`
   // or `value={() => ...}`. The object/array/function literal is rebuilt on
