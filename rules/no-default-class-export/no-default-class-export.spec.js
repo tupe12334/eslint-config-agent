@@ -8,11 +8,12 @@ import { noDefaultClassExportRule } from './index.js'
  * and provides auto-fix functionality to convert them to named exports.
  */
 
+const { default: tsParser } = await import('@typescript-eslint/parser')
 const ruleTester = new RuleTester({
   languageOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
-    parser: (await import('@typescript-eslint/parser')).default,
+    parser: tsParser,
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
@@ -298,4 +299,6 @@ ruleTester.run('no-default-class-export', noDefaultClassExportRule, {
 console.log('✅ All no-default-class-export rule tests passed!')
 
 // Export for potential use in other test files
-export { noDefaultClassExportRule }
+
+
+export {noDefaultClassExportRule} from './index.js'

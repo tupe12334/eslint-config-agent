@@ -17,8 +17,8 @@
  * does not satisfy the requirement for the source file.
  */
 
-import { existsSync } from 'fs'
-import { parse as parsePath, join as joinPath } from 'path'
+import { existsSync } from 'node:fs'
+import { parse as parsePath, join as joinPath } from 'node:path'
 import {
   JSX_EXTENSIONS,
   hasLogicInNode,
@@ -74,13 +74,13 @@ export const requireSpecFileTsxRule = {
 
       'Program:exit'(node) {
         const filename = context.filename || context.getFilename()
-        const normalized = filename.replace(/\\/g, '/')
+        const normalized = filename.replaceAll('\\', '/')
         const parsed = parsePath(normalized)
-        const ext = JSX_EXTENSIONS.find(candidate =>
+        const extension = JSX_EXTENSIONS.find(candidate =>
           normalized.endsWith(candidate)
         )
 
-        if (!ext) {
+        if (!extension) {
           return
         }
         // A spec/test file never needs its own spec.
@@ -91,7 +91,7 @@ export const requireSpecFileTsxRule = {
           return
         }
 
-        const specFileName = `${parsed.name}.spec${ext}`
+        const specFileName = `${parsed.name}.spec${extension}`
         const hasSibling = existsSync(joinPath(parsed.dir, specFileName))
 
         if (!hasSibling) {

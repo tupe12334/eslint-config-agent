@@ -27,14 +27,14 @@ const mockRule = {
     const handlers = {}
 
     // Add handlers for both selectors from our configuration
-    noRecordLiteralTypesConfigs.forEach(config => {
+    for (const config of noRecordLiteralTypesConfigs) {
       handlers[config.selector] = node => {
         context.report({
           node,
           message: config.message,
         })
       }
-    })
+    }
 
     return handlers
   },

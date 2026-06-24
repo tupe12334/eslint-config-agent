@@ -58,7 +58,7 @@ const sharedRestrictedSyntax = [
     message:
       'Exporting from external libraries is not allowed. Only re-export from relative paths or scoped packages.',
   },
-  allRules.noProcessEnvPropertiesConfig,
+  allRules.noProcessEnvironmentPropertiesConfig,
   allRules.noExportSpecifiersConfig,
   ...allRules.noDefaultClassExportRules,
 ]
@@ -240,6 +240,9 @@ export const testFilesConfig = [
       'jsdoc/require-jsdoc': 'off',
       'jsdoc/require-param': 'off',
       'jsdoc/require-returns': 'off',
+      // Spec files act as CLI test runners and legitimately call process.exit()
+      // to report pass/fail status — the unicorn rule is for library code only.
+      'unicorn/no-process-exit': 'off',
     },
   },
 

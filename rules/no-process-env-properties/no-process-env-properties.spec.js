@@ -1,5 +1,6 @@
+/* eslint-disable unicorn/prevent-abbreviations -- filename uses "env" as part of the rule name it tests; renaming the spec file would break the test runner's file-discovery convention */
 import { RuleTester } from 'eslint'
-import { noProcessEnvPropertiesConfig } from './index.js'
+import { noProcessEnvironmentPropertiesConfig } from './index.js'
 
 /**
  * Test suite for no-process-env-properties rule
@@ -10,20 +11,20 @@ import { noProcessEnvPropertiesConfig } from './index.js'
  */
 
 // Create a custom rule for testing our selector
-const noProcessEnvPropertiesRule = {
+const noProcessEnvironmentPropertiesRule = {
   meta: {
     type: 'problem',
     docs: {
       description: 'Disallow direct access to process.env properties',
     },
     messages: {
-      noProcessEnvProperties: noProcessEnvPropertiesConfig.message,
+      noProcessEnvProperties: noProcessEnvironmentPropertiesConfig.message,
     },
     schema: [],
   },
   create(context) {
     return {
-      [noProcessEnvPropertiesConfig.selector](node) {
+      [noProcessEnvironmentPropertiesConfig.selector](node) {
         context.report({
           node,
           messageId: 'noProcessEnvProperties',
@@ -42,7 +43,7 @@ const ruleTester = new RuleTester({
     },
   },
 })
-ruleTester.run('no-process-env-properties', noProcessEnvPropertiesRule, {
+ruleTester.run('no-process-env-properties', noProcessEnvironmentPropertiesRule, {
   valid: [
     // Valid: Using process.env as whole object
     {
@@ -201,7 +202,7 @@ ruleTester.run('no-process-env-properties', noProcessEnvPropertiesRule, {
 })
 
 console.log('✅ All no-process-env-properties tests passed!')
-console.log(`   Selector: ${noProcessEnvPropertiesConfig.selector}`)
-console.log(`   Message: ${noProcessEnvPropertiesConfig.message}`)
+console.log(`   Selector: ${noProcessEnvironmentPropertiesConfig.selector}`)
+console.log(`   Message: ${noProcessEnvironmentPropertiesConfig.message}`)
 
-export { noProcessEnvPropertiesRule }
+export { noProcessEnvironmentPropertiesRule }
