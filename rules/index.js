@@ -6,7 +6,7 @@
  */
 
 // Core rule configurations
-import noTrailingSpacesConfig from './no-trailing-spaces/index.js'
+import { noTrailingSpacesConfig } from './no-trailing-spaces/index.js'
 import {
   maxFunctionLinesWarning,
   maxFunctionLinesError,
@@ -17,7 +17,7 @@ import {
 } from './max-file-lines/index.js'
 
 // Custom restricted syntax rules
-import { noProcessEnvPropertiesConfig } from './no-process-env-properties/index.js'
+import { noProcessEnvironmentPropertiesConfig } from './no-process-env-properties/index.js'
 import { noTypeAssertionsConfig } from './no-type-assertions/index.js'
 import { noExportSpecifiersConfig } from './no-empty-exports/index.js'
 import { noDefaultClassExportRules } from './no-default-class-export/index.js'
@@ -42,7 +42,7 @@ const allRules = {
   maxFileLinesError,
 
   // Custom restricted syntax rules
-  noProcessEnvPropertiesConfig,
+  noProcessEnvironmentPropertiesConfig,
   noTypeAssertionsConfig,
   noExportSpecifiersConfig,
   noDefaultClassExportRules,
@@ -61,27 +61,20 @@ const allRules = {
 export default allRules
 
 // Named exports for backward compatibility
-export {
-  // Core rule configurations
-  noTrailingSpacesConfig,
-  maxFunctionLinesWarning,
-  maxFunctionLinesError,
-  maxFileLinesWarning,
-  maxFileLinesError,
 
-  // Custom restricted syntax rules
-  noProcessEnvPropertiesConfig,
-  noTypeAssertionsConfig,
-  noExportSpecifiersConfig,
-  noDefaultClassExportRules,
-  noNullishCoalescingConfig,
-  switchStatementsReturnTypeConfigs,
-  switchCaseFunctionsReturnTypeConfigs,
-  switchCaseExplicitReturnConfigs,
-  noTrivialTypeAliasesConfigs,
-  noInlineUnionTypesConfigs,
 
-  // Plugin rule configurations
-  pluginRules,
-  typescriptEslintRules,
-}
+export {noTrailingSpacesConfig} from './no-trailing-spaces/index.js'
+export {maxFunctionLinesWarning, maxFunctionLinesError} from './max-function-lines/index.js'
+export {maxFileLinesWarning, maxFileLinesError} from './max-file-lines/index.js'
+export {noProcessEnvironmentPropertiesConfig} from './no-process-env-properties/index.js'
+export {noTypeAssertionsConfig} from './no-type-assertions/index.js'
+export {noExportSpecifiersConfig} from './no-empty-exports/index.js'
+export {noDefaultClassExportRules} from './no-default-class-export/index.js'
+export {noNullishCoalescingConfig} from './nullish-coalescing/index.js'
+export {switchStatementsReturnTypeConfigs} from './switch-statements-return-type/index.js'
+export {switchCaseFunctionsReturnTypeConfigs} from './switch-case-functions-return-type/index.js'
+export {switchCaseExplicitReturnConfigs} from './switch-case-explicit-return/index.js'
+export {noTrivialTypeAliasesConfigs} from './no-trivial-type-aliases/index.js'
+export {noInlineUnionTypesConfigs} from './no-inline-union-types/index.js'
+export {pluginRules} from './plugin/index.js'
+export {typescriptEslintRules} from './plugin/typescript-eslint/index.js'

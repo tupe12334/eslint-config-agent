@@ -18,13 +18,13 @@ export class TestError extends Error {
 
 // Configure RuleTester for Node.js test environment (modern best practice)
 RuleTester.afterAll = () => {} // eslint-disable-line @typescript-eslint/no-empty-function -- intentional no-op for RuleTester setup
-RuleTester.describe = (name, fn) => {
+RuleTester.describe = (name, function_) => {
   console.log(`\n📝 ${name}`)
-  fn()
+  function_()
 }
-RuleTester.it = (name, fn) => {
+RuleTester.it = (name, function_) => {
   try {
-    fn()
+    function_()
     console.log(`   ✅ ${name}`)
   } catch (error) {
     console.log(`   ❌ ${name}: ${error.message}`)
@@ -78,7 +78,7 @@ console.log(
 )
 
 // Test each rule configuration
-switchCaseExplicitReturnConfigs.forEach((config, index) => {
+for (const [index, config] of switchCaseExplicitReturnConfigs.entries()) {
   const rule = createSwitchCaseExplicitReturnRule(config)
   const ruleName = `switch-case-explicit-return-${index}`
 
@@ -195,9 +195,7 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
       errors: [{ messageId: 'requireExplicitReturn' }],
       name: 'empty return in block statement within switch case',
       filename: 'test.ts',
-    })
-
-    testCases.invalid.push({
+    }, {
       code: `
         function complexAction(action: any): any {
           switch (action.type) {
@@ -246,9 +244,7 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
       errors: [{ messageId: 'requireExplicitReturn' }],
       name: 'empty return in switch case',
       filename: 'test.ts',
-    })
-
-    testCases.invalid.push({
+    }, {
       code: `
         function multipleEmptyReturns(status: string): string {
           switch (status) {
@@ -267,9 +263,7 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
       ],
       name: 'multiple empty returns in different cases',
       filename: 'test.ts',
-    })
-
-    testCases.invalid.push({
+    }, {
       code: `
         function validateInput(input: any): boolean {
           switch (input.type) {
@@ -291,7 +285,7 @@ switchCaseExplicitReturnConfigs.forEach((config, index) => {
   // Run the test for this specific rule
   ruleTester.run(ruleName, rule, testCases)
   console.log(`   ✅ Rule ${index + 1} tests passed`)
-})
+}
 
 console.log('\n✅ All switch-case-explicit-return RuleTester tests completed!')
 console.log('\n🎯 Modern Testing Benefits:')
@@ -304,7 +298,7 @@ console.log('   • No manual parser configuration required')
 console.log(
   `\n📋 Tested ${switchCaseExplicitReturnConfigs.length} rule configurations:`
 )
-switchCaseExplicitReturnConfigs.forEach((config, index) => {
+for (const [index, config] of switchCaseExplicitReturnConfigs.entries()) {
   console.log(`   ${index + 1}. ${config.selector}`)
   console.log(`      → ${config.message}`)
-})
+}

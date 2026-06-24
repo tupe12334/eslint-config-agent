@@ -45,7 +45,7 @@ const sharedRestrictedSyntax = [
     message:
       'Exporting from external libraries is not allowed. Only re-export from relative paths or scoped packages.',
   },
-  allRules.noProcessEnvPropertiesConfig,
+  allRules.noProcessEnvironmentPropertiesConfig,
   allRules.noExportSpecifiersConfig,
   ...allRules.noDefaultClassExportRules,
 ]
