@@ -300,5 +300,4 @@ console.log('✅ All no-default-class-export rule tests passed!')
 
 // Export for potential use in other test files
 
-
-export {noDefaultClassExportRule} from './index.js'
+export { noDefaultClassExportRule } from './index.js'

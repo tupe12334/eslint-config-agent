@@ -180,8 +180,9 @@ for (const [index, config] of switchCaseExplicitReturnConfigs.entries()) {
       filename: 'test.ts',
     })
 
-    testCases.invalid.push({
-      code: `
+    testCases.invalid.push(
+      {
+        code: `
         function handleWithBlocks(type: string): string {
           switch (type) {
             case 'early': {
@@ -192,11 +193,12 @@ for (const [index, config] of switchCaseExplicitReturnConfigs.entries()) {
           }
         }
       `,
-      errors: [{ messageId: 'requireExplicitReturn' }],
-      name: 'empty return in block statement within switch case',
-      filename: 'test.ts',
-    }, {
-      code: `
+        errors: [{ messageId: 'requireExplicitReturn' }],
+        name: 'empty return in block statement within switch case',
+        filename: 'test.ts',
+      },
+      {
+        code: `
         function complexAction(action: any): any {
           switch (action.type) {
             case 'RESET': {
@@ -208,10 +210,11 @@ for (const [index, config] of switchCaseExplicitReturnConfigs.entries()) {
           }
         }
       `,
-      errors: [{ messageId: 'requireExplicitReturn' }],
-      name: 'empty return in block after side effect',
-      filename: 'test.ts',
-    })
+        errors: [{ messageId: 'requireExplicitReturn' }],
+        name: 'empty return in block after side effect',
+        filename: 'test.ts',
+      }
+    )
   } else {
     testCases.valid.push({
       code: `
@@ -230,8 +233,9 @@ for (const [index, config] of switchCaseExplicitReturnConfigs.entries()) {
       filename: 'test.ts',
     })
 
-    testCases.invalid.push({
-      code: `
+    testCases.invalid.push(
+      {
+        code: `
         function processAction(action: string): string | undefined {
           switch (action) {
             case 'skip':
@@ -241,11 +245,12 @@ for (const [index, config] of switchCaseExplicitReturnConfigs.entries()) {
           }
         }
       `,
-      errors: [{ messageId: 'requireExplicitReturn' }],
-      name: 'empty return in switch case',
-      filename: 'test.ts',
-    }, {
-      code: `
+        errors: [{ messageId: 'requireExplicitReturn' }],
+        name: 'empty return in switch case',
+        filename: 'test.ts',
+      },
+      {
+        code: `
         function multipleEmptyReturns(status: string): string {
           switch (status) {
             case 'pending':
@@ -257,14 +262,15 @@ for (const [index, config] of switchCaseExplicitReturnConfigs.entries()) {
           }
         }
       `,
-      errors: [
-        { messageId: 'requireExplicitReturn' },
-        { messageId: 'requireExplicitReturn' },
-      ],
-      name: 'multiple empty returns in different cases',
-      filename: 'test.ts',
-    }, {
-      code: `
+        errors: [
+          { messageId: 'requireExplicitReturn' },
+          { messageId: 'requireExplicitReturn' },
+        ],
+        name: 'multiple empty returns in different cases',
+        filename: 'test.ts',
+      },
+      {
+        code: `
         function validateInput(input: any): boolean {
           switch (input.type) {
             case 'invalid':
@@ -276,10 +282,11 @@ for (const [index, config] of switchCaseExplicitReturnConfigs.entries()) {
           }
         }
       `,
-      errors: [{ messageId: 'requireExplicitReturn' }],
-      name: 'empty return instead of explicit boolean',
-      filename: 'test.ts',
-    })
+        errors: [{ messageId: 'requireExplicitReturn' }],
+        name: 'empty return instead of explicit boolean',
+        filename: 'test.ts',
+      }
+    )
   }
 
   // Run the test for this specific rule

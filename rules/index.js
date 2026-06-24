@@ -62,19 +62,24 @@ export default allRules
 
 // Named exports for backward compatibility
 
-
-export {noTrailingSpacesConfig} from './no-trailing-spaces/index.js'
-export {maxFunctionLinesWarning, maxFunctionLinesError} from './max-function-lines/index.js'
-export {maxFileLinesWarning, maxFileLinesError} from './max-file-lines/index.js'
-export {noProcessEnvironmentPropertiesConfig} from './no-process-env-properties/index.js'
-export {noTypeAssertionsConfig} from './no-type-assertions/index.js'
-export {noExportSpecifiersConfig} from './no-empty-exports/index.js'
-export {noDefaultClassExportRules} from './no-default-class-export/index.js'
-export {noNullishCoalescingConfig} from './nullish-coalescing/index.js'
-export {switchStatementsReturnTypeConfigs} from './switch-statements-return-type/index.js'
-export {switchCaseFunctionsReturnTypeConfigs} from './switch-case-functions-return-type/index.js'
-export {switchCaseExplicitReturnConfigs} from './switch-case-explicit-return/index.js'
-export {noTrivialTypeAliasesConfigs} from './no-trivial-type-aliases/index.js'
-export {noInlineUnionTypesConfigs} from './no-inline-union-types/index.js'
-export {pluginRules} from './plugin/index.js'
-export {typescriptEslintRules} from './plugin/typescript-eslint/index.js'
+export { noTrailingSpacesConfig } from './no-trailing-spaces/index.js'
+export {
+  maxFunctionLinesWarning,
+  maxFunctionLinesError,
+} from './max-function-lines/index.js'
+export {
+  maxFileLinesWarning,
+  maxFileLinesError,
+} from './max-file-lines/index.js'
+export { noProcessEnvironmentPropertiesConfig } from './no-process-env-properties/index.js'
+export { noTypeAssertionsConfig } from './no-type-assertions/index.js'
+export { noExportSpecifiersConfig } from './no-empty-exports/index.js'
+export { noDefaultClassExportRules } from './no-default-class-export/index.js'
+export { noNullishCoalescingConfig } from './nullish-coalescing/index.js'
+export { switchStatementsReturnTypeConfigs } from './switch-statements-return-type/index.js'
+export { switchCaseFunctionsReturnTypeConfigs } from './switch-case-functions-return-type/index.js'
+export { switchCaseExplicitReturnConfigs } from './switch-case-explicit-return/index.js'
+export { noTrivialTypeAliasesConfigs } from './no-trivial-type-aliases/index.js'
+export { noInlineUnionTypesConfigs } from './no-inline-union-types/index.js'
+export { pluginRules } from './plugin/index.js'
+export { typescriptEslintRules } from './plugin/typescript-eslint/index.js'
