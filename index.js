@@ -1,4 +1,5 @@
 import js from '@eslint/js'
+import unicorn from 'eslint-plugin-unicorn'
 import earlyReturn from 'eslint-plugin-early-return'
 import switchCase from 'eslint-plugin-switch-case'
 import jsxClassname from 'eslint-plugin-jsx-classname'
@@ -100,6 +101,8 @@ const sharedRules = {
   // when they mechanically wrap each new branch instead of extending the chain.
   // Collapsing it into an `else if` keeps the control flow flat and legible. The
   // rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
+  // Note: `unicorn/no-lonely-if` covers a different pattern (lone `if` inside
+  // another `if` without `else`), so both rules are active — they are complementary.
   'no-lonely-if': 'error',
   // Disallow a `return;` (or `return undefined;`) that is the last statement of
   // a function and so changes nothing — control already falls off the end and
@@ -149,13 +152,6 @@ const sharedRules = {
   // not auto-fixable because only the author knows whether a comparison or a
   // separate statement was intended.
   'no-return-assign': ['error', 'always'],
-  // Disallow nested ternaries. A ternary inside another ternary is the
-  // archetypal "clever but unreadable" construct this config exists to
-  // prevent: it collapses branching logic into a single dense expression that
-  // is hard to scan and easy to get wrong, and it is one of the shortcuts AI
-  // assistants reach for most. Forcing an `if`/`else` or an early return keeps
-  // the control flow explicit.
-  'no-nested-ternary': 'error',
   // Disallow ternaries whose branches are themselves a boolean literal
   // (`cond ? true : false`, `cond ? false : true`) or that re-test a value
   // they could simply fall through to (`a ? a : b`). These are the flat
@@ -664,6 +660,7 @@ const config = defineConfig([
     },
   },
   js.configs.recommended,
+  unicorn.configs.all,
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   {

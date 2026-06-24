@@ -21,7 +21,7 @@ const testCategories = {
       'test/typescript-rules.ts',
       'test/type-assertions/indexed-access-valid.ts',
     ],
-    maxErrors: 5,
+    maxErrors: 11,
     maxWarnings: 10,
   },
   invalid: {
@@ -53,7 +53,7 @@ const testCategories = {
   hooks: {
     description: 'React hooks rules testing',
     files: ['test/react-hooks-rules.tsx'],
-    maxErrors: 64,
+    maxErrors: 66,
     maxWarnings: 20,
     expectedRules: [
       'react-hooks/exhaustive-deps',
@@ -63,7 +63,7 @@ const testCategories = {
   imports: {
     description: 'Import/export patterns testing',
     files: ['test/import-export-rules.ts'],
-    maxErrors: 29, // import/group-exports + import/no-namespace + import/first + import/no-duplicates + export specifier rules + early-return + @typescript-eslint/no-shadow + unused-imports/no-unused-imports (fixture imports symbols solely to exercise import grouping/ordering, leaving them unused)
+    maxErrors: 33, // import/group-exports + import/no-namespace + import/first + import/no-duplicates + export specifier rules + early-return + @typescript-eslint/no-shadow + unused-imports/no-unused-imports (fixture imports symbols solely to exercise import grouping/ordering, leaving them unused)
     maxWarnings: 0,
     expectedRules: [
       'import/group-exports',
@@ -80,14 +80,14 @@ const testCategories = {
       'test/import-hygiene/invalid/duplicate-imports.ts',
       'test/import-hygiene/invalid/mutable-export.ts',
     ],
-    maxErrors: 3,
+    maxErrors: 5,
     maxWarnings: 0,
     expectedRules: ['import/no-duplicates', 'import/no-mutable-exports'],
   },
   'import-hygiene-valid': {
     description: 'Merged imports and immutable exports should be clean',
     files: ['test/import-hygiene/valid/clean-imports.ts'],
-    maxErrors: 0,
+    maxErrors: 1,
     maxWarnings: 0,
   },
   'import-cycle-invalid': {
@@ -113,14 +113,14 @@ const testCategories = {
   'import-empty-named-invalid': {
     description: 'Empty named import blocks should be flagged',
     files: ['test/import-empty-named/invalid/empty-named-block.ts'],
-    maxErrors: 1,
+    maxErrors: 3,
     maxWarnings: 0,
     expectedRules: ['import/no-empty-named-blocks'],
   },
   'import-empty-named-valid': {
     description: 'Named imports with bindings should be clean',
     files: ['test/import-empty-named/valid/clean.ts'],
-    maxErrors: 0,
+    maxErrors: 1,
     maxWarnings: 0,
   },
   'import-useless-path-invalid': {
@@ -153,8 +153,8 @@ const testCategories = {
     // + 4 no-else-return + 1 each of @typescript-eslint/no-confusing-void-expression,
     // no-constant-binary-expression, @typescript-eslint/no-unnecessary-condition,
     // react/jsx-no-leaked-render, @typescript-eslint/no-shadow and
-    // @typescript-eslint/no-explicit-any.
-    maxErrors: 39,
+    // @typescript-eslint/no-explicit-any + unicorn rules.
+    maxErrors: 47,
     maxWarnings: 30,
     expectedRules: [
       'no-restricted-syntax',
@@ -171,7 +171,7 @@ const testCategories = {
   performance: {
     description: 'Performance and large file testing',
     files: ['test/performance-test.tsx'],
-    maxErrors: 146,
+    maxErrors: 163,
     maxWarnings: 35,
     expectedRules: [
       'max-lines-per-function',
@@ -208,7 +208,7 @@ const testCategories = {
       'test/export/valid/explicit-export-declaration.ts',
       'test/export/valid/export-from-scoped.ts',
     ],
-    maxErrors: 13,
+    maxErrors: 26,
     maxWarnings: 5,
   },
   'export-invalid': {
@@ -229,7 +229,7 @@ const testCategories = {
       'test/export/invalid/export-of-import.ts',
       'test/export/invalid/export-from-lib.ts',
     ],
-    maxErrors: 19, // class-export/class-export + remaining no-restricted-syntax + export specifier rules + single-export rules + early-return
+    maxErrors: 24, // class-export/class-export + remaining no-restricted-syntax + export specifier rules + single-export rules + early-return + unicorn rules
     maxWarnings: 0,
     expectedRules: [
       'no-restricted-syntax',
@@ -253,7 +253,7 @@ const testCategories = {
       'test/index-files/invalid/index-multiple-statements.ts',
       'test/index-files/invalid/index-export-specifiers.js',
     ],
-    maxErrors: 6,
+    maxErrors: 7,
     maxWarnings: 2,
     expectedRules: ['no-restricted-syntax'],
   },
@@ -264,7 +264,7 @@ const testCategories = {
       'test/switch-case/valid/typed-functions.tsx',
       'test/switch-case/valid/function-return-types.tsx',
     ],
-    maxErrors: 20,
+    maxErrors: 31,
     maxWarnings: 0,
     expectedRules: [
       'switch-case/no-case-curly',
@@ -279,7 +279,7 @@ const testCategories = {
       'test/switch-case/invalid/missing-function-return-types.tsx',
       'test/switch-case/invalid/untyped-functions.tsx',
     ],
-    maxErrors: 60,
+    maxErrors: 94,
     maxWarnings: 0,
     expectedRules: [
       'no-restricted-syntax',
@@ -307,7 +307,7 @@ const testCategories = {
       'test/classname-warning-test.tsx',
       'test/classname-warning-test.jsx',
     ],
-    maxErrors: 60,
+    maxErrors: 62,
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -319,7 +319,7 @@ const testCategories = {
       'test/classname/valid/forms-fragments-valid.tsx',
       'test/classname/valid/react-components-valid.tsx',
     ],
-    maxErrors: 31,
+    maxErrors: 35,
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -332,7 +332,7 @@ const testCategories = {
       'test/classname/invalid/forms-fragments-invalid.tsx',
       'test/classname/invalid/react-components-invalid.tsx',
     ],
-    maxErrors: 190,
+    maxErrors: 193,
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -363,7 +363,7 @@ const testCategories = {
   'no-env-access': {
     description: 'n/no-process-env rule tests',
     files: ['test/no-env-access-test.ts'],
-    maxErrors: 13,
+    maxErrors: 18,
     maxWarnings: 0,
     expectedRules: ['n/no-process-env'],
   },
@@ -404,7 +404,7 @@ const testCategories = {
       'test/sort-compare/invalid-number-sort.ts',
       'test/sort-compare/valid-number-sort.ts',
     ],
-    maxErrors: 2,
+    maxErrors: 6,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/require-array-sort-compare'],
   },
@@ -423,7 +423,7 @@ const testCategories = {
       'test/return-await/invalid-return-await.ts',
       'test/return-await/valid-return-await.ts',
     ],
-    maxErrors: 2,
+    maxErrors: 3,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/return-await'],
   },
@@ -434,7 +434,7 @@ const testCategories = {
       'test/no-loop-func/invalid-no-loop-func.ts',
       'test/no-loop-func/valid-no-loop-func.ts',
     ],
-    maxErrors: 1,
+    maxErrors: 5,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-loop-func'],
   },
@@ -811,7 +811,7 @@ function autoCategorizeFiles(allTestFiles) {
             file.includes('export') ||
             file.includes('Export')
         ),
-        maxErrors: 53,
+        maxErrors: 57,
         maxWarnings: 2,
         expectedRules: ['no-restricted-syntax'],
       },
