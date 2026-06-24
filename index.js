@@ -661,6 +661,30 @@ const config = defineConfig([
   },
   js.configs.recommended,
   unicorn.configs.all,
+  // Disable unicorn rules that are too opinionated or conflict with this
+  // codebase's conventions. These are turned off globally after
+  // `unicorn.configs.all` enables them.
+  {
+    name: 'agent/unicorn-overrides',
+    rules: {
+      // Prevents `class`-prefixed identifiers like `classExportPlugin`,
+      // `classDeclaration`, etc. — common in ESLint plugin code where `class`
+      // is part of a domain concept, not a keyword accident.
+      'unicorn/no-keyword-prefix': 'off',
+      // Requires renaming `fn` → `function_`, `ext` → `extension`, etc.
+      // Too opinionated for abbreviations that are widely understood.
+      'unicorn/prevent-abbreviations': 'off',
+      // Disallows `null` in favor of `undefined`. TypeScript APIs use `null`
+      // intentionally (e.g. `null` vs `undefined` in type narrowing).
+      'unicorn/no-null': 'off',
+      // Prevents passing a function reference directly to `.map(fn)`. The
+      // direct reference form is idiomatic and readable.
+      'unicorn/no-array-callback-reference': 'off',
+      // Enforces specific import styles for some packages (e.g. named vs
+      // default). Too opinionated for this config's consumers.
+      'unicorn/import-style': 'off',
+    },
+  },
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   {
