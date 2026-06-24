@@ -53,14 +53,14 @@ const switchStatementsReturnTypeRule = {
     const rules = {}
 
     // Add all selectors to the rule
-    switchStatementsReturnTypeConfigs.forEach(config => {
+    for (const config of switchStatementsReturnTypeConfigs) {
       rules[config.selector] = function (node) {
         context.report({
           node,
           messageId: 'requireReturnType',
         })
       }
-    })
+    }
 
     return rules
   },
@@ -234,7 +234,7 @@ console.log('   • No manual parser configuration required')
 console.log(
   `\n📋 Tested ${switchStatementsReturnTypeConfigs.length} rule configurations:`
 )
-switchStatementsReturnTypeConfigs.forEach((config, index) => {
+for (const [index, config] of switchStatementsReturnTypeConfigs.entries()) {
   console.log(`   ${index + 1}. ${config.selector}`)
   console.log(`      → ${config.message}`)
-})
+}

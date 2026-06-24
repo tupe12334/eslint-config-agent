@@ -6,31 +6,31 @@
 
 export const JSX_EXTENSIONS = ['.tsx', '.jsx']
 
-const FUNC_TYPES = [
+const FUNC_TYPES = new Set([
   'FunctionDeclaration',
   'FunctionExpression',
   'ArrowFunctionExpression',
-]
+])
 
 // Arrow bodies that are a bare value (not a block) and carry no real logic.
-const SIMPLE_BODIES = [
+const SIMPLE_BODIES = new Set([
   'Literal',
   'Identifier',
   'ObjectExpression',
   'ArrayExpression',
-]
+])
 
 // Whether a node introduces real logic that warrants a spec file.
 export const hasLogicInNode = node => {
   if (!node) {
     return false
   }
-  if (FUNC_TYPES.includes(node.type) && node.body) {
+  if (FUNC_TYPES.has(node.type) && node.body) {
     if (
       node.type === 'ArrowFunctionExpression' &&
       node.body.type !== 'BlockStatement'
     ) {
-      return !SIMPLE_BODIES.includes(node.body.type)
+      return !SIMPLE_BODIES.has(node.body.type)
     }
     return true
   }
@@ -64,7 +64,7 @@ const checkSinglePattern = (filename, pattern) => {
 // Test a filename against glob-ish exclude patterns, supporting the same
 // double-star prefix and brace-expansion forms accepted by the ddd plugin.
 export const checkExcludePatterns = (filename, excludePatterns) => {
-  const normalized = filename.replace(/\\/g, '/')
+  const normalized = filename.replaceAll('\\', '/')
   return excludePatterns.some(pattern => {
     const braceMatch = pattern.match(/\{([^}]+)\}/)
     if (braceMatch) {

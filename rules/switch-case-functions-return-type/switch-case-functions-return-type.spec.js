@@ -79,7 +79,7 @@ console.log(
 )
 
 // Test each rule configuration
-switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
+for (const [index, config] of switchCaseFunctionsReturnTypeConfigs.entries()) {
   const rule = createSwitchCaseFunctionRule(config)
   const ruleName = `switch-case-functions-return-type-${index}`
 
@@ -266,7 +266,7 @@ switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
   // Run the test for this specific rule
   ruleTester.run(ruleName, rule, testCases)
   console.log(`   ✅ Rule ${index + 1} tests passed`)
-})
+}
 
 console.log(
   '\n✅ All switch-case-functions-return-type RuleTester tests completed!'
@@ -281,7 +281,7 @@ console.log('   • No manual parser configuration required')
 console.log(
   `\n📋 Tested ${switchCaseFunctionsReturnTypeConfigs.length} rule configurations:`
 )
-switchCaseFunctionsReturnTypeConfigs.forEach((config, index) => {
+for (const [index, config] of switchCaseFunctionsReturnTypeConfigs.entries()) {
   console.log(`   ${index + 1}. ${config.selector}`)
   console.log(`      → ${config.message}`)
-})
+}

@@ -33,14 +33,14 @@ const mockRule = {
     const handlers = {}
 
     // Add handlers for all selectors from our configuration
-    noInlineUnionTypesConfigs.forEach(config => {
+    for (const config of noInlineUnionTypesConfigs) {
       handlers[config.selector] = node => {
         context.report({
           node,
           message: config.message,
         })
       }
-    })
+    }
 
     return handlers
   },

@@ -32,11 +32,12 @@ const noNullishCoalescingRule = {
   },
 }
 
+const { default: tsParser } = await import('@typescript-eslint/parser')
 const ruleTester = new RuleTester({
   languageOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
-    parser: (await import('@typescript-eslint/parser')).default,
+    parser: tsParser,
     parserOptions: {
       ecmaFeatures: {
         jsx: true,

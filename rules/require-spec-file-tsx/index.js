@@ -17,8 +17,8 @@
  * does not satisfy the requirement for the source file.
  */
 
-import { existsSync } from 'fs'
-import { parse as parsePath, join as joinPath } from 'path'
+import { existsSync } from 'node:fs'
+import { parse as parsePath, join as joinPath } from 'node:path'
 import {
   JSX_EXTENSIONS,
   hasLogicInNode,
@@ -74,7 +74,7 @@ export const requireSpecFileTsxRule = {
 
       'Program:exit'(node) {
         const filename = context.filename || context.getFilename()
-        const normalized = filename.replace(/\\/g, '/')
+        const normalized = filename.replaceAll('\\', '/')
         const parsed = parsePath(normalized)
         const ext = JSX_EXTENSIONS.find(candidate =>
           normalized.endsWith(candidate)
