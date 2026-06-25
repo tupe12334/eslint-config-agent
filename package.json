@@ -40,7 +40,7 @@
     "configs/",
     "plugins/",
     "exports/",
-    "rules/**/index.js",
+    "rules/**/*.js",
     "!rules/**/examples/",
     "!rules/**/*.spec.js",
     "!rules/**/*.test.js"
