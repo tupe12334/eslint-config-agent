@@ -392,6 +392,25 @@ const sharedRules = {
     'error',
     { allowImplicit: false, checkForEach: true },
   ],
+  // Disallow a loop whose body always exits on the first iteration — a `for`,
+  // `while`, or `do...while` where every control-flow path ends in `return`,
+  // `break`, or `throw`. Such a loop can never reach a second pass: it reads
+  // as "iterate every element" but actually runs at most once, collapsing what
+  // the author probably meant as a search into a single-element check. The
+  // classic form is a misplaced `return` inside a `for-of`:
+  //   `for (const item of list) { if (cond(item)) return item; return null }`
+  // The unconditional `return null` exits on the first iteration regardless of
+  // the condition, so every element after the first is silently ignored. This
+  // is a wrong-result correctness bug that type checking cannot catch (the
+  // types are fine; only the data flow is broken) and exactly the shape AI
+  // assistants emit when they flatten a "find the first match" pattern into a
+  // loop and lose track of which exit belongs where. It is the loop-level
+  // sibling of `array-callback-return` directly above: both catch the "loop
+  // body was supposed to visit every element, but silently doesn't" class of
+  // mistake. The rule is not in `eslint:recommended`, so it is enabled
+  // explicitly. It is not auto-fixable because only the author knows whether
+  // the loop or the misplaced exit is wrong.
+  'no-unreachable-loop': 'error',
   // Only allow throwing real `Error` objects — reject `throw 'boom'`,
   // `throw { code: 500 }`, `throw 42` and any other non-Error value. A thrown
   // string or plain object carries no stack trace, so the failure surfaces with
