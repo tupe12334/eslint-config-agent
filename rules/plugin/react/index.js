@@ -12,7 +12,16 @@ export const reactRules = {
   'react/require-default-props': 'off',
   'react/jsx-wrap-multilines': 'off',
   'react/jsx-closing-bracket-location': 'off',
-  'react/jsx-no-useless-fragment': 'off',
+  // Forbid fragments that wrap a single child: `<><MyComponent /></>` adds DOM
+  // overhead and a return-type mismatch (`React.ReactElement` vs `JSX.Element`)
+  // without buying anything. It is exactly the kind of dead-weight an AI
+  // assistant emits when scaffolding a component. `allowExpressions: false`
+  // also covers `<>{value}</>` — if you need a fragment solely for a JSX
+  // expression, wrap it in a parent instead. The rule is auto-fixable, so
+  // `eslint --fix` rewrites `<><X /></>` to `<X />` with zero manual work.
+  // oss-il already enables this by hand on top of the base config; promoting
+  // it here removes the per-repo copy-paste.
+  'react/jsx-no-useless-fragment': ['error', { allowExpressions: false }],
   // Guard against React's "leaked render" bug: a short-circuit like
   // `{count && <List />}` renders the literal `0` (or `NaN`) when the left
   // operand is a falsy *non-boolean*, and `{name && <h1>{name}</h1>}` renders

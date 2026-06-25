@@ -23,7 +23,7 @@ function ComplexJSXComponent() {
       <SomeComponent {...{ name: 'test', value: 123 }} />
 
       {/* Button without type (react/button-has-type is off) */}
-      <button onClick={() => console.log('clicked')}>Click me</button>
+      <button onClick={() => { console.log('clicked'); }}>Click me</button>
 
       {/* Multiple expressions per line (react/jsx-one-expression-per-line is off) */}
       <div>{items[0]} {items[1]} {items[2]}</div>
@@ -34,10 +34,8 @@ function ComplexJSXComponent() {
       {/* Target blank without rel (react/jsx-no-target-blank is off) */}
       <a href="https://example.com" target="_blank">External link</a>
 
-      {/* Fragments (react/jsx-no-useless-fragment is off) */}
-      <React.Fragment>
-        <span>Fragment content</span>
-      </React.Fragment>
+      {/* Fragments (react/jsx-no-useless-fragment is ON — useless single-child fragments are auto-fixed away) */}
+      <span>Fragment content</span>
 
       {/* No React in scope (react/react-in-jsx-scope is off) */}
       <div>This works without explicit React import in modern setups</div>
@@ -46,12 +44,12 @@ function ComplexJSXComponent() {
 }
 
 // Component without defaultProps (react/require-default-props is off)
-interface Props {
+interface Properties {
   name?: string;
   count?: number;
 }
 
-function ComponentWithoutDefaults({ name, count }: Props) {
+function ComponentWithoutDefaults({ name, count }: Properties) {
   return <div>Name: {name}, Count: {count}</div>;
 }
 
@@ -76,20 +74,20 @@ function NestedComponent() {
         </div>
       </div>
       {/* Multiline JSX (react/jsx-wrap-multilines is off) */}
-      {true && <div>
+      {true ? <div>
         Conditional content
         that spans multiple lines
-      </div>}
+      </div> : null}
     </div>
   );
 }
 
 // Test destructuring assignment (react/destructuring-assignment is off)
-function NoDestructuring(props: { user: { name: string; email: string } }) {
+function NoDestructuring(properties: { user: { name: string; email: string } }) {
   return (
     <div>
-      <p>Name: {props.user.name}</p>
-      <p>Email: {props.user.email}</p>
+      <p>Name: {properties.user.name}</p>
+      <p>Email: {properties.user.email}</p>
     </div>
   );
 }
@@ -110,11 +108,11 @@ function ShadowTest() {
 function ContinueTest() {
   const results = [];
 
-  for (let i = 0; i < 10; i++) {
-    if (i % 2 === 0) {
+  for (let index = 0; index < 10; index++) {
+    if (index % 2 === 0) {
       continue; // This should be allowed
     }
-    results.push(i);
+    results.push(index);
   }
 
   return results;
@@ -126,25 +124,25 @@ function ComplexFunction(input: number): string {
     if (input < -10) {
       if (input < -100) {
         return 'very negative';
-      } else {
-        return 'quite negative';
       }
-    } else {
-      return 'negative';
+        return 'quite negative';
+
     }
-  } else if (input === 0) {
+      return 'negative';
+
+  } if (input === 0) {
     return 'zero';
-  } else {
+  }
     if (input > 100) {
       if (input > 1000) {
         return 'very positive';
-      } else {
-        return 'quite positive';
       }
-    } else {
-      return 'positive';
+        return 'quite positive';
+
     }
-  }
+      return 'positive';
+
+
 }
 
 // Test semicolons (semi is off)
@@ -174,6 +172,6 @@ export {
 };
 
 // Helper component for testing
-function SomeComponent(props: any) {
-  return <div>{JSON.stringify(props)}</div>;
+function SomeComponent(properties: any) {
+  return <div>{JSON.stringify(properties)}</div>;
 }
