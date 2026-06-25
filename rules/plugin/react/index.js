@@ -12,7 +12,18 @@ export const reactRules = {
   'react/require-default-props': 'off',
   'react/jsx-wrap-multilines': 'off',
   'react/jsx-closing-bracket-location': 'off',
-  'react/jsx-no-useless-fragment': 'off',
+  // Forbid fragments that wrap only a single child element. A single-child
+  // fragment adds DOM overhead, changes the component's return type from
+  // `JSX.Element` to `React.ReactElement`, and is almost always an oversight —
+  // either a leftover wrapper after removing siblings, or a habit that sneaked
+  // in from a multi-child case. It is exactly the kind of dead wrapper an AI
+  // assistant inserts when scaffolding a component. The multi-child form (two
+  // or more siblings, or a fragment with a `key`) is load-bearing and stays
+  // untouched. `tupe12334/oss-il` already enables this rule by hand on top of
+  // the shared config; promoting it here removes the per-repo copy-paste and
+  // ensures every consumer gets the check. The rule is auto-fixable
+  // (`eslint --fix` rewrites `<><X /></>` to `<X />`), so adoption is free.
+  'react/jsx-no-useless-fragment': ['error', { allowExpressions: false }],
   // Guard against React's "leaked render" bug: a short-circuit like
   // `{count && <List />}` renders the literal `0` (or `NaN`) when the left
   // operand is a falsy *non-boolean*, and `{name && <h1>{name}</h1>}` renders
