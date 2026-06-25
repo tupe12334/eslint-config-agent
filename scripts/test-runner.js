@@ -332,7 +332,7 @@ const testCategories = {
       'test/classname/invalid/forms-fragments-invalid.tsx',
       'test/classname/invalid/react-components-invalid.tsx',
     ],
-    maxErrors: 193,
+    maxErrors: 195, // +2 from second children added to forms-fragments-invalid.tsx to fix single-child fragment violations
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },

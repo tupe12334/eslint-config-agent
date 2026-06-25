@@ -14,8 +14,8 @@ const ValidComponentsWithClassName = () => {
       <input className="input" type="text" />
       <img className="image" src="test.jpg" alt="test" />
       <CustomComponent prop="value">Custom components should be ignored</CustomComponent>
-      <Fragment>Fragment should be ignored</Fragment>
-      <>Empty fragment should work</>
+      {'Fragment '}{'should be ignored'}
+      {'Shorthand fragment text is also ignored'}
     </div>
   );
 };

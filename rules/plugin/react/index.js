@@ -12,7 +12,23 @@ export const reactRules = {
   'react/require-default-props': 'off',
   'react/jsx-wrap-multilines': 'off',
   'react/jsx-closing-bracket-location': 'off',
-  'react/jsx-no-useless-fragment': 'off',
+  // Forbid React fragments that wrap only a single child — `<><MyComp /></>`,
+  // `<Fragment>{value}</Fragment>`. A single-child fragment is pure overhead: it
+  // adds a virtual DOM node with no structural benefit, silently changes the
+  // component's return type from `JSX.Element` to `React.ReactElement` (causing
+  // subtle TypeScript mismatches with consumers that expect the narrower type),
+  // and is almost always an oversight — a wrapper left behind after siblings
+  // were removed, or a habit carried over from a multi-child context. It is the
+  // JSX sibling of the `no-useless-return` and `no-extra-bind` rules this config
+  // already enables: dead structure that looks meaningful while doing nothing.
+  // The fix is trivial and always safe: drop the fragment and use the child
+  // directly. The rule is autofixable (`eslint --fix`), so adoption is free.
+  // `allowExpressions: false` (the default) also flags `<>{expr}</>` where
+  // `expr` is a single JSX expression — another form that adds no nesting
+  // benefit. This is why the downstream repo `oss-il` already re-adds the rule
+  // by hand on top of the base config; promoting it into the shared ruleset
+  // removes that copy-paste and covers every consumer automatically.
+  'react/jsx-no-useless-fragment': 'error',
   // Guard against React's "leaked render" bug: a short-circuit like
   // `{count && <List />}` renders the literal `0` (or `NaN`) when the left
   // operand is a falsy *non-boolean*, and `{name && <h1>{name}</h1>}` renders
