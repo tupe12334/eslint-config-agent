@@ -471,6 +471,16 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   dependent (each needs the previous result, an ordered write, a deliberate
   rate limit) the serial `await` is correct, so the rule has no auto-fix — those
   loops opt out with `// eslint-disable-next-line no-await-in-loop`.
+- **`no-unreachable-loop`**: Forbids a loop whose body always exits on the
+  first iteration — every path ends in `return`, `throw`, `break`, or
+  `continue` to an outer label, so the loop can never reach a second pass. The
+  classic form: a misplaced `return` that collapses a search into a single
+  check (`for (const item of items) { if (cond(item)) return item; return null }`).
+  The loop reads as "iterate every element" but only ever examines the first
+  one — a wrong-result correctness bug the type checker cannot catch and one
+  AI assistants emit when they flatten a search into a loop and lose track of
+  which exit belongs where. Not in `eslint:recommended`; not auto-fixable
+  (only the author knows whether the loop or the misplaced exit is wrong).
 - **`no-throw-literal`**: Forbids throwing a non-`Error` value — `throw 'boom'`,
   `throw { code: 500 }`, `throw 42`. A thrown literal carries no stack trace and
   breaks every `catch` that relies on `instanceof Error` or reads

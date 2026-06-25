@@ -84,6 +84,26 @@ const sharedRules = {
   // no-await-in-loop`. It is not in `eslint:recommended`, so it is enabled
   // explicitly here.
   'no-await-in-loop': 'error',
+  // Disallow a loop whose body *always* exits on the first iteration — every
+  // path inside the loop ends in `return`, `throw`, `break`, or `continue`
+  // (to an outer label), so the loop can never reach a second pass. The most
+  // common form is a misplaced `return` that collapses a search into a single
+  // check:
+  //
+  //   for (const item of items) {
+  //     if (cond(item)) return item
+  //     return null  // ← exits unconditionally; loop never iterates twice
+  //   }
+  //
+  // The loop reads as "iterate every element" but only ever examines the
+  // first one — a wrong-result correctness bug that type checking cannot catch
+  // and that AI assistants emit when they flatten a search into a loop and
+  // lose track of which exit belongs where. It is the loop-level companion to
+  // `array-callback-return` already enabled here. The rule is not in
+  // `eslint:recommended`, so it is enabled explicitly. It is not auto-fixable
+  // because only the author knows whether the loop or the misplaced exit is
+  // wrong.
+  'no-unreachable-loop': 'error',
   // Disallow an `else`/`else if` block when the preceding `if` already exits
   // the function via `return`. The `else` is dead weight: once the `if` branch
   // returns, the code after it is unreachable from that path, so wrapping the
