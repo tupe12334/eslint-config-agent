@@ -44,8 +44,8 @@ export const ValidComponentsWithClassName = () => {
       </AnotherComponent>
 
       {/* Fragments should be ignored */}
-      <Fragment>Fragment is ignored</Fragment>
-      <>Empty fragment is ignored</>
+      <Fragment>{'Fragment '}{'is ignored'}</Fragment>
+      {'Shorthand fragment text is also ignored'}
     </div>
   );
 };

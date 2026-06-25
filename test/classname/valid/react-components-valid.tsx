@@ -4,10 +4,11 @@ import React, { Fragment } from 'react';
 // Test React.* components (should NOT trigger errors)
 export const ValidReactComponents = () => {
   return (
-    <div className="container">
-      {/* React.Fragment */}
+    <>
+      {/* React.Fragment - not inside HTML element so Fragment itself is not useless */}
       <React.Fragment>
         <div className="content">Valid content with className</div>
+        <div className="content-2">Second valid content with className</div>
       </React.Fragment>
 
       {/* React.StrictMode */}
@@ -29,7 +30,7 @@ export const ValidReactComponents = () => {
       <React.Component>
         <span className="component-content">Valid span with className</span>
       </React.Component>
-    </div>
+    </>
   );
 };
 
@@ -40,6 +41,7 @@ export const ValidFragment = () => {
       <div className="fragment-content">Valid div with className</div>
       <Fragment>
         <p className="nested-fragment">Valid nested fragment content</p>
+        <p className="nested-fragment-2">Second nested fragment content</p>
       </Fragment>
     </Fragment>
   );
@@ -52,6 +54,7 @@ export const ValidEmptyFragments = () => {
       <div className="empty-fragment-content">Valid content in empty fragment</div>
       <>
         <span className="nested-empty">Valid nested empty fragment</span>
+        <span className="nested-empty-2">Second nested element in fragment</span>
       </>
     </>
   );

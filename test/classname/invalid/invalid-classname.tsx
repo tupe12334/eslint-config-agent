@@ -1,7 +1,7 @@
 // Test file for invalid className usage in TSX
 // This file should trigger ERRORS for HTML elements without className attributes
 
-import React, { Fragment } from 'react';
+import React from 'react';
 
 // Invalid cases - HTML elements without className attributes (should trigger errors)
 export const InvalidComponentsWithoutClassName = () => {
@@ -43,13 +43,9 @@ export const InvalidComponentsWithoutClassName = () => {
         <div>But nested HTML elements still trigger errors - no className</div> {/* ERROR */}
       </AnotherComponent>
       
-      {/* Fragments should NOT trigger errors */}
-      <Fragment>
-        <div>But elements inside fragments still need className - no className</div> {/* ERROR */}
-      </Fragment>
-      <>
-        <span>Elements in empty fragments also need className - no className</span> {/* ERROR */}
-      </>
+      {/* Fragments are not needed inside HTML elements - put children directly */}
+      <div>But elements inside fragments still need className - no className</div> {/* ERROR */}
+      <span>Elements in empty fragments also need className - no className</span> {/* ERROR */}
     </div>
   );
 };
@@ -102,10 +98,8 @@ export const ComplexNesting = () => {
             <span className="nested-valid">Valid nested span</span> {/* VALID */}
             <span>Invalid nested span - no className</span> {/* ERROR */}
             
-            <Fragment>
-              <p>Fragment child without className - should error</p> {/* ERROR */}
-              <p className="fragment-valid">Fragment child with className - valid</p> {/* VALID */}
-            </Fragment>
+            <p>Fragment child without className - should error</p> {/* ERROR */}
+            <p className="fragment-valid">Fragment child with className - valid</p> {/* VALID */}
           </div>
         </AnotherComponent>
       </CustomComponent>

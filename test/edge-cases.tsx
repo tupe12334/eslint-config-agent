@@ -34,11 +34,6 @@ function ComplexJSXComponent() {
       {/* Target blank without rel (react/jsx-no-target-blank is off) */}
       <a href="https://example.com" target="_blank">External link</a>
 
-      {/* Fragments (react/jsx-no-useless-fragment is off) */}
-      <React.Fragment>
-        <span>Fragment content</span>
-      </React.Fragment>
-
       {/* No React in scope (react/react-in-jsx-scope is off) */}
       <div>This works without explicit React import in modern setups</div>
     </div>

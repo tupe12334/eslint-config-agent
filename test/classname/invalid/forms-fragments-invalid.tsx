@@ -31,13 +31,14 @@ export const InvalidFormElements = () => {
 // Edge case: Elements in fragments and components without className (should trigger errors)
 export const InvalidFragmentsAndComponents = () => {
   return (
-    <div className="mixed-container">
+    <>
       <Fragment>
         <div>Invalid div in Fragment - no className</div> {/* ERROR */}
         <CustomComponent>
           <span>Invalid span in component - no className</span> {/* ERROR */}
           <Fragment>
             <p>Invalid nested p in Fragment - no className</p> {/* ERROR */}
+            <span>Second element in Fragment - no className</span> {/* ERROR */}
           </Fragment>
         </CustomComponent>
       </Fragment>
@@ -46,15 +47,17 @@ export const InvalidFragmentsAndComponents = () => {
         <section>Invalid section in empty fragment - no className</section> {/* ERROR */}
         <Fragment>
           <article>Invalid deeply nested article - no className</article> {/* ERROR */}
+          <section>Second element in nested Fragment - no className</section> {/* ERROR */}
         </Fragment>
       </>
 
       <CustomComponent>
         <>
           <div>Invalid div in complex nesting - no className</div> {/* ERROR */}
+          <span>Second element in complex nesting - no className</span> {/* ERROR */}
         </>
       </CustomComponent>
-    </div>
+    </>
   );
 };
 

@@ -31,13 +31,14 @@ export const ValidFormElements = () => {
 // Edge case: React Fragments and components mixed with HTML elements (should be valid)
 export const ValidFragmentsAndComponents = () => {
   return (
-    <div className="mixed-container">
+    <>
       <Fragment>
         <div className="valid-in-fragment">Valid div in Fragment with className</div>
         <CustomComponent>
           <span className="valid-in-component">Valid span in component with className</span>
           <Fragment>
             <p className="valid-nested">Valid nested p in Fragment with className</p>
+            <p className="valid-nested-2">Second nested p for multi-child fragment</p>
           </Fragment>
         </CustomComponent>
       </Fragment>
@@ -46,15 +47,17 @@ export const ValidFragmentsAndComponents = () => {
         <section className="valid-in-empty-fragment">Valid section in empty fragment</section>
         <Fragment>
           <article className="deeply-nested">Valid deeply nested article</article>
+          <aside className="deeply-nested-2">Second deeply nested element</aside>
         </Fragment>
       </>
 
       <CustomComponent>
         <>
           <div className="complex-nesting">Valid div in complex nesting</div>
+          <div className="complex-nesting-2">Second div in complex nesting</div>
         </>
       </CustomComponent>
-    </div>
+    </>
   );
 };
 
