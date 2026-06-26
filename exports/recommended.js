@@ -75,6 +75,16 @@ const relaxedOverrides = {
     // nullish coalescing (`??`), type assertions and switch-default bans live.
     // Relaxing it lets idiomatic TypeScript through during adoption.
     'no-restricted-syntax': 'off',
+    // The strict config applies a two-tier threshold for file and function
+    // length: warn at >70 lines (base config) then hard-error at >100 lines
+    // (overrides layer). Existing codebases routinely contain files and
+    // functions well over 100 lines, so the error tier is the single most
+    // common reason `recommended` still causes CI failures on the first run
+    // even with every other divisive rule relaxed. Turn both rules off so
+    // teams can adopt the quality rules without needing to split files before
+    // they can even get the linter passing.
+    'max-lines': 'off',
+    'max-lines-per-function': 'off',
   },
 }
 
