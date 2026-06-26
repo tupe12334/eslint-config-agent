@@ -146,6 +146,19 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'no-script-url-invalid': {
+    description: 'A `javascript:` URL string should be flagged',
+    files: ['test/no-script-url/invalid/script-url.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['no-script-url'],
+  },
+  'no-script-url-valid': {
+    description: 'An ordinary URL string should be clean',
+    files: ['test/no-script-url/valid/clean-url.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
   'edge-cases': {
     description: 'Edge cases and boundary testing',
     files: ['test/edge-cases.tsx'],
