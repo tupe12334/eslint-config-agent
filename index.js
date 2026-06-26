@@ -412,6 +412,21 @@ const sharedRules = {
   // explicit-over-clever, AI-safety scope. The rule is auto-fixable, so
   // consumers can adopt it with `eslint --fix`.
   'no-object-constructor': 'error',
+  // Disallow the primitive-wrapper constructors `new String()`, `new Number()`,
+  // and `new Boolean()`. These do the opposite of what they look like: instead of
+  // converting to a primitive they produce a **boxed object**, so
+  // `typeof new Number(5)` is `'object'` (not `'number'`),
+  // `new Boolean(false)` is always truthy (the object is truthy), and
+  // `new String('x') === 'x'` is `false`. The caller typically expects a
+  // primitive and the wrong type is a quiet, wrong-result trap that the type
+  // checker will not always catch when the boxed type is widened to `object`.
+  // For conversion use the unadorned call form (`Number(str)`, `String(n)`,
+  // `Boolean(x)`) — that is what `no-implicit-coercion` already pushes code
+  // toward, and these two rules are complementary: `no-implicit-coercion` bans
+  // the shorthand coercions (`!!x`, `+str`), `no-new-wrappers` bans the
+  // constructor path to the same wrong object. The rule is auto-fixable, so
+  // consumers can adopt it with `eslint --fix`.
+  'no-new-wrappers': 'error',
   // Require object spread (`{ ...a, ...b }`) over `Object.assign({}, a, b)` when
   // the call is building a brand-new object (its first argument is an object
   // literal). The `Object.assign({}, ...)` form is a more indirect, punctuation-
