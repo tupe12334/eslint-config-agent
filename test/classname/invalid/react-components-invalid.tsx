@@ -6,10 +6,8 @@ export const InvalidReactComponents = () => {
   return (
     <div className="container">
       {/* React.Fragment - fragment OK, but HTML elements inside need className */}
-      <React.Fragment>
-        <div>Invalid div - no className</div> {/* ERROR */}
+      <div>Invalid div - no className</div> {/* ERROR */}
         <span>Invalid span - no className</span> {/* ERROR */}
-      </React.Fragment>
 
       {/* React.StrictMode - component OK, but HTML elements inside need className */}
       <React.StrictMode>
@@ -81,10 +79,8 @@ export const InvalidCustomComponents = () => {
 export const MixedValidInvalid = () => {
   return (
     <div className="mixed-container">
-      <React.Fragment>
-        <div className="valid">This div has className - valid</div>
+      <div className="valid">This div has className - valid</div>
         <span>This span has no className - invalid</span> {/* ERROR */}
-      </React.Fragment>
 
       <React.StrictMode>
         <p className="valid">This paragraph has className - valid</p>
