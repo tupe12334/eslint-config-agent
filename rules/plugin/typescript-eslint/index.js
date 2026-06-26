@@ -162,6 +162,19 @@ export const typescriptEslintRules = {
   // signal without the false positives the core rule raises in typed code. It
   // needs no type information, so it adds no parser cost.
   '@typescript-eslint/no-loop-func': 'error',
+  // Prefer optional chaining (`a?.b?.c`) over a chain of `&&` null-guards
+  // (`a && a.b && a.b.c`). The `&&`-chain form evaluates the base expression
+  // repeatedly and handles `0`, `""`, and `false` as "missing" — a falsy-value
+  // coercion bug the type checker cannot catch because the operator is
+  // perfectly typed. Optional chaining short-circuits on `null`/`undefined`
+  // only, evaluates the base once, and is the form TypeScript was designed to
+  // express. It is also shorter and reads left-to-right with no repeated
+  // sub-expressions. The rule is auto-fixable (`eslint --fix`), so adoption is
+  // cheap. It lives in typescript-eslint's `stylistic-type-checked` preset but
+  // NOT in `strict-type-checked`, which is why this config (extending
+  // `strictTypeChecked`) must enable it explicitly — and why a downstream repo
+  // (`tools-view`) already re-adds it by hand on top of the base config.
+  '@typescript-eslint/prefer-optional-chain': 'error',
   // Require any function that returns a `Promise` to be declared `async`. A
   // plain (non-`async`) function that returns a promise can still throw
   // *synchronously* — anything that runs before the promise is constructed (an
