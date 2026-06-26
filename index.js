@@ -335,6 +335,32 @@ const sharedRules = {
   // also exactly what an AI assistant trained on older code reaches for. The
   // rule is auto-fixable, so consumers can adopt it with `eslint --fix`.
   'operator-assignment': ['error', 'always'],
+  // Require the logical-assignment shorthand (`x ||= y`, `x &&= y`, `x ??= y`)
+  // wherever a binding is reassigned by a logical expression over itself. A
+  // longhand `x = x || defaultValue` names the target twice — once as the left
+  // operand of `||` and once as the assignment destination — which is the same
+  // duplicated-name typo site the `operator-assignment` rule directly above
+  // already catches for arithmetic operators. Writing `x ||= defaultValue`
+  // removes the second spelling of the name entirely so the assignment-by-typo
+  // footgun disappears, and it states the intent — "set this variable only if it
+  // is currently falsy / nullish / truthy" — in fewer characters and with the
+  // exact same semantics. The three forms map directly onto the boolean and
+  // nullish operators the config already steers code toward (`eqeqeq`,
+  // `@typescript-eslint/prefer-nullish-coalescing`): `&&=` for "assign only when
+  // truthy", `||=` for "assign only when falsy", `??=` for "assign only when null
+  // or undefined". `enforceForIfStatements: true` extends the check to the
+  // equivalent `if`-guarded form (`if (!x) x = y`, `if (x == null) x = y`), so
+  // both the expression and the statement spelling of the pattern are caught. The
+  // longhand `x = x || y` is also exactly what an AI assistant trained on
+  // pre-ES2021 code reaches for, which puts it squarely in this config's
+  // AI-safety scope alongside `operator-assignment`. The rule is auto-fixable
+  // (`eslint --fix`), so adoption is free, and it is not in `eslint:recommended`,
+  // so it must be enabled explicitly here.
+  'logical-assignment-operators': [
+    'error',
+    'always',
+    { enforceForIfStatements: true },
+  ],
   // Disallow chained assignment expressions such as `a = b = c = 0`. Chaining
   // collapses several writes into one expression: the value flows right-to-left
   // through bindings that have nothing to do with each other, so a reader has to
