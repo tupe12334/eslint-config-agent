@@ -476,6 +476,20 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'no-useless-call-invalid': {
+    description:
+      '.call(null, ...) and .apply(undefined, [...]) with a null/undefined receiver must be flagged',
+    files: ['test/no-useless-call/invalid-no-useless-call.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['no-useless-call'],
+  },
+  'no-useless-call-valid': {
+    description: 'Direct calls must not be flagged',
+    files: ['test/no-useless-call/valid-no-useless-call.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
 }
 
 async function findTestFiles() {
