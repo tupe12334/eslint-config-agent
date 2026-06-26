@@ -24,6 +24,7 @@
  */
 
 import config from '../index.js'
+import { noProcessEnvironmentPropertiesConfig } from '../rules/no-process-env-properties/index.js'
 
 const relaxedOverrides = {
   name: 'eslint-config-agent/recommended-overrides',
@@ -71,10 +72,14 @@ const relaxedOverrides = {
     // adopt incrementally in any React/Preact + Tailwind codebase — by far the
     // most common modern setup — so relax it for the recommended preset.
     'jsx-classname/require-classname': 'off',
-    // The most divisive layer: this is where optional chaining (`?.`),
-    // nullish coalescing (`??`), type assertions and switch-default bans live.
-    // Relaxing it lets idiomatic TypeScript through during adoption.
-    'no-restricted-syntax': 'off',
+    // The most divisive layer: optional chaining (`?.`), nullish coalescing
+    // (`??`), type assertions, switch-default bans, and inline union/record
+    // type restrictions. Removing them lets idiomatic TypeScript through during
+    // adoption. The process.env guard (`no-process-env-properties`) is NOT in
+    // this group: scattered `process.env.FOO` access is a configuration smell
+    // regardless of adoption stage, so it is kept as the one surviving
+    // no-restricted-syntax check.
+    'no-restricted-syntax': ['error', noProcessEnvironmentPropertiesConfig],
   },
 }
 
