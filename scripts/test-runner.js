@@ -461,6 +461,21 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-misused-promises'],
   },
+  'prefer-enum-initializers-invalid': {
+    description:
+      'Enum members without explicit initializers must be flagged; one error per member',
+    files: ['test/prefer-enum-initializers/invalid-implicit-enum.ts'],
+    maxErrors: 4,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/prefer-enum-initializers'],
+  },
+  'prefer-enum-initializers-valid': {
+    description:
+      'Enum members with explicit string initializers must not be flagged',
+    files: ['test/prefer-enum-initializers/valid-explicit-enum.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
 }
 
 async function findTestFiles() {

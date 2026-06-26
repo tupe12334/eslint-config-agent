@@ -255,4 +255,23 @@ export const typescriptEslintRules = {
   // (`book-processor`) already promote this rule to `error` on top of the base
   // config — promoting it into the shared rule set removes that copy-paste.
   '@typescript-eslint/no-misused-promises': 'error',
+  // Require an explicit initializer for every enum member. Without one,
+  // TypeScript assigns implicit numeric values (0, 1, 2, …) based on the
+  // member's position in the declaration. Reordering members or inserting a
+  // new one in the middle silently changes every subsequent member's numeric
+  // value — a breaking API change for any caller that stored or compared the
+  // raw numbers. The type-checker cannot flag this: the values are still typed
+  // as the enum, not as literal `0`/`1`/`2`, so the mismatch only surfaces at
+  // runtime. Writing an explicit initializer (`= 'Up'`, `= 1`) makes the
+  // assigned value visible and independent of position: adding or reordering
+  // members is now safe by construction, and the intent is legible without
+  // counting indices. It is exactly the "looks stable, breaks on extension"
+  // footgun AI assistants introduce when they generate an enum and leave the
+  // compiler to decide the values — the enum counterpart of the
+  // `array-callback-return` and `switch-exhaustiveness-check` rules this
+  // config already ships for other "silent missing value" bugs. The rule is
+  // not in `strictTypeChecked` or `stylisticTypeChecked`, so it must be
+  // enabled explicitly. It is not auto-fixable: only the author knows what
+  // each member's value should be.
+  '@typescript-eslint/prefer-enum-initializers': 'error',
 }
