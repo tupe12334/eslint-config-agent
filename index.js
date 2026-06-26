@@ -181,6 +181,17 @@ const sharedRules = {
   // prevent. Enforcing it in the shared config means consumers no longer have
   // to re-add it on top of the package.
   eqeqeq: ['error', 'always'],
+  // Require the natural reading order in comparisons: the variable (or
+  // expression) on the left, the literal on the right — `count === 0`, never
+  // `0 === count`. The reversed "Yoda" form exists only to guard against the
+  // assignment typo `if (count = 0)`, but `eqeqeq` (directly above) already
+  // forces `===`/`!==` everywhere, and TypeScript flags accidental assignment
+  // in a condition as a type error, so the Yoda workaround is pure readability
+  // tax. `exceptRange` keeps the clearer range idiom (`0 <= x && x < limit`)
+  // which reads as a natural number-line comparison and is harder to express in
+  // the canonical order. The rule is auto-fixable, so consumers can adopt it
+  // with `eslint --fix`.
+  yoda: ['error', 'never', { exceptRange: true }],
   // Disallow reassigning function parameters and mutating their properties.
   // Reassigning a parameter decouples it from the caller's argument and hides the
   // function's real inputs; mutating a parameter's properties causes
