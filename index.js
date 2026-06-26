@@ -386,6 +386,23 @@ const sharedRules = {
   // explicit-over-clever, AI-safety scope. The rule is auto-fixable, so
   // consumers can adopt it with `eslint --fix`.
   'no-object-constructor': 'error',
+  // Disallow the primitive-wrapper constructors `new String(...)`,
+  // `new Number(...)`, and `new Boolean(...)`. These constructors create objects,
+  // not primitives: `typeof new String('hello')` is `'object'`, not `'string'`,
+  // and `new String('hello') !== 'hello'` — so any `===` comparison, `typeof`
+  // check, or `instanceof` test that the caller writes produces the wrong answer
+  // silently. The explicit primitive form (`String(x)`, `Number(x)`,
+  // `Boolean(x)`) is the correct way to coerce a value, and the literal
+  // (`'hello'`, `42`, `true`) is the correct way to write a constant — neither
+  // requires a constructor. This is the wrapper-object sibling of the
+  // `no-object-constructor` ban directly above and of `no-new-func`
+  // below: all three reject a `new` call whose only effect is to make a
+  // plain value harder to compare or type-check. `new String()` is also the
+  // form an AI assistant trained on older Java-influenced code reaches for when
+  // it wants "a string object," which puts it squarely in this config's
+  // explicit-over-clever, AI-safety scope. The rule is auto-fixable (`eslint
+  // --fix` drops the `new` keyword), so adoption is cheap.
+  'no-new-wrappers': 'error',
   // Require object spread (`{ ...a, ...b }`) over `Object.assign({}, a, b)` when
   // the call is building a brand-new object (its first argument is an object
   // literal). The `Object.assign({}, ...)` form is a more indirect, punctuation-
