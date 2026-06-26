@@ -583,6 +583,22 @@ const sharedRules = {
   // `tupe12334/animals-shop`) re-add `no-debugger: 'error'` by hand on top of
   // the shared config; porting it here removes that copy-paste.
   'no-debugger': 'error',
+  // Disallow `alert()`, `confirm()`, and `prompt()`. These browser dialog APIs
+  // are exclusively debugging artifacts: `alert(value)` is the browser-native
+  // counterpart of `console.log` — a quick "did I reach here / what is this
+  // value?" check — but one that blocks the UI thread and cannot be silenced in
+  // production without a runtime patch to `window.alert`. Like `no-console` and
+  // `no-debugger` directly above, the rule exists to prevent leftover debugging
+  // scaffolding from reaching a commit: the three rules together guard every
+  // major "quick check" channel that AI assistants reach for when they want to
+  // inspect state or get user input inline without wiring a real UI or log
+  // channel. `confirm` and `prompt` are included because they carry the same
+  // blocking, production-hostile behavior and are equally likely to appear in
+  // AI-generated event handlers ("just pop a confirm dialog for now"). The rule
+  // is not in `eslint:recommended`, so it must be enabled explicitly. It is not
+  // auto-fixable because only the author knows whether the call should be
+  // deleted, replaced with a proper log, or wired to a real modal component.
+  'no-alert': 'error',
   // Require a regex literal (`/\d+/`) instead of the `RegExp` constructor with
   // a string argument (`new RegExp('\\d+')`, `RegExp('\\d+')`) when the pattern
   // is a static string. The string form forces every backslash to be escaped
