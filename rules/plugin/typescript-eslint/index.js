@@ -2,6 +2,18 @@ import { noExplicitAnyConfig } from './no-explicit-any/index.js'
 
 export const typescriptEslintRules = {
   ...noExplicitAnyConfig,
+  // `strictTypeChecked` (which this config extends) enables
+  // `@typescript-eslint/only-throw-error` — the type-aware replacement for the
+  // core `no-throw-literal` rule that catches additional cases (e.g. throwing a
+  // variable typed as `string | Error`). The core rule is still active in
+  // `sharedRules` and, because `sharedRules` is spread into the TypeScript
+  // config *after* the preset, it overrides the preset's own `no-throw-literal:
+  // 'off'`. Turning the core rule off here (in `typescriptEslintRules`, which
+  // is spread after `sharedRules`) ensures TypeScript files are checked only by
+  // the type-aware rule so there is no double-reporting of the same violation.
+  // The core rule remains active for `.js`/`.jsx` files via `sharedRules`,
+  // where the type-aware version does not run.
+  'no-throw-literal': 'off',
   '@typescript-eslint/consistent-type-assertions': 'off',
   '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
   // Require a `case` for every member of the union/enum a `switch` discriminates
