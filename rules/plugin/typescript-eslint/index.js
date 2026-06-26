@@ -208,4 +208,38 @@ export const typescriptEslintRules = {
   // running under the `projectService` parser options already configured for
   // `.ts`/`.tsx`.
   '@typescript-eslint/return-await': ['error', 'in-try-catch'],
+  // Flag Promises used in positions where their resolution value cannot be
+  // observed — the fourth side of the async-hygiene quadrant already in this
+  // config (`no-floating-promises`, `promise-function-async`, `return-await`).
+  //
+  // Three patterns are caught:
+  //
+  // 1. `checksVoidReturn` (default `true`): an async function passed where the
+  //    callback's return type is `void` — the textbook case is
+  //    `array.forEach(async item => { await work(item) })`. The returned
+  //    `Promise<void>` is structurally assignable to `void`, so TypeScript's
+  //    own type-checker never flags it, but the Promise is silently dropped and
+  //    its rejection becomes an unhandled rejection crash. The fix is an
+  //    explicit `for...of` loop with `await`, or an `async` wrapper that is
+  //    then awaited by the caller.
+  //
+  // 2. `checksConditionals` (default `true`): a Promise used directly in a
+  //    boolean context — `if (fetchData())` or `while (poll())`. The Promise
+  //    object itself is always truthy, so the condition never reflects the
+  //    resolved value; this is almost always a missing `await`.
+  //
+  // 3. `checksSpreads` (default `true`): `{...asyncFn()}` spreads the Promise
+  //    object's own properties (none meaningful) instead of the resolved
+  //    object's properties — a silent data-loss bug.
+  //
+  // All three are silent: TypeScript does not flag them, the code runs without
+  // a syntax error, and the bug surfaces at runtime as either a missing
+  // side-effect, an always-true conditional, or an empty object spread. They
+  // are exactly the "looks correct, fails at runtime" shortcuts an AI assistant
+  // produces when it wraps async work in a sync-looking callback or forgets an
+  // `await`. The rule is type-aware, so it runs under the `projectService`
+  // parser options already configured for `.ts`/`.tsx` files. Downstream repos
+  // (`book-processor`) already promote this rule to `error` on top of the base
+  // config — promoting it into the shared rule set removes that copy-paste.
+  '@typescript-eslint/no-misused-promises': 'error',
 }

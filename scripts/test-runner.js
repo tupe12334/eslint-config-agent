@@ -1,14 +1,13 @@
 #!/usr/bin/env node
-/* eslint-disable max-lines, max-lines-per-function, security/detect-non-literal-fs-filename, security/detect-object-injection, default/no-default-params, import/order */
+/* eslint-disable max-lines, max-lines-per-function, security/detect-non-literal-fs-filename, security/detect-object-injection, default/no-default-params, import/order, unicorn/prevent-abbreviations, unicorn/try-complexity, no-await-in-loop, unicorn/no-array-sort, unicorn/prefer-top-level-await */
 
 import { ESLint } from 'eslint'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-import { readdir, stat } from 'fs/promises'
-import { spawn } from 'child_process'
+import { join } from 'node:path'
+import { readdir, stat } from 'node:fs/promises'
+import { spawn } from 'node:child_process'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __filename = import.meta.filename
+const __dirname = import.meta.dirname
 const projectRoot = join(__dirname, '..')
 
 // Test categories and their expected behaviors
@@ -438,6 +437,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-loop-func'],
   },
+  'no-misused-promises': {
+    description:
+      'An async callback passed to forEach (void-return context) is flagged; an explicit for...of with await passes',
+    files: [
+      'test/no-misused-promises/invalid-no-misused-promises.ts',
+      'test/no-misused-promises/valid-no-misused-promises.ts',
+    ],
+    maxErrors: 5,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-misused-promises'],
+  },
 }
 
 async function findTestFiles() {
@@ -522,7 +532,7 @@ async function findTestFiles() {
       if (stats.isFile()) {
         files.push(testFile)
       }
-    } catch (error) {
+    } catch {
       // File doesn't exist, skip
     }
   }
@@ -563,11 +573,11 @@ async function runTestCategory(eslint, category, config) {
         })
 
         // Collect rules that were triggered
-        result.messages.forEach(msg => {
+        for (const msg of result.messages) {
           if (msg.ruleId) {
             categoryResults.rulesCovered.add(msg.ruleId)
           }
-        })
+        }
 
         console.log(
           `   📄 ${file}: ${errorCount} errors, ${warningCount} warnings`
@@ -576,14 +586,14 @@ async function runTestCategory(eslint, category, config) {
         // Show top errors/warnings for debugging
         if (result.messages.length > 0) {
           const topMessages = result.messages.slice(0, 3)
-          topMessages.forEach(msg => {
+          for (const msg of topMessages) {
             const level = msg.severity === 2 ? '❌' : '⚠️ '
             console.log(
               `      ${level} Line ${msg.line}: ${msg.message} (${
                 msg.ruleId || 'unknown'
               })`
             )
-          })
+          }
 
           if (result.messages.length > 3) {
             console.log(
@@ -625,9 +635,7 @@ async function runTestCategory(eslint, category, config) {
 
     if (categoryResults.rulesCovered.size > 0) {
       console.log(
-        `   ✅ Rules covered: ${Array.from(categoryResults.rulesCovered).join(
-          ', '
-        )}`
+        `   ✅ Rules covered: ${[...categoryResults.rulesCovered].join(', ')}`
       )
     }
   }
@@ -668,7 +676,7 @@ async function runStandaloneTest(testFile) {
         // Show last line of stdout (usually success message)
         const lines = stdout.trim().split('\n')
         if (lines.length > 0) {
-          console.log(`   📝 ${lines[lines.length - 1]}`)
+          console.log(`   📝 ${lines.at(-1)}`)
         }
       } else {
         console.log(`   ❌ Test failed: ${testFile} (exit code: ${code})`)
@@ -731,9 +739,9 @@ async function generateTestReport(allResults, standaloneResult = null) {
     totalErrors += results.totalErrors
     totalWarnings += results.totalWarnings
 
-    results.rulesCovered.forEach(rule => {
+    for (const rule of results.rulesCovered) {
       allRulesCovered.add(rule)
-    })
+    }
   }
 
   // Report standalone test results
@@ -756,7 +764,7 @@ async function generateTestReport(allResults, standaloneResult = null) {
   console.log(`   Categories Tested: ${Object.keys(allResults).length}`)
 
   console.log('\n🔧 Rules Coverage:')
-  const sortedRules = Array.from(allRulesCovered).sort()
+  const sortedRules = [...allRulesCovered].sort()
   for (let i = 0; i < sortedRules.length; i += 3) {
     const chunk = sortedRules.slice(i, i + 3)
     console.log(`   ${chunk.join(', ')}`)
@@ -789,9 +797,9 @@ function autoCategorizeFiles(allTestFiles) {
   // Find files that aren't in any predefined category
   const categorizedFiles = new Set()
   for (const category of Object.values(autoCategories)) {
-    category.files.forEach(file => {
+    for (const file of category.files) {
       categorizedFiles.add(file)
-    })
+    }
   }
 
   for (const file of allTestFiles) {
@@ -886,9 +894,9 @@ async function runComprehensiveTests() {
     // Discover all test files
     const allTestFiles = await findTestFiles()
     console.log(`📁 Discovered ${allTestFiles.length} test files:`)
-    allTestFiles.forEach(file => {
+    for (const file of allTestFiles) {
       console.log(`   - ${file}`)
-    })
+    }
 
     // Separate standalone test files from lint test files
     const standaloneTestFiles = allTestFiles.filter(
@@ -938,8 +946,8 @@ async function runComprehensiveTests() {
 }
 
 // Handle CLI arguments
-const args = process.argv.slice(2)
-const showHelp = args.includes('--help') || args.includes('-h')
+const args = new Set(process.argv.slice(2))
+const showHelp = args.has('--help') || args.has('-h')
 
 if (showHelp) {
   console.log(`
