@@ -560,6 +560,27 @@ const sharedRules = {
   // runtime, is left untouched. The rule is auto-fixable for the simple cases,
   // so consumers can adopt much of it with `eslint --fix`.
   'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
+  // Disallow the comma operator — `a = 1, b = 2`, `for (i = 0, j = 0; ...)`,
+  // `return a++, b`. The comma operator evaluates both operands left-to-right
+  // and returns the *right-hand* value, silently discarding the left. That is
+  // almost never intentional: in almost every real occurrence the author either
+  // meant a semicolon (two separate statements), an array literal, or a
+  // destructuring assignment — the comma operator just lets the mistake compile
+  // without error. It is the hidden-mutation sibling of the assignment
+  // discipline rules already here (`no-multi-assign`, `no-return-assign`,
+  // `no-useless-assignment`): all of them surface values that look meaningful
+  // but are silently discarded or overwritten, exactly the "clever but wrong"
+  // pattern this config exists to prevent and one AI assistants emit when
+  // packing multiple side effects onto a single expression. The one legitimate
+  // use — `for` loop initializers and updates with multiple variables — is
+  // carved out by the `allowInParentheses: false` default (the option only
+  // affects the parenthesized `(a, b)` form used to suppress some parsers).
+  // For `for` loop heads that genuinely need two counters, a destructuring
+  // `let [i, j] = [0, 0]` states the intent clearly. The rule is not in
+  // `eslint:recommended`, so it is enabled explicitly here. It is not
+  // auto-fixable because only the author knows whether to split into separate
+  // statements or rewrite the expression entirely.
+  'no-sequences': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
