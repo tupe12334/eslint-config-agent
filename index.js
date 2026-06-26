@@ -84,6 +84,20 @@ const sharedRules = {
   // no-await-in-loop`. It is not in `eslint:recommended`, so it is enabled
   // explicitly here.
   'no-await-in-loop': 'error',
+  // Disallow loop conditions that reference a variable that is never modified
+  // inside the loop body. A loop whose condition tests a value that nothing
+  // inside the body ever updates is almost always a bug: either an unintended
+  // infinite loop or a forgotten increment / mutation. TypeScript does not
+  // catch this because the code is well-typed — the variable simply keeps its
+  // initial value and the condition never changes truth-value. This is exactly
+  // the kind of quiet, wrong-behavior bug AI assistants emit when they
+  // scaffold a loop body and lose track of what actually advances it. It is
+  // not in `eslint:recommended`, so it must be enabled explicitly here. The
+  // rule has a very low false-positive rate (genuine cases where an outer scope
+  // change is intended are rare and easy to suppress with a comment) and is not
+  // auto-fixable because only the author knows which variable was meant to
+  // change.
+  'no-unmodified-loop-condition': 'error',
   // Disallow an `else`/`else if` block when the preceding `if` already exits
   // the function via `return`. The `else` is dead weight: once the `if` branch
   // returns, the code after it is unreachable from that path, so wrapping the
