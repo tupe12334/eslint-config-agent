@@ -8,9 +8,9 @@ function ComplexJSXComponent() {
 
   return (
     <div>
-      {/* Self-closing components (react/self-closing-comp is off) */}
-      <input type="text"></input>
-      <br></br>
+      {/* Self-closing components (react/self-closing-comp is enabled) */}
+      <input type="text" />
+      <br />
 
       {/* Object curly newline (object-curly-newline is off) */}
       <div style={{

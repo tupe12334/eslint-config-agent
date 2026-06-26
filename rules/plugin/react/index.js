@@ -1,5 +1,19 @@
 export const reactRules = {
-  'react/self-closing-comp': 'off',
+  // Require self-closing tags for JSX components and HTML elements that have
+  // no children. `<Button></Button>` and `<div></div>` become `<Button />` and
+  // `<div />` respectively. An explicit open/close tag pair is meaningful only
+  // when it contains children; without children it is pure noise — it adds an
+  // extra close tag the reader has to scan past to confirm nothing is inside,
+  // and it is exactly the verbose form AI assistants emit when scaffolding
+  // components from a template. The single-tag form states "this element has
+  // no children" directly, which is the explicit, low-noise style this config
+  // favors throughout. The rule is auto-fixable, so `eslint --fix` collapses
+  // every violating element in one pass. `component: true` covers React
+  // components (`<MyComp></MyComp>`) and `html: true` covers intrinsic
+  // elements (`<div></div>`, `<span></span>`), so both surfaces stay
+  // consistent. `oss-il` already enforces this manually on top of the base
+  // config; promoting it here removes that copy-paste.
+  'react/self-closing-comp': ['error', { component: true, html: true }],
   'react/destructuring-assignment': 'off',
   'react/jsx-props-no-spreading': 'off',
   'react/button-has-type': 'off',
