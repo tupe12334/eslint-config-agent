@@ -300,6 +300,19 @@ const sharedRules = {
   // with `eslint --fix`; it is not in `eslint:recommended`, so it is enabled
   // explicitly here.
   'no-extra-bind': 'error',
+  // Disallow `.call()` and `.apply()` when the first argument (the `this`
+  // binding) is `undefined` or `null` and the result is identical to a
+  // direct call. `fn.call(null, a, b)` behaves exactly like `fn(a, b)` in
+  // non-strict mode and almost always in strict mode: the wrapper only adds
+  // noise and an extra property lookup. `fn.apply(undefined, [a, b])` is the
+  // same deadweight applied to a spread. The two are the direct-invocation
+  // counterpart of the `no-extra-bind` rule just above, which catches
+  // `.bind()` that never changes `this` — together they close the "look up
+  // the prototype chain to call the function" footgun an AI assistant emits
+  // when it wants to forward arguments or detach a method without realizing
+  // a direct call suffices. The rule is auto-fixable (`eslint --fix`) and is
+  // not in `eslint:recommended`, so it is enabled explicitly here.
+  'no-useless-call': 'error',
   // Require `Object.hasOwn(obj, key)` over the legacy ways of asking the same
   // question. The two forms it replaces are each a footgun: calling
   // `obj.hasOwnProperty(key)` directly breaks the moment `obj` has a `null`
