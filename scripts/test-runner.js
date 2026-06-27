@@ -490,6 +490,20 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'no-mixed-enums-invalid': {
+    description:
+      'An enum that mixes numeric and string member values must be flagged',
+    files: ['test/no-mixed-enums/invalid-mixed-enum.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-mixed-enums'],
+  },
+  'no-mixed-enums-valid': {
+    description: 'Pure-string and pure-numeric enums must not be flagged',
+    files: ['test/no-mixed-enums/valid-mixed-enum.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
 }
 
 async function findTestFiles() {
@@ -522,7 +536,7 @@ async function findTestFiles() {
 
         if (
           stats.isFile() &&
-          /\.(ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(entry)
+          /\.(?:ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(entry)
         ) {
           files.push(relativeFilePath)
         } else if (stats.isDirectory()) {
