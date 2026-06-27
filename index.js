@@ -661,6 +661,23 @@ const sharedRules = {
   // runtime, is left untouched. The rule is auto-fixable for the simple cases,
   // so consumers can adopt much of it with `eslint --fix`.
   'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
+  // Require named capture groups (`(?<year>\d{4})`) instead of positional ones
+  // (`(\d{4})`). An unnamed capture group is referenced by a fragile positional
+  // index — `match[1]`, `match[2]` — whose meaning evaporates the moment a
+  // group is added, removed, or reordered: `match[1]` silently shifts to a
+  // different piece of the string with no type error and no runtime warning.
+  // Named groups surface the intent in the regex itself (`(?<year>\d{4})`) and
+  // are accessed by key (`match.groups.year`), so the code stays readable and
+  // correct even as the pattern evolves. This is the regex-shaped sibling of
+  // the explicit-over-clever stance this config already enforces in the rest of
+  // the rule set: an unnamed group is exactly the "I'll remember what index 2
+  // means" shortcut that doesn't age and that AI assistants emit by default
+  // whenever they scaffold a regex. Non-capturing groups (`(?:...)`) are
+  // unaffected — only groups that capture and expose a match need a name. The
+  // rule is not in `eslint:recommended` and is not covered by
+  // `unicorn.configs.all`, so it is enabled explicitly here. It is not
+  // auto-fixable because only the author knows what name to give each group.
+  'prefer-named-capture-group': 'error',
   // Disallow the comma operator — `a = 1, b = 2`, `for (i = 0, j = 0; ...)`,
   // `return a++, b`. The comma operator evaluates both operands left-to-right
   // and returns the *right-hand* value, silently discarding the left. That is
