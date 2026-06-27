@@ -40,7 +40,8 @@
     "commitlint",
     "knip",
     "infile",
-    "footgun"
+    "footgun",
+    "footguns"
   ],
   "ignorePaths": [
     "node_modules",
