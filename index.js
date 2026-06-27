@@ -682,6 +682,23 @@ const sharedRules = {
   // auto-fixable because only the author knows whether to split into separate
   // statements or rewrite the expression entirely.
   'no-sequences': 'error',
+  // Disallow empty constructors (`class Foo { constructor() {} }`) and
+  // constructors whose only statement forwards all arguments to `super`
+  // (`class Foo extends Bar { constructor(...args) { super(...args); } }`). In
+  // both cases the constructor adds nothing: JavaScript already synthesizes an
+  // implicit empty constructor for base classes and an implicit forwarding
+  // constructor for subclasses, so writing them out is pure dead weight — visual
+  // noise that looks load-bearing but changes nothing. They are boilerplate an
+  // AI assistant reflexively emits when scaffolding a class from a template,
+  // putting them squarely in this config's explicit-over-clever, "dead code is
+  // not free" stance: the class-declaration siblings of `no-useless-return`,
+  // `no-useless-assignment`, and `no-extra-bind` already active here. The rule
+  // is auto-fixable, so adopters get a one-shot `eslint --fix`. The core rule
+  // is enabled here for JavaScript files; TypeScript files get the same
+  // behavior via `@typescript-eslint/no-useless-constructor` enabled by the
+  // `strictTypeChecked` preset (which extends `recommended`), so the core rule
+  // is turned off in `typescriptEslintRules` to avoid double-reporting.
+  'no-useless-constructor': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
