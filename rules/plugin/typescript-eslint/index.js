@@ -16,6 +16,25 @@ export const typescriptEslintRules = {
   'no-throw-literal': 'off',
   '@typescript-eslint/consistent-type-assertions': 'off',
   '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+  // Force the **property style** (`foo: (x: number) => void`) for every method
+  // member of an interface or object type, and forbid the **method shorthand**
+  // (`foo(x: number): void`). The two forms look interchangeable but are not:
+  // TypeScript deliberately exempts method-shorthand signatures from
+  // `strictFunctionTypes` and checks them *bivariantly* (a documented language
+  // unsoundness), while property-style signatures are checked *contravariantly*
+  // (sound). In practice a method-shorthand declaration silently accepts an
+  // incompatible callback or override that the property style would reject —
+  // the incompatibility passes type-checking and only surfaces as a wrong call
+  // at runtime. That is exactly the "looks typed, fails at runtime" gap this
+  // config exists to close, and it is the signature-side companion of the
+  // already-enabled `no-non-null-assertion` and `require-array-sort-compare`
+  // rules. The rule is *not* in typescript-eslint's `strictTypeChecked` preset
+  // this config extends, so it must be turned on explicitly. It is
+  // **auto-fixable** (`eslint --fix`), so adoption costs nothing. Both
+  // `tupe12334/zod-utils` and `tupe12334/tools-view` already re-add it by hand
+  // on top of the shared config; promoting it here removes that copy-paste and
+  // covers every downstream consumer.
+  '@typescript-eslint/method-signature-style': ['error', 'property'],
   // Require a `case` for every member of the union/enum a `switch` discriminates
   // on. This is the type-aware completion of the `no-restricted-syntax` ban on
   // `default` cases this config already ships ("Default cases are not allowed in
