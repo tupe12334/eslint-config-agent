@@ -66,9 +66,9 @@ const checkSinglePattern = (filename, pattern) => {
 export const checkExcludePatterns = (filename, excludePatterns) => {
   const normalized = filename.replaceAll('\\', '/')
   return excludePatterns.some(pattern => {
-    const braceMatch = pattern.match(/\{([^}]+)\}/)
+    const braceMatch = pattern.match(/\{(?<content>[^}]+)\}/)
     if (braceMatch) {
-      return braceMatch[1]
+      return braceMatch.groups.content
         .split(',')
         .some(alt =>
           checkSinglePattern(normalized, pattern.replace(/\{[^}]+\}/, alt))
