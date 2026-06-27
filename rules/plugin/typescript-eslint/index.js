@@ -14,6 +14,13 @@ export const typescriptEslintRules = {
   // The core rule remains active for `.js`/`.jsx` files via `sharedRules`,
   // where the type-aware version does not run.
   'no-throw-literal': 'off',
+  // `strictTypeChecked` (which this config extends) includes `recommended`,
+  // which enables `@typescript-eslint/no-useless-constructor` for TypeScript
+  // files. The core `no-useless-constructor` rule is active in `sharedRules`
+  // for JavaScript files. Turning the core rule off here ensures TypeScript
+  // files are covered only by the TypeScript-aware variant, preventing
+  // double-reporting on the same constructor.
+  'no-useless-constructor': 'off',
   '@typescript-eslint/consistent-type-assertions': 'off',
   '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
   // Force the **property style** (`foo: (x: number) => void`) for every method
