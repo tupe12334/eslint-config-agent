@@ -85,6 +85,23 @@ export const reactRules = {
   // intentional decision visible in code review. The rule is not auto-fixable,
   // so each suppression is a deliberate act.
   'react/no-danger': 'error',
+  // Enforce the `[value, setValue]` naming convention for `useState` pairs.
+  // When `useState` is destructured with a setter that does not match
+  // `set<Capitalize(stateName)>` — e.g. `const [data, handleUpdate] = useState()`
+  // instead of `const [data, setData] = useState()` — the mismatch signals a
+  // naming mistake that often means the wrong setter was wired up: the right
+  // value is read but a misnamed variable is written on update, a class of
+  // silent state-management bug that type-checking cannot catch (both names are
+  // just `Dispatch<SetStateAction<T>>`). AI assistants introduce exactly this
+  // slip when stitching a component from multiple snippets — emitting
+  // `const [user, setCurrentUser] = useState()` or
+  // `const [loading, handleLoadingChange] = useState(false)`, each of which
+  // compiles fine but breaks the per-component naming contract that makes state
+  // variables identifiable at a glance. The rule is not auto-fixable because
+  // only the author knows whether the state name or the setter name is the
+  // intended canonical one. It fires only on `.tsx`/`.jsx` files, so pure
+  // TypeScript packages are unaffected.
+  'react/hook-use-state': 'error',
   // Forbid a freshly-constructed value as the `value` of a Context Provider:
   // `<Ctx.Provider value={{ user, setUser }}>` or `value={[state, dispatch]}`
   // or `value={() => ...}`. The object/array/function literal is rebuilt on
