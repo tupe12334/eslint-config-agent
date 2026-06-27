@@ -312,4 +312,20 @@ export const typescriptEslintRules = {
   // enabled explicitly. It is not auto-fixable: only the author knows what
   // each member's value should be.
   '@typescript-eslint/prefer-enum-initializers': 'error',
+  // Forbid enum declarations that mix numeric and string member values. TypeScript
+  // allows both `Status.Active = 0` (number) and `Status.Name = 'active'`
+  // (string) in the same declaration, but the resulting type widens in
+  // surprising ways: a mixed enum has no reverse-mapping for string members,
+  // exhaustiveness checks over it behave differently depending on TypeScript
+  // version, and `Object.values(Status)` returns `[0, 'active']` — a
+  // heterogeneous array the caller rarely expects. Combined with the existing
+  // `prefer-enum-initializers` rule (which makes every member's value
+  // explicit), this rule makes the *kind* of value explicit too: all numbers or
+  // all strings, never both. It is exactly the implicit ambiguity an AI
+  // assistant introduces when it scaffolds an enum from a mixed-type spec ("id
+  // is 0, label is 'active'") without deciding which kind to use. The rule is
+  // not in `strictTypeChecked` or `stylisticTypeChecked`, so it must be enabled
+  // explicitly. It is not auto-fixable: only the author knows whether to
+  // normalize to numbers or strings.
+  '@typescript-eslint/no-mixed-enums': 'error',
 }
