@@ -682,6 +682,19 @@ const sharedRules = {
   // auto-fixable because only the author knows whether to split into separate
   // statements or rewrite the expression entirely.
   'no-sequences': 'error',
+  // Require a description string when calling `Symbol()`. An anonymous
+  // `Symbol()` is completely opaque in every debug surface: it prints as
+  // `Symbol()` in `console.log`, in stack traces, and in browser devtools,
+  // giving no clue about the symbol's role or the module that created it. A
+  // description costs nothing at runtime — it is only used by `.toString()` and
+  // `Symbol.for()` look-ups — but it turns `Symbol()` into `Symbol('userId')`
+  // or `Symbol('cache:key')`, which is instantly readable. The anonymous form is
+  // exactly the terse shortcut an AI assistant emits when it scaffolds a symbol
+  // without pausing to name it, which puts it squarely in this config's
+  // explicit-over-clever, AI-safety scope. It is not in `eslint:recommended`,
+  // so it is enabled explicitly here. The rule is not auto-fixable because only
+  // the author knows what the symbol represents.
+  'symbol-description': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
