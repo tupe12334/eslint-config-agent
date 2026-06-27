@@ -52,11 +52,12 @@ const testCategories = {
   hooks: {
     description: 'React hooks rules testing',
     files: ['test/react-hooks-rules.tsx'],
-    maxErrors: 66,
+    maxErrors: 67,
     maxWarnings: 20,
     expectedRules: [
       'react-hooks/exhaustive-deps',
       'react-hooks/rules-of-hooks',
+      'react/hook-use-state',
     ],
   },
   imports: {
@@ -522,7 +523,7 @@ async function findTestFiles() {
 
         if (
           stats.isFile() &&
-          /\.(ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(entry)
+          /\.(?:ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(entry)
         ) {
           files.push(relativeFilePath)
         } else if (stats.isDirectory()) {
