@@ -56,6 +56,9 @@ jobs:
       - name: Run validation
         run: pnpm validate
 
+      - name: Verify pack integrity
+        run: pnpm test:pack
+
   release:
     needs: test
     runs-on: ubuntu-latest
