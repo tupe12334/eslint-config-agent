@@ -729,6 +729,23 @@ const sharedRules = {
   // `strictTypeChecked` preset (which extends `recommended`), so the core rule
   // is turned off in `typescriptEslintRules` to avoid double-reporting.
   'no-useless-constructor': 'error',
+  // Disallow returning a value from a class constructor (`return someObject`,
+  // `return 5`). `new Thing()` has a contract every caller relies on: the
+  // expression evaluates to the instance that was just constructed. Returning
+  // an object from the constructor silently overrides that — `new Thing()`
+  // hands back a *different* object than the class body initialized, so
+  // `instanceof Thing` no longer holds for the value the rest of the program
+  // sees. Returning a primitive is the opposite trap: the return value is
+  // ignored outright by the `new` semantics, so the statement is dead code
+  // that reads as if it does something. Both are exactly the kind of silent,
+  // contract-breaking footgun this config exists to catch, and the sort of
+  // misplaced `return` an AI assistant emits when it treats a constructor
+  // like an ordinary function. A bare early `return;` with no value to bail
+  // out of the constructor is unaffected — only returning a value is flagged.
+  // The rule is not in `eslint:recommended`, so it is enabled explicitly. It
+  // is not auto-fixable because only the author knows whether the returned
+  // value or the constructor itself is wrong.
+  'no-constructor-return': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS
