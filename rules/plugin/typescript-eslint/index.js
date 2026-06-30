@@ -21,6 +21,18 @@ export const typescriptEslintRules = {
   // files are covered only by the TypeScript-aware variant, preventing
   // double-reporting on the same constructor.
   'no-useless-constructor': 'off',
+  // `stylisticTypeChecked` (which this config extends) enables
+  // `@typescript-eslint/prefer-nullish-coalescing`, recommending `??` over `||`
+  // for nullable-type checks. However, this config deliberately bans the `??`
+  // operator via a `no-restricted-syntax` rule (see `noNullishCoalescingConfig`)
+  // in favour of explicit `!== null && !== undefined` checks. With both active,
+  // a user writing `x || 'default'` (where `x` is nullable) gets
+  // `prefer-nullish-coalescing` telling them to use `??`, and then
+  // `no-restricted-syntax` forbidding the `??` they just added — an
+  // unresolvable contradiction. Turning this rule off here lets
+  // `no-restricted-syntax` be the single, authoritative constraint: reach for
+  // explicit null checks, not `??`.
+  '@typescript-eslint/prefer-nullish-coalescing': 'off',
   '@typescript-eslint/consistent-type-assertions': 'off',
   '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
   // Force the **property style** (`foo: (x: number) => void`) for every method
