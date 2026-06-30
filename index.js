@@ -571,6 +571,24 @@ const sharedRules = {
   // and not the `Function` constructor). The rule is not auto-fixable because
   // only the author can restate the string body as real code.
   'no-new-func': 'error',
+  // Disallow monkey-patching the prototype of a built-in object —
+  // `Array.prototype.last = function () { ... }`,
+  // `Object.prototype.keysOf = function () { ... }`, `String.prototype.foo = ...`.
+  // The patch mutates global state every module and dependency shares: the
+  // effect is invisible at the call site, order-dependent (whoever loads first
+  // wins, so two libraries patching the same prototype clash silently), and an
+  // enumerable addition to `Object.prototype` / `Array.prototype` leaks into
+  // every `for...in` loop and `in` check in the program, quietly breaking
+  // unrelated code. A safe, explicit equivalent always exists — a standalone
+  // helper (`last(arr)`) or a local wrapper — so the patch buys a little
+  // call-site sugar at the cost of a global hazard, and it is exactly the
+  // shortcut an AI assistant reaches for when asked to "add a method to
+  // arrays." This is the prototype-mutation sibling of the `no-new-func` ban
+  // directly above. It is not in `eslint:recommended`, so it must be enabled
+  // explicitly. Not auto-fixable: only the author can move the behavior into a
+  // standalone function. Extending a user-defined class is unaffected — the
+  // rule only flags built-in globals.
+  'no-extend-native': 'error',
   // Disallow `eval(...)`. It hands a string to the JavaScript engine to parse
   // and run at runtime: the body is opaque to the parser, the type checker and
   // every reader, it can reach and mutate the surrounding scope, and feeding it
