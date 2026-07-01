@@ -516,6 +516,22 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'no-unnecessary-condition-invalid': {
+    description:
+      'A guard over a non-nullable type (always truthy) must be flagged',
+    files: [
+      'test/no-unnecessary-condition/invalid-no-unnecessary-condition.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-unnecessary-condition'],
+  },
+  'no-unnecessary-condition-valid': {
+    description: 'A guard over a genuinely nullable type must not be flagged',
+    files: ['test/no-unnecessary-condition/valid-no-unnecessary-condition.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
   'no-useless-rename-invalid': {
     description:
       'Renaming an import, export, or destructured binding to its own name must be flagged',
