@@ -189,6 +189,37 @@ export const typescriptEslintRules = {
   // by hand on top of the base config — promoting it into the shared rule set
   // removes that copy-paste.
   '@typescript-eslint/no-shadow': 'error',
+  // Forbid referencing a `let`/`const`/`class` binding before its textual
+  // declaration. Thanks to the Temporal Dead Zone, an early reference to such
+  // a binding does not read `undefined` — it throws a `ReferenceError` at
+  // runtime, so the file can type-check and look correct while a particular
+  // code path (a closure invoked before its outer scope finishes
+  // initializing, a module-level `const` referenced by another before both
+  // have run) blows up only when actually executed. That looks-right-fails-
+  // at-runtime gap is exactly what this config exists to close. Declaration
+  // order should be a reliable signal of evaluation order; this rule makes
+  // violations a lint error instead of a surprise crash.
+  //
+  // The core `no-use-before-define` rule is intentionally left `off` (see
+  // `sharedRules` in `index.js`): it does not understand TypeScript's hoisted
+  // type-level declarations (`interface`, `type`, and `enum` members are safe
+  // to reference before their textual position) and would false-positive on
+  // them. The typescript-eslint version understands those cases, so it is the
+  // documented replacement rather than a second rule fighting the first. It
+  // needs no type information, so it adds no parser cost.
+  //
+  // `functions: false` exempts function declarations, which are fully
+  // hoisted (including their body) and safe to call before their textual
+  // definition — flagging them would only add noise, not catch a real bug.
+  // `classes` and `variables` stay `true` because those bindings are hoisted
+  // but left uninitialized (the TDZ), so referencing them early is the actual
+  // runtime hazard this rule exists to catch. This mirrors how downstream repo
+  // `ameliso-io/web` already configures the rule by hand on top of the base
+  // config — promoting it into the shared rule set removes that copy-paste.
+  '@typescript-eslint/no-use-before-define': [
+    'error',
+    { functions: false, classes: true, variables: true },
+  ],
   // Forbid declaring a function inside a loop when that function closes over a
   // binding that changes between iterations. A function created in a loop
   // captures its outer variables *by reference*, not by value, so every closure

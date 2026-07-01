@@ -26,6 +26,12 @@ const sharedRules = {
   ...allRules.pluginRules,
   'object-curly-newline': 'off',
   'no-shadow': 'off',
+  // The core `no-use-before-define` rule is intentionally left `off`: it
+  // false-positives on TypeScript type/interface declarations and enum
+  // members referenced before their textual position, which are hoisted and
+  // safe. `@typescript-eslint/no-use-before-define` below is the documented
+  // replacement — see that rule's comment for the full rationale.
+  'no-use-before-define': 'off',
   'comma-dangle': 'off',
   'function-paren-newline': 'off',
   quotes: 'off',
