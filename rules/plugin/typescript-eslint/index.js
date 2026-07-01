@@ -340,4 +340,28 @@ export const typescriptEslintRules = {
   // explicitly. It is not auto-fixable: only the author knows whether to
   // normalize to numbers or strings.
   '@typescript-eslint/no-mixed-enums': 'error',
+  // Forbid redeclaring a variable, function, class, or type in the same scope.
+  // A redeclaration silently overwrites the earlier binding — the second
+  // `function foo() {}` or `let value` wins, and every reference to the name
+  // above it now resolves to the wrong definition — which is exactly the kind
+  // of "looks like two things, is actually one" mistake that surfaces far from
+  // its source, as a call that no longer does what its nearby declaration
+  // suggests. TypeScript's own re-declaration diagnostics do not cover every
+  // case this rule does (e.g. a `let`/`var` redeclared inside a nested block
+  // that shadows rather than errors), so the type checker alone does not close
+  // this gap.
+  //
+  // The core `no-redeclare` rule is intentionally left `off` for TypeScript
+  // files (see `strictTypeChecked`, which this config extends): it
+  // false-positives on TypeScript-specific merging patterns such as a
+  // `function`/`namespace` pair or an `interface` and a `class` sharing a name
+  // by design. The typescript-eslint version understands those cases, so it is
+  // the documented replacement rather than a second rule fighting the first —
+  // mirroring how `@typescript-eslint/no-shadow` already replaces core
+  // `no-shadow` in this config. It needs no type information, so it adds no
+  // parser cost. `ameliso-io/web` already re-adds this exact replacement by
+  // hand on top of the base config (`"no-redeclare": "off"` with a comment
+  // pointing at the typescript-eslint variant); promoting it here removes that
+  // copy-paste and covers every downstream consumer.
+  '@typescript-eslint/no-redeclare': 'error',
 }
