@@ -1,0 +1,90 @@
+name: Scheduled Release
+
+# Safeguard against merged fixes sitting un-released on `main` indefinitely.
+#
+# The `release` job in ci.yml only runs on a manual `workflow_dispatch`, and the
+# `publish` job only publishes when package.json#version differs from what's
+# already on npm. If nobody remembers to trigger `workflow_dispatch`, commits
+# can pile up on `main` forever without ever reaching npm (see #345, where ~70
+# commits landed with no release for over a week).
+#
+# This workflow runs on a schedule (not on `push`) specifically to avoid an
+# infinite loop: release-it's version-bump commit+push back to `main` would
+# itself trigger another `push` event if this were push-triggered.
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  scheduled-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for unreleased commits
+        id: check
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ]; then
+            echo "No git tags found; treating all history as unreleased."
+            echo "has_unreleased=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "Last tag: $LAST_TAG"
+          UNRELEASED_COUNT=$(git log "${LAST_TAG}..HEAD" --oneline | wc -l | tr -d ' ')
+          if [ "$UNRELEASED_COUNT" -eq 0 ]; then
+            echo "No commits since $LAST_TAG. Nothing to release, skipping."
+            echo "has_unreleased=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Found $UNRELEASED_COUNT commit(s) since $LAST_TAG. Release needed."
+            echo "has_unreleased=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Everything below only runs when there is actually something to
+      # release, so this workflow is a cheap no-op on most scheduled runs.
+
+      - name: Install pnpm
+        if: steps.check.outputs.has_unreleased == 'true'
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        if: steps.check.outputs.has_unreleased == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        if: steps.check.outputs.has_unreleased == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure git
+        if: steps.check.outputs.has_unreleased == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      # `pnpm release:ci` runs `release-it --ci` with no explicit
+      # patch/minor/major argument. The @release-it/conventional-changelog
+      # plugin configured in .release-it.json then supplies the recommended
+      # bump based on Conventional Commits since the last tag, so the bump
+      # type is determined automatically rather than always being "patch".
+      #
+      # release-it's own `hooks.before:init` (see .release-it.json) already
+      # runs `pnpm validate` and `pnpm test:ci` before doing anything else, so
+      # a broken build blocks the release here without duplicating the full
+      # `test` job matrix from ci.yml.
+      - name: Release (auto-bump from Conventional Commits)
+        if: steps.check.outputs.has_unreleased == 'true'
+        run: pnpm release:ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
