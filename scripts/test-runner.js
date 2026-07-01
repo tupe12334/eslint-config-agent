@@ -505,6 +505,23 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'no-useless-rename-invalid': {
+    description:
+      'Renaming an import, export, or destructured binding to its own name must be flagged',
+    files: ['test/no-useless-rename/invalid-no-useless-rename.ts'],
+    maxErrors: 3,
+    maxWarnings: 0,
+    expectedRules: ['no-useless-rename'],
+  },
+  'no-useless-rename-valid': {
+    description: 'Genuine renames to a different name must not be flagged',
+    files: [
+      'test/no-useless-rename/valid-no-useless-rename.ts',
+      'test/no-useless-rename/value.ts',
+    ],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
 }
 
 async function findTestFiles() {

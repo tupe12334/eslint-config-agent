@@ -329,6 +329,17 @@ const sharedRules = {
   // a direct call suffices. The rule is auto-fixable (`eslint --fix`) and is
   // not in `eslint:recommended`, so it is enabled explicitly here.
   'no-useless-call': 'error',
+  // Disallow renaming an import, export, or destructured binding to the exact
+  // name it already has — `import { foo as foo } from './foo'`,
+  // `export { bar as bar }`, `const { baz: baz } = obj`. The `as`/`:` clause
+  // reads as if it transforms the binding, so a reader stops to compare both
+  // sides only to discover they are identical: pure punctuation noise that
+  // adds nothing. It is the binding-alias sibling of `no-useless-call` just
+  // above — both look meaningful and are dead — and exactly the ceremony an
+  // AI assistant spells out mechanically for an alias it never needed. The
+  // rule is auto-fixable (`eslint --fix`) and is not in `eslint:recommended`,
+  // so it is enabled explicitly here.
+  'no-useless-rename': 'error',
   // Require `Object.hasOwn(obj, key)` over the legacy ways of asking the same
   // question. The two forms it replaces are each a footgun: calling
   // `obj.hasOwnProperty(key)` directly breaks the moment `obj` has a `null`
