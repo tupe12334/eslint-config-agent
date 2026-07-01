@@ -473,6 +473,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-misused-promises'],
   },
+  'no-unused-private-class-members': {
+    description:
+      'A private field only ever assigned, never read, is flagged; the same field read through a public accessor passes',
+    files: [
+      'test/no-unused-private-class-members/invalid-no-unused-private-class-members.ts',
+      'test/no-unused-private-class-members/valid-no-unused-private-class-members.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-unused-private-class-members'],
+  },
   'prefer-enum-initializers-invalid': {
     description:
       'Enum members without explicit initializers must be flagged; one error per member',

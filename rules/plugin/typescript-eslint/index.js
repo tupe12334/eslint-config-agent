@@ -371,4 +371,23 @@ export const typescriptEslintRules = {
   // explicitly. It is not auto-fixable: only the author knows whether to
   // normalize to numbers or strings.
   '@typescript-eslint/no-mixed-enums': 'error',
+  // Flag a `private` (or `#hashPrivate`) class field or method that is never
+  // read/called anywhere in the class body. An unused private member is dead
+  // code — either a leftover from a refactor that forgot to delete it, or
+  // (worse) a sign the author meant to wire it up but a typo or a missed call
+  // site left it orphaned, silently changing nothing at runtime while the
+  // reader assumes it does. Because the member is `private`, nothing outside
+  // the class can be using it either, so there is no legitimate external
+  // caller to account for. This is exactly the kind of unreferenced code an
+  // AI assistant leaves behind when it scaffolds a field or helper method
+  // "for later" and then never finishes wiring it in.
+  //
+  // The core `no-unused-private-class-members` rule is intentionally left
+  // `off` (see `sharedRules` in `index.js`): it only understands `#hashPrivate`
+  // fields, not TypeScript's `private` keyword, so a TS project's actual
+  // dead-code surface (mostly `private` members, not `#hashPrivate` ones)
+  // would go unchecked. This typescript-eslint variant is a strict superset —
+  // it flags both forms — and needs no type information, so it adds no
+  // parser cost.
+  '@typescript-eslint/no-unused-private-class-members': 'error',
 }
