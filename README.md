@@ -548,6 +548,13 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   `verbatimModuleSyntax` / `isolatedModules`. Splitting type and value
   re-exports keeps the emitted module graph honest and a barrel file's
   value-vs-type surface legible. Auto-fixable.
+- **`no-useless-rename`**: Forbids renaming an import, export, or destructured
+  binding to the exact name it already has — `import { foo as foo } from
+'./foo'`, `export { bar as bar }`, `const { baz: baz } = obj`. The `as`/`:`
+  clause reads as if it transforms the binding, so a reader stops to compare
+  both sides only to discover they are identical: pure punctuation noise that
+  adds nothing. Exactly the ceremony an AI assistant spells out mechanically
+  for an alias it never needed. Auto-fixable with `eslint --fix`.
 
 ### Bundled Custom Rules
 
