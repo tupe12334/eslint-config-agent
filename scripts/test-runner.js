@@ -451,6 +451,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-loop-func'],
   },
+  'no-use-before-define': {
+    description:
+      'A let read before its declaration (TDZ) is flagged; a hoisted function called before its textual definition passes',
+    files: [
+      'test/no-use-before-define/invalid-no-use-before-define.ts',
+      'test/no-use-before-define/valid-no-use-before-define.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-use-before-define'],
+  },
   'no-misused-promises': {
     description:
       'An async callback passed to forEach (void-return context) is flagged; an explicit for...of with await passes',
