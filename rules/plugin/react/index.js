@@ -105,4 +105,28 @@ export const reactRules = {
   // is why a downstream repo (`oss-il`) already re-adds it by hand on top of the
   // base config.
   'react/jsx-no-constructed-context-values': 'error',
+  // Forbid using an object type (`{}`, `[]`, or a function literal) as the
+  // default value for a prop in function-component destructuring:
+  //
+  //   function List({ items = [], onSelect = () => {} }) { ... }
+  //
+  // Each call to the component creates a fresh object/array/function literal
+  // for the default, so the reference changes on every render even when the
+  // prop is not actually provided. Any child that is `React.memo`-ed on that
+  // prop, or any `useEffect`/`useCallback`/`useMemo` that lists it as a
+  // dependency, will re-run unnecessarily — a silent performance bug the type
+  // checker cannot detect. The fix is to hoist the constant outside the
+  // component or memoize it:
+  //
+  //   const DEFAULT_ITEMS: string[] = []
+  //   function List({ items = DEFAULT_ITEMS }) { ... }
+  //
+  // This is exactly the shortcut an AI assistant reaches for when a prop is
+  // optional and the model doesn't want to add a module-level constant. The
+  // rule sits on the same correctness/perf-not-style bar as `jsx-no-leaked-
+  // render`, `no-array-index-key`, and `jsx-no-constructed-context-values`
+  // above — all of which catch silent reference-equality bugs that are
+  // invisible to the type checker. Like the other react rules this only fires
+  // on `.jsx`/`.tsx` files, so non-React TypeScript packages are unaffected.
+  'react/no-object-type-as-default-prop': 'error',
 }
