@@ -353,6 +353,18 @@ const sharedRules = {
   // explicit-over-clever, AI-safety stance. It is also the foundation the
   // `prefer-const` rule builds on. The rule is auto-fixable.
   'no-var': 'error',
+  // Disallow explicitly initializing a variable to `undefined` —
+  // `let value = undefined` instead of the equivalent, shorter `let value`.
+  // Every declared-but-unassigned binding is already `undefined`, so the
+  // initializer adds a token that looks like it is doing something (choosing
+  // a starting value) while actually doing nothing; a reader has to stop and
+  // confirm that `undefined` really is the intended value rather than a
+  // half-finished assignment the author forgot to fill in. It is exactly the
+  // no-op an AI assistant emits when it scaffolds a variable before deciding
+  // what to assign to it. Not in `eslint:recommended`, so it must be enabled
+  // explicitly here. The rule is auto-fixable (`eslint --fix` deletes the
+  // redundant initializer), so adoption costs nothing.
+  'no-undef-init': 'error',
   // Require object literal shorthand for properties and methods, so
   // `{ value: value }` collapses to `{ value }` and `{ run: function () {} }`
   // to `{ run() {} }`. The longhand forms carry no extra meaning — they are
