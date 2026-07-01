@@ -566,6 +566,26 @@ const sharedRules = {
   // keeps the check legible. The rule is not auto-fixable because only the
   // author knows which operand was meant.
   'no-self-compare': 'error',
+  // Disallow a binary or logical expression whose result is provably
+  // constant regardless of a variable operand: a `&&`/`||` whose left side
+  // is already a statically known boolean (`true || sideEffect()`, `false
+  // && sideEffect()` — the right side, and any side effect in it, never
+  // runs, yet reads as if it were conditional), a loose-equality check
+  // against `null`/`undefined` where the other side can never be nullish
+  // (`null == undefined` — always `true`), or a `===`/`!==` comparison
+  // between two freshly constructed objects (`new Error() === new
+  // Error()` — two distinct object references can never be `===`-equal, so
+  // the comparison always evaluates the same way no matter what either
+  // constructor does). Each of these type-checks and runs without error, so
+  // the constant result hides behind what reads like a real, live
+  // condition. This is exactly the family `no-self-compare` and
+  // `no-unsafe-optional-chaining` above already guard against: a condition
+  // that looks meaningful but is defeated by its own operands, and
+  // precisely the copy-paste slip an AI assistant leaves behind when it
+  // stubs out a condition with a literal or duplicates a `new` expression on
+  // both sides of a comparison. Not auto-fixable: only the author knows
+  // which operand was meant.
+  'no-constant-binary-expression': 'error',
   // Disallow optional chaining in positions where a short-circuit to
   // `undefined` is immediately used in a way that throws at runtime — member
   // access, a call, arithmetic, spread, `instanceof`, `in`, or destructuring on
