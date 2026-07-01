@@ -32,6 +32,15 @@ const sharedRules = {
   // safe. `@typescript-eslint/no-use-before-define` below is the documented
   // replacement — see that rule's comment for the full rationale.
   'no-use-before-define': 'off',
+  // The core `no-unused-private-class-members` rule only understands
+  // ECMAScript `#hashPrivate` fields — it has no notion of TypeScript's
+  // `private` keyword, so an unused `private` field or method slips through
+  // untouched. `@typescript-eslint/no-unused-private-class-members` below is
+  // a strict superset (it flags both `#hashPrivate` and TS `private`
+  // members) and is the documented replacement, mirroring how
+  // `@typescript-eslint/no-shadow` and `@typescript-eslint/no-use-before-define`
+  // already replace their core counterparts above.
+  'no-unused-private-class-members': 'off',
   'comma-dangle': 'off',
   'function-paren-newline': 'off',
   quotes: 'off',
