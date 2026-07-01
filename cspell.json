@@ -42,7 +42,8 @@
     "infile",
     "footgun",
     "bivariantly",
-    "contravariantly"
+    "contravariantly",
+    "ameliso"
   ],
   "ignorePaths": [
     "node_modules",

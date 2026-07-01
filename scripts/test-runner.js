@@ -451,6 +451,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-loop-func'],
   },
+  'no-redeclare': {
+    description:
+      'Two top-level function declarations sharing a name are flagged; distinctly named declarations pass',
+    files: [
+      'test/no-redeclare/invalid-no-redeclare.ts',
+      'test/no-redeclare/valid-no-redeclare.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-redeclare'],
+  },
   'no-misused-promises': {
     description:
       'An async callback passed to forEach (void-return context) is flagged; an explicit for...of with await passes',
