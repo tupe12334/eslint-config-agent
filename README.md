@@ -883,6 +883,10 @@ scripts. Three ways to resolve it, in order of preference:
 - **🔄 [Releases & Changelog](https://github.com/tupe12334/eslint-config-agent/releases)**
 - **📖 [ESLint Flat Config Documentation](https://eslint.org/docs/latest/use/configure/configuration-files)**
 
+### Related projects
+
+- **🔁 [moadim](https://moadim.io/)** — loop engineering: build, schedule & run agent loops.
+
 ## Support
 
 This project stands in solidarity with the people of Ukraine 🇺🇦 and Israel 🇮🇱.
