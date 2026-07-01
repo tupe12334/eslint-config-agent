@@ -483,6 +483,14 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   `default` that omits `break` silently falls through into the cases below it.
   Pinning `default` to the end keeps its order-independent meaning legible. Not
   auto-fixable: moving a clause that omits `break` could change behavior.
+- **`consistent-return`**: Requires every `return` statement in a function to
+  either always specify a value or never specify one. A function that returns
+  a value on one branch and falls through (or hits a bare `return;`) on another
+  silently yields `undefined` on the unhandled paths — a quiet,
+  plausible-but-wrong mistake the type checker does not reliably catch, since
+  an inferred `T | undefined` return type checks cleanly either way. Not
+  auto-fixable: only the author knows whether the missing branch should return
+  a value or the value-returning branch should stop returning one.
 - **`no-extra-bind`**: Forbids `.bind()` on a function that never references
   `this` (and binds no arguments) — `(() => x).bind(obj)`,
   `function () { return 1 }.bind(this)`, `handler.bind(this)` where `handler`

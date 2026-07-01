@@ -130,6 +130,22 @@ const sharedRules = {
   // behind. The rule is auto-fixable, so consumers can adopt it with
   // `eslint --fix`.
   'no-useless-return': 'error',
+  // Require every `return` statement in a function to either always specify a
+  // value or never specify one. A function that returns a value on one branch
+  // and falls through — or hits a bare `return;` — on another silently yields
+  // `undefined` on the unhandled paths, and the caller then receives
+  // `undefined` where it expected the value. The bug surfaces far downstream as
+  // a "cannot read property of undefined" crash rather than at the offending
+  // branch, and the type checker does not reliably catch it: an inferred
+  // `T | undefined` return type type-checks cleanly even though the
+  // fall-through was accidental. This is exactly the quiet, plausible-but-wrong
+  // control-flow mistake an AI assistant emits when it adds an early-exit
+  // branch and forgets to carry a value through it. Not in `eslint:recommended`,
+  // so it must be enabled explicitly here. The rule is intentionally not
+  // auto-fixable — only the author knows whether the missing branch should
+  // return a value or the value-returning branch should stop returning one —
+  // so adoption surfaces the call sites rather than silently rewriting them.
+  'consistent-return': 'error',
   // Disallow a value assigned to a variable that is never read before the
   // variable is overwritten or its scope ends — a "dead store". Writing
   // `let total = compute()` and then unconditionally reassigning `total = 0`
