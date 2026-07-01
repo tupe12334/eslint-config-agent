@@ -25,6 +25,9 @@
 
 import config from '../index.js'
 import { noProcessEnvironmentPropertiesConfig } from '../rules/no-process-env-properties/index.js'
+import { errorOptions as maxFunctionLinesErrorOptions } from '../rules/max-function-lines/index.js'
+import { errorOptions as maxFileLinesErrorOptions } from '../rules/max-file-lines/index.js'
+import { lengthRuleFileMatch } from '../configs/length-rule-scope.js'
 
 const relaxedOverrides = {
   name: 'eslint-config-agent/recommended-overrides',
@@ -83,4 +86,25 @@ const relaxedOverrides = {
   },
 }
 
-export default [...config, relaxedOverrides]
+// The strict default promotes function/file length to hard errors in its
+// final override layer (`configs/overrides.js`'s "Function and file length
+// rules" block) — at >70 lines per function and >100 lines per file — which
+// blocks incremental adoption: an existing codebase pointing `recommended` at
+// its real source tree still gets fatal errors on every long legacy
+// function/file, exactly the "wall of errors" this preset exists to avoid
+// (see issue #85). Downgrade both to `warn` while keeping the same 70/100
+// thresholds — and the same file scope (`lengthRuleFileMatch`, shared with
+// the strict block) — so the signal still surfaces in `eslint` output and the
+// backlog can be burned down, but it no longer fails a CI run that treats
+// errors as fatal. Consumers can re-enable these as errors with their own
+// override layer once they are ready.
+const lengthWarningOverrides = {
+  name: 'eslint-config-agent/recommended-length-warnings',
+  ...lengthRuleFileMatch,
+  rules: {
+    'max-lines-per-function': ['warn', maxFunctionLinesErrorOptions],
+    'max-lines': ['warn', maxFileLinesErrorOptions],
+  },
+}
+
+export default [...config, relaxedOverrides, lengthWarningOverrides]
