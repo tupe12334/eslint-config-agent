@@ -11,6 +11,14 @@ name: Scheduled Release
 # This workflow runs on a schedule (not on `push`) specifically to avoid an
 # infinite loop: release-it's version-bump commit+push back to `main` would
 # itself trigger another `push` event if this were push-triggered.
+#
+# That same GITHUB_TOKEN behavior means this workflow's own push does NOT
+# trigger ci.yml's push-gated `publish` job either — GitHub Actions
+# intentionally does not chain further workflow runs off of events produced
+# by the default GITHUB_TOKEN, precisely to prevent the loop described above.
+# So this workflow publishes to npm itself once release-it has bumped, tagged,
+# and pushed the version, instead of assuming ci.yml's `publish` job will pick
+# it up on a follow-up run that will never happen.
 on:
   schedule:
     - cron: '0 6 * * *'
@@ -22,6 +30,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      id-token: write
 
     steps:
       - name: Checkout
@@ -88,3 +97,37 @@ jobs:
         run: pnpm release:ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # release-it's own `npm.publish` is `false` (see .release-it.json) — it
+      # only bumps/commits/tags/pushes. Publishing is deliberately left to CI
+      # so it can use OIDC trusted publishing (`npm publish --provenance`),
+      # which needs a fresh `npm` and the `id-token: write` permission above.
+      #
+      # This mirrors ci.yml's `publish` job's version-check step: after
+      # release-it runs, package.json#version is the newly bumped version, so
+      # re-checking npm here (rather than trusting the bump succeeded) guards
+      # against release-it having no-op'd (e.g. commit type didn't warrant a
+      # bump) and publishing a version that's already on npm.
+      - name: Check if should publish
+        id: version_check
+        if: steps.check.outputs.has_unreleased == 'true'
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "Package: $PACKAGE_NAME@$CURRENT_VERSION"
+
+          if npm view "$PACKAGE_NAME" time --json 2>/dev/null | grep -q "\"$CURRENT_VERSION\""; then
+            echo "Version $CURRENT_VERSION was previously published, skipping"
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Version $CURRENT_VERSION never published, will publish"
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install latest npm (required for OIDC trusted publishing)
+        if: steps.version_check.outputs.should_publish == 'true'
+        run: npm install -g npm@latest
+
+      - name: Publish to npm
+        if: steps.version_check.outputs.should_publish == 'true'
+        run: npm publish --provenance --access public
