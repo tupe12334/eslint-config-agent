@@ -371,4 +371,22 @@ export const typescriptEslintRules = {
   // explicitly. It is not auto-fixable: only the author knows whether to
   // normalize to numbers or strings.
   '@typescript-eslint/no-mixed-enums': 'error',
+  // Flag a condition, `&&`/`||` operand, or optional-chain (`?.`) link whose
+  // type proves it can never be anything but truthy or never be anything but
+  // falsy. A guard like `if (value)` where `value`'s type is a non-nullable
+  // object looks like a real null/undefined check, but the type checker has
+  // already proven it always passes — the "guard" is dead code that silently
+  // hides the fact the author expected a case (`null`, `undefined`, `false`)
+  // the type no longer allows, usually because an earlier refactor narrowed
+  // the type and left a now-redundant check behind. The inverse (a condition
+  // that is always falsy) is worse: the guarded branch is unreachable dead
+  // code that looks live. Both are exactly the "looks like a safety check,
+  // does nothing" gap this config exists to close, and the type-aware
+  // completion of the same always-true/false class of bug
+  // `no-self-compare` and `no-constant-binary-expression` already catch by
+  // syntax alone. The rule is type-aware, so it runs under the
+  // `projectService` parser options already configured for `.ts`/`.tsx`
+  // files, and it is why downstream repo `block-no-verify` already re-adds
+  // it by hand on top of the base config.
+  '@typescript-eslint/no-unnecessary-condition': 'error',
 }
