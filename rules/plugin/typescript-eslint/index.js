@@ -389,4 +389,25 @@ export const typescriptEslintRules = {
   // files, and it is why downstream repo `block-no-verify` already re-adds
   // it by hand on top of the base config.
   '@typescript-eslint/no-unnecessary-condition': 'error',
+  // Forbid a `private` (TypeScript keyword) or `#hashPrivate` class field or
+  // method that is declared and never read or called anywhere in the class
+  // body. Because the member is private, there is no legitimate external
+  // caller to account for — an unused one is dead code: a leftover from a
+  // refactor that forgot to delete it, or worse, a member the author meant to
+  // wire up but a typo or missed call site left orphaned, silently doing
+  // nothing while the reader assumes it does something.
+  //
+  // The core `no-unused-private-class-members` rule (already enabled via
+  // `eslint:recommended`) only understands ECMAScript `#hashPrivate` fields —
+  // it has no notion of TypeScript's `private` keyword, which is the actual
+  // dead-code surface in a TypeScript-heavy codebase. The typescript-eslint
+  // version is a strict superset (flags both forms) and needs no type
+  // information, so it adds no parser cost. This mirrors how
+  // `@typescript-eslint/no-shadow` and `@typescript-eslint/no-use-before-define`
+  // above already replace their core counterparts. Downstream repo
+  // `ameliso-io/web` already re-adds both the core and typescript-eslint
+  // variants by hand on top of the base config — promoting the
+  // typescript-eslint version into the shared rule set removes that
+  // copy-paste.
+  '@typescript-eslint/no-unused-private-class-members': 'error',
 }
