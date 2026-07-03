@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [3.2.0](https://github.com/tupe12334/eslint-config-agent/compare/v3.1.0...v3.2.0) (2026-07-03)
+
+### Features
+
+* **config:** enable @typescript-eslint/no-unused-private-class-members ([#357](https://github.com/tupe12334/eslint-config-agent/issues/357)) ([5837f63](https://github.com/tupe12334/eslint-config-agent/commit/5837f63a933c5d2e5330cb3c96aacab987f19ddb)), closes [#347](https://github.com/tupe12334/eslint-config-agent/issues/347) [#hashPrivate](https://github.com/tupe12334/eslint-config-agent/issues/hashPrivate)
+
 ## [3.1.0](https://github.com/tupe12334/eslint-config-agent/compare/v3.0.5...v3.1.0) (2026-07-02)
 
 ### Features
