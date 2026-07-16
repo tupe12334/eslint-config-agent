@@ -24,6 +24,10 @@
  */
 
 import config from '../index.js'
+import { noProcessEnvironmentPropertiesConfig } from '../rules/no-process-env-properties/index.js'
+import { errorOptions as maxFunctionLinesErrorOptions } from '../rules/max-function-lines/index.js'
+import { errorOptions as maxFileLinesErrorOptions } from '../rules/max-file-lines/index.js'
+import { lengthRuleFileMatch } from '../configs/length-rule-scope.js'
 
 const relaxedOverrides = {
   name: 'eslint-config-agent/recommended-overrides',
@@ -71,21 +75,36 @@ const relaxedOverrides = {
     // adopt incrementally in any React/Preact + Tailwind codebase — by far the
     // most common modern setup — so relax it for the recommended preset.
     'jsx-classname/require-classname': 'off',
-    // The most divisive layer: this is where optional chaining (`?.`),
-    // nullish coalescing (`??`), type assertions and switch-default bans live.
-    // Relaxing it lets idiomatic TypeScript through during adoption.
-    'no-restricted-syntax': 'off',
-    // The strict config applies a two-tier threshold for file and function
-    // length: warn at >70 lines (base config) then hard-error at >100 lines
-    // (overrides layer). Existing codebases routinely contain files and
-    // functions well over 100 lines, so the error tier is the single most
-    // common reason `recommended` still causes CI failures on the first run
-    // even with every other divisive rule relaxed. Turn both rules off so
-    // teams can adopt the quality rules without needing to split files before
-    // they can even get the linter passing.
-    'max-lines': 'off',
-    'max-lines-per-function': 'off',
+    // The most divisive layer: optional chaining (`?.`), nullish coalescing
+    // (`??`), type assertions, switch-default bans, and inline union/record
+    // type restrictions. Removing them lets idiomatic TypeScript through during
+    // adoption. The process.env guard (`no-process-env-properties`) is NOT in
+    // this group: scattered `process.env.FOO` access is a configuration smell
+    // regardless of adoption stage, so it is kept as the one surviving
+    // no-restricted-syntax check.
+    'no-restricted-syntax': ['error', noProcessEnvironmentPropertiesConfig],
   },
 }
 
-export default [...config, relaxedOverrides]
+// The strict default promotes function/file length to hard errors in its
+// final override layer (`configs/overrides.js`'s "Function and file length
+// rules" block) — at >70 lines per function and >100 lines per file — which
+// blocks incremental adoption: an existing codebase pointing `recommended` at
+// its real source tree still gets fatal errors on every long legacy
+// function/file, exactly the "wall of errors" this preset exists to avoid
+// (see issue #85). Downgrade both to `warn` while keeping the same 70/100
+// thresholds — and the same file scope (`lengthRuleFileMatch`, shared with
+// the strict block) — so the signal still surfaces in `eslint` output and the
+// backlog can be burned down, but it no longer fails a CI run that treats
+// errors as fatal. Consumers can re-enable these as errors with their own
+// override layer once they are ready.
+const lengthWarningOverrides = {
+  name: 'eslint-config-agent/recommended-length-warnings',
+  ...lengthRuleFileMatch,
+  rules: {
+    'max-lines-per-function': ['warn', maxFunctionLinesErrorOptions],
+    'max-lines': ['warn', maxFileLinesErrorOptions],
+  },
+}
+
+export default [...config, relaxedOverrides, lengthWarningOverrides]
