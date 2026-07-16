@@ -179,7 +179,9 @@ load without a wall of errors.
 
 The `eslint-config-agent/recommended` preset bundles those common overrides for
 you. It keeps the core quality rules but disables the most opinionated ones
-(`ddd/require-spec-file`, `single-export`, `required-exports`, the custom
+(`ddd/require-spec-file` and its `.tsx`/`.jsx` counterpart
+`custom/require-spec-file-tsx`, so React/Preact components are not forced to
+ship a spec file up front either, `single-export`, `required-exports`, the custom
 `error/*` rules, `jsdoc/require-jsdoc` (so existing code is not forced to
 document every exported function and class up front — the jsdoc _content_ rules
 stay on, so any JSDoc you do write is still validated),
@@ -247,6 +249,33 @@ export default [
 
 Keep your CI lint step at `eslint .` during migration; switch it to
 `eslint . --max-warnings 0` once the warnings are cleared.
+
+#### The `toWarnings` helper
+
+The `incremental` preset warn-levels the **whole** ruleset. When you instead
+want to compose your own flat config — warn-level the shared ruleset but keep a
+handful of rules as hard errors from day one — import the same
+`toWarnings` severity-downgrade helper the incremental presets use internally,
+instead of copy-pasting it:
+
+```javascript
+import config from 'eslint-config-agent'
+import { toWarnings } from 'eslint-config-agent/to-warnings'
+
+export default [
+  ...config.map(toWarnings),
+  // Rules you are ready to enforce as hard errors today:
+  {
+    rules: {
+      eqeqeq: ['error', 'always'],
+    },
+  },
+]
+```
+
+`toWarnings` takes a single flat-config block and returns it with every
+error-level rule downgraded to a warning. Blocks without a `rules` object are
+returned untouched, and `off`/`warn` rules are left exactly as they are.
 
 ### Recommended + incremental (relaxed, warn-level) preset
 
@@ -395,9 +424,22 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   returns, the `else` only adds nesting that hides the real control flow.
   Removing it flattens the code into guard-clause style — the same goal as the
   bundled `early-return` plugin. Auto-fixable with `eslint --fix`.
+- **`no-lonely-if`**: Forbids an `if` statement as the only statement inside an
+  `else` block, requiring `else if` instead. The lone `if`-in-`else` adds an
+  indentation level that hides what is really a flat chain of conditions — the
+  same needless nesting `no-else-return` and the bundled `early-return` plugin
+  already push back on. Auto-fixable with `eslint --fix`.
 - **`no-nested-ternary`**: Forbids a ternary inside another ternary, the
   archetypal "clever but unreadable" construct. Use `if`/`else` or an early
   return instead.
+- **`prefer-template`**: Forbids building strings with `+` concatenation
+  (`'Hello ' + name + '!'`) in favor of a template literal
+  (`` `Hello ${name}!` ``). Chaining `+` scatters the literal text across
+  operators, hides where text ends and a value begins, and leans on the same
+  implicit coercion the bundled `no-implicit-coercion` ban already targets
+  whenever a non-string operand sneaks in. The template literal keeps the final
+  shape of the string visible at a glance — the same clarity goal as `eqeqeq`
+  and `no-implicit-coercion`. Auto-fixable with `eslint --fix`.
 - **`no-object-constructor`**: Forbids the `Object` constructor (`new Object()`
   and `Object()`) in favor of the `{}` literal. The constructor form is more
   verbose and a trap — `Object(x)` with a non-object argument returns that value
@@ -418,6 +460,46 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   lets rejections go unhandled. A correctness check, like the bundled
   `array-callback-return`. Use a block body that calls `resolve`/`reject`
   without returning.
+- **`no-await-in-loop`**: Forbids `await` inside a loop body. Awaiting on every
+  iteration serializes work that could run concurrently, so the loop pays the
+  _sum_ of every promise's latency instead of the _max_ — a batch of
+  independent network/DB calls becomes an N-times slower stall. A quiet
+  performance bug the type checker cannot see, and the throughput side of the
+  async-hygiene family (`no-floating-promises`, `promise-function-async`,
+  `return-await`). Run the independent work with `Promise.all`/
+  `Promise.allSettled` over a `.map` instead. When the iterations are genuinely
+  dependent (each needs the previous result, an ordered write, a deliberate
+  rate limit) the serial `await` is correct, so the rule has no auto-fix — those
+  loops opt out with `// eslint-disable-next-line no-await-in-loop`.
+- **`no-throw-literal`**: Forbids throwing a non-`Error` value — `throw 'boom'`,
+  `throw { code: 500 }`, `throw 42`. A thrown literal carries no stack trace and
+  breaks every `catch` that relies on `instanceof Error` or reads
+  `.message`/`.stack`, so the consumer's error handling silently misfires. A
+  correctness check, like the bundled `array-callback-return`. Throw a real
+  `Error` (or a subclass) instead.
+- **`default-case-last`**: Requires the `default` clause of a `switch` to come
+  last. `default` matches only when no `case` does, so a `default` placed before
+  later cases reads as if those cases were unreachable, and a mid-`switch`
+  `default` that omits `break` silently falls through into the cases below it.
+  Pinning `default` to the end keeps its order-independent meaning legible. Not
+  auto-fixable: moving a clause that omits `break` could change behavior.
+- **`consistent-return`**: Requires every `return` statement in a function to
+  either always specify a value or never specify one. A function that returns
+  a value on one branch and falls through (or hits a bare `return;`) on another
+  silently yields `undefined` on the unhandled paths — a quiet,
+  plausible-but-wrong mistake the type checker does not reliably catch, since
+  an inferred `T | undefined` return type checks cleanly either way. Not
+  auto-fixable: only the author knows whether the missing branch should return
+  a value or the value-returning branch should stop returning one.
+- **`no-extra-bind`**: Forbids `.bind()` on a function that never references
+  `this` (and binds no arguments) — `(() => x).bind(obj)`,
+  `function () { return 1 }.bind(this)`, `handler.bind(this)` where `handler`
+  ignores `this`. The bind allocates a new wrapper on every evaluation and
+  returns one that behaves identically to the original, so it is pure overhead
+  that also misleads the reader into thinking the receiver matters — the same
+  "looks meaningful but is dead" clutter `no-useless-return` /
+  `no-useless-concat` already remove, and the reflexive `.bind(this)` an AI
+  assistant appends to a callback by habit. Auto-fixable with `eslint --fix`.
 
 ### Import Hygiene
 
@@ -439,6 +521,15 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   named binding — the statement imports nothing yet still reads as if it pulls
   names in, leaving a dead dependency edge behind. Use a bare side-effect
   import (`import 'mod'`) or remove the line. Auto-fixable.
+- **`unused-imports/no-unused-imports`**: Forbids imports that are never
+  referenced. The core `no-unused-vars` rules are turned off in this config, so
+  nothing else flagged dead imports — yet an unused `import` is pure noise: it
+  has no runtime effect, slows resolution/bundling, and implies a dependency
+  that does not exist. AI assistants frequently leave these behind after editing
+  a file. Provided by `eslint-plugin-unused-imports`, which (unlike the base
+  rule) auto-fixes them — an unused import is always safe to delete. Scoped to
+  imports only; unused locals and parameters are intentionally left untouched.
+  Auto-fixable.
 - **`@typescript-eslint/consistent-type-imports`**: Forces `import type { … }`
   for imports used only as types (TypeScript files). A type-only import is
   erased at compile time, so writing it as a value import leaves a binding that
@@ -448,6 +539,22 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   keeps the emitted module graph honest and every import's intent legible. Uses
   `fixStyle: 'separate-type-imports'` (a distinct `import type` statement rather
   than the inline `import { type X }` form). Auto-fixable.
+- **`@typescript-eslint/consistent-type-exports`**: The export-side mirror of
+  `consistent-type-imports` — forces `export type { … }` for re-exports that
+  only carry types. A type-only name re-exported through a plain `export { … }`
+  is erased at compile time, so the value-shaped statement leaves a runtime
+  export edge for something with no runtime existence: bundlers keep the source
+  module (and its side effects) alive, and the re-export breaks under
+  `verbatimModuleSyntax` / `isolatedModules`. Splitting type and value
+  re-exports keeps the emitted module graph honest and a barrel file's
+  value-vs-type surface legible. Auto-fixable.
+- **`no-useless-rename`**: Forbids renaming an import, export, or destructured
+  binding to the exact name it already has — `import { foo as foo } from
+'./foo'`, `export { bar as bar }`, `const { baz: baz } = obj`. The `as`/`:`
+  clause reads as if it transforms the binding, so a reader stops to compare
+  both sides only to discover they are identical: pure punctuation noise that
+  adds nothing. Exactly the ceremony an AI assistant spells out mechanically
+  for an alias it never needed. Auto-fixable with `eslint --fix`.
 
 ### Bundled Custom Rules
 
@@ -609,16 +716,14 @@ If you have files that only export simple Error classes or other boilerplate wit
   older code reaches for, so banning it keeps every binding block-scoped and
   its lifetime legible. The rule is auto-fixable, so existing code can adopt it
   with `eslint --fix`.
-- **`no-eval` / `no-implied-eval`**: Forbid executing code from strings. `eval`,
-  the `Function` constructor (see `no-new-func`), and the implied-eval forms — a
-  string first argument to `setTimeout`, `setInterval`, `setImmediate`, or
-  `execScript` — all hand an opaque string to the engine to compile and run,
-  invisible to the parser and type checker and an injection hole the moment any
-  part of that string comes from input. Every legitimate case has a plain, safe
-  equivalent (a real function literal), so the dynamic form buys nothing but
-  risk. `eslint-plugin-security` only flags `eval` with a _non-literal_
-  argument; these core rules close that gap, including `eval('literal')`. Not
-  auto-fixable, since only the author can restate the string as real code.
+- **`radix`** (`'always'`): Requires an explicit base for `parseInt` —
+  `parseInt(str, 10)`, never `parseInt(str)`. With the base omitted it is
+  inferred from the string, so a leading `0x` is parsed as hex and
+  `parseInt(userInput)` silently uses a base the author never chose. The
+  wrong-number result still type-checks, so only the data flow is broken — the
+  same class of _implicit_ behavior the config already bans via `eqeqeq` and
+  `no-implicit-coercion`. Not auto-fixable: only the author knows the intended
+  base.
 
 ### Honest Suppressions
 
