@@ -41,7 +41,10 @@
     "knip",
     "infile",
     "footgun",
-    "footguns"
+    "footguns",
+    "bivariantly",
+    "contravariantly",
+    "ameliso"
   ],
   "ignorePaths": [
     "node_modules",

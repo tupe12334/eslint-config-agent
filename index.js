@@ -26,6 +26,19 @@ const sharedRules = {
   ...allRules.pluginRules,
   'object-curly-newline': 'off',
   'no-shadow': 'off',
+  // The core `no-use-before-define` rule is intentionally left `off`: it
+  // false-positives on TypeScript type/interface declarations and enum
+  // members referenced before their textual position, which are hoisted and
+  // safe. `@typescript-eslint/no-use-before-define` below is the documented
+  // replacement — see that rule's comment for the full rationale.
+  'no-use-before-define': 'off',
+  // The core `no-unused-private-class-members` rule is intentionally left
+  // `off`: it only understands ECMAScript `#hashPrivate` fields, not
+  // TypeScript's `private` keyword, which is the actual dead-code surface in
+  // this codebase. `@typescript-eslint/no-unused-private-class-members` is
+  // the documented replacement — see that rule's comment for the full
+  // rationale.
+  'no-unused-private-class-members': 'off',
   'comma-dangle': 'off',
   'function-paren-newline': 'off',
   quotes: 'off',
@@ -130,6 +143,22 @@ const sharedRules = {
   // behind. The rule is auto-fixable, so consumers can adopt it with
   // `eslint --fix`.
   'no-useless-return': 'error',
+  // Require every `return` statement in a function to either always specify a
+  // value or never specify one. A function that returns a value on one branch
+  // and falls through — or hits a bare `return;` — on another silently yields
+  // `undefined` on the unhandled paths, and the caller then receives
+  // `undefined` where it expected the value. The bug surfaces far downstream as
+  // a "cannot read property of undefined" crash rather than at the offending
+  // branch, and the type checker does not reliably catch it: an inferred
+  // `T | undefined` return type type-checks cleanly even though the
+  // fall-through was accidental. This is exactly the quiet, plausible-but-wrong
+  // control-flow mistake an AI assistant emits when it adds an early-exit
+  // branch and forgets to carry a value through it. Not in `eslint:recommended`,
+  // so it must be enabled explicitly here. The rule is intentionally not
+  // auto-fixable — only the author knows whether the missing branch should
+  // return a value or the value-returning branch should stop returning one —
+  // so adoption surfaces the call sites rather than silently rewriting them.
+  'consistent-return': 'error',
   // Disallow a value assigned to a variable that is never read before the
   // variable is overwritten or its scope ends — a "dead store". Writing
   // `let total = compute()` and then unconditionally reassigning `total = 0`
@@ -300,6 +329,30 @@ const sharedRules = {
   // with `eslint --fix`; it is not in `eslint:recommended`, so it is enabled
   // explicitly here.
   'no-extra-bind': 'error',
+  // Disallow `.call()` and `.apply()` when the first argument (the `this`
+  // binding) is `undefined` or `null` and the result is identical to a
+  // direct call. `fn.call(null, a, b)` behaves exactly like `fn(a, b)` in
+  // non-strict mode and almost always in strict mode: the wrapper only adds
+  // noise and an extra property lookup. `fn.apply(undefined, [a, b])` is the
+  // same deadweight applied to a spread. The two are the direct-invocation
+  // counterpart of the `no-extra-bind` rule just above, which catches
+  // `.bind()` that never changes `this` — together they close the "look up
+  // the prototype chain to call the function" footgun an AI assistant emits
+  // when it wants to forward arguments or detach a method without realizing
+  // a direct call suffices. The rule is auto-fixable (`eslint --fix`) and is
+  // not in `eslint:recommended`, so it is enabled explicitly here.
+  'no-useless-call': 'error',
+  // Disallow renaming an import, export, or destructured binding to the exact
+  // name it already has — `import { foo as foo } from './foo'`,
+  // `export { bar as bar }`, `const { baz: baz } = obj`. The `as`/`:` clause
+  // reads as if it transforms the binding, so a reader stops to compare both
+  // sides only to discover they are identical: pure punctuation noise that
+  // adds nothing. It is the binding-alias sibling of `no-useless-call` just
+  // above — both look meaningful and are dead — and exactly the ceremony an
+  // AI assistant spells out mechanically for an alias it never needed. The
+  // rule is auto-fixable (`eslint --fix`) and is not in `eslint:recommended`,
+  // so it is enabled explicitly here.
+  'no-useless-rename': 'error',
   // Require `Object.hasOwn(obj, key)` over the legacy ways of asking the same
   // question. The two forms it replaces are each a footgun: calling
   // `obj.hasOwnProperty(key)` directly breaks the moment `obj` has a `null`
@@ -359,6 +412,18 @@ const sharedRules = {
   // (`eslint --fix`); it is not in `eslint:recommended`, so it must be enabled
   // explicitly here.
   'prefer-spread': 'error',
+  // Disallow explicitly initializing a variable to `undefined` —
+  // `let value = undefined` instead of the equivalent, shorter `let value`.
+  // Every declared-but-unassigned binding is already `undefined`, so the
+  // initializer adds a token that looks like it is doing something (choosing
+  // a starting value) while actually doing nothing; a reader has to stop and
+  // confirm that `undefined` really is the intended value rather than a
+  // half-finished assignment the author forgot to fill in. It is exactly the
+  // no-op an AI assistant emits when it scaffolds a variable before deciding
+  // what to assign to it. Not in `eslint:recommended`, so it must be enabled
+  // explicitly here. The rule is auto-fixable (`eslint --fix` deletes the
+  // redundant initializer), so adoption costs nothing.
+  'no-undef-init': 'error',
   // Require object literal shorthand for properties and methods, so
   // `{ value: value }` collapses to `{ value }` and `{ run: function () {} }`
   // to `{ run() {} }`. The longhand forms carry no extra meaning — they are
@@ -543,6 +608,26 @@ const sharedRules = {
   // keeps the check legible. The rule is not auto-fixable because only the
   // author knows which operand was meant.
   'no-self-compare': 'error',
+  // Disallow a binary or logical expression whose result is provably
+  // constant regardless of a variable operand: a `&&`/`||` whose left side
+  // is already a statically known boolean (`true || sideEffect()`, `false
+  // && sideEffect()` — the right side, and any side effect in it, never
+  // runs, yet reads as if it were conditional), a loose-equality check
+  // against `null`/`undefined` where the other side can never be nullish
+  // (`null == undefined` — always `true`), or a `===`/`!==` comparison
+  // between two freshly constructed objects (`new Error() === new
+  // Error()` — two distinct object references can never be `===`-equal, so
+  // the comparison always evaluates the same way no matter what either
+  // constructor does). Each of these type-checks and runs without error, so
+  // the constant result hides behind what reads like a real, live
+  // condition. This is exactly the family `no-self-compare` and
+  // `no-unsafe-optional-chaining` above already guard against: a condition
+  // that looks meaningful but is defeated by its own operands, and
+  // precisely the copy-paste slip an AI assistant leaves behind when it
+  // stubs out a condition with a literal or duplicates a `new` expression on
+  // both sides of a comparison. Not auto-fixable: only the author knows
+  // which operand was meant.
+  'no-constant-binary-expression': 'error',
   // Disallow optional chaining in positions where a short-circuit to
   // `undefined` is immediately used in a way that throws at runtime — member
   // access, a call, arithmetic, spread, `instanceof`, `in`, or destructuring on
@@ -593,6 +678,24 @@ const sharedRules = {
   // and not the `Function` constructor). The rule is not auto-fixable because
   // only the author can restate the string body as real code.
   'no-new-func': 'error',
+  // Disallow monkey-patching the prototype of a built-in object —
+  // `Array.prototype.last = function () { ... }`,
+  // `Object.prototype.keysOf = function () { ... }`, `String.prototype.foo = ...`.
+  // The patch mutates global state every module and dependency shares: the
+  // effect is invisible at the call site, order-dependent (whoever loads first
+  // wins, so two libraries patching the same prototype clash silently), and an
+  // enumerable addition to `Object.prototype` / `Array.prototype` leaks into
+  // every `for...in` loop and `in` check in the program, quietly breaking
+  // unrelated code. A safe, explicit equivalent always exists — a standalone
+  // helper (`last(arr)`) or a local wrapper — so the patch buys a little
+  // call-site sugar at the cost of a global hazard, and it is exactly the
+  // shortcut an AI assistant reaches for when asked to "add a method to
+  // arrays." This is the prototype-mutation sibling of the `no-new-func` ban
+  // directly above. It is not in `eslint:recommended`, so it must be enabled
+  // explicitly. Not auto-fixable: only the author can move the behavior into a
+  // standalone function. Extending a user-defined class is unaffected — the
+  // rule only flags built-in globals.
+  'no-extend-native': 'error',
   // Disallow `eval(...)`. It hands a string to the JavaScript engine to parse
   // and run at runtime: the body is opaque to the parser, the type checker and
   // every reader, it can reach and mutate the surrounding scope, and feeding it
@@ -696,6 +799,23 @@ const sharedRules = {
   // runtime, is left untouched. The rule is auto-fixable for the simple cases,
   // so consumers can adopt much of it with `eslint --fix`.
   'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
+  // Require named capture groups (`(?<year>\d{4})`) instead of positional ones
+  // (`(\d{4})`). An unnamed capture group is referenced by a fragile positional
+  // index — `match[1]`, `match[2]` — whose meaning evaporates the moment a
+  // group is added, removed, or reordered: `match[1]` silently shifts to a
+  // different piece of the string with no type error and no runtime warning.
+  // Named groups surface the intent in the regex itself (`(?<year>\d{4})`) and
+  // are accessed by key (`match.groups.year`), so the code stays readable and
+  // correct even as the pattern evolves. This is the regex-shaped sibling of
+  // the explicit-over-clever stance this config already enforces in the rest of
+  // the rule set: an unnamed group is exactly the "I'll remember what index 2
+  // means" shortcut that doesn't age and that AI assistants emit by default
+  // whenever they scaffold a regex. Non-capturing groups (`(?:...)`) are
+  // unaffected — only groups that capture and expose a match need a name. The
+  // rule is not in `eslint:recommended` and is not covered by
+  // `unicorn.configs.all`, so it is enabled explicitly here. It is not
+  // auto-fixable because only the author knows what name to give each group.
+  'prefer-named-capture-group': 'error',
   // Disallow the comma operator — `a = 1, b = 2`, `for (i = 0, j = 0; ...)`,
   // `return a++, b`. The comma operator evaluates both operands left-to-right
   // and returns the *right-hand* value, silently discarding the left. That is
@@ -717,6 +837,40 @@ const sharedRules = {
   // auto-fixable because only the author knows whether to split into separate
   // statements or rewrite the expression entirely.
   'no-sequences': 'error',
+  // Disallow empty constructors (`class Foo { constructor() {} }`) and
+  // constructors whose only statement forwards all arguments to `super`
+  // (`class Foo extends Bar { constructor(...args) { super(...args); } }`). In
+  // both cases the constructor adds nothing: JavaScript already synthesizes an
+  // implicit empty constructor for base classes and an implicit forwarding
+  // constructor for subclasses, so writing them out is pure dead weight — visual
+  // noise that looks load-bearing but changes nothing. They are boilerplate an
+  // AI assistant reflexively emits when scaffolding a class from a template,
+  // putting them squarely in this config's explicit-over-clever, "dead code is
+  // not free" stance: the class-declaration siblings of `no-useless-return`,
+  // `no-useless-assignment`, and `no-extra-bind` already active here. The rule
+  // is auto-fixable, so adopters get a one-shot `eslint --fix`. The core rule
+  // is enabled here for JavaScript files; TypeScript files get the same
+  // behavior via `@typescript-eslint/no-useless-constructor` enabled by the
+  // `strictTypeChecked` preset (which extends `recommended`), so the core rule
+  // is turned off in `typescriptEslintRules` to avoid double-reporting.
+  'no-useless-constructor': 'error',
+  // Disallow returning a value from a class constructor (`return someObject`,
+  // `return 5`). `new Thing()` has a contract every caller relies on: the
+  // expression evaluates to the instance that was just constructed. Returning
+  // an object from the constructor silently overrides that — `new Thing()`
+  // hands back a *different* object than the class body initialized, so
+  // `instanceof Thing` no longer holds for the value the rest of the program
+  // sees. Returning a primitive is the opposite trap: the return value is
+  // ignored outright by the `new` semantics, so the statement is dead code
+  // that reads as if it does something. Both are exactly the kind of silent,
+  // contract-breaking footgun this config exists to catch, and the sort of
+  // misplaced `return` an AI assistant emits when it treats a constructor
+  // like an ordinary function. A bare early `return;` with no value to bail
+  // out of the constructor is unaffected — only returning a value is flagged.
+  // The rule is not in `eslint:recommended`, so it is enabled explicitly. It
+  // is not auto-fixable because only the author knows whether the returned
+  // value or the constructor itself is wrong.
+  'no-constructor-return': 'error',
 }
 
 // Shared no-restricted-syntax rules for both JS and TS

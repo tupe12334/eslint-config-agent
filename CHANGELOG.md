@@ -4,6 +4,58 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [3.2.0](https://github.com/tupe12334/eslint-config-agent/compare/v3.1.0...v3.2.0) (2026-07-03)
+
+### Features
+
+* **config:** enable @typescript-eslint/no-unused-private-class-members ([#357](https://github.com/tupe12334/eslint-config-agent/issues/357)) ([5837f63](https://github.com/tupe12334/eslint-config-agent/commit/5837f63a933c5d2e5330cb3c96aacab987f19ddb)), closes [#347](https://github.com/tupe12334/eslint-config-agent/issues/347) [#hashPrivate](https://github.com/tupe12334/eslint-config-agent/issues/hashPrivate)
+
+## [3.1.0](https://github.com/tupe12334/eslint-config-agent/compare/v3.0.5...v3.1.0) (2026-07-02)
+
+### Features
+
+* **config:** enable @typescript-eslint/explicit-function-return-type for .ts ([#257](https://github.com/tupe12334/eslint-config-agent/issues/257)) ([7469e06](https://github.com/tupe12334/eslint-config-agent/commit/7469e06503157f838071cbdaa8216065ccce9975)), closes [#255](https://github.com/tupe12334/eslint-config-agent/issues/255)
+* **config:** enable @typescript-eslint/method-signature-style in the shared rule set ([#313](https://github.com/tupe12334/eslint-config-agent/issues/313)) ([e261d06](https://github.com/tupe12334/eslint-config-agent/commit/e261d06e8724702fb763a11e24f922d51156a66c))
+* **config:** enable @typescript-eslint/no-misused-promises in the shared rule set ([#285](https://github.com/tupe12334/eslint-config-agent/issues/285)) ([0fba9f0](https://github.com/tupe12334/eslint-config-agent/commit/0fba9f0ecabe89368cb1ffa6dcd2c6e983815472))
+* **config:** enable @typescript-eslint/no-mixed-enums in the shared rule set ([#317](https://github.com/tupe12334/eslint-config-agent/issues/317)) ([51ee52b](https://github.com/tupe12334/eslint-config-agent/commit/51ee52b991516730db6bb3a9c5014a3a780af911))
+* **config:** enable @typescript-eslint/no-unnecessary-condition in the shared rule set ([#352](https://github.com/tupe12334/eslint-config-agent/issues/352)) ([d8449f5](https://github.com/tupe12334/eslint-config-agent/commit/d8449f57600a60afd37e35a171e772371583219b)), closes [#351](https://github.com/tupe12334/eslint-config-agent/issues/351)
+* **config:** enable @typescript-eslint/no-use-before-define in the shared rule set ([#338](https://github.com/tupe12334/eslint-config-agent/issues/338)) ([4079061](https://github.com/tupe12334/eslint-config-agent/commit/407906131981054bddb05fbfc531bf54839484e9)), closes [#337](https://github.com/tupe12334/eslint-config-agent/issues/337)
+* **config:** enable @typescript-eslint/prefer-enum-initializers ([#289](https://github.com/tupe12334/eslint-config-agent/issues/289)) ([630f36f](https://github.com/tupe12334/eslint-config-agent/commit/630f36fa6c79b8cbfed1187cb4192b7118b786dd))
+* **config:** enable @typescript-eslint/prefer-optional-chain for .ts/.tsx files ([#260](https://github.com/tupe12334/eslint-config-agent/issues/260)) ([45d6423](https://github.com/tupe12334/eslint-config-agent/commit/45d6423d18a4778aed6f5391c8fe12f02b1f31e2))
+* **config:** enable consistent-return in the shared rule set ([#331](https://github.com/tupe12334/eslint-config-agent/issues/331)) ([4f7f522](https://github.com/tupe12334/eslint-config-agent/commit/4f7f5221e17b031efd2ca1a96202ca40de8ad88b))
+* **config:** enable logical-assignment-operators in the shared rule set ([#295](https://github.com/tupe12334/eslint-config-agent/issues/295)) ([5cec4f8](https://github.com/tupe12334/eslint-config-agent/commit/5cec4f87a32817fa005488deb39fb773a09c4690))
+* **config:** enable n/prefer-node-protocol in the shared rule set ([#291](https://github.com/tupe12334/eslint-config-agent/issues/291)) ([cc8c47a](https://github.com/tupe12334/eslint-config-agent/commit/cc8c47a621f5d71f5847d35d3ce69f4f9c043070))
+* **config:** enable no-alert in the shared rule set ([#297](https://github.com/tupe12334/eslint-config-agent/issues/297)) ([f7cc412](https://github.com/tupe12334/eslint-config-agent/commit/f7cc4129f40e59669f284e0f683186992f4bb937))
+* **config:** enable no-constant-binary-expression in the shared rule set ([#354](https://github.com/tupe12334/eslint-config-agent/issues/354)) ([310deb6](https://github.com/tupe12334/eslint-config-agent/commit/310deb6b0f08c0872b810a0c4c31020b34603352))
+* **config:** enable no-constructor-return in the shared rule set ([#332](https://github.com/tupe12334/eslint-config-agent/issues/332)) ([79357a3](https://github.com/tupe12334/eslint-config-agent/commit/79357a3a699c6bd66287c2f8a02d66ee7bf93716))
+* **config:** enable no-debugger in the shared rule set ([#254](https://github.com/tupe12334/eslint-config-agent/issues/254)) ([d941604](https://github.com/tupe12334/eslint-config-agent/commit/d941604ecb43ba02cd570af9d49f3f7861791f39))
+* **config:** enable no-extend-native in the shared rule set ([#330](https://github.com/tupe12334/eslint-config-agent/issues/330)) ([138006b](https://github.com/tupe12334/eslint-config-agent/commit/138006b480e69752e16e2c80f34c675ab0b9c594))
+* **config:** enable no-new-wrappers in the shared rule set ([#125](https://github.com/tupe12334/eslint-config-agent/issues/125)) ([2cdc1c2](https://github.com/tupe12334/eslint-config-agent/commit/2cdc1c2143b288c38e41cbad0c2267522b6d912d)), closes [#124](https://github.com/tupe12334/eslint-config-agent/issues/124)
+* **config:** enable no-script-url in the shared rule set ([#251](https://github.com/tupe12334/eslint-config-agent/issues/251)) ([18147fc](https://github.com/tupe12334/eslint-config-agent/commit/18147fc5c5a6e37177f8c1c0599250a0b816c255)), closes [#250](https://github.com/tupe12334/eslint-config-agent/issues/250)
+* **config:** enable no-sequences in the shared rule set ([#267](https://github.com/tupe12334/eslint-config-agent/issues/267)) ([6d45085](https://github.com/tupe12334/eslint-config-agent/commit/6d450854eac3cba29f6fb6715fd4477954c48666)), closes [#81](https://github.com/tupe12334/eslint-config-agent/issues/81)
+* **config:** enable no-undef-init in the shared rule set ([#344](https://github.com/tupe12334/eslint-config-agent/issues/344)) ([8521b73](https://github.com/tupe12334/eslint-config-agent/commit/8521b73062acd82e608088dcb2541dde509fb5b0)), closes [#343](https://github.com/tupe12334/eslint-config-agent/issues/343)
+* **config:** enable no-unmodified-loop-condition in the shared rule set ([#96](https://github.com/tupe12334/eslint-config-agent/issues/96)) ([acd21b7](https://github.com/tupe12334/eslint-config-agent/commit/acd21b7940ea8b675f207da464d198c631a9ddde)), closes [#95](https://github.com/tupe12334/eslint-config-agent/issues/95)
+* **config:** enable no-unreachable-loop in the shared rule set ([#274](https://github.com/tupe12334/eslint-config-agent/issues/274)) ([a18fcf2](https://github.com/tupe12334/eslint-config-agent/commit/a18fcf271a05ec9aa3865b220feaf23b59257863)), closes [#87](https://github.com/tupe12334/eslint-config-agent/issues/87)
+* **config:** enable no-useless-call in the shared rule set ([#301](https://github.com/tupe12334/eslint-config-agent/issues/301)) ([3edf7aa](https://github.com/tupe12334/eslint-config-agent/commit/3edf7aaf1e553342892ef42382bb8acc7e8ab37e))
+* **config:** enable no-useless-constructor in the shared rule set ([#312](https://github.com/tupe12334/eslint-config-agent/issues/312)) ([76808e2](https://github.com/tupe12334/eslint-config-agent/commit/76808e2ee038d5ba6094b75e6bc0ecb456a279ae)), closes [#311](https://github.com/tupe12334/eslint-config-agent/issues/311)
+* **config:** enable no-useless-rename in the shared rule set ([#336](https://github.com/tupe12334/eslint-config-agent/issues/336)) ([f1fa2e4](https://github.com/tupe12334/eslint-config-agent/commit/f1fa2e41a4fd467b601c194b3f860c4c50c3848e)), closes [#113](https://github.com/tupe12334/eslint-config-agent/issues/113)
+* **config:** enable prefer-named-capture-group in the shared rule set ([#308](https://github.com/tupe12334/eslint-config-agent/issues/308)) ([75877f9](https://github.com/tupe12334/eslint-config-agent/commit/75877f9bde9614a3c311343f11a5b55fbf31cb28))
+* **config:** enable react/jsx-no-useless-fragment in the shared rule set ([#272](https://github.com/tupe12334/eslint-config-agent/issues/272)) ([de076fc](https://github.com/tupe12334/eslint-config-agent/commit/de076fc52107878dca23cfa491ef19a48a99be6d)), closes [#271](https://github.com/tupe12334/eslint-config-agent/issues/271)
+* **config:** enable react/self-closing-comp in the shared rule set ([#269](https://github.com/tupe12334/eslint-config-agent/issues/269)) ([20d15b6](https://github.com/tupe12334/eslint-config-agent/commit/20d15b6891ea88df2df2b31d75b0a70ce1b88587))
+* **config:** enable yoda rule in the shared rule set ([#273](https://github.com/tupe12334/eslint-config-agent/issues/273)) ([b7ebd29](https://github.com/tupe12334/eslint-config-agent/commit/b7ebd29351475549581c72ec09f55dc968abcf54)), closes [#61](https://github.com/tupe12334/eslint-config-agent/issues/61)
+* **react:** enable react/hook-use-state in the shared rule set ([#319](https://github.com/tupe12334/eslint-config-agent/issues/319)) ([bb23979](https://github.com/tupe12334/eslint-config-agent/commit/bb23979d479e0af64b4eba550b30a7c6aa2bf7bb))
+* **react:** enable react/jsx-key in the shared rule set ([#342](https://github.com/tupe12334/eslint-config-agent/issues/342)) ([297c706](https://github.com/tupe12334/eslint-config-agent/commit/297c7067cdb1ed9db5a2065e53b60885420dbddb))
+* **react:** enable react/no-object-type-as-default-prop in the shared rule set ([#323](https://github.com/tupe12334/eslint-config-agent/issues/323)) ([4d43920](https://github.com/tupe12334/eslint-config-agent/commit/4d439201b343cf9aebb3c702a2d99b74b723ab71))
+
+### Bug Fixes
+
+* **ci:** publish directly from scheduled-release.yml ([#356](https://github.com/tupe12334/eslint-config-agent/issues/356)) ([ac2db7b](https://github.com/tupe12334/eslint-config-agent/commit/ac2db7b9e911d58fd422e0d5461a8f4b1ec0efea))
+* **config:** disable prefer-nullish-coalescing to resolve ?? contradiction ([#321](https://github.com/tupe12334/eslint-config-agent/issues/321)) ([13a18d4](https://github.com/tupe12334/eslint-config-agent/commit/13a18d48068448289f36698a7e000f4252ef309a))
+* publish rule helper modules, not just index.js ([#270](https://github.com/tupe12334/eslint-config-agent/issues/270)) ([4e81453](https://github.com/tupe12334/eslint-config-agent/commit/4e81453914fc4e1bd8ca048ba03054a272b168e3))
+* **recommended:** downgrade max-lines rules from error to warn ([#335](https://github.com/tupe12334/eslint-config-agent/issues/335)) ([b69ccb3](https://github.com/tupe12334/eslint-config-agent/commit/b69ccb34ede4f7ede1a49d72b1e35ab52d2e9023)), closes [#85](https://github.com/tupe12334/eslint-config-agent/issues/85)
+* **recommended:** keep process.env property guard in the relaxed preset ([#281](https://github.com/tupe12334/eslint-config-agent/issues/281)) ([a99f00c](https://github.com/tupe12334/eslint-config-agent/commit/a99f00c13639c191650c8c7f15df3e84bd969b46))
+* **ts:** disable no-throw-literal for TS files; let only-throw-error handle it ([#299](https://github.com/tupe12334/eslint-config-agent/issues/299)) ([c0c9b28](https://github.com/tupe12334/eslint-config-agent/commit/c0c9b28afc2436573e90b87316415569f3e44ff7))
+
 ## [3.0.5](https://github.com/tupe12334/eslint-config-agent/compare/v3.0.4...v3.0.5) (2026-06-24)
 
 ### Features
