@@ -18,13 +18,13 @@ export class TestError extends Error {
 
 // Configure RuleTester for Node.js test environment (modern best practice)
 RuleTester.afterAll = () => {} // eslint-disable-line @typescript-eslint/no-empty-function -- intentional no-op for RuleTester setup
-RuleTester.describe = (name, fn) => {
+RuleTester.describe = (name, function_) => {
   console.log(`\n📝 ${name}`)
-  fn()
+  function_()
 }
-RuleTester.it = (name, fn) => {
+RuleTester.it = (name, function_) => {
   try {
-    fn()
+    function_()
     console.log(`   ✅ ${name}`)
   } catch (error) {
     console.log(`   ❌ ${name}: ${error.message}`)
@@ -53,14 +53,14 @@ const switchStatementsReturnTypeRule = {
     const rules = {}
 
     // Add all selectors to the rule
-    switchStatementsReturnTypeConfigs.forEach(config => {
+    for (const config of switchStatementsReturnTypeConfigs) {
       rules[config.selector] = function (node) {
         context.report({
           node,
           messageId: 'requireReturnType',
         })
       }
-    })
+    }
 
     return rules
   },
@@ -234,7 +234,7 @@ console.log('   • No manual parser configuration required')
 console.log(
   `\n📋 Tested ${switchStatementsReturnTypeConfigs.length} rule configurations:`
 )
-switchStatementsReturnTypeConfigs.forEach((config, index) => {
+for (const [index, config] of switchStatementsReturnTypeConfigs.entries()) {
   console.log(`   ${index + 1}. ${config.selector}`)
   console.log(`      → ${config.message}`)
-})
+}
