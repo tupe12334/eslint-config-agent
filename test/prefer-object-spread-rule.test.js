@@ -2,12 +2,12 @@
  * Integration test for the `prefer-object-spread` rule shipped by
  * eslint-config-agent.
  *
- * The shared config must flag `Object.assign` with an object-literal first
- * argument (the copy/merge-into-a-new-object idiom), accept the object-spread
- * form, and leave a genuine in-place `Object.assign(target, src)` mutation
- * alone. This guards against accidental removal of the rule and documents the
- * intended behavior. Run as a standalone node script by scripts/test-runner.js
- * (exit code 0 = pass).
+ * The shared config must reject building a new object with
+ * `Object.assign({}, ...)` in favor of object spread (`{ ...a, ...b }`), while
+ * leaving `Object.assign(target, ...)` onto an existing target (which mutates)
+ * untouched. This guards against accidental removal of the rule and documents
+ * the intended behavior. Run as a standalone node script by
+ * scripts/test-runner.js (exit code 0 = pass).
  */
 import assert from 'assert'
 import { ESLint } from 'eslint'
@@ -29,38 +29,53 @@ const preferObjectSpreadMessages = async code => {
 
 console.log('Testing prefer-object-spread rule from the shipped config...')
 
-// `Object.assign` with an object-literal first argument must be flagged.
-const objectAssignCopy = await preferObjectSpreadMessages(
-  'export const merge = (base, override) =>\n  Object.assign({}, base, override)\n'
+// `Object.assign({}, source)` builds a new object and must be flagged.
+const newObject = await preferObjectSpreadMessages(
+  'export const merge = source => {\n' +
+    '  return Object.assign({}, source)\n' +
+    '}\n'
 )
 assert.ok(
-  objectAssignCopy.length > 0,
-  'Expected Object.assign({}, ...) to be flagged by prefer-object-spread'
+  newObject.length > 0,
+  'Expected `Object.assign({}, source)` to be flagged by prefer-object-spread'
 )
 assert.strictEqual(
-  objectAssignCopy[0].severity,
+  newObject[0].severity,
   2,
   'prefer-object-spread should be an error'
 )
 
-// The object-spread form must pass.
-const objectSpread = await preferObjectSpreadMessages(
-  'export const merge = (base, override) => ({ ...base, ...override })\n'
+// Merging several sources into a fresh object must also be flagged.
+const newObjectMulti = await preferObjectSpreadMessages(
+  'export const merge = (a, b) => {\n' +
+    '  return Object.assign({}, a, b)\n' +
+    '}\n'
 )
-assert.strictEqual(
-  objectSpread.length,
-  0,
-  'Did not expect object spread to be flagged by prefer-object-spread'
+assert.ok(
+  newObjectMulti.length > 0,
+  'Expected `Object.assign({}, a, b)` to be flagged by prefer-object-spread'
 )
 
-// A genuine in-place mutation `Object.assign(target, src)` must pass.
-const inPlaceMutation = await preferObjectSpreadMessages(
-  'export const apply = (target, src) => Object.assign(target, src)\n'
+// The explicit object-spread form must pass.
+const spread = await preferObjectSpreadMessages(
+  'export const merge = (a, b) => {\n' + '  return { ...a, ...b }\n' + '}\n'
 )
 assert.strictEqual(
-  inPlaceMutation.length,
+  spread.length,
   0,
-  'Did not expect Object.assign(target, src) to be flagged by prefer-object-spread'
+  'Did not expect the object-spread form to be flagged by prefer-object-spread'
+)
+
+// Assigning onto an existing target mutates it and must NOT be flagged.
+const mutateTarget = await preferObjectSpreadMessages(
+  'export const apply = (target, source) => {\n' +
+    '  return Object.assign(target, source)\n' +
+    '}\n'
+)
+assert.strictEqual(
+  mutateTarget.length,
+  0,
+  'Did not expect `Object.assign(target, source)` to be flagged by prefer-object-spread'
 )
 
 console.log('✅ All tests passed!')
