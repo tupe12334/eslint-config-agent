@@ -14,7 +14,9 @@
 import globals from 'globals'
 
 export const javascriptConfig = (sharedRules, sharedRestrictedSyntax) => [
-  // JavaScript files (not JSX)
+  // JavaScript files (not JSX). ESM/CommonJS variants (.mjs/.cjs) are covered
+  // too, mirroring the .ts/.mts/.cts symmetry on the TypeScript side, so the
+  // package's signature rules are not silently skipped for those files.
   {
     files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
     ignores: [
