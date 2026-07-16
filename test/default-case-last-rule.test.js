@@ -2,10 +2,12 @@
  * Integration test for the `default-case-last` rule shipped by
  * eslint-config-agent.
  *
- * The shared config must reject a `switch` whose `default` clause is not the
- * last clause, and accept a `switch` whose `default` comes last. This guards
- * against accidental removal of the rule and documents the intended behavior.
- * Run as a standalone node script by scripts/test-runner.js (exit code 0 = pass).
+ * The shared config must require the `default` clause of a `switch` to come
+ * last. A `default` written before later cases reads as if those cases were
+ * unreachable, and a mid-`switch` `default` that omits `break` falls through
+ * into the cases below it — the "looks one way, behaves another" footgun this
+ * config exists to surface. A `switch` whose `default` is last must pass. Run as
+ * a standalone node script by scripts/test-runner.js (exit code 0 = pass).
  */
 import assert from 'assert'
 import { ESLint } from 'eslint'
@@ -27,42 +29,44 @@ const defaultCaseLastMessages = async code => {
 
 console.log('Testing default-case-last rule from the shipped config...')
 
-// A `default` clause placed before later `case`s must be flagged.
-const defaultNotLast = await defaultCaseLastMessages(
-  'export const label = value => {\n' +
-    '  switch (value) {\n' +
-    '    default:\n' +
-    "      return 'other'\n" +
-    '    case 1:\n' +
-    "      return 'one'\n" +
-    '  }\n' +
-    '}\n'
+// A `default` clause placed before later cases must be flagged.
+const nonLastDefault = await defaultCaseLastMessages(
+  `export const label = value => {
+  switch (value) {
+    default:
+      return 'other'
+    case 1:
+      return 'one'
+  }
+}
+`
 )
 assert.ok(
-  defaultNotLast.length > 0,
-  'Expected a non-last `default` clause to be flagged by default-case-last'
+  nonLastDefault.length > 0,
+  'Expected a non-last `default` clause to be flagged'
 )
 assert.strictEqual(
-  defaultNotLast[0].severity,
+  nonLastDefault[0].severity,
   2,
   'default-case-last should be an error'
 )
 
-// A `switch` whose `default` clause comes last must pass.
-const defaultLast = await defaultCaseLastMessages(
-  'export const label = value => {\n' +
-    '  switch (value) {\n' +
-    '    case 1:\n' +
-    "      return 'one'\n" +
-    '    default:\n' +
-    "      return 'other'\n" +
-    '  }\n' +
-    '}\n'
+// A `default` clause that comes last must pass.
+const lastDefault = await defaultCaseLastMessages(
+  `export const label = value => {
+  switch (value) {
+    case 1:
+      return 'one'
+    default:
+      return 'other'
+  }
+}
+`
 )
 assert.strictEqual(
-  defaultLast.length,
+  lastDefault.length,
   0,
-  'Did not expect a last `default` clause to be flagged by default-case-last'
+  'Did not expect a last `default` clause to be flagged'
 )
 
 console.log('✅ All tests passed!')
