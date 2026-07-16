@@ -26,6 +26,19 @@ const sharedRules = {
   ...allRules.pluginRules,
   'object-curly-newline': 'off',
   'no-shadow': 'off',
+  // The core `no-use-before-define` rule is intentionally left `off`: it
+  // false-positives on TypeScript type/interface declarations and enum
+  // members referenced before their textual position, which are hoisted and
+  // safe. `@typescript-eslint/no-use-before-define` below is the documented
+  // replacement — see that rule's comment for the full rationale.
+  'no-use-before-define': 'off',
+  // The core `no-unused-private-class-members` rule is intentionally left
+  // `off`: it only understands ECMAScript `#hashPrivate` fields, not
+  // TypeScript's `private` keyword, which is the actual dead-code surface in
+  // this codebase. `@typescript-eslint/no-unused-private-class-members` is
+  // the documented replacement — see that rule's comment for the full
+  // rationale.
+  'no-unused-private-class-members': 'off',
   'comma-dangle': 'off',
   'function-paren-newline': 'off',
   quotes: 'off',
@@ -329,6 +342,17 @@ const sharedRules = {
   // a direct call suffices. The rule is auto-fixable (`eslint --fix`) and is
   // not in `eslint:recommended`, so it is enabled explicitly here.
   'no-useless-call': 'error',
+  // Disallow renaming an import, export, or destructured binding to the exact
+  // name it already has — `import { foo as foo } from './foo'`,
+  // `export { bar as bar }`, `const { baz: baz } = obj`. The `as`/`:` clause
+  // reads as if it transforms the binding, so a reader stops to compare both
+  // sides only to discover they are identical: pure punctuation noise that
+  // adds nothing. It is the binding-alias sibling of `no-useless-call` just
+  // above — both look meaningful and are dead — and exactly the ceremony an
+  // AI assistant spells out mechanically for an alias it never needed. The
+  // rule is auto-fixable (`eslint --fix`) and is not in `eslint:recommended`,
+  // so it is enabled explicitly here.
+  'no-useless-rename': 'error',
   // Require `Object.hasOwn(obj, key)` over the legacy ways of asking the same
   // question. The two forms it replaces are each a footgun: calling
   // `obj.hasOwnProperty(key)` directly breaks the moment `obj` has a `null`
@@ -353,6 +377,18 @@ const sharedRules = {
   // explicit-over-clever, AI-safety stance. It is also the foundation the
   // `prefer-const` rule builds on. The rule is auto-fixable.
   'no-var': 'error',
+  // Disallow explicitly initializing a variable to `undefined` —
+  // `let value = undefined` instead of the equivalent, shorter `let value`.
+  // Every declared-but-unassigned binding is already `undefined`, so the
+  // initializer adds a token that looks like it is doing something (choosing
+  // a starting value) while actually doing nothing; a reader has to stop and
+  // confirm that `undefined` really is the intended value rather than a
+  // half-finished assignment the author forgot to fill in. It is exactly the
+  // no-op an AI assistant emits when it scaffolds a variable before deciding
+  // what to assign to it. Not in `eslint:recommended`, so it must be enabled
+  // explicitly here. The rule is auto-fixable (`eslint --fix` deletes the
+  // redundant initializer), so adoption costs nothing.
+  'no-undef-init': 'error',
   // Require object literal shorthand for properties and methods, so
   // `{ value: value }` collapses to `{ value }` and `{ run: function () {} }`
   // to `{ run() {} }`. The longhand forms carry no extra meaning — they are
@@ -537,6 +573,26 @@ const sharedRules = {
   // keeps the check legible. The rule is not auto-fixable because only the
   // author knows which operand was meant.
   'no-self-compare': 'error',
+  // Disallow a binary or logical expression whose result is provably
+  // constant regardless of a variable operand: a `&&`/`||` whose left side
+  // is already a statically known boolean (`true || sideEffect()`, `false
+  // && sideEffect()` — the right side, and any side effect in it, never
+  // runs, yet reads as if it were conditional), a loose-equality check
+  // against `null`/`undefined` where the other side can never be nullish
+  // (`null == undefined` — always `true`), or a `===`/`!==` comparison
+  // between two freshly constructed objects (`new Error() === new
+  // Error()` — two distinct object references can never be `===`-equal, so
+  // the comparison always evaluates the same way no matter what either
+  // constructor does). Each of these type-checks and runs without error, so
+  // the constant result hides behind what reads like a real, live
+  // condition. This is exactly the family `no-self-compare` and
+  // `no-unsafe-optional-chaining` above already guard against: a condition
+  // that looks meaningful but is defeated by its own operands, and
+  // precisely the copy-paste slip an AI assistant leaves behind when it
+  // stubs out a condition with a literal or duplicates a `new` expression on
+  // both sides of a comparison. Not auto-fixable: only the author knows
+  // which operand was meant.
+  'no-constant-binary-expression': 'error',
   // Disallow optional chaining in positions where a short-circuit to
   // `undefined` is immediately used in a way that throws at runtime — member
   // access, a call, arithmetic, spread, `instanceof`, `in`, or destructuring on

@@ -146,4 +146,19 @@ export const reactRules = {
   // invisible to the type checker. Like the other react rules this only fires
   // on `.jsx`/`.tsx` files, so non-React TypeScript packages are unaffected.
   'react/no-object-type-as-default-prop': 'error',
+  // Require a `key` prop on every element created inside an array/iterator
+  // (`.map()`, a spread of JSX literals, etc.). `key` is React's per-child
+  // identity across renders; without it React falls back to matching children
+  // by position, so as soon as the list is reordered, filtered, or gains/loses
+  // an item, state and DOM nodes "smear" onto the wrong element — text typed
+  // into one row's input jumps to another, the wrong checkbox stays checked,
+  // an animation plays on the wrong item. The JSX is perfectly typed either
+  // way, so this is a real rendering bug invisible to the type checker, and
+  // exactly the shortcut an AI assistant reaches for when it renders a list
+  // without pausing to think about identity. It sits on the same
+  // correctness-not-style bar as `no-array-index-key`, `jsx-no-leaked-render`,
+  // and `jsx-no-constructed-context-values` above. Like the other react rules
+  // it only applies to `.jsx`/`.tsx` files, so non-React TypeScript packages
+  // are unaffected.
+  'react/jsx-key': 'error',
 }

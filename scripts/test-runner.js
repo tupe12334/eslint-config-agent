@@ -139,6 +139,23 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'import-path-segments-invalid': {
+    description:
+      'Relative imports with redundant path segments should be flagged',
+    files: ['test/import-path-segments/invalid/useless-segments.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['import/no-useless-path-segments'],
+  },
+  'import-path-segments-valid': {
+    description: 'Shortest-form relative imports should be clean',
+    files: [
+      'test/import-path-segments/valid/clean.ts',
+      'test/import-path-segments/valid/target.ts',
+    ],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
   'security-in-tests': {
     description:
       'Noisy eslint-plugin-security heuristics are relaxed for test/spec files',
@@ -462,6 +479,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-redeclare'],
   },
+  'no-use-before-define': {
+    description:
+      'A let read before its declaration (TDZ) is flagged; a hoisted function called before its textual definition passes',
+    files: [
+      'test/no-use-before-define/invalid-no-use-before-define.ts',
+      'test/no-use-before-define/valid-no-use-before-define.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-use-before-define'],
+  },
   'no-misused-promises': {
     description:
       'An async callback passed to forEach (void-return context) is flagged; an explicit for...of with await passes',
@@ -513,6 +541,39 @@ const testCategories = {
   'no-mixed-enums-valid': {
     description: 'Pure-string and pure-numeric enums must not be flagged',
     files: ['test/no-mixed-enums/valid-mixed-enum.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-unnecessary-condition-invalid': {
+    description:
+      'A guard over a non-nullable type (always truthy) must be flagged',
+    files: [
+      'test/no-unnecessary-condition/invalid-no-unnecessary-condition.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-unnecessary-condition'],
+  },
+  'no-unnecessary-condition-valid': {
+    description: 'A guard over a genuinely nullable type must not be flagged',
+    files: ['test/no-unnecessary-condition/valid-no-unnecessary-condition.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-useless-rename-invalid': {
+    description:
+      'Renaming an import, export, or destructured binding to its own name must be flagged',
+    files: ['test/no-useless-rename/invalid-no-useless-rename.ts'],
+    maxErrors: 3,
+    maxWarnings: 0,
+    expectedRules: ['no-useless-rename'],
+  },
+  'no-useless-rename-valid': {
+    description: 'Genuine renames to a different name must not be flagged',
+    files: [
+      'test/no-useless-rename/valid-no-useless-rename.ts',
+      'test/no-useless-rename/value.ts',
+    ],
     maxErrors: 0,
     maxWarnings: 0,
   },

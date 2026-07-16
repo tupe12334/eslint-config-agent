@@ -189,6 +189,37 @@ export const typescriptEslintRules = {
   // by hand on top of the base config — promoting it into the shared rule set
   // removes that copy-paste.
   '@typescript-eslint/no-shadow': 'error',
+  // Forbid referencing a `let`/`const`/`class` binding before its textual
+  // declaration. Thanks to the Temporal Dead Zone, an early reference to such
+  // a binding does not read `undefined` — it throws a `ReferenceError` at
+  // runtime, so the file can type-check and look correct while a particular
+  // code path (a closure invoked before its outer scope finishes
+  // initializing, a module-level `const` referenced by another before both
+  // have run) blows up only when actually executed. That looks-right-fails-
+  // at-runtime gap is exactly what this config exists to close. Declaration
+  // order should be a reliable signal of evaluation order; this rule makes
+  // violations a lint error instead of a surprise crash.
+  //
+  // The core `no-use-before-define` rule is intentionally left `off` (see
+  // `sharedRules` in `index.js`): it does not understand TypeScript's hoisted
+  // type-level declarations (`interface`, `type`, and `enum` members are safe
+  // to reference before their textual position) and would false-positive on
+  // them. The typescript-eslint version understands those cases, so it is the
+  // documented replacement rather than a second rule fighting the first. It
+  // needs no type information, so it adds no parser cost.
+  //
+  // `functions: false` exempts function declarations, which are fully
+  // hoisted (including their body) and safe to call before their textual
+  // definition — flagging them would only add noise, not catch a real bug.
+  // `classes` and `variables` stay `true` because those bindings are hoisted
+  // but left uninitialized (the TDZ), so referencing them early is the actual
+  // runtime hazard this rule exists to catch. This mirrors how downstream repo
+  // `ameliso-io/web` already configures the rule by hand on top of the base
+  // config — promoting it into the shared rule set removes that copy-paste.
+  '@typescript-eslint/no-use-before-define': [
+    'error',
+    { functions: false, classes: true, variables: true },
+  ],
   // Forbid declaring a function inside a loop when that function closes over a
   // binding that changes between iterations. A function created in a loop
   // captures its outer variables *by reference*, not by value, so every closure
@@ -364,4 +395,43 @@ export const typescriptEslintRules = {
   // pointing at the typescript-eslint variant); promoting it here removes that
   // copy-paste and covers every downstream consumer.
   '@typescript-eslint/no-redeclare': 'error',
+  // Flag a condition, `&&`/`||` operand, or optional-chain (`?.`) link whose
+  // type proves it can never be anything but truthy or never be anything but
+  // falsy. A guard like `if (value)` where `value`'s type is a non-nullable
+  // object looks like a real null/undefined check, but the type checker has
+  // already proven it always passes — the "guard" is dead code that silently
+  // hides the fact the author expected a case (`null`, `undefined`, `false`)
+  // the type no longer allows, usually because an earlier refactor narrowed
+  // the type and left a now-redundant check behind. The inverse (a condition
+  // that is always falsy) is worse: the guarded branch is unreachable dead
+  // code that looks live. Both are exactly the "looks like a safety check,
+  // does nothing" gap this config exists to close, and the type-aware
+  // completion of the same always-true/false class of bug
+  // `no-self-compare` and `no-constant-binary-expression` already catch by
+  // syntax alone. The rule is type-aware, so it runs under the
+  // `projectService` parser options already configured for `.ts`/`.tsx`
+  // files, and it is why downstream repo `block-no-verify` already re-adds
+  // it by hand on top of the base config.
+  '@typescript-eslint/no-unnecessary-condition': 'error',
+  // Forbid a `private` (TypeScript keyword) or `#hashPrivate` class field or
+  // method that is declared and never read or called anywhere in the class
+  // body. Because the member is private, there is no legitimate external
+  // caller to account for — an unused one is dead code: a leftover from a
+  // refactor that forgot to delete it, or worse, a member the author meant to
+  // wire up but a typo or missed call site left orphaned, silently doing
+  // nothing while the reader assumes it does something.
+  //
+  // The core `no-unused-private-class-members` rule (already enabled via
+  // `eslint:recommended`) only understands ECMAScript `#hashPrivate` fields —
+  // it has no notion of TypeScript's `private` keyword, which is the actual
+  // dead-code surface in a TypeScript-heavy codebase. The typescript-eslint
+  // version is a strict superset (flags both forms) and needs no type
+  // information, so it adds no parser cost. This mirrors how
+  // `@typescript-eslint/no-shadow` and `@typescript-eslint/no-use-before-define`
+  // above already replace their core counterparts. Downstream repo
+  // `ameliso-io/web` already re-adds both the core and typescript-eslint
+  // variants by hand on top of the base config — promoting the
+  // typescript-eslint version into the shared rule set removes that
+  // copy-paste.
+  '@typescript-eslint/no-unused-private-class-members': 'error',
 }
