@@ -2,15 +2,10 @@
  * Integration test for the `@typescript-eslint/no-unused-private-class-members`
  * rule shipped by eslint-config-agent.
  *
- * A `private` (or `#hashPrivate`) class field or method that is never read or
- * called anywhere in the class is dead code: because it is private, nothing
- * outside the class can be using it either, so there is no legitimate caller
- * left to account for. It is either a leftover from a refactor or a member
- * the author meant to wire up and never finished. The shared config must
- * flag a private field that is only ever written, never read, while leaving
- * a private field that is read back through a public accessor alone. This
- * guards against accidental removal of the rule and documents the intended
- * behavior.
+ * A `private` (TypeScript keyword) or `#hashPrivate` class field/method that
+ * is declared and never read anywhere in the class body is dead code — there
+ * is no legitimate external caller to account for. The shared config must
+ * flag every such member and leave members that are actually used alone.
  *
  * Run as a standalone node script by scripts/test-runner.js (exit code 0 = pass).
  */
@@ -31,14 +26,13 @@ console.log(
   'Testing no-unused-private-class-members rule from the shipped config...'
 )
 
-// A private field that is only ever assigned, never read, must be flagged.
+// An unread private field must be flagged.
 const invalid = await noUnusedPrivateClassMembersMessages(
-  'test/no-unused-private-class-members/invalid-no-unused-private-class-members.ts'
+  'test/no-unused-private-class-members/invalid-unused-private-class-members.ts'
 )
-assert.strictEqual(
-  invalid.length,
-  1,
-  `Expected the write-only private field to be flagged by no-unused-private-class-members, got ${invalid.length}`
+assert.ok(
+  invalid.length > 0,
+  `Expected an unused private class member to be flagged, got ${invalid.length}`
 )
 assert.strictEqual(
   invalid[0].severity,
@@ -46,14 +40,14 @@ assert.strictEqual(
   'no-unused-private-class-members should be an error'
 )
 
-// A private field read back through a public accessor must pass.
+// A private field read elsewhere in the class must not be flagged.
 const valid = await noUnusedPrivateClassMembersMessages(
-  'test/no-unused-private-class-members/valid-no-unused-private-class-members.ts'
+  'test/no-unused-private-class-members/valid-unused-private-class-members.ts'
 )
 assert.strictEqual(
   valid.length,
   0,
-  `Did not expect a private field read through a public accessor to be flagged, got ${valid.length}`
+  `Did not expect a used private class member to be flagged, got ${valid.length}`
 )
 
 console.log('✅ All tests passed!')

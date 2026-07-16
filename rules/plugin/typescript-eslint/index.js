@@ -371,23 +371,43 @@ export const typescriptEslintRules = {
   // explicitly. It is not auto-fixable: only the author knows whether to
   // normalize to numbers or strings.
   '@typescript-eslint/no-mixed-enums': 'error',
-  // Flag a `private` (or `#hashPrivate`) class field or method that is never
-  // read/called anywhere in the class body. An unused private member is dead
-  // code — either a leftover from a refactor that forgot to delete it, or
-  // (worse) a sign the author meant to wire it up but a typo or a missed call
-  // site left it orphaned, silently changing nothing at runtime while the
-  // reader assumes it does. Because the member is `private`, nothing outside
-  // the class can be using it either, so there is no legitimate external
-  // caller to account for. This is exactly the kind of unreferenced code an
-  // AI assistant leaves behind when it scaffolds a field or helper method
-  // "for later" and then never finishes wiring it in.
+  // Flag a condition, `&&`/`||` operand, or optional-chain (`?.`) link whose
+  // type proves it can never be anything but truthy or never be anything but
+  // falsy. A guard like `if (value)` where `value`'s type is a non-nullable
+  // object looks like a real null/undefined check, but the type checker has
+  // already proven it always passes — the "guard" is dead code that silently
+  // hides the fact the author expected a case (`null`, `undefined`, `false`)
+  // the type no longer allows, usually because an earlier refactor narrowed
+  // the type and left a now-redundant check behind. The inverse (a condition
+  // that is always falsy) is worse: the guarded branch is unreachable dead
+  // code that looks live. Both are exactly the "looks like a safety check,
+  // does nothing" gap this config exists to close, and the type-aware
+  // completion of the same always-true/false class of bug
+  // `no-self-compare` and `no-constant-binary-expression` already catch by
+  // syntax alone. The rule is type-aware, so it runs under the
+  // `projectService` parser options already configured for `.ts`/`.tsx`
+  // files, and it is why downstream repo `block-no-verify` already re-adds
+  // it by hand on top of the base config.
+  '@typescript-eslint/no-unnecessary-condition': 'error',
+  // Forbid a `private` (TypeScript keyword) or `#hashPrivate` class field or
+  // method that is declared and never read or called anywhere in the class
+  // body. Because the member is private, there is no legitimate external
+  // caller to account for — an unused one is dead code: a leftover from a
+  // refactor that forgot to delete it, or worse, a member the author meant to
+  // wire up but a typo or missed call site left orphaned, silently doing
+  // nothing while the reader assumes it does something.
   //
-  // The core `no-unused-private-class-members` rule is intentionally left
-  // `off` (see `sharedRules` in `index.js`): it only understands `#hashPrivate`
-  // fields, not TypeScript's `private` keyword, so a TS project's actual
-  // dead-code surface (mostly `private` members, not `#hashPrivate` ones)
-  // would go unchecked. This typescript-eslint variant is a strict superset —
-  // it flags both forms — and needs no type information, so it adds no
-  // parser cost.
+  // The core `no-unused-private-class-members` rule (already enabled via
+  // `eslint:recommended`) only understands ECMAScript `#hashPrivate` fields —
+  // it has no notion of TypeScript's `private` keyword, which is the actual
+  // dead-code surface in a TypeScript-heavy codebase. The typescript-eslint
+  // version is a strict superset (flags both forms) and needs no type
+  // information, so it adds no parser cost. This mirrors how
+  // `@typescript-eslint/no-shadow` and `@typescript-eslint/no-use-before-define`
+  // above already replace their core counterparts. Downstream repo
+  // `ameliso-io/web` already re-adds both the core and typescript-eslint
+  // variants by hand on top of the base config — promoting the
+  // typescript-eslint version into the shared rule set removes that
+  // copy-paste.
   '@typescript-eslint/no-unused-private-class-members': 'error',
 }
