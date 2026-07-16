@@ -139,6 +139,23 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'import-path-segments-invalid': {
+    description:
+      'Relative imports with redundant path segments should be flagged',
+    files: ['test/import-path-segments/invalid/useless-segments.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['import/no-useless-path-segments'],
+  },
+  'import-path-segments-valid': {
+    description: 'Shortest-form relative imports should be clean',
+    files: [
+      'test/import-path-segments/valid/clean.ts',
+      'test/import-path-segments/valid/target.ts',
+    ],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
   'security-in-tests': {
     description:
       'Noisy eslint-plugin-security heuristics are relaxed for test/spec files',
@@ -527,6 +544,22 @@ const testCategories = {
   'no-logic-in-index-valid': {
     description: 'A pure re-export barrel must not be flagged',
     files: ['test/no-logic-in-index/valid/index.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-unnecessary-condition-invalid': {
+    description:
+      'A guard over a non-nullable type (always truthy) must be flagged',
+    files: [
+      'test/no-unnecessary-condition/invalid-no-unnecessary-condition.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-unnecessary-condition'],
+  },
+  'no-unnecessary-condition-valid': {
+    description: 'A guard over a genuinely nullable type must not be flagged',
+    files: ['test/no-unnecessary-condition/valid-no-unnecessary-condition.ts'],
     maxErrors: 0,
     maxWarnings: 0,
   },
