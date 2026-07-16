@@ -34,36 +34,6 @@
  */
 
 import config from '../index.js'
-
-const WARN = 'warn'
-const ERROR_LEVELS = new Set(['error', 2])
-
-const downgrade = severity => (ERROR_LEVELS.has(severity) ? WARN : severity)
-
-/**
- * Downgrade every error-level rule in a flat-config block to a warning.
- *
- * Blocks without a `rules` object (for example `ignores`-only blocks) are
- * returned untouched. Both shorthand (`'error'`) and tuple
- * (`['error', options]`) rule values are handled, and `off`/`warn` rules are
- * left exactly as they are.
- * @param block A flat-config block.
- * @returns The block with error-level rules downgraded to warnings.
- */
-const toWarnings = block => {
-  if (block.rules === undefined) {
-    return block
-  }
-
-  const rules = Object.fromEntries(
-    Object.entries(block.rules).map(([name, value]) =>
-      Array.isArray(value)
-        ? [name, [downgrade(value[0]), ...value.slice(1)]]
-        : [name, downgrade(value)]
-    )
-  )
-
-  return { ...block, rules }
-}
+import { toWarnings } from './to-warnings.js'
 
 export default config.map(toWarnings)
