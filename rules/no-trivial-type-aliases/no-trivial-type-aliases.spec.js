@@ -47,11 +47,12 @@ const literalTypeRule = createRuleFromConfig(
   'noLiteralTypes'
 )
 
+const { default: tsParser } = await import('@typescript-eslint/parser')
 const ruleTester = new RuleTester({
   languageOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
-    parser: (await import('@typescript-eslint/parser')).default,
+    parser: tsParser,
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
@@ -155,9 +156,9 @@ ruleTester.run('no-trivial-type-aliases-literal', literalTypeRule, {
 })
 
 console.log('✅ All no-trivial-type-aliases tests passed!')
-noTrivialTypeAliasesConfigs.forEach((config, index) => {
+for (const [index, config] of noTrivialTypeAliasesConfigs.entries()) {
   console.log(`   Rule ${index + 1} - Selector: ${config.selector}`)
   console.log(`   Rule ${index + 1} - Message: ${config.message}`)
-})
+}
 
 export { primitiveTypeRule, typeReferenceRule, literalTypeRule }

@@ -1,5 +1,4 @@
-// Test file for className warning rule
-// This file tests that UI elements without className attributes generate warnings
+// Test file for className warning rule This file tests that UI elements without className attributes generate warnings
 
 import React from 'react';
 
@@ -14,8 +13,8 @@ const ValidComponentsWithClassName = () => {
       <input className="input" type="text" />
       <img className="image" src="test.jpg" alt="test" />
       <CustomComponent prop="value">Custom components should be ignored</CustomComponent>
-      <Fragment>Fragment should be ignored</Fragment>
-      <>Empty fragment should work</>
+      Fragment should be ignored
+      Empty fragment should work
     </div>
   );
 };
@@ -81,7 +80,7 @@ const EdgeCases = () => {
       <div className={false}>Boolean className should still count</div>
       <div className={0}>Number className should still count</div>
       <div className={"dynamic"}>String literal className should count</div>
-      <div className={`template-${true}`}>Template literal className should count</div>
+      <div className={`template-true`}>Template literal className should count</div>
     </div>
   );
 };

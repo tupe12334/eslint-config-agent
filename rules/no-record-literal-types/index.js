@@ -23,7 +23,7 @@
 const rule = 'error'
 
 // First selector: matches TSLiteralType descendants of first param (catches literals inside unions)
-const selectorNestedParams =
+const selectorNestedParameters =
   'TSTypeReference[typeName.name="Record"] > TSTypeParameterInstantiation > .params:first-child TSLiteralType'
 
 // Second selector: matches direct TSLiteralType as first param
@@ -38,7 +38,7 @@ const message =
  * Can be used in ESLint config as part of no-restricted-syntax rules
  */
 const noRecordLiteralTypesNestedConfig = {
-  selector: selectorNestedParams,
+  selector: selectorNestedParameters,
   message,
 }
 
@@ -58,7 +58,7 @@ const noRecordLiteralTypesConfigs = [
 // Consolidated exports
 export {
   rule,
-  selectorNestedParams,
+  selectorNestedParameters,
   selectorFirstChild,
   message,
   noRecordLiteralTypesNestedConfig,
