@@ -1,111 +1,79 @@
 #!/usr/bin/env node
-/* eslint-disable import/order, security/detect-object-injection */
+/* eslint-disable import/order */
 
 /**
  * Smoke test for the `eslint-config-agent/recommended` preset.
  *
  * Asserts that the relaxed preset accepts idiomatic TypeScript (optional
  * chaining, nullish coalescing, default params, generic Error, multiple
- * exports, no spec file) that the strict default config rejects — proving the
- * preset actually relaxes the opinionated rules.
+ * exports, no spec file) and idiomatic JSX (a Tailwind-only `className`) that
+ * the strict default config rejects — proving the preset actually relaxes the
+ * opinionated rules. Also asserts that `max-lines-per-function`/`max-lines`
+ * stay enforced at the same 70/100-line thresholds as the strict default, but
+ * downgraded from `error` to `warn` (issue #85), so an adopting codebase's
+ * legacy long functions/files surface as backlog instead of failing CI.
  */
 
 import { ESLint } from 'eslint'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-import strictFlatConfig from '../index.js'
-import recommendedFlatConfig from '../exports/recommended.js'
+import { join } from 'node:path'
+import { assertRuleChecks } from './lib/assert-rule-checks.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __filename = import.meta.filename
+const __dirname = import.meta.dirname
 const projectRoot = join(__dirname, '..')
-const sample = join(projectRoot, 'test/recommended/sample.ts')
+// Lint against the shipped config (`index.js`) rather than this repo's local
+// `eslint.config.js`, which deliberately ignores the invalid-by-design
+// `sample.jsx` fixture so the repo's own lint stays green.
+const strictConfig = join(projectRoot, 'index.js')
+const recommendedConfig = join(projectRoot, 'test/recommended/eslint.config.js')
 
-async function countErrors(configFile) {
+// Each fixture is idiomatic code the strict default rejects but the relaxed
+// preset must accept. `sample.ts` covers the TypeScript relaxations; the
+// `sample.jsx` covers `jsx-classname/require-classname` (a Tailwind-only
+// className), which would otherwise block every React/Preact + Tailwind repo.
+const samples = [
+  join(projectRoot, 'test/recommended/sample.ts'),
+  join(projectRoot, 'test/recommended/sample.jsx'),
+]
+
+async function countErrors(configFile, sample) {
   const eslint = new ESLint({ overrideConfigFile: configFile })
   const results = await eslint.lintFiles([sample])
   return results.reduce((total, result) => total + result.errorCount, 0)
 }
 
-// Resolve a rule's effective severity across a flat-config array: later blocks
-// win, so walk the whole array and keep the last block that sets the rule
-// globally (no `files` scope). Returns the normalized severity string, or
-// `undefined` if no global block configures it.
-function effectiveSeverity(flatConfig, ruleId) {
-  const severities = new Map([
-    [0, 'off'],
-    [1, 'warn'],
-    [2, 'error'],
-    ['off', 'off'],
-    ['warn', 'warn'],
-    ['error', 'error'],
-  ])
-  let resolved
-  for (const block of flatConfig) {
-    if (block === null || typeof block !== 'object') continue
-    if (block.files !== undefined) continue
-    const rules = block.rules
-    if (rules === undefined || rules === null) continue
-    const setting = rules[ruleId]
-    if (setting === undefined) continue
-    const level = Array.isArray(setting) ? setting[0] : setting
-    resolved = severities.has(level) ? severities.get(level) : String(level)
+async function checkSample(sample) {
+  const strictErrors = await countErrors(strictConfig, sample)
+  const relaxedErrors = await countErrors(recommendedConfig, sample)
+  console.log(`\n${sample}`)
+  console.log(`  strict config errors:      ${strictErrors}`)
+  console.log(`  recommended preset errors: ${relaxedErrors}`)
+  if (strictErrors === 0) {
+    console.error(
+      `❌ Expected the strict config to flag ${sample}; the fixture no longer exercises the relaxed rules.`
+    )
+    process.exit(1)
   }
-  return resolved
+  if (relaxedErrors === 0) {
+    return
+  }
+  console.error(
+    `❌ Expected the recommended preset to accept ${sample} with zero errors.`
+  )
+  process.exit(1)
 }
 
 async function main() {
-  const strictErrors = await countErrors(join(projectRoot, 'eslint.config.js'))
-  const relaxedErrors = await countErrors(
-    join(projectRoot, 'test/recommended/eslint.config.js')
-  )
+  await Promise.all(samples.map(sample => checkSample(sample)))
 
-  console.log(`strict config errors:      ${strictErrors}`)
-  console.log(`recommended preset errors: ${relaxedErrors}`)
+  await assertRuleChecks(projectRoot, strictConfig, recommendedConfig)
 
-  if (strictErrors === 0) {
-    console.error(
-      '❌ Expected the strict config to flag the sample; the fixture no longer exercises the relaxed rules.'
-    )
-    process.exit(1)
-  }
-  if (relaxedErrors !== 0) {
-    console.error(
-      '❌ Expected the recommended preset to accept the sample with zero errors.'
-    )
-    process.exit(1)
-  }
-  console.log('✅ recommended preset relaxes the strict rules as expected.')
-
-  // Regression guard: the recommended preset must relax `jsdoc/require-jsdoc`
-  // (a documented migration-on-ramp rule) to `off`, while the strict default
-  // config still enforces it. Asserted at the config level because the rule is
-  // suppressed for everything under test/, so a fixture file cannot exercise it.
-  const strictJsdoc = effectiveSeverity(strictFlatConfig, 'jsdoc/require-jsdoc')
-  const relaxedJsdoc = effectiveSeverity(
-    recommendedFlatConfig,
-    'jsdoc/require-jsdoc'
-  )
-
-  console.log(`strict jsdoc/require-jsdoc:      ${strictJsdoc}`)
-  console.log(`recommended jsdoc/require-jsdoc: ${relaxedJsdoc}`)
-
-  if (strictJsdoc !== 'error') {
-    console.error(
-      `❌ Expected the strict config to enforce jsdoc/require-jsdoc (error); got "${strictJsdoc}".`
-    )
-    process.exit(1)
-  }
-  if (relaxedJsdoc !== 'off') {
-    console.error(
-      `❌ Expected the recommended preset to disable jsdoc/require-jsdoc (off); got "${relaxedJsdoc}".`
-    )
-    process.exit(1)
-  }
-  console.log('✅ recommended preset relaxes jsdoc/require-jsdoc as expected.')
+  console.log('\n✅ recommended preset relaxes the strict rules as expected.')
 }
 
-main().catch(error => {
+try {
+  await main()
+} catch (error) {
   console.error(error)
   process.exit(1)
-})
+}
