@@ -1,5 +1,5 @@
 // Valid ESM JavaScript (.mjs) file.
-// Verifies that .mjs files are linted with the JavaScript rule set and pass
-// without false positives (single export, no banned syntax).
+// Verifies that .mjs files receive the JavaScript rule set (shared rules plus
+// no-restricted-syntax) and pass cleanly without false positives.
 
 export const greeting = 'hello from an mjs module'

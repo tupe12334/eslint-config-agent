@@ -1,5 +1,5 @@
 // Valid CommonJS JavaScript (.cjs) file.
-// Verifies that .cjs files are linted with the JavaScript rule set and pass
-// without false positives (single export, no banned syntax).
+// Verifies that .cjs files receive the JavaScript rule set (shared rules plus
+// no-restricted-syntax) and pass cleanly without false positives.
 
 export const farewell = 'goodbye from a cjs module'
