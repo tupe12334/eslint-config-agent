@@ -1,7 +1,6 @@
-// Test file for valid className usage in TSX
-// This file should have NO errors - all HTML elements have className attributes
+// Test file for valid className usage in TSX This file should have NO errors - all HTML elements have className attributes
 
-import React, { Fragment } from 'react';
+import React from 'react';
 
 // Valid cases - all HTML elements have className attributes
 export const ValidComponentsWithClassName = () => {
@@ -44,8 +43,8 @@ export const ValidComponentsWithClassName = () => {
       </AnotherComponent>
 
       {/* Fragments should be ignored */}
-      <Fragment>Fragment is ignored</Fragment>
-      <>Empty fragment is ignored</>
+      Fragment is ignored
+      Empty fragment is ignored
     </div>
   );
 };
@@ -60,7 +59,7 @@ export const EdgeCasesValid = () => {
       <div className={false}>Dynamic className (boolean) should be valid</div>
       <div className={0}>Dynamic className (number) should be valid</div>
       <div className={"dynamic"}>Dynamic className (string literal) should be valid</div>
-      <div className={`template-${"test"}`}>Dynamic className (template literal) should be valid</div>
+      <div className={`template-test`}>Dynamic className (template literal) should be valid</div>
 
       {/* Conditional className should be valid */}
       <div className={"active"}>Conditional className should be valid</div>

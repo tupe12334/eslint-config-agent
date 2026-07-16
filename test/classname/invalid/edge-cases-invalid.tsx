@@ -1,7 +1,6 @@
-// Test file for invalid edge cases of className rule
-// This file should trigger ERRORS for elements without className attributes
+// Test file for invalid edge cases of className rule This file should trigger ERRORS for elements without className attributes
 
-import React, { Fragment } from 'react';
+import React from 'react';
 
 // Edge case: SVG elements without className (should trigger errors)
 export const InvalidSVGElements = () => {
