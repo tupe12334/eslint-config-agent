@@ -2,14 +2,15 @@
  * Integration test for the `no-constructor-return` rule shipped by
  * eslint-config-agent.
  *
- * The shared config must reject `return <value>` inside a class constructor
- * (which silently overrides the constructed instance or is dead code) and
- * accept both a constructor with no return and a bare early `return;`. This
- * guards against accidental removal of the rule and documents the intended
- * behavior. Run as a standalone node script by scripts/test-runner.js
- * (exit code 0 = pass).
+ * The shared config must flag a class constructor that returns a value —
+ * whether an object (which silently overrides the instance `new` hands back)
+ * or a primitive (which is ignored outright, making the `return` dead code).
+ * A constructor with no `return` at all, and a constructor with a bare early
+ * `return;` (no value) used to bail out, must both pass. This guards against
+ * accidental removal of the rule and documents the intended behavior.
+ * Run as a standalone node script by scripts/test-runner.js (exit 0 = pass).
  */
-import assert from 'assert'
+import assert from 'node:assert'
 import { ESLint } from 'eslint'
 import config from '../index.js'
 
@@ -18,7 +19,11 @@ const eslint = new ESLint({
   overrideConfig: config,
 })
 
-const noConstructorReturnMessages = async code => {
+/**
+ * @param code - Source code to lint as a .js file.
+ * @returns Messages for no-constructor-return.
+ */
+const constructorReturnMessages = async code => {
   const [result] = await eslint.lintText(code, {
     filePath: 'no-constructor-return-sample.js',
   })
@@ -29,62 +34,42 @@ const noConstructorReturnMessages = async code => {
 
 console.log('Testing no-constructor-return rule from the shipped config...')
 
-// Returning an object from a constructor must be flagged.
-const returnObject = await noConstructorReturnMessages(
-  'export class Thing {\n' +
-    '  constructor() {\n' +
-    '    return { hijacked: true }\n' +
-    '  }\n' +
-    '}\n'
+// A constructor returning an object must be flagged.
+const objectReturn = await constructorReturnMessages(
+  'export class Thing {\n  constructor() {\n    return { fake: true }\n  }\n}\n'
 )
 assert.ok(
-  returnObject.length > 0,
-  'Expected returning an object from a constructor to be flagged by no-constructor-return'
+  objectReturn.length > 0,
+  'Expected a constructor returning an object to be flagged by no-constructor-return'
 )
 assert.strictEqual(
-  returnObject[0].severity,
+  objectReturn[0].severity,
   2,
   'no-constructor-return should be an error'
 )
 
-// Returning a primitive from a constructor (dead code) must also be flagged.
-const returnPrimitive = await noConstructorReturnMessages(
-  'export class Counter {\n' +
-    '  constructor() {\n' +
-    '    this.value = 0\n' +
-    '    return 42\n' +
-    '  }\n' +
-    '}\n'
+// A constructor returning a primitive must be flagged.
+const primitiveReturn = await constructorReturnMessages(
+  'export class Thing {\n  constructor() {\n    return 5\n  }\n}\n'
 )
 assert.ok(
-  returnPrimitive.length > 0,
-  'Expected returning a primitive from a constructor to be flagged by no-constructor-return'
+  primitiveReturn.length > 0,
+  'Expected a constructor returning a primitive to be flagged by no-constructor-return'
 )
 
-// A constructor that only initializes `this` must pass.
-const noReturn = await noConstructorReturnMessages(
-  'export class Counter {\n' +
-    '  constructor() {\n' +
-    '    this.value = 0\n' +
-    '  }\n' +
-    '}\n'
+// A constructor with no return must NOT be flagged.
+const noReturn = await constructorReturnMessages(
+  'export class Thing {\n  constructor(value) {\n    this.value = value\n  }\n}\n'
 )
 assert.strictEqual(
   noReturn.length,
   0,
-  'Did not expect a constructor without a returned value to be flagged by no-constructor-return'
+  'Did not expect a constructor with no return to be flagged by no-constructor-return'
 )
 
-// A bare early `return;` (no value) is allowed and must pass.
-const bareReturn = await noConstructorReturnMessages(
-  'export class Guarded {\n' +
-    '  constructor(enabled) {\n' +
-    '    if (!enabled) {\n' +
-    '      return\n' +
-    '    }\n' +
-    '    this.enabled = enabled\n' +
-    '  }\n' +
-    '}\n'
+// A constructor with a bare early `return;` (no value) must NOT be flagged.
+const bareReturn = await constructorReturnMessages(
+  'export class Thing {\n  constructor(value) {\n    if (!value) {\n      return\n    }\n    this.value = value\n  }\n}\n'
 )
 assert.strictEqual(
   bareReturn.length,
