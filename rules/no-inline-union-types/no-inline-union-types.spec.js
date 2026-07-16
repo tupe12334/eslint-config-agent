@@ -33,14 +33,14 @@ const mockRule = {
     const handlers = {}
 
     // Add handlers for all selectors from our configuration
-    noInlineUnionTypesConfigs.forEach(config => {
+    for (const config of noInlineUnionTypesConfigs) {
       handlers[config.selector] = node => {
         context.report({
           node,
           message: config.message,
         })
       }
-    })
+    }
 
     return handlers
   },
@@ -81,6 +81,24 @@ ruleTester.run('no-inline-union-types', mockRule, {
     {
       code: 'class Config { mode: "dev" | "prod"; }',
       errors: [{ message: messageClassProperty }],
+    },
+
+    // Interface properties with non-literal unions (e.g. string | number)
+    {
+      code: 'interface User { id: string | number; }',
+      errors: [{ message: messageProperty }],
+    },
+
+    // Class properties with non-literal unions
+    {
+      code: 'class Config { value: string | number; }',
+      errors: [{ message: messageClassProperty }],
+    },
+
+    // Mixed literal/non-literal union in an interface property
+    {
+      code: 'interface Box { content: string | null; }',
+      errors: [{ message: messageProperty }],
     },
 
     // Multiple interface properties

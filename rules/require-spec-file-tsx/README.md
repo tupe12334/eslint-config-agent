@@ -37,14 +37,17 @@ does **not** satisfy the requirement for the source file.
 - `index.tsx` / `index.jsx` (barrel files)
 - `*.stories.tsx` / `*.stories.jsx`
 - `.d.ts` declaration files
+- Error/exception files — `*-error.{tsx,jsx}`, `*.error.{tsx,jsx}`, anything
+  under `errors/` or `exceptions/` (mirrors the `ddd/require-spec-file`
+  exemptions for `.ts`/`.js`)
 - Files with no logic (e.g. pure re-export barrels)
 - `.spec.*` / `.test.*` files themselves
 
 ## Options
 
-| Option            | Type       | Default                                                                   | Description                                         |
-| ----------------- | ---------- | ------------------------------------------------------------------------- | --------------------------------------------------- |
-| `excludePatterns` | `string[]` | `['**/index.tsx', '**/index.jsx', '**/*.stories.{tsx,jsx}', '**/*.d.ts']` | Glob patterns to exclude from the spec requirement. |
+| Option            | Type       | Default                                                                                                                                                       | Description                                         |
+| ----------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `excludePatterns` | `string[]` | `['**/index.tsx', '**/index.jsx', '**/*.stories.{tsx,jsx}', '**/*.d.ts', '**/*-error.{tsx,jsx}', '**/*.error.{tsx,jsx}', '**/errors/**', '**/exceptions/**']` | Glob patterns to exclude from the spec requirement. |
 
 ```js
 'custom/require-spec-file-tsx': [

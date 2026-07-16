@@ -1,5 +1,4 @@
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { join } from 'node:path'
 import { RuleTester } from 'eslint'
 import { requireSpecFileTsxRule } from './index.js'
 
@@ -12,15 +11,16 @@ import { requireSpecFileTsxRule } from './index.js'
  * sibling spec/test files need to exist on disk.
  */
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = import.meta.dirname
 const valid = name => join(__dirname, 'examples', 'valid', name)
 const invalid = name => join(__dirname, 'examples', 'invalid', name)
 
+const { default: tsParser } = await import('@typescript-eslint/parser')
 const ruleTester = new RuleTester({
   languageOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
-    parser: (await import('@typescript-eslint/parser')).default,
+    parser: tsParser,
     parserOptions: {
       ecmaFeatures: { jsx: true },
     },
@@ -73,6 +73,25 @@ ruleTester.run('require-spec-file-tsx', requireSpecFileTsxRule, {
       code: componentCode,
       filename: invalid('Lonely.tsx'),
       options: [{ excludePatterns: ['**/Lonely.tsx'] }],
+    },
+    // Error/exception files are excluded by default, mirroring the
+    // ddd/require-spec-file exemptions for `.ts`/`.js`. These fixtures need not
+    // exist on disk: an excluded file short-circuits before the sibling lookup.
+    {
+      code: arrowComponentCode,
+      filename: invalid('AppBoundary.error.tsx'),
+    },
+    {
+      code: arrowComponentCode,
+      filename: invalid('app-error.jsx'),
+    },
+    {
+      code: arrowComponentCode,
+      filename: join(__dirname, 'examples', 'errors', 'Boundary.tsx'),
+    },
+    {
+      code: arrowComponentCode,
+      filename: join(__dirname, 'examples', 'exceptions', 'NotFound.jsx'),
     },
   ],
   invalid: [
