@@ -13,11 +13,11 @@ const options = {}
 /**
  * Export the complete rule configuration
  * Can be used in ESLint config as:
- * "n/no-process-env": noProcessEnvConfig
+ * "n/no-process-env": noProcessEnvironmentConfig
  */
-const noProcessEnvConfig = [rule, options]
+const noProcessEnvironmentConfig = [rule, options]
 
 // Consolidated exports
-export { rule, options, noProcessEnvConfig }
+export { rule, options, noProcessEnvironmentConfig }
 
-export default noProcessEnvConfig
+export default noProcessEnvironmentConfig
