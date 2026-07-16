@@ -1,16 +1,13 @@
 /**
- * Integration test for the `no-new-wrappers` rule shipped by
- * eslint-config-agent.
+ * Integration test for the `no-new-wrappers` rule shipped by eslint-config-agent.
  *
- * `new String(...)`, `new Number(...)`, and `new Boolean(...)` create objects,
- * not primitives: `typeof new String('x')` is `'object'`, not `'string'`, and
- * `new String('x') !== 'x'` — so every `===` comparison, `typeof` check, or
- * `instanceof` test silently produces the wrong answer. The shared config must
- * flag each wrapper constructor while letting the coercion functions
- * (`String(x)`, `Number(x)`, `Boolean(x)`) and bare literals pass. This
- * guards against accidental removal of the rule and documents the intended
- * behavior. Run as a standalone node script by scripts/test-runner.js (exit
- * code 0 = pass).
+ * The shared config must reject the primitive-wrapper constructors
+ * `new String()`, `new Number()`, and `new Boolean()` — they produce boxed
+ * objects whose type and equality semantics surprise callers — while allowing
+ * the plain conversion call forms (`String(x)`, `Number(x)`, `Boolean(x)`).
+ * This guards against accidental removal of the rule and documents the intended
+ * behavior. Run as a standalone node script by scripts/test-runner.js
+ * (exit code 0 = pass).
  */
 import assert from 'node:assert'
 import { ESLint } from 'eslint'
@@ -30,47 +27,64 @@ const noNewWrappersMessages = async code => {
 
 console.log('Testing no-new-wrappers rule from the shipped config...')
 
-// new String(...) must be flagged — creates an object, not a primitive.
+// `new String(...)` must be flagged — produces a boxed object, not a primitive.
 const newString = await noNewWrappersMessages(
-  `export const greeting = new String('hello')\n`
+  "export const label = new String('hello')\n"
 )
-assert.ok(newString.length > 0, 'Expected `new String()` to be flagged')
+assert.ok(
+  newString.length > 0,
+  "Expected `new String('hello')` to be flagged by no-new-wrappers"
+)
 assert.strictEqual(
   newString[0].severity,
   2,
   'no-new-wrappers should be an error'
 )
 
-// new Number(...) must be flagged.
+// `new Number(...)` must be flagged — typeof is 'object', not 'number'.
 const newNumber = await noNewWrappersMessages(
-  `export const count = new Number(42)\n`
+  'export const count = new Number(42)\n'
 )
-assert.ok(newNumber.length > 0, 'Expected `new Number()` to be flagged')
+assert.ok(
+  newNumber.length > 0,
+  'Expected `new Number(42)` to be flagged by no-new-wrappers'
+)
 
-// new Boolean(...) must be flagged.
+// `new Boolean(...)` must be flagged — the object is always truthy.
 const newBoolean = await noNewWrappersMessages(
-  `export const flag = new Boolean(true)\n`
+  'export const flag = new Boolean(false)\n'
 )
-assert.ok(newBoolean.length > 0, 'Expected `new Boolean()` to be flagged')
-
-// Coercion functions without `new` must pass — they return a primitive, not an object.
-const coercionFunctions = await noNewWrappersMessages(
-  `export const s = String(42)\nexport const n = Number('3')\nexport const b = Boolean(0)\n`
-)
-assert.strictEqual(
-  coercionFunctions.length,
-  0,
-  'Did not expect coercion functions (no `new`) to be flagged'
+assert.ok(
+  newBoolean.length > 0,
+  'Expected `new Boolean(false)` to be flagged by no-new-wrappers'
 )
 
-// Bare literals must pass.
-const literals = await noNewWrappersMessages(
-  `export const s = 'hello'\nexport const n = 42\nexport const b = true\n`
+// Plain conversion calls must NOT be flagged.
+const stringConversion = await noNewWrappersMessages(
+  'export const label = String(42)\n'
 )
 assert.strictEqual(
-  literals.length,
+  stringConversion.length,
   0,
-  'Did not expect bare literals to be flagged'
+  'Did not expect `String(42)` to be flagged by no-new-wrappers'
+)
+
+const numberConversion = await noNewWrappersMessages(
+  "export const count = Number('42')\n"
+)
+assert.strictEqual(
+  numberConversion.length,
+  0,
+  "Did not expect `Number('42')` to be flagged by no-new-wrappers"
+)
+
+const booleanConversion = await noNewWrappersMessages(
+  'export const flag = Boolean(0)\n'
+)
+assert.strictEqual(
+  booleanConversion.length,
+  0,
+  'Did not expect `Boolean(0)` to be flagged by no-new-wrappers'
 )
 
 console.log('✅ All tests passed!')
