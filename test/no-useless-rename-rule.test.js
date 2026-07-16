@@ -2,14 +2,17 @@
  * Integration test for the `no-useless-rename` rule shipped by
  * eslint-config-agent.
  *
- * The shared config must reject renaming an import, export or destructured
- * binding to the same name (`import { foo as foo }`, `export { bar as bar }`,
- * `const { baz: baz } = obj`) and accept the equivalent form without the
- * redundant alias. This guards against accidental removal of the rule and
- * documents the intended behavior. Run as a standalone node script by
- * scripts/test-runner.js (exit code 0 = pass).
+ * Renaming an import, an export, or a destructured binding to the exact name
+ * it already has (`import { foo as foo }`, `export { bar as bar }`,
+ * `const { baz: baz } = obj`) is pure punctuation noise — the `as`/`:` clause
+ * looks like a transformation but the two sides are identical. The shared
+ * config must flag all three useless-rename shapes while leaving genuine
+ * renames (to a different name) alone. This guards against accidental
+ * removal of the rule and documents the intended behavior.
+ *
+ * Run as a standalone node script by scripts/test-runner.js (exit code 0 = pass).
  */
-import assert from 'assert'
+import assert from 'node:assert'
 import { ESLint } from 'eslint'
 import config from '../index.js'
 
@@ -29,56 +32,54 @@ const noUselessRenameMessages = async code => {
 
 console.log('Testing no-useless-rename rule from the shipped config...')
 
-// A destructuring rename to the same name must be flagged.
-const uselessDestructure = await noUselessRenameMessages(
-  'export const unwrap = obj => {\n' +
-    '  const { value: value } = obj\n' +
-    '  return value\n' +
-    '}\n'
-)
+// Renaming an import to its own name must be flagged.
+const importRename = await noUselessRenameMessages(`
+import { value as value } from './value'
+export const doubled = value * 2
+`)
 assert.ok(
-  uselessDestructure.length > 0,
-  'Expected `{ value: value }` to be flagged by no-useless-rename'
+  importRename.length > 0,
+  `Expected import { value as value } to be flagged, got ${importRename.length}`
 )
 assert.strictEqual(
-  uselessDestructure[0].severity,
+  importRename[0].severity,
   2,
   'no-useless-rename should be an error'
 )
 
-// An export renamed to the same name must be flagged.
-const uselessExport = await noUselessRenameMessages(
-  'const total = 1\n' + 'export { total as total }\n'
-)
+// Renaming an export to its own name must be flagged.
+const exportRename = await noUselessRenameMessages(`
+const value = 1
+export { value as value }
+`)
 assert.ok(
-  uselessExport.length > 0,
-  'Expected `export { total as total }` to be flagged by no-useless-rename'
+  exportRename.length > 0,
+  `Expected export { value as value } to be flagged, got ${exportRename.length}`
 )
 
-// The form without the redundant alias must pass.
-const noRename = await noUselessRenameMessages(
-  'export const unwrap = obj => {\n' +
-    '  const { value } = obj\n' +
-    '  return value\n' +
-    '}\n'
-)
-assert.strictEqual(
-  noRename.length,
-  0,
-  'Did not expect the plain destructuring form to be flagged by no-useless-rename'
+// Renaming a destructured binding to its own name must be flagged.
+const destructureRename = await noUselessRenameMessages(`
+const obj = { baz: 1 }
+const { baz: baz } = obj
+export const result = baz
+`)
+assert.ok(
+  destructureRename.length > 0,
+  `Expected const { baz: baz } to be flagged, got ${destructureRename.length}`
 )
 
-// A genuine rename to a different name must also pass.
-const realRename = await noUselessRenameMessages(
-  'export const unwrap = obj => {\n' +
-    '  const { value: amount } = obj\n' +
-    '  return amount\n' +
-    '}\n'
-)
+// A genuine rename (to a different name) must pass for all three shapes.
+const genuineRenames = await noUselessRenameMessages(`
+import { value as importedValue } from './value'
+const obj = { baz: 1 }
+const { baz: renamedBaz } = obj
+const total = importedValue + renamedBaz
+export { total as exportedTotal }
+`)
 assert.strictEqual(
-  realRename.length,
+  genuineRenames.length,
   0,
-  'Did not expect a genuine rename to be flagged by no-useless-rename'
+  `Did not expect genuine renames to be flagged, got ${genuineRenames.length}`
 )
 
 console.log('✅ All tests passed!')

@@ -1,7 +1,7 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
   "project": ["**/*.js"],
-  "ignore": ["test/**", "rules/**", "exports/**"],
+  "ignore": ["test/**", "rules/**", "exports/**", "**/*.d.ts"],
   "ignoreDependencies": [
     "@eslint/eslintrc",
     "@eslint/js",
