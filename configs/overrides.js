@@ -7,6 +7,7 @@
 
 import globals from 'globals'
 import allRules from '../rules/index.js'
+import { lengthRuleFileMatch } from './length-rule-scope.js'
 
 export const overridesConfig = (
   sharedRestrictedSyntax,
@@ -87,19 +88,7 @@ export const overridesConfig = (
 
   // Function and file length rules - strict error thresholds
   {
-    files: ['**/*.{ts,tsx,js,jsx}'],
-    ignores: [
-      '**/*.stories.{js,jsx,ts,tsx}',
-      '**/*.test.{js,jsx,ts,tsx}',
-      '**/*.spec.{js,jsx,ts,tsx}',
-      '**/test/**/*.{js,jsx,ts,tsx}',
-      '**/tests/**/*.{js,jsx,ts,tsx}',
-      '**/__tests__/**/*.{js,jsx,ts,tsx}',
-      '**/configs/**/*.{js,ts}',
-      '*.config.{js,ts}',
-      'eslint.config.{js,ts}',
-      'index.js',
-    ],
+    ...lengthRuleFileMatch,
     rules: {
       'max-lines-per-function': allRules.maxFunctionLinesError,
       'max-lines': allRules.maxFileLinesError,

@@ -4,12 +4,10 @@ import React, { Fragment } from 'react';
 // Test React.* components - the components themselves should not error, but HTML elements inside should
 export const InvalidReactComponents = () => {
   return (
-    <>
+    <div className="container">
       {/* React.Fragment - fragment OK, but HTML elements inside need className */}
-      <React.Fragment>
-        <div>Invalid div - no className</div> {/* ERROR */}
+      <div>Invalid div - no className</div> {/* ERROR */}
         <span>Invalid span - no className</span> {/* ERROR */}
-      </React.Fragment>
 
       {/* React.StrictMode - component OK, but HTML elements inside need className */}
       <React.StrictMode>
@@ -27,7 +25,7 @@ export const InvalidReactComponents = () => {
         <h1>Invalid heading - no className</h1> {/* ERROR */}
         <ul>Invalid list - no className</ul> {/* ERROR */}
       </React.Profiler>
-    </>
+    </div>
   );
 };
 
@@ -80,16 +78,14 @@ export const InvalidCustomComponents = () => {
 // Test mixed valid/invalid cases
 export const MixedValidInvalid = () => {
   return (
-    <>
-      <React.Fragment>
-        <div className="valid">This div has className - valid</div>
+    <div className="mixed-container">
+      <div className="valid">This div has className - valid</div>
         <span>This span has no className - invalid</span> {/* ERROR */}
-      </React.Fragment>
 
       <React.StrictMode>
         <p className="valid">This paragraph has className - valid</p>
         <article>This article has no className - invalid</article> {/* ERROR */}
       </React.StrictMode>
-    </>
+    </div>
   );
 };

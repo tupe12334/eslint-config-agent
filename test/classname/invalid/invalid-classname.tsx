@@ -1,5 +1,4 @@
-// Test file for invalid className usage in TSX
-// This file should trigger ERRORS for HTML elements without className attributes
+// Test file for invalid className usage in TSX This file should trigger ERRORS for HTML elements without className attributes
 
 import React from 'react';
 
@@ -36,14 +35,14 @@ export const InvalidComponentsWithoutClassName = () => {
       <tr>This tr should trigger an error - no className</tr> {/* ERROR */}
       <td>This td should trigger an error - no className</td> {/* ERROR */}
       <th>This th should trigger an error - no className</th> {/* ERROR */}
-      
+
       {/* React components should NOT trigger errors */}
       <CustomComponent>Custom components are ignored</CustomComponent>
       <AnotherComponent>
         <div>But nested HTML elements still trigger errors - no className</div> {/* ERROR */}
       </AnotherComponent>
-      
-      {/* Fragments are not needed inside HTML elements - put children directly */}
+
+      {/* Fragments should NOT trigger errors */}
       <div>But elements inside fragments still need className - no className</div> {/* ERROR */}
       <span>Elements in empty fragments also need className - no className</span> {/* ERROR */}
     </div>
@@ -74,12 +73,12 @@ export const MixedValidInvalid = () => {
     <div className="container"> {/* VALID: has className */}
       <div className="with-class">This div has a className - should be fine</div> {/* VALID */}
       <div>This div has no className - should trigger error</div> {/* ERROR */}
-      
+
       <CustomComponent>
         <div className="nested-with-class">Nested with className - should be fine</div> {/* VALID */}
         <div>Nested without className - should trigger error</div> {/* ERROR */}
       </CustomComponent>
-      
+
       <section className="valid-section"> {/* VALID */}
         <p>This paragraph has no className - should trigger error</p> {/* ERROR */}
         <p className="valid-paragraph">This paragraph is valid</p> {/* VALID */}
@@ -97,9 +96,9 @@ export const ComplexNesting = () => {
           <div> {/* ERROR: deeply nested HTML element without className */}
             <span className="nested-valid">Valid nested span</span> {/* VALID */}
             <span>Invalid nested span - no className</span> {/* ERROR */}
-            
+
             <p>Fragment child without className - should error</p> {/* ERROR */}
-            <p className="fragment-valid">Fragment child with className - valid</p> {/* VALID */}
+              <p className="fragment-valid">Fragment child with className - valid</p> {/* VALID */}
           </div>
         </AnotherComponent>
       </CustomComponent>

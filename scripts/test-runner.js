@@ -1,14 +1,13 @@
 #!/usr/bin/env node
-/* eslint-disable max-lines, max-lines-per-function, security/detect-non-literal-fs-filename, security/detect-object-injection, default/no-default-params, import/order */
+/* eslint-disable max-lines, max-lines-per-function, security/detect-non-literal-fs-filename, security/detect-object-injection, default/no-default-params, import/order, unicorn/prevent-abbreviations, unicorn/try-complexity, no-await-in-loop, unicorn/no-array-sort, unicorn/prefer-top-level-await */
 
 import { ESLint } from 'eslint'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-import { readdir, stat } from 'fs/promises'
-import { spawn } from 'child_process'
+import { join } from 'node:path'
+import { readdir, stat } from 'node:fs/promises'
+import { spawn } from 'node:child_process'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __filename = import.meta.filename
+const __dirname = import.meta.dirname
 const projectRoot = join(__dirname, '..')
 
 // Test categories and their expected behaviors
@@ -53,11 +52,12 @@ const testCategories = {
   hooks: {
     description: 'React hooks rules testing',
     files: ['test/react-hooks-rules.tsx'],
-    maxErrors: 66,
+    maxErrors: 67,
     maxWarnings: 20,
     expectedRules: [
       'react-hooks/exhaustive-deps',
       'react-hooks/rules-of-hooks',
+      'react/hook-use-state',
     ],
   },
   imports: {
@@ -143,6 +143,19 @@ const testCategories = {
     description:
       'Noisy eslint-plugin-security heuristics are relaxed for test/spec files',
     files: ['test/security/security-in-tests.spec.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-script-url-invalid': {
+    description: 'A `javascript:` URL string should be flagged',
+    files: ['test/no-script-url/invalid/script-url.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['no-script-url'],
+  },
+  'no-script-url-valid': {
+    description: 'An ordinary URL string should be clean',
+    files: ['test/no-script-url/valid/clean-url.ts'],
     maxErrors: 0,
     maxWarnings: 0,
   },
@@ -332,7 +345,7 @@ const testCategories = {
       'test/classname/invalid/forms-fragments-invalid.tsx',
       'test/classname/invalid/react-components-invalid.tsx',
     ],
-    maxErrors: 195, // +2 from second children added to forms-fragments-invalid.tsx to fix single-child fragment violations
+    maxErrors: 193,
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -438,6 +451,104 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-loop-func'],
   },
+  'no-use-before-define': {
+    description:
+      'A let read before its declaration (TDZ) is flagged; a hoisted function called before its textual definition passes',
+    files: [
+      'test/no-use-before-define/invalid-no-use-before-define.ts',
+      'test/no-use-before-define/valid-no-use-before-define.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-use-before-define'],
+  },
+  'no-misused-promises': {
+    description:
+      'An async callback passed to forEach (void-return context) is flagged; an explicit for...of with await passes',
+    files: [
+      'test/no-misused-promises/invalid-no-misused-promises.ts',
+      'test/no-misused-promises/valid-no-misused-promises.ts',
+    ],
+    maxErrors: 5,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-misused-promises'],
+  },
+  'prefer-enum-initializers-invalid': {
+    description:
+      'Enum members without explicit initializers must be flagged; one error per member',
+    files: ['test/prefer-enum-initializers/invalid-implicit-enum.ts'],
+    maxErrors: 4,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/prefer-enum-initializers'],
+  },
+  'prefer-enum-initializers-valid': {
+    description:
+      'Enum members with explicit string initializers must not be flagged',
+    files: ['test/prefer-enum-initializers/valid-explicit-enum.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-useless-call-invalid': {
+    description:
+      '.call(null, ...) and .apply(undefined, [...]) with a null/undefined receiver must be flagged',
+    files: ['test/no-useless-call/invalid-no-useless-call.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['no-useless-call'],
+  },
+  'no-useless-call-valid': {
+    description: 'Direct calls must not be flagged',
+    files: ['test/no-useless-call/valid-no-useless-call.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-mixed-enums-invalid': {
+    description:
+      'An enum that mixes numeric and string member values must be flagged',
+    files: ['test/no-mixed-enums/invalid-mixed-enum.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-mixed-enums'],
+  },
+  'no-mixed-enums-valid': {
+    description: 'Pure-string and pure-numeric enums must not be flagged',
+    files: ['test/no-mixed-enums/valid-mixed-enum.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-unnecessary-condition-invalid': {
+    description:
+      'A guard over a non-nullable type (always truthy) must be flagged',
+    files: [
+      'test/no-unnecessary-condition/invalid-no-unnecessary-condition.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-unnecessary-condition'],
+  },
+  'no-unnecessary-condition-valid': {
+    description: 'A guard over a genuinely nullable type must not be flagged',
+    files: ['test/no-unnecessary-condition/valid-no-unnecessary-condition.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-useless-rename-invalid': {
+    description:
+      'Renaming an import, export, or destructured binding to its own name must be flagged',
+    files: ['test/no-useless-rename/invalid-no-useless-rename.ts'],
+    maxErrors: 3,
+    maxWarnings: 0,
+    expectedRules: ['no-useless-rename'],
+  },
+  'no-useless-rename-valid': {
+    description: 'Genuine renames to a different name must not be flagged',
+    files: [
+      'test/no-useless-rename/valid-no-useless-rename.ts',
+      'test/no-useless-rename/value.ts',
+    ],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
 }
 
 async function findTestFiles() {
@@ -470,7 +581,7 @@ async function findTestFiles() {
 
         if (
           stats.isFile() &&
-          /\.(ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(entry)
+          /\.(?:ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(entry)
         ) {
           files.push(relativeFilePath)
         } else if (stats.isDirectory()) {
@@ -522,7 +633,7 @@ async function findTestFiles() {
       if (stats.isFile()) {
         files.push(testFile)
       }
-    } catch (error) {
+    } catch {
       // File doesn't exist, skip
     }
   }
@@ -563,11 +674,11 @@ async function runTestCategory(eslint, category, config) {
         })
 
         // Collect rules that were triggered
-        result.messages.forEach(msg => {
+        for (const msg of result.messages) {
           if (msg.ruleId) {
             categoryResults.rulesCovered.add(msg.ruleId)
           }
-        })
+        }
 
         console.log(
           `   📄 ${file}: ${errorCount} errors, ${warningCount} warnings`
@@ -576,14 +687,14 @@ async function runTestCategory(eslint, category, config) {
         // Show top errors/warnings for debugging
         if (result.messages.length > 0) {
           const topMessages = result.messages.slice(0, 3)
-          topMessages.forEach(msg => {
+          for (const msg of topMessages) {
             const level = msg.severity === 2 ? '❌' : '⚠️ '
             console.log(
               `      ${level} Line ${msg.line}: ${msg.message} (${
                 msg.ruleId || 'unknown'
               })`
             )
-          })
+          }
 
           if (result.messages.length > 3) {
             console.log(
@@ -625,9 +736,7 @@ async function runTestCategory(eslint, category, config) {
 
     if (categoryResults.rulesCovered.size > 0) {
       console.log(
-        `   ✅ Rules covered: ${Array.from(categoryResults.rulesCovered).join(
-          ', '
-        )}`
+        `   ✅ Rules covered: ${[...categoryResults.rulesCovered].join(', ')}`
       )
     }
   }
@@ -668,7 +777,7 @@ async function runStandaloneTest(testFile) {
         // Show last line of stdout (usually success message)
         const lines = stdout.trim().split('\n')
         if (lines.length > 0) {
-          console.log(`   📝 ${lines[lines.length - 1]}`)
+          console.log(`   📝 ${lines.at(-1)}`)
         }
       } else {
         console.log(`   ❌ Test failed: ${testFile} (exit code: ${code})`)
@@ -731,9 +840,9 @@ async function generateTestReport(allResults, standaloneResult = null) {
     totalErrors += results.totalErrors
     totalWarnings += results.totalWarnings
 
-    results.rulesCovered.forEach(rule => {
+    for (const rule of results.rulesCovered) {
       allRulesCovered.add(rule)
-    })
+    }
   }
 
   // Report standalone test results
@@ -756,7 +865,7 @@ async function generateTestReport(allResults, standaloneResult = null) {
   console.log(`   Categories Tested: ${Object.keys(allResults).length}`)
 
   console.log('\n🔧 Rules Coverage:')
-  const sortedRules = Array.from(allRulesCovered).sort()
+  const sortedRules = [...allRulesCovered].sort()
   for (let i = 0; i < sortedRules.length; i += 3) {
     const chunk = sortedRules.slice(i, i + 3)
     console.log(`   ${chunk.join(', ')}`)
@@ -789,9 +898,9 @@ function autoCategorizeFiles(allTestFiles) {
   // Find files that aren't in any predefined category
   const categorizedFiles = new Set()
   for (const category of Object.values(autoCategories)) {
-    category.files.forEach(file => {
+    for (const file of category.files) {
       categorizedFiles.add(file)
-    })
+    }
   }
 
   for (const file of allTestFiles) {
@@ -886,9 +995,9 @@ async function runComprehensiveTests() {
     // Discover all test files
     const allTestFiles = await findTestFiles()
     console.log(`📁 Discovered ${allTestFiles.length} test files:`)
-    allTestFiles.forEach(file => {
+    for (const file of allTestFiles) {
       console.log(`   - ${file}`)
-    })
+    }
 
     // Separate standalone test files from lint test files
     const standaloneTestFiles = allTestFiles.filter(
@@ -938,8 +1047,8 @@ async function runComprehensiveTests() {
 }
 
 // Handle CLI arguments
-const args = process.argv.slice(2)
-const showHelp = args.includes('--help') || args.includes('-h')
+const args = new Set(process.argv.slice(2))
+const showHelp = args.has('--help') || args.has('-h')
 
 if (showHelp) {
   console.log(`
