@@ -40,7 +40,10 @@
     "commitlint",
     "knip",
     "infile",
-    "footgun"
+    "footgun",
+    "bivariantly",
+    "contravariantly",
+    "ameliso"
   ],
   "ignorePaths": [
     "node_modules",

@@ -1,7 +1,8 @@
 /**
- * Integration test for the `no-nested-ternary` rule shipped by
- * eslint-config-agent.
+ * Integration test for nested-ternary coverage shipped by eslint-config-agent.
  *
+ * `unicorn.configs.all` provides `unicorn/no-nested-ternary` and disables the
+ * core `no-nested-ternary` rule, so this test checks the unicorn variant.
  * Nested ternaries are the archetypal "clever but unreadable" construct this
  * config exists to prevent, so the shared config must reject a ternary nested
  * inside another ternary while still accepting a single, flat ternary. This
@@ -23,7 +24,7 @@ const nestedTernaryMessages = async code => {
     filePath: 'nested-ternary-sample.js',
   })
   return result.messages.filter(
-    message => message.ruleId === 'no-nested-ternary'
+    message => message.ruleId === 'unicorn/no-nested-ternary'
   )
 }
 
@@ -37,12 +38,12 @@ const nested = await nestedTernaryMessages(
 )
 assert.ok(
   nested.length > 0,
-  'Expected a nested ternary to be flagged by the no-nested-ternary rule'
+  'Expected a nested ternary to be flagged by the unicorn/no-nested-ternary rule'
 )
 assert.strictEqual(
   nested[0].severity,
   2,
-  'no-nested-ternary should be an error'
+  'unicorn/no-nested-ternary should be an error'
 )
 
 // A single, flat ternary must pass.
@@ -54,7 +55,7 @@ const flat = await nestedTernaryMessages(
 assert.strictEqual(
   flat.length,
   0,
-  'Did not expect a single flat ternary to be flagged by the no-nested-ternary rule'
+  'Did not expect a single flat ternary to be flagged by the unicorn/no-nested-ternary rule'
 )
 
 console.log('✅ All tests passed!')

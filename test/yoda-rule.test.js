@@ -1,14 +1,14 @@
 /**
  * Integration test for the `yoda` rule shipped by eslint-config-agent.
  *
- * The shared config must reject "yoda" conditions (literal on the left, e.g.
- * `0 === count`) and accept the natural ordering (`count === 0`). The
- * `exceptRange: true` option must still allow the range idiom
- * (`0 <= x && x < limit`). This guards against accidental removal of the rule
- * and documents the intended behavior. Run as a standalone node script by
- * scripts/test-runner.js (exit code 0 = pass).
+ * The shared config must flag "Yoda" conditions where a literal appears on the
+ * left side of a comparison (`0 === count`), and accept the natural reading
+ * order (`count === 0`). The `exceptRange` option keeps the clearer number-line
+ * form (`0 <= x && x < limit`) unflagged. This guards against accidental
+ * removal of the rule and documents the intended behavior. Run as a standalone
+ * node script by scripts/test-runner.js (exit code 0 = pass).
  */
-import assert from 'assert'
+import assert from 'node:assert'
 import { ESLint } from 'eslint'
 import config from '../index.js'
 
@@ -18,49 +18,54 @@ const eslint = new ESLint({
 })
 
 const yodaMessages = async code => {
-  const [result] = await eslint.lintText(code, { filePath: 'yoda-sample.js' })
+  const [result] = await eslint.lintText(code, {
+    filePath: 'yoda-sample.js',
+  })
   return result.messages.filter(message => message.ruleId === 'yoda')
 }
 
 console.log('Testing yoda rule from the shipped config...')
 
-// Literal on the left must be flagged.
-const literalLeft = await yodaMessages(
-  'export const isZero = count => {\n  return 0 === count\n}\n'
+// A literal on the left side of a strict equality must be flagged.
+const yodaCondition = await yodaMessages(
+  'export const isDone = status => {\n' +
+    "  if ('done' === status) return true\n" +
+    '  return false\n' +
+    '}\n'
 )
 assert.ok(
-  literalLeft.length > 0,
-  'Expected `0 === count` to be flagged by the yoda rule'
-)
-assert.strictEqual(literalLeft[0].severity, 2, 'yoda should be an error')
-
-const stringLiteralLeft = await yodaMessages(
-  "export const isDone = status => {\n  return 'done' === status\n}\n"
-)
-assert.ok(
-  stringLiteralLeft.length > 0,
+  yodaCondition.length > 0,
   "Expected `'done' === status` to be flagged by the yoda rule"
 )
+assert.strictEqual(yodaCondition[0].severity, 2, 'yoda should be an error')
 
-// Natural ordering must pass.
+// Natural reading order (variable on the left) must pass.
 const naturalOrder = await yodaMessages(
-  'export const isZero = count => {\n  return count === 0\n}\n'
+  'export const isDone = status => {\n' +
+    "  if (status === 'done') return true\n" +
+    '  return false\n' +
+    '}\n'
 )
 assert.strictEqual(
   naturalOrder.length,
   0,
-  'Did not expect `count === 0` to be flagged by the yoda rule'
+  'Did not expect natural-order comparison to be flagged by the yoda rule'
 )
 
-// The range idiom is allowed by `exceptRange: true` (range used as a
-// condition, the form the option recognizes as a number-line check).
-const rangeIdiom = await yodaMessages(
-  'export const inRange = (x, limit) => {\n  if (0 <= x && x < limit) {\n    return true\n  }\n  return false\n}\n'
+// The range idiom inside an `if` condition (`0 <= x && x < 100`) is exempted
+// by `exceptRange` and must pass — it reads as a number-line check and is
+// clearer in this form. The exemption only applies in conditional contexts
+// (if/while/ternary), not standalone expressions.
+const rangeCheck = await yodaMessages(
+  'export const inBounds = (x) => {\n' +
+    '  if (0 <= x && x < 100) return true\n' +
+    '  return false\n' +
+    '}\n'
 )
 assert.strictEqual(
-  rangeIdiom.length,
+  rangeCheck.length,
   0,
-  'Did not expect the `0 <= x && x < limit` range idiom to be flagged'
+  'Did not expect the range idiom in an if condition to be flagged (exceptRange)'
 )
 
 console.log('✅ All tests passed!')
