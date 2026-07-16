@@ -85,6 +85,23 @@ export const reactRules = {
   // intentional decision visible in code review. The rule is not auto-fixable,
   // so each suppression is a deliberate act.
   'react/no-danger': 'error',
+  // Enforce the `[value, setValue]` naming convention for `useState` pairs.
+  // When `useState` is destructured with a setter that does not match
+  // `set<Capitalize(stateName)>` — e.g. `const [data, handleUpdate] = useState()`
+  // instead of `const [data, setData] = useState()` — the mismatch signals a
+  // naming mistake that often means the wrong setter was wired up: the right
+  // value is read but a misnamed variable is written on update, a class of
+  // silent state-management bug that type-checking cannot catch (both names are
+  // just `Dispatch<SetStateAction<T>>`). AI assistants introduce exactly this
+  // slip when stitching a component from multiple snippets — emitting
+  // `const [user, setCurrentUser] = useState()` or
+  // `const [loading, handleLoadingChange] = useState(false)`, each of which
+  // compiles fine but breaks the per-component naming contract that makes state
+  // variables identifiable at a glance. The rule is not auto-fixable because
+  // only the author knows whether the state name or the setter name is the
+  // intended canonical one. It fires only on `.tsx`/`.jsx` files, so pure
+  // TypeScript packages are unaffected.
+  'react/hook-use-state': 'error',
   // Forbid a freshly-constructed value as the `value` of a Context Provider:
   // `<Ctx.Provider value={{ user, setUser }}>` or `value={[state, dispatch]}`
   // or `value={() => ...}`. The object/array/function literal is rebuilt on
@@ -105,4 +122,43 @@ export const reactRules = {
   // is why a downstream repo (`oss-il`) already re-adds it by hand on top of the
   // base config.
   'react/jsx-no-constructed-context-values': 'error',
+  // Forbid using an object type (`{}`, `[]`, or a function literal) as the
+  // default value for a prop in function-component destructuring:
+  //
+  //   function List({ items = [], onSelect = () => {} }) { ... }
+  //
+  // Each call to the component creates a fresh object/array/function literal
+  // for the default, so the reference changes on every render even when the
+  // prop is not actually provided. Any child that is `React.memo`-ed on that
+  // prop, or any `useEffect`/`useCallback`/`useMemo` that lists it as a
+  // dependency, will re-run unnecessarily — a silent performance bug the type
+  // checker cannot detect. The fix is to hoist the constant outside the
+  // component or memoize it:
+  //
+  //   const DEFAULT_ITEMS: string[] = []
+  //   function List({ items = DEFAULT_ITEMS }) { ... }
+  //
+  // This is exactly the shortcut an AI assistant reaches for when a prop is
+  // optional and the model doesn't want to add a module-level constant. The
+  // rule sits on the same correctness/perf-not-style bar as `jsx-no-leaked-
+  // render`, `no-array-index-key`, and `jsx-no-constructed-context-values`
+  // above — all of which catch silent reference-equality bugs that are
+  // invisible to the type checker. Like the other react rules this only fires
+  // on `.jsx`/`.tsx` files, so non-React TypeScript packages are unaffected.
+  'react/no-object-type-as-default-prop': 'error',
+  // Require a `key` prop on every element created inside an array/iterator
+  // (`.map()`, a spread of JSX literals, etc.). `key` is React's per-child
+  // identity across renders; without it React falls back to matching children
+  // by position, so as soon as the list is reordered, filtered, or gains/loses
+  // an item, state and DOM nodes "smear" onto the wrong element — text typed
+  // into one row's input jumps to another, the wrong checkbox stays checked,
+  // an animation plays on the wrong item. The JSX is perfectly typed either
+  // way, so this is a real rendering bug invisible to the type checker, and
+  // exactly the shortcut an AI assistant reaches for when it renders a list
+  // without pausing to think about identity. It sits on the same
+  // correctness-not-style bar as `no-array-index-key`, `jsx-no-leaked-render`,
+  // and `jsx-no-constructed-context-values` above. Like the other react rules
+  // it only applies to `.jsx`/`.tsx` files, so non-React TypeScript packages
+  // are unaffected.
+  'react/jsx-key': 'error',
 }

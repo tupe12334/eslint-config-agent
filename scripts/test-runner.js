@@ -52,11 +52,12 @@ const testCategories = {
   hooks: {
     description: 'React hooks rules testing',
     files: ['test/react-hooks-rules.tsx'],
-    maxErrors: 66,
+    maxErrors: 67,
     maxWarnings: 20,
     expectedRules: [
       'react-hooks/exhaustive-deps',
       'react-hooks/rules-of-hooks',
+      'react/hook-use-state',
     ],
   },
   imports: {
@@ -134,6 +135,23 @@ const testCategories = {
     files: [
       'test/import-useless-path/valid/clean-path.ts',
       'test/import-useless-path/valid/target.ts',
+    ],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'import-path-segments-invalid': {
+    description:
+      'Relative imports with redundant path segments should be flagged',
+    files: ['test/import-path-segments/invalid/useless-segments.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['import/no-useless-path-segments'],
+  },
+  'import-path-segments-valid': {
+    description: 'Shortest-form relative imports should be clean',
+    files: [
+      'test/import-path-segments/valid/clean.ts',
+      'test/import-path-segments/valid/target.ts',
     ],
     maxErrors: 0,
     maxWarnings: 0,
@@ -450,6 +468,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-loop-func'],
   },
+  'no-use-before-define': {
+    description:
+      'A let read before its declaration (TDZ) is flagged; a hoisted function called before its textual definition passes',
+    files: [
+      'test/no-use-before-define/invalid-no-use-before-define.ts',
+      'test/no-use-before-define/valid-no-use-before-define.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-use-before-define'],
+  },
   'no-misused-promises': {
     description:
       'An async callback passed to forEach (void-return context) is flagged; an explicit for...of with await passes',
@@ -473,6 +502,67 @@ const testCategories = {
     description:
       'Enum members with explicit string initializers must not be flagged',
     files: ['test/prefer-enum-initializers/valid-explicit-enum.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-useless-call-invalid': {
+    description:
+      '.call(null, ...) and .apply(undefined, [...]) with a null/undefined receiver must be flagged',
+    files: ['test/no-useless-call/invalid-no-useless-call.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['no-useless-call'],
+  },
+  'no-useless-call-valid': {
+    description: 'Direct calls must not be flagged',
+    files: ['test/no-useless-call/valid-no-useless-call.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-mixed-enums-invalid': {
+    description:
+      'An enum that mixes numeric and string member values must be flagged',
+    files: ['test/no-mixed-enums/invalid-mixed-enum.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-mixed-enums'],
+  },
+  'no-mixed-enums-valid': {
+    description: 'Pure-string and pure-numeric enums must not be flagged',
+    files: ['test/no-mixed-enums/valid-mixed-enum.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-unnecessary-condition-invalid': {
+    description:
+      'A guard over a non-nullable type (always truthy) must be flagged',
+    files: [
+      'test/no-unnecessary-condition/invalid-no-unnecessary-condition.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-unnecessary-condition'],
+  },
+  'no-unnecessary-condition-valid': {
+    description: 'A guard over a genuinely nullable type must not be flagged',
+    files: ['test/no-unnecessary-condition/valid-no-unnecessary-condition.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
+  'no-useless-rename-invalid': {
+    description:
+      'Renaming an import, export, or destructured binding to its own name must be flagged',
+    files: ['test/no-useless-rename/invalid-no-useless-rename.ts'],
+    maxErrors: 3,
+    maxWarnings: 0,
+    expectedRules: ['no-useless-rename'],
+  },
+  'no-useless-rename-valid': {
+    description: 'Genuine renames to a different name must not be flagged',
+    files: [
+      'test/no-useless-rename/valid-no-useless-rename.ts',
+      'test/no-useless-rename/value.ts',
+    ],
     maxErrors: 0,
     maxWarnings: 0,
   },
@@ -508,7 +598,7 @@ async function findTestFiles() {
 
         if (
           stats.isFile() &&
-          /\.(ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(entry)
+          /\.(?:ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(entry)
         ) {
           files.push(relativeFilePath)
         } else if (stats.isDirectory()) {
