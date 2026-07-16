@@ -2,8 +2,8 @@
 // import/no-duplicates should flag this and ask for a single merged import.
 // Type-only imports keep the fixture focused on the duplication, free of
 // unrelated type-checking noise.
-import type { Stats } from 'fs'
-import type { BigIntStats } from 'fs'
+import type { Stats } from 'node:fs'
+import type { BigIntStats } from 'node:fs'
 
 export interface FileInfo {
   stats: Stats
