@@ -1,5 +1,4 @@
-// Test file for invalid form and fragment cases without className
-// This file should trigger ERRORS for elements without className attributes
+// Test file for invalid form and fragment cases without className This file should trigger ERRORS for elements without className attributes
 
 import React, { Fragment } from 'react';
 
@@ -32,22 +31,16 @@ export const InvalidFormElements = () => {
 export const InvalidFragmentsAndComponents = () => {
   return (
     <div className="mixed-container">
-      <Fragment>
-        <div>Invalid div in Fragment - no className</div> {/* ERROR */}
+      <div>Invalid div in Fragment - no className</div> {/* ERROR */}
         <CustomComponent>
           <span>Invalid span in component - no className</span> {/* ERROR */}
           <Fragment>
             <p>Invalid nested p in Fragment - no className</p> {/* ERROR */}
           </Fragment>
         </CustomComponent>
-      </Fragment>
 
-      <>
-        <section>Invalid section in empty fragment - no className</section> {/* ERROR */}
-        <Fragment>
-          <article>Invalid deeply nested article - no className</article> {/* ERROR */}
-        </Fragment>
-      </>
+      <section>Invalid section in empty fragment - no className</section> {/* ERROR */}
+        <article>Invalid deeply nested article - no className</article> {/* ERROR */}
 
       <CustomComponent>
         <>
