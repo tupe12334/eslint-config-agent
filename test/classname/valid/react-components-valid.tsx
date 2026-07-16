@@ -6,9 +6,7 @@ export const ValidReactComponents = () => {
   return (
     <div className="container">
       {/* React.Fragment */}
-      <React.Fragment>
-        <div className="content">Valid content with className</div>
-      </React.Fragment>
+      <div className="content">Valid content with className</div>
 
       {/* React.StrictMode */}
       <React.StrictMode>
@@ -38,9 +36,7 @@ export const ValidFragment = () => {
   return (
     <Fragment>
       <div className="fragment-content">Valid div with className</div>
-      <Fragment>
-        <p className="nested-fragment">Valid nested fragment content</p>
-      </Fragment>
+      <p className="nested-fragment">Valid nested fragment content</p>
     </Fragment>
   );
 };
@@ -50,9 +46,7 @@ export const ValidEmptyFragments = () => {
   return (
     <>
       <div className="empty-fragment-content">Valid content in empty fragment</div>
-      <>
-        <span className="nested-empty">Valid nested empty fragment</span>
-      </>
+      <span className="nested-empty">Valid nested empty fragment</span>
     </>
   );
 };
