@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-agent",
-  "version": "3.0.5",
+  "version": "3.2.0",
   "description": "ESLint configuration package with TypeScript support",
   "main": "index.js",
   "types": "./index.d.ts",
@@ -68,6 +68,7 @@
     "test:recommended": "node scripts/test-recommended.js",
     "test:recommended-incremental": "node scripts/test-recommended-incremental.js",
     "test:exports": "node scripts/test-exports.js",
+    "test:pack": "node scripts/verify-pack.js",
     "test:incremental": "node scripts/test-incremental.js",
     "test:types": "tsc -p test/types/tsconfig.json",
     "test:edge": "eslint test/edge-cases.tsx",
