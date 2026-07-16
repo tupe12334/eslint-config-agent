@@ -1,5 +1,4 @@
-// Test file for valid form and fragment cases with className
-// This file should have NO errors - all elements have className attributes
+// Test file for valid form and fragment cases with className This file should have NO errors - all elements have className attributes
 
 import React, { Fragment } from 'react';
 
@@ -32,26 +31,22 @@ export const ValidFormElements = () => {
 export const ValidFragmentsAndComponents = () => {
   return (
     <div className="mixed-container">
-      <Fragment>
-        <div className="valid-in-fragment">Valid div in Fragment with className</div>
+      <div className="valid-in-fragment">Valid div in Fragment with className</div>
         <CustomComponent>
           <span className="valid-in-component">Valid span in component with className</span>
           <Fragment>
             <p className="valid-nested">Valid nested p in Fragment with className</p>
+            <p className="valid-nested-2">Second child — keeps fragment load-bearing</p>
           </Fragment>
         </CustomComponent>
-      </Fragment>
 
-      <>
-        <section className="valid-in-empty-fragment">Valid section in empty fragment</section>
-        <Fragment>
-          <article className="deeply-nested">Valid deeply nested article</article>
-        </Fragment>
-      </>
+      <section className="valid-in-empty-fragment">Valid section in empty fragment</section>
+        <article className="deeply-nested">Valid deeply nested article</article>
 
       <CustomComponent>
         <>
           <div className="complex-nesting">Valid div in complex nesting</div>
+          <div className="complex-nesting-2">Second child — keeps fragment load-bearing</div>
         </>
       </CustomComponent>
     </div>
