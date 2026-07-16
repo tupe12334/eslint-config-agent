@@ -23,14 +23,14 @@ const message =
 /**
  * Export the complete rule configuration for no-restricted-syntax
  * Can be used in ESLint config as part of no-restricted-syntax rules:
- * "no-restricted-syntax": ["error", ...otherRules, noProcessEnvPropertiesConfig]
+ * "no-restricted-syntax": ["error", ...otherRules, noProcessEnvironmentPropertiesConfig]
  */
-const noProcessEnvPropertiesConfig = {
+const noProcessEnvironmentPropertiesConfig = {
   selector,
   message,
 }
 
 // Consolidated exports
-export { rule, selector, message, noProcessEnvPropertiesConfig }
+export { rule, selector, message, noProcessEnvironmentPropertiesConfig }
 
-export default noProcessEnvPropertiesConfig
+export default noProcessEnvironmentPropertiesConfig

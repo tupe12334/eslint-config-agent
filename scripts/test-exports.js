@@ -46,6 +46,7 @@ const EXPECTED_ENTRY_POINTS = [
   './recommended',
   './recommended-incremental',
   './incremental',
+  './to-warnings',
 ]
 
 async function readPackageJson() {
@@ -60,32 +61,53 @@ function specifierFor(packageName, subpath) {
   return `${packageName}${subpath.slice(1)}`
 }
 
-// `./package.json` must be exposed and resolve to this package's manifest, so
-// tooling can read it (e.g. `require.resolve('eslint-config-agent/package.json')`
-// or a JSON import) without crashing on ERR_PACKAGE_PATH_NOT_EXPORTED. It is a
-// data export, not a flat config, so it is verified here rather than in the
-// flat-config loop.
-async function verifyManifestExport(pkg, declared) {
-  if (!declared.includes('./package.json')) {
-    return [
-      '"./package.json" is missing from package.json#exports; tooling cannot resolve the manifest.',
-    ]
+// `./package.json` is a manifest passthrough, not a flat-config entry point. It
+// exists so tooling can resolve the package manifest (e.g. to read its version)
+// without tripping ERR_PACKAGE_PATH_NOT_EXPORTED. Verify it resolves to the
+// manifest rather than checking it as a config array.
+async function verifyManifest(specifier, packageName) {
+  const { default: manifest } = await import(specifier, { with: { type: 'json' } }) // prettier-ignore
+  if (!manifest || manifest.name !== packageName) {
+    return `${specifier} resolved but did not yield the package manifest (name "${manifest && manifest.name}").`
   }
+  console.log(`✅ ${specifier} → package manifest (${manifest.name})`)
+}
 
-  const specifier = `${pkg.name}/package.json`
-  try {
-    const mod = await import(specifier, { with: { type: 'json' } })
-    const manifest = mod.default
-    if (!manifest || manifest.name !== pkg.name) {
-      return [
-        `${specifier} resolved but did not yield this package's manifest (expected name "${pkg.name}").`,
-      ]
-    }
-    console.log(`✅ ${specifier} → package manifest (name "${manifest.name}")`)
-    return []
-  } catch (error) {
-    return [`${specifier} failed to load: ${error.message}`]
+// `./to-warnings` is a named-function helper, not a default flat-config entry
+// point. It exposes the severity-downgrade helper the incremental presets use
+// internally so consumers composing their own config can map it over the shared
+// ruleset instead of copy-pasting it. Verify the named export is a function and
+// behaves (downgrades an error-level rule to a warning) rather than checking it
+// as a config array.
+async function verifyToWarnings(specifier) {
+  const { toWarnings } = await import(specifier)
+  if (typeof toWarnings !== 'function') {
+    return `${specifier} resolved but did not export a \`toWarnings\` function (got ${typeof toWarnings}).`
   }
+  const downgraded = toWarnings({ rules: { eqeqeq: 'error' } })
+  if (downgraded.rules.eqeqeq !== 'warn') {
+    return `${specifier} exported \`toWarnings\` but it did not downgrade an error-level rule to a warning (got ${JSON.stringify(downgraded.rules.eqeqeq)}).`
+  }
+  console.log(`✅ ${specifier} → toWarnings() helper`)
+}
+
+async function verifyConfigArray(specifier) {
+  const { default: config } = await import(specifier)
+  if (!Array.isArray(config)) {
+    return `${specifier} resolved but its default export is not a flat-config array (got ${typeof config}).`
+  }
+  if (config.length === 0) {
+    return `${specifier} resolved to an empty flat-config array.`
+  }
+  console.log(`✅ ${specifier} → ${config.length} flat-config block(s)`)
+}
+
+// `./package.json` and `./to-warnings` are not flat-config arrays, so they get
+// bespoke checks; every other subpath is verified as a flat-config array.
+function verifierFor(subpath) {
+  if (subpath === './package.json') return verifyManifest
+  if (subpath === './to-warnings') return verifyToWarnings
+  return verifyConfigArray
 }
 
 async function main() {
@@ -109,36 +131,22 @@ async function main() {
   }
 
   // (2) Verify every documented entry point plus every declared subpath. Using
-  // a set avoids importing the same specifier twice. `./package.json` is a data
-  // export (the manifest), not a flat config, so it is handled separately below
-  // instead of being checked as a flat-config array.
+  // a set avoids importing the same specifier twice.
   const subpaths = [...new Set([...EXPECTED_ENTRY_POINTS, ...declared])].filter(
-    subpath => declared.includes(subpath) && subpath !== './package.json'
+    subpath => declared.includes(subpath)
   )
 
   for (const subpath of subpaths) {
     const specifier = specifierFor(pkg.name, subpath)
     try {
-      const mod = await import(specifier)
-      const config = mod.default
-      if (!Array.isArray(config)) {
-        failures.push(
-          `${specifier} resolved but its default export is not a flat-config array (got ${typeof config}).`
-        )
-        continue
+      const failure = await verifierFor(subpath)(specifier, pkg.name)
+      if (failure) {
+        failures.push(failure)
       }
-      if (config.length === 0) {
-        failures.push(`${specifier} resolved to an empty flat-config array.`)
-        continue
-      }
-      console.log(`✅ ${specifier} → ${config.length} flat-config block(s)`)
     } catch (error) {
       failures.push(`${specifier} failed to load: ${error.message}`)
     }
   }
-
-  // (3) `./package.json` must resolve to this package's manifest.
-  failures.push(...(await verifyManifestExport(pkg, declared)))
 
   if (failures.length > 0) {
     console.error('\n❌ Public exports surface check failed:')
@@ -148,10 +156,8 @@ async function main() {
     process.exit(1)
   }
 
-  console.log(
-    `\n✅ All ${subpaths.length} entry point(s) resolve to usable flat configs, ` +
-      `including every documented one (${EXPECTED_ENTRY_POINTS.join(', ')}).`
-  )
+  const documented = EXPECTED_ENTRY_POINTS.join(', ')
+  console.log(`\n✅ All ${subpaths.length} entry point(s) resolve, including every documented one (${documented}).`) // prettier-ignore
 }
 
 main().catch(error => {

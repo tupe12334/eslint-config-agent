@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-agent",
-  "version": "3.0.4",
+  "version": "3.2.0",
   "description": "ESLint configuration package with TypeScript support",
   "main": "index.js",
   "types": "./index.d.ts",
@@ -26,6 +26,10 @@
       "types": "./exports/incremental.d.ts",
       "default": "./exports/incremental.js"
     },
+    "./to-warnings": {
+      "types": "./exports/to-warnings.d.ts",
+      "default": "./exports/to-warnings.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -36,13 +40,21 @@
     "configs/",
     "plugins/",
     "exports/",
-    "rules/**/index.js",
+    "rules/**/*.js",
     "!rules/**/examples/",
     "!rules/**/*.spec.js",
     "!rules/**/*.test.js"
   ],
   "engines": {
     "node": ">=20.0.0"
+  },
+  "peerDependencies": {
+    "typescript": ">=4.8.4"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
   },
   "scripts": {
     "lint": "eslint .",
@@ -56,6 +68,7 @@
     "test:recommended": "node scripts/test-recommended.js",
     "test:recommended-incremental": "node scripts/test-recommended-incremental.js",
     "test:exports": "node scripts/test-exports.js",
+    "test:pack": "node scripts/verify-pack.js",
     "test:incremental": "node scripts/test-incremental.js",
     "test:types": "tsc -p test/types/tsconfig.json",
     "test:edge": "eslint test/edge-cases.tsx",
@@ -141,6 +154,8 @@
     "eslint-plugin-single-export": "^1.1.2",
     "eslint-plugin-storybook": "^10.4.2",
     "eslint-plugin-switch-case": "^4.0.0",
+    "eslint-plugin-unicorn": "^65.0.1",
+    "eslint-plugin-unused-imports": "^4.4.1",
     "globals": "^17.6.0",
     "typescript-eslint": "^8.60.1"
   }
