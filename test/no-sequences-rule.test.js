@@ -1,17 +1,14 @@
 /**
- * Integration test for the `no-sequences` rule shipped by
- * eslint-config-agent.
+ * Integration test for the `no-sequences` rule shipped by eslint-config-agent.
  *
- * The shared config must reject the comma operator in expression-statement and
- * assignment positions where it is not parenthesized — e.g. `a++, b++` as a
- * standalone statement. The rule uses the default `allowInParentheses: true`
- * option, which exempts the parenthesised `(a, b)` form used in `for` loop
- * headers, since that context is intentional and widely understood. Commas
- * inside function arguments and array literals are structural and must also
- * pass. Run as a standalone node script by scripts/test-runner.js (exit code
- * 0 = pass).
+ * The shared config must reject the comma operator — a construct that smuggles
+ * several side effects into one expression and discards every result but the
+ * last — while leaving the legitimate comma uses (`for` headers, call
+ * arguments, array literals, declaration lists) untouched. This guards against
+ * accidental removal of the rule and documents the intended behavior. Run as a
+ * standalone node script by scripts/test-runner.js (exit code 0 = pass).
  */
-import assert from 'node:assert'
+import assert from 'assert'
 import { ESLint } from 'eslint'
 import config from '../index.js'
 
@@ -20,7 +17,7 @@ const eslint = new ESLint({
   overrideConfig: config,
 })
 
-const sequenceMessages = async code => {
+const noSequencesMessages = async code => {
   const [result] = await eslint.lintText(code, {
     filePath: 'no-sequences-sample.js',
   })
@@ -29,46 +26,49 @@ const sequenceMessages = async code => {
 
 console.log('Testing no-sequences rule from the shipped config...')
 
-// An unparenthesized comma operator used as a statement must be flagged.
-const commaStatement = await sequenceMessages(
-  'export const run = (counter) => {\n  counter++, counter++\n  return counter\n}\n'
+// The comma operator in an assignment must be flagged.
+const assignmentSequence = await noSequencesMessages(
+  'export const run = (a, b) => {\n  const value = (a(), b())\n  return value\n}\n'
 )
 assert.ok(
-  commaStatement.length > 0,
-  'Expected `a++, b++` (comma operator as statement) to be flagged by no-sequences'
+  assignmentSequence.length > 0,
+  'Expected the comma operator in an assignment to be flagged by no-sequences'
 )
 assert.strictEqual(
-  commaStatement[0].severity,
+  assignmentSequence[0].severity,
   2,
   'no-sequences should be an error'
 )
 
-// A comma inside function arguments must NOT be flagged.
-const functionArguments = await sequenceMessages(
-  'export const run = () => Math.max(1, 2, 3)\n'
+// The comma operator in a return statement must be flagged.
+const returnSequence = await noSequencesMessages(
+  'export const run = (cleanup, value) => {\n  return cleanup(), value\n}\n'
 )
-assert.strictEqual(
-  functionArguments.length,
-  0,
-  'Did not expect commas in function arguments to be flagged by no-sequences'
-)
-
-// A comma inside an array literal must NOT be flagged.
-const arrayLiteral = await sequenceMessages('export const items = [1, 2, 3]\n')
-assert.strictEqual(
-  arrayLiteral.length,
-  0,
-  'Did not expect commas in array literals to be flagged by no-sequences'
+assert.ok(
+  returnSequence.length > 0,
+  'Expected the comma operator in a return to be flagged by no-sequences'
 )
 
-// Separate statements must NOT be flagged.
-const separateStatements = await sequenceMessages(
-  'export const run = () => {\n  let counter = 0\n  counter++\n  return counter\n}\n'
+// Legitimate comma uses must NOT be flagged: `for` headers, call arguments,
+// array literals and declaration lists all rely on commas that are not the
+// comma operator.
+const legitimateCommas = await noSequencesMessages(
+  [
+    'export const run = items => {',
+    '  const pairs = [1, 2, 3]',
+    '  let total = 0',
+    '  for (let i = 0, len = pairs.length; i < len; i += 1, total += 1) {',
+    '    total += pairs[i]',
+    '  }',
+    '  return Math.max(total, items.length)',
+    '}',
+    '',
+  ].join('\n')
 )
 assert.strictEqual(
-  separateStatements.length,
+  legitimateCommas.length,
   0,
-  'Did not expect separate statements to be flagged by no-sequences'
+  'Did not expect legitimate comma uses to be flagged by no-sequences'
 )
 
 console.log('✅ All tests passed!')

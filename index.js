@@ -800,8 +800,13 @@ const sharedRules = {
   // `let [i, j] = [0, 0]` states the intent clearly. The rule is not in
   // `eslint:recommended`, so it is enabled explicitly here. It is not
   // auto-fixable because only the author knows whether to split into separate
-  // statements or rewrite the expression entirely.
-  'no-sequences': 'error',
+  // statements or rewrite the expression entirely. `allowInParentheses: false`
+  // closes the rule's default escape hatch: by default `no-sequences` treats a
+  // sequence wrapped in explicit parens (`(a(), b())`) as deliberate and lets
+  // it through, but a parenthesized comma operator still smuggles side effects
+  // into an expression, which is precisely the construct this config exists to
+  // surface — so it is flagged too.
+  'no-sequences': ['error', { allowInParentheses: false }],
   // Disallow empty constructors (`class Foo { constructor() {} }`) and
   // constructors whose only statement forwards all arguments to `super`
   // (`class Foo extends Bar { constructor(...args) { super(...args); } }`). In
