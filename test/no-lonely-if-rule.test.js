@@ -1,12 +1,13 @@
 /**
  * Integration test for the `no-lonely-if` rule shipped by eslint-config-agent.
  *
- * The shared config must reject an `if` that is the only statement inside an
- * `else` block (it should be written as `else if`), and accept both the
- * flattened `else if` chain and an `else` block that contains more than the
- * lone `if`. This guards against accidental removal of the rule and documents
- * the intended behavior. Run as a standalone node script by
- * scripts/test-runner.js (exit code 0 = pass).
+ * The shared config must reject an `if` statement that is the only statement
+ * inside an `else` block, requiring `else if` instead. The lone `if`-in-`else`
+ * adds an indentation level that hides what is really a flat chain of
+ * conditions — the same needless nesting the config's `no-else-return` rule and
+ * `early-return` plugin already push back on. A flat `else if` chain, and an
+ * `else` that holds extra statements alongside the `if`, must both pass. Run as
+ * a standalone node script by scripts/test-runner.js (exit code 0 = pass).
  */
 import assert from 'assert'
 import { ESLint } from 'eslint'
@@ -26,61 +27,57 @@ const noLonelyIfMessages = async code => {
 
 console.log('Testing no-lonely-if rule from the shipped config...')
 
-// A lone `if` as the only statement inside `else` must be flagged.
-const lonelyIf = await noLonelyIfMessages(
-  'export const classify = value => {\n' +
-    '  if (value > 0) {\n' +
-    "    return 'positive'\n" +
-    '  } else {\n' +
-    '    if (value < 0) {\n' +
-    "      return 'negative'\n" +
-    '    }\n' +
-    '  }\n' +
-    "  return 'zero'\n" +
-    '}\n'
+// A lone `if` nested in an `else` must be flagged.
+const lonely = await noLonelyIfMessages(
+  `export const run = (a, b) => {
+  if (a) {
+    doA()
+  } else {
+    if (b) {
+      doB()
+    }
+  }
+}
+`
 )
-assert.ok(
-  lonelyIf.length > 0,
-  'Expected a lone `if` inside `else` to be flagged by no-lonely-if'
-)
-assert.strictEqual(lonelyIf[0].severity, 2, 'no-lonely-if should be an error')
+assert.ok(lonely.length > 0, 'Expected a lone `if` inside `else` to be flagged')
+assert.strictEqual(lonely[0].severity, 2, 'no-lonely-if should be an error')
 
-// The flattened `else if` chain must pass.
-const elseIfChain = await noLonelyIfMessages(
-  'export const classify = value => {\n' +
-    '  if (value > 0) {\n' +
-    "    return 'positive'\n" +
-    '  } else if (value < 0) {\n' +
-    "    return 'negative'\n" +
-    '  }\n' +
-    "  return 'zero'\n" +
-    '}\n'
+// A flat `else if` chain must pass.
+const chain = await noLonelyIfMessages(
+  `export const run = (a, b) => {
+  if (a) {
+    doA()
+  } else if (b) {
+    doB()
+  }
+}
+`
 )
 assert.strictEqual(
-  elseIfChain.length,
+  chain.length,
   0,
-  'Did not expect the `else if` chain to be flagged by no-lonely-if'
+  'Did not expect a flat `else if` chain to be flagged'
 )
 
-// An `else` block with more than the lone `if` must pass.
-const elseWithExtra = await noLonelyIfMessages(
-  'export const classify = value => {\n' +
-    '  let label = null\n' +
-    '  if (value > 0) {\n' +
-    "    label = 'positive'\n" +
-    '  } else {\n' +
-    '    if (value < 0) {\n' +
-    "      label = 'negative'\n" +
-    '    }\n' +
-    "    label = label === null ? 'zero' : label\n" +
-    '  }\n' +
-    '  return label\n' +
-    '}\n'
+// An `else` that holds extra statements alongside the `if` must pass.
+const withExtra = await noLonelyIfMessages(
+  `export const run = (a, b) => {
+  if (a) {
+    doA()
+  } else {
+    prep()
+    if (b) {
+      doB()
+    }
+  }
+}
+`
 )
 assert.strictEqual(
-  elseWithExtra.length,
+  withExtra.length,
   0,
-  'Did not expect an `else` block with extra statements to be flagged by no-lonely-if'
+  'Did not expect an `else` with extra statements to be flagged'
 )
 
 console.log('✅ All tests passed!')
