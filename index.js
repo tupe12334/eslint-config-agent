@@ -799,6 +799,20 @@ const sharedRules = {
   // runtime, is left untouched. The rule is auto-fixable for the simple cases,
   // so consumers can adopt much of it with `eslint --fix`.
   'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
+  // Require `base ** exponent` over `Math.pow(base, exponent)`. The `Math.pow`
+  // call is two steps removed from the intent — readers must look up the
+  // function, remember that the first argument is the base and the second is the
+  // exponent, and mentally translate the call into the mathematical operation.
+  // The `**` exponentiation operator states that intent directly in one token,
+  // the same way `+`, `-` and `*` do for the other arithmetic operations, and is
+  // consistent with the rest of the arithmetic rules this config already ships
+  // (`operator-assignment`, `no-implicit-coercion`). `Math.pow` is also the form
+  // an AI assistant trained on older code reaches for — `**` was introduced in
+  // ES2016 and is not yet reflexive for a model that learned from ES5/ES6
+  // sources. The rule is auto-fixable, so consumers can adopt it with
+  // `eslint --fix`. It is not in `eslint:recommended`, so it is enabled
+  // explicitly here.
+  'prefer-exponentiation-operator': 'error',
   // Require named capture groups (`(?<year>\d{4})`) instead of positional ones
   // (`(\d{4})`). An unnamed capture group is referenced by a fragile positional
   // index — `match[1]`, `match[2]` — whose meaning evaporates the moment a
