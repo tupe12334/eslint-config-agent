@@ -377,6 +377,41 @@ const sharedRules = {
   // explicit-over-clever, AI-safety stance. It is also the foundation the
   // `prefer-const` rule builds on. The rule is auto-fixable.
   'no-var': 'error',
+  // Require rest parameters (`...args`) instead of the `arguments` object.
+  // The `arguments` object is a legacy "array-like" with no type information:
+  // TypeScript types it as `IArguments` — an `any`-element iterable — so every
+  // access is implicitly `any`, silently defeating the type-safety the rest of
+  // the config enforces. Arrow functions compound the hazard: they have no own
+  // `arguments` binding, so `arguments` inside an arrow silently captures the
+  // *outer* function's argument list, a scoping surprise that looks right and
+  // fails at runtime. A rest parameter (`...args`) is an ordinary, explicitly-
+  // typed array (`string[]`, `unknown[]`, whatever the signature declares),
+  // visible to the reader and the type checker alike. This is the argument-list
+  // sibling of `no-var` just above: just as `var` is a legacy declaration whose
+  // hoisting footguns `let`/`const` avoid, `arguments` is a legacy binding
+  // whose type-unsafety and arrow-scoping footguns an explicit rest parameter
+  // avoids. AI assistants trained on older code reach for `arguments` by default,
+  // which puts this squarely in the config's AI-safety scope. The rule is
+  // auto-fixable (`eslint --fix`); it is not in `eslint:recommended` or in
+  // typescript-eslint's `strictTypeChecked` preset, so it must be enabled
+  // explicitly here.
+  'prefer-rest-params': 'error',
+  // Require spread syntax (`fn(...args)`) instead of `fn.apply(ctx, args)`.
+  // The `.apply()` form forces the caller to supply a `this` context even when
+  // the function ignores `this` — the idiomatic `.apply(null, args)` — which is
+  // pure ceremony that obscures the call's intent and signals the code predates
+  // ES6 spread syntax. Spread (`fn(...args)`) states the intent directly —
+  // "call `fn` with these arguments unpacked" — with no spurious `this` slot to
+  // fill. This is the call-site companion to `prefer-rest-params` just above:
+  // that one replaces the legacy `arguments` binding at the declaration, this
+  // one replaces the legacy `.apply()` form at the call site. Together they
+  // close the arguments-as-array footgun that `eslint:recommended` and
+  // typescript-eslint's presets both leave open. AI assistants trained on older
+  // code reach for `.apply(null, args)` when spreading into a call, which puts
+  // this squarely in the config's AI-safety scope. The rule is auto-fixable
+  // (`eslint --fix`); it is not in `eslint:recommended`, so it must be enabled
+  // explicitly here.
+  'prefer-spread': 'error',
   // Disallow explicitly initializing a variable to `undefined` —
   // `let value = undefined` instead of the equivalent, shorter `let value`.
   // Every declared-but-unassigned binding is already `undefined`, so the
