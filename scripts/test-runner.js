@@ -446,6 +446,16 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/consistent-type-exports'],
   },
+  'strict-boolean-expressions': {
+    description:
+      'Nullable values in a boolean position are flagged; explicit null/zero checks pass',
+    files: ['test/strict-boolean/invalid.ts', 'test/strict-boolean/valid.ts'],
+    // +2 for unicorn/no-negated-condition + no-restricted-syntax-adjacent
+    // findings main has since added to these fixture files.
+    maxErrors: 5,
+    maxWarnings: 4,
+    expectedRules: ['@typescript-eslint/strict-boolean-expressions'],
+  },
   'return-await': {
     description:
       'A bare return-in-try and a redundant return-await are flagged; an awaited try-return and a bare return outside try pass',
@@ -575,7 +585,9 @@ const testCategories = {
     files: [
       'test/no-unnecessary-condition/invalid-no-unnecessary-condition.ts',
     ],
-    maxErrors: 1,
+    // +1 for @typescript-eslint/strict-boolean-expressions on the same
+    // always-truthy object condition.
+    maxErrors: 2,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-unnecessary-condition'],
   },
