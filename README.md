@@ -595,13 +595,14 @@ know what is enforcing each error.
 
 #### Spec-file & size rules
 
-| Rule                           | What it enforces                                                                                                  |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| `custom/require-spec-file-tsx` | Requires a `.spec` sibling for `.tsx`/`.jsx` components, mirroring `ddd/require-spec-file` for React/Preact code. |
-| `error-only-exports`           | Exempts files that export only `Error` subclasses from the spec-file requirement (no testable logic to cover).    |
-| `max-file-lines`               | `max-lines`: warns above 70 lines, errors above 100 (comments and blank lines skipped).                           |
-| `max-function-lines`           | `max-lines-per-function`: warns above 50 lines, errors above 70 (comments and blank lines skipped).               |
-| `no-trailing-spaces`           | Flags trailing whitespace so diffs stay clean and invisible characters never sneak into source.                   |
+| Rule                           | What it enforces                                                                                                                                            |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `custom/require-spec-file-tsx` | Requires a `.spec` sibling for `.tsx`/`.jsx` components, mirroring `ddd/require-spec-file` for React/Preact code.                                           |
+| `ddd/no-logic-in-index`        | Bans real functions/classes in `index.{js,ts,jsx,tsx}` files — they may only re-export, since barrel files are exempt from the spec-file requirement above. |
+| `error-only-exports`           | Exempts files that export only `Error` subclasses from the spec-file requirement (no testable logic to cover).                                              |
+| `max-file-lines`               | `max-lines`: warns above 70 lines, errors above 100 (comments and blank lines skipped).                                                                     |
+| `max-function-lines`           | `max-lines-per-function`: warns above 50 lines, errors above 70 (comments and blank lines skipped).                                                         |
+| `no-trailing-spaces`           | Flags trailing whitespace so diffs stay clean and invisible characters never sneak into source.                                                             |
 
 ### Framework-Specific Features
 
@@ -640,6 +641,12 @@ know what is enforcing each error.
 - Storybook files (`.stories.tsx`)
 - Example files in `examples/` directories
 - Error files (`.error.ts`, `-error.ts`, `errors/`, `exceptions/`)
+
+> Index/barrel files are exempt from `require-spec-file` on the assumption
+> that they only re-export — `ddd/no-logic-in-index` enforces that half of
+> the bargain, flagging any real function or class defined directly in an
+> `index.{js,ts,jsx,tsx}` file so logic can no longer hide in a file that
+> skips spec-file coverage.
 
 **Example structure:**
 

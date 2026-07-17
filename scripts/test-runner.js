@@ -533,6 +533,20 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'no-logic-in-index-invalid': {
+    description:
+      'A function defined directly in an index.ts barrel file must be flagged',
+    files: ['test/no-logic-in-index/invalid/index.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['ddd/no-logic-in-index'],
+  },
+  'no-logic-in-index-valid': {
+    description: 'A pure re-export barrel must not be flagged',
+    files: ['test/no-logic-in-index/valid/index.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
   'no-unnecessary-condition-invalid': {
     description:
       'A guard over a non-nullable type (always truthy) must be flagged',
