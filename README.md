@@ -446,6 +446,14 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   instead of a fresh object — while the literal is unambiguous. The
   object-creation sibling of the bundled wrapper-constructor and coercion bans.
   Auto-fixable with `eslint --fix`.
+- **`no-new-wrappers`**: Forbids `new String(...)`, `new Number(...)`, and `new
+Boolean(...)`. These constructors create objects, not primitives: `typeof new
+String('x')` is `'object'` not `'string'`, and `new String('x') !== 'x'` —
+  so every `===` comparison or `typeof` check silently produces the wrong answer.
+  The wrapper-object sibling of the `no-object-constructor` and `no-new-func`
+  bans: all three reject a `new` call whose only effect is to make a plain value
+  harder to compare or type-check. Use the coercion function (`String(x)`) or
+  a bare literal instead. Auto-fixable with `eslint --fix`.
 - **`prefer-regex-literals`** (`disallowRedundantWrapping: true`): Forbids the
   `RegExp` constructor for a static pattern (`new RegExp('\\d+')`) in favor of a
   regex literal (`/\d+/`). The string form double-escapes every backslash, so a
