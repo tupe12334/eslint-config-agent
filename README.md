@@ -189,7 +189,10 @@ stay on, so any JSDoc you do write is still validated),
 `jsx-classname/require-classname` (which otherwise errors on Tailwind-only
 `className`s), and the `no-restricted-syntax` bans on optional chaining /
 nullish coalescing / type assertions), so idiomatic TypeScript and
-React/Preact + Tailwind code passes during incremental adoption.
+React/Preact + Tailwind code passes during incremental adoption. It also
+downgrades the function/file length limits (`max-lines-per-function`,
+`max-lines`) from errors to warnings — the same 70/100-line thresholds, but they
+no longer fail a CI lint run while a long-function backlog is burned down.
 
 ```javascript
 import recommended from 'eslint-config-agent/recommended'
