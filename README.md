@@ -38,7 +38,7 @@ AI coding assistants often generate code that:
 This configuration enforces patterns that:
 
 - Make null/undefined handling explicit and clear
-- Keep functions at manageable lengths (≤100 lines)
+- Keep functions at manageable lengths (≤70 lines)
 - Require proper file organization and naming
 - Ensure consistent, readable code structure
 
@@ -47,7 +47,7 @@ This configuration enforces patterns that:
 - **🛠️ TypeScript First**: Full TypeScript ESLint integration with advanced type checking
 - **⚛️ React & Preact**: Complete support for both React and Preact projects
 - **🔐 Strict Standards**: Enforces explicit null/undefined checks, requires strict equality (`===`/`!==`), and disallows optional chaining and nullish coalescing for better code clarity
-- **📏 Code Quality**: Function length limits (100 lines), trailing space detection, and consistent formatting
+- **📏 Code Quality**: Function length limits (70 lines), trailing space detection, and consistent formatting
 - **🧪 DDD by Default**: Requires spec files for all source files to ensure comprehensive test coverage
 - **🚀 Modern ESLint**: Uses the latest flat configuration format (ESLint 9)
 - **📋 Comprehensive Testing**: 12+ test categories with automated validation
