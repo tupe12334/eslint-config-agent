@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [Conven
 
 
 
+## [3.4.0](https://github.com/tupe12334/eslint-config-agent/compare/v3.3.0...v3.4.0) (2026-07-20)
+
+### Features
+
+* **exports:** expose the toWarnings helper as a public entry point ([#223](https://github.com/tupe12334/eslint-config-agent/issues/223)) ([e752f1e](https://github.com/tupe12334/eslint-config-agent/commit/e752f1ecc95012e92642071794fad73130c7d325)), closes [#222](https://github.com/tupe12334/eslint-config-agent/issues/222)
+
 ## [3.3.0](https://github.com/tupe12334/eslint-config-agent/compare/v3.2.0...v3.3.0) (2026-07-17)
 
 ### Features
