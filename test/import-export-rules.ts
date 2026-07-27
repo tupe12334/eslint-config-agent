@@ -11,8 +11,8 @@ import React from 'react';
 import type { ReactNode } from 'react';
 
 // Multiple imports from same module
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 // Named exports (should be allowed)
 export const utilityFunction = () => 'test';
@@ -58,7 +58,7 @@ export function identity<T>(arg: T): T {
 
 // Class export
 export class TestService {
-  private config: TestConfig;
+  private readonly config: TestConfig;
 
   constructor(config: TestConfig) {
     this.config = config;

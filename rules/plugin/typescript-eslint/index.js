@@ -2,8 +2,58 @@ import { noExplicitAnyConfig } from './no-explicit-any/index.js'
 
 export const typescriptEslintRules = {
   ...noExplicitAnyConfig,
+  // `strictTypeChecked` (which this config extends) enables
+  // `@typescript-eslint/only-throw-error` — the type-aware replacement for the
+  // core `no-throw-literal` rule that catches additional cases (e.g. throwing a
+  // variable typed as `string | Error`). The core rule is still active in
+  // `sharedRules` and, because `sharedRules` is spread into the TypeScript
+  // config *after* the preset, it overrides the preset's own `no-throw-literal:
+  // 'off'`. Turning the core rule off here (in `typescriptEslintRules`, which
+  // is spread after `sharedRules`) ensures TypeScript files are checked only by
+  // the type-aware rule so there is no double-reporting of the same violation.
+  // The core rule remains active for `.js`/`.jsx` files via `sharedRules`,
+  // where the type-aware version does not run.
+  'no-throw-literal': 'off',
+  // `strictTypeChecked` (which this config extends) includes `recommended`,
+  // which enables `@typescript-eslint/no-useless-constructor` for TypeScript
+  // files. The core `no-useless-constructor` rule is active in `sharedRules`
+  // for JavaScript files. Turning the core rule off here ensures TypeScript
+  // files are covered only by the TypeScript-aware variant, preventing
+  // double-reporting on the same constructor.
+  'no-useless-constructor': 'off',
+  // `stylisticTypeChecked` (which this config extends) enables
+  // `@typescript-eslint/prefer-nullish-coalescing`, recommending `??` over `||`
+  // for nullable-type checks. However, this config deliberately bans the `??`
+  // operator via a `no-restricted-syntax` rule (see `noNullishCoalescingConfig`)
+  // in favour of explicit `!== null && !== undefined` checks. With both active,
+  // a user writing `x || 'default'` (where `x` is nullable) gets
+  // `prefer-nullish-coalescing` telling them to use `??`, and then
+  // `no-restricted-syntax` forbidding the `??` they just added — an
+  // unresolvable contradiction. Turning this rule off here lets
+  // `no-restricted-syntax` be the single, authoritative constraint: reach for
+  // explicit null checks, not `??`.
+  '@typescript-eslint/prefer-nullish-coalescing': 'off',
   '@typescript-eslint/consistent-type-assertions': 'off',
   '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+  // Force the **property style** (`foo: (x: number) => void`) for every method
+  // member of an interface or object type, and forbid the **method shorthand**
+  // (`foo(x: number): void`). The two forms look interchangeable but are not:
+  // TypeScript deliberately exempts method-shorthand signatures from
+  // `strictFunctionTypes` and checks them *bivariantly* (a documented language
+  // unsoundness), while property-style signatures are checked *contravariantly*
+  // (sound). In practice a method-shorthand declaration silently accepts an
+  // incompatible callback or override that the property style would reject —
+  // the incompatibility passes type-checking and only surfaces as a wrong call
+  // at runtime. That is exactly the "looks typed, fails at runtime" gap this
+  // config exists to close, and it is the signature-side companion of the
+  // already-enabled `no-non-null-assertion` and `require-array-sort-compare`
+  // rules. The rule is *not* in typescript-eslint's `strictTypeChecked` preset
+  // this config extends, so it must be turned on explicitly. It is
+  // **auto-fixable** (`eslint --fix`), so adoption costs nothing. Both
+  // `tupe12334/zod-utils` and `tupe12334/tools-view` already re-add it by hand
+  // on top of the shared config; promoting it here removes that copy-paste and
+  // covers every downstream consumer.
+  '@typescript-eslint/method-signature-style': ['error', 'property'],
   // Require a `case` for every member of the union/enum a `switch` discriminates
   // on. This is the type-aware completion of the `no-restricted-syntax` ban on
   // `default` cases this config already ships ("Default cases are not allowed in
@@ -139,6 +189,93 @@ export const typescriptEslintRules = {
   // by hand on top of the base config — promoting it into the shared rule set
   // removes that copy-paste.
   '@typescript-eslint/no-shadow': 'error',
+  // Require `readonly` on every private class member that is only ever assigned
+  // in its declaration or the constructor. A field that is conceptually fixed
+  // after construction but left writable reads as if it might change later, so
+  // a stray reassignment elsewhere in the class compiles silently and the
+  // reader can no longer trust the value is settled — the immutability gap is
+  // invisible until something mutates it by accident. Marking it `readonly`
+  // turns that accidental write into a compile error and states the contract at
+  // the declaration site, which is the same explicit-over-clever,
+  // immutability-leaning stance the core `prefer-const` and `no-param-reassign`
+  // rules already set for variables and parameters — this extends it to class
+  // state. It is exactly the annotation an AI assistant omits when it generates
+  // a class, leaving every field mutable by default. The rule is type-aware
+  // (it must see the whole class to prove a member is never reassigned), so it
+  // lives in the TypeScript-only rule set rather than `sharedRules`, and it is
+  // deliberately left out of typescript-eslint's `strictTypeChecked` preset
+  // this config extends, so it must be turned on explicitly — which is why
+  // downstream repos (`block-no-verify`, `tools-view`) already re-add it by
+  // hand on top of the base config. The rule is auto-fixable (`eslint --fix`),
+  // so adoption is cheap.
+  '@typescript-eslint/prefer-readonly': 'error',
+  // Forbid referencing a `let`/`const`/`class` binding before its textual
+  // declaration. Thanks to the Temporal Dead Zone, an early reference to such
+  // a binding does not read `undefined` — it throws a `ReferenceError` at
+  // runtime, so the file can type-check and look correct while a particular
+  // code path (a closure invoked before its outer scope finishes
+  // initializing, a module-level `const` referenced by another before both
+  // have run) blows up only when actually executed. That looks-right-fails-
+  // at-runtime gap is exactly what this config exists to close. Declaration
+  // order should be a reliable signal of evaluation order; this rule makes
+  // violations a lint error instead of a surprise crash.
+  //
+  // The core `no-use-before-define` rule is intentionally left `off` (see
+  // `sharedRules` in `index.js`): it does not understand TypeScript's hoisted
+  // type-level declarations (`interface`, `type`, and `enum` members are safe
+  // to reference before their textual position) and would false-positive on
+  // them. The typescript-eslint version understands those cases, so it is the
+  // documented replacement rather than a second rule fighting the first. It
+  // needs no type information, so it adds no parser cost.
+  //
+  // `functions: false` exempts function declarations, which are fully
+  // hoisted (including their body) and safe to call before their textual
+  // definition — flagging them would only add noise, not catch a real bug.
+  // `classes` and `variables` stay `true` because those bindings are hoisted
+  // but left uninitialized (the TDZ), so referencing them early is the actual
+  // runtime hazard this rule exists to catch. This mirrors how downstream repo
+  // `ameliso-io/web` already configures the rule by hand on top of the base
+  // config — promoting it into the shared rule set removes that copy-paste.
+  '@typescript-eslint/no-use-before-define': [
+    'error',
+    { functions: false, classes: true, variables: true },
+  ],
+  // Forbid declaring a function inside a loop when that function closes over a
+  // binding that changes between iterations. A function created in a loop
+  // captures its outer variables *by reference*, not by value, so every closure
+  // shares the one binding and, by the time any of them runs, sees that
+  // binding's final value — not the per-iteration value the author plainly
+  // intended. The textbook bug is registering handlers/timers in a loop
+  // (`for (let i = 0; ...) el.onclick = () => use(i)` over a `var i`, or pushing
+  // `() => row` closures while a loop reassigns `row`): every callback fires with
+  // the last value. The function "looks like it captures this iteration" but does
+  // not — the same looks-right-fails-at-runtime mismatch this config exists to
+  // catch, and exactly the shortcut an AI assistant emits when it lifts a closure
+  // into a loop body without checking what the closure captures. The fix is
+  // explicit: bind the per-iteration value (a block-scoped `const` inside the
+  // loop, a parameter, or `.map`/`.forEach` whose callback gets a fresh binding),
+  // which the rule's safe forms allow. It is not in `eslint:recommended` or in
+  // typescript-eslint's `strictTypeChecked`/`stylisticTypeChecked` presets this
+  // config extends, so it must be enabled explicitly. The typescript-eslint
+  // extension is used in place of the core `no-loop-func` because it understands
+  // TypeScript scoping — a reference to a type, an `enum`, or a `const` that
+  // cannot change across iterations is not flagged — so it keeps the rule's
+  // signal without the false positives the core rule raises in typed code. It
+  // needs no type information, so it adds no parser cost.
+  '@typescript-eslint/no-loop-func': 'error',
+  // Prefer optional chaining (`a?.b?.c`) over a chain of `&&` null-guards
+  // (`a && a.b && a.b.c`). The `&&`-chain form evaluates the base expression
+  // repeatedly and handles `0`, `""`, and `false` as "missing" — a falsy-value
+  // coercion bug the type checker cannot catch because the operator is
+  // perfectly typed. Optional chaining short-circuits on `null`/`undefined`
+  // only, evaluates the base once, and is the form TypeScript was designed to
+  // express. It is also shorter and reads left-to-right with no repeated
+  // sub-expressions. The rule is auto-fixable (`eslint --fix`), so adoption is
+  // cheap. It lives in typescript-eslint's `stylistic-type-checked` preset but
+  // NOT in `strict-type-checked`, which is why this config (extending
+  // `strictTypeChecked`) must enable it explicitly — and why a downstream repo
+  // (`tools-view`) already re-adds it by hand on top of the base config.
+  '@typescript-eslint/prefer-optional-chain': 'error',
   // Require any function that returns a `Promise` to be declared `async`. A
   // plain (non-`async`) function that returns a promise can still throw
   // *synchronously* — anything that runs before the promise is constructed (an
@@ -160,6 +297,31 @@ export const typescriptEslintRules = {
   // `.tsx`, which is why downstream repos (`tools-view`) re-add it by hand on
   // top of the base config.
   '@typescript-eslint/promise-function-async': 'error',
+  // Forbid an unsafe non-boolean value in a boolean position (an `if`, `while`,
+  // `&&`, `||`, `!`, or ternary test). With this rule's defaults a plain
+  // `string`/`number` truthiness check stays allowed; what it catches is the
+  // genuinely ambiguous coercion: a *nullable* value (`string | undefined`,
+  // `number | null`, a nullable boolean), an `any`, or a bare object in a
+  // condition. `if (maybeStr)` on a `string | undefined` silently folds two
+  // different states into one — an empty string `''` and a missing `undefined`
+  // both take the falsy branch — so the case the author meant to separate ("present
+  // but empty" vs "not there at all") slips through as a branch that quietly
+  // does the wrong thing; `if (maybeNum)` does the same to `0` vs `undefined`,
+  // and `if (obj)` blends a null-check with a truthiness-check. The rule forces
+  // the condition to say which it means: compare against `''`, `0`, or
+  // `null`/`undefined` explicitly. That implicit nullable coercion is exactly
+  // what an AI assistant leans on when it writes `if (value)` against a
+  // `string | undefined` without deciding what the empty string should do, so
+  // it sits squarely in this config's explicit-over-clever, surface-the-edge
+  // -case stance — the same intent behind the already-enabled `eqeqeq` and the
+  // `??` ban, applied to the condition itself. It is deliberately left out of
+  // the `strictTypeChecked` preset this config extends (too opinionated to be a
+  // default), so it must be turned on explicitly — which is why several
+  // downstream repos (`tools-view`, `zod-utils`, `currency-fa`,
+  // `block-no-verify`) already re-add it by hand on top of the base config.
+  // The rule is type-aware and runs under the `projectService` parser options
+  // already configured for `.ts`/`.tsx` files, so it adds no new setup.
+  '@typescript-eslint/strict-boolean-expressions': 'error',
   // Require `return await promise` (never a bare `return promise`) inside a
   // `try`/`catch`, and forbid the redundant `return await` everywhere else.
   // A bare `return promise` from inside a `try` block hands the promise back to
@@ -185,4 +347,136 @@ export const typescriptEslintRules = {
   // running under the `projectService` parser options already configured for
   // `.ts`/`.tsx`.
   '@typescript-eslint/return-await': ['error', 'in-try-catch'],
+  // Flag Promises used in positions where their resolution value cannot be
+  // observed — the fourth side of the async-hygiene quadrant already in this
+  // config (`no-floating-promises`, `promise-function-async`, `return-await`).
+  //
+  // Three patterns are caught:
+  //
+  // 1. `checksVoidReturn` (default `true`): an async function passed where the
+  //    callback's return type is `void` — the textbook case is
+  //    `array.forEach(async item => { await work(item) })`. The returned
+  //    `Promise<void>` is structurally assignable to `void`, so TypeScript's
+  //    own type-checker never flags it, but the Promise is silently dropped and
+  //    its rejection becomes an unhandled rejection crash. The fix is an
+  //    explicit `for...of` loop with `await`, or an `async` wrapper that is
+  //    then awaited by the caller.
+  //
+  // 2. `checksConditionals` (default `true`): a Promise used directly in a
+  //    boolean context — `if (fetchData())` or `while (poll())`. The Promise
+  //    object itself is always truthy, so the condition never reflects the
+  //    resolved value; this is almost always a missing `await`.
+  //
+  // 3. `checksSpreads` (default `true`): `{...asyncFn()}` spreads the Promise
+  //    object's own properties (none meaningful) instead of the resolved
+  //    object's properties — a silent data-loss bug.
+  //
+  // All three are silent: TypeScript does not flag them, the code runs without
+  // a syntax error, and the bug surfaces at runtime as either a missing
+  // side-effect, an always-true conditional, or an empty object spread. They
+  // are exactly the "looks correct, fails at runtime" shortcuts an AI assistant
+  // produces when it wraps async work in a sync-looking callback or forgets an
+  // `await`. The rule is type-aware, so it runs under the `projectService`
+  // parser options already configured for `.ts`/`.tsx` files. Downstream repos
+  // (`book-processor`) already promote this rule to `error` on top of the base
+  // config — promoting it into the shared rule set removes that copy-paste.
+  '@typescript-eslint/no-misused-promises': 'error',
+  // Require an explicit initializer for every enum member. Without one,
+  // TypeScript assigns implicit numeric values (0, 1, 2, …) based on the
+  // member's position in the declaration. Reordering members or inserting a
+  // new one in the middle silently changes every subsequent member's numeric
+  // value — a breaking API change for any caller that stored or compared the
+  // raw numbers. The type-checker cannot flag this: the values are still typed
+  // as the enum, not as literal `0`/`1`/`2`, so the mismatch only surfaces at
+  // runtime. Writing an explicit initializer (`= 'Up'`, `= 1`) makes the
+  // assigned value visible and independent of position: adding or reordering
+  // members is now safe by construction, and the intent is legible without
+  // counting indices. It is exactly the "looks stable, breaks on extension"
+  // footgun AI assistants introduce when they generate an enum and leave the
+  // compiler to decide the values — the enum counterpart of the
+  // `array-callback-return` and `switch-exhaustiveness-check` rules this
+  // config already ships for other "silent missing value" bugs. The rule is
+  // not in `strictTypeChecked` or `stylisticTypeChecked`, so it must be
+  // enabled explicitly. It is not auto-fixable: only the author knows what
+  // each member's value should be.
+  '@typescript-eslint/prefer-enum-initializers': 'error',
+  // Forbid enum declarations that mix numeric and string member values. TypeScript
+  // allows both `Status.Active = 0` (number) and `Status.Name = 'active'`
+  // (string) in the same declaration, but the resulting type widens in
+  // surprising ways: a mixed enum has no reverse-mapping for string members,
+  // exhaustiveness checks over it behave differently depending on TypeScript
+  // version, and `Object.values(Status)` returns `[0, 'active']` — a
+  // heterogeneous array the caller rarely expects. Combined with the existing
+  // `prefer-enum-initializers` rule (which makes every member's value
+  // explicit), this rule makes the *kind* of value explicit too: all numbers or
+  // all strings, never both. It is exactly the implicit ambiguity an AI
+  // assistant introduces when it scaffolds an enum from a mixed-type spec ("id
+  // is 0, label is 'active'") without deciding which kind to use. The rule is
+  // not in `strictTypeChecked` or `stylisticTypeChecked`, so it must be enabled
+  // explicitly. It is not auto-fixable: only the author knows whether to
+  // normalize to numbers or strings.
+  '@typescript-eslint/no-mixed-enums': 'error',
+  // Forbid redeclaring a variable, function, class, or type in the same scope.
+  // A redeclaration silently overwrites the earlier binding — the second
+  // `function foo() {}` or `let value` wins, and every reference to the name
+  // above it now resolves to the wrong definition — which is exactly the kind
+  // of "looks like two things, is actually one" mistake that surfaces far from
+  // its source, as a call that no longer does what its nearby declaration
+  // suggests. TypeScript's own re-declaration diagnostics do not cover every
+  // case this rule does (e.g. a `let`/`var` redeclared inside a nested block
+  // that shadows rather than errors), so the type checker alone does not close
+  // this gap.
+  //
+  // The core `no-redeclare` rule is intentionally left `off` for TypeScript
+  // files (see `strictTypeChecked`, which this config extends): it
+  // false-positives on TypeScript-specific merging patterns such as a
+  // `function`/`namespace` pair or an `interface` and a `class` sharing a name
+  // by design. The typescript-eslint version understands those cases, so it is
+  // the documented replacement rather than a second rule fighting the first —
+  // mirroring how `@typescript-eslint/no-shadow` already replaces core
+  // `no-shadow` in this config. It needs no type information, so it adds no
+  // parser cost. `ameliso-io/web` already re-adds this exact replacement by
+  // hand on top of the base config (`"no-redeclare": "off"` with a comment
+  // pointing at the typescript-eslint variant); promoting it here removes that
+  // copy-paste and covers every downstream consumer.
+  '@typescript-eslint/no-redeclare': 'error',
+  // Flag a condition, `&&`/`||` operand, or optional-chain (`?.`) link whose
+  // type proves it can never be anything but truthy or never be anything but
+  // falsy. A guard like `if (value)` where `value`'s type is a non-nullable
+  // object looks like a real null/undefined check, but the type checker has
+  // already proven it always passes — the "guard" is dead code that silently
+  // hides the fact the author expected a case (`null`, `undefined`, `false`)
+  // the type no longer allows, usually because an earlier refactor narrowed
+  // the type and left a now-redundant check behind. The inverse (a condition
+  // that is always falsy) is worse: the guarded branch is unreachable dead
+  // code that looks live. Both are exactly the "looks like a safety check,
+  // does nothing" gap this config exists to close, and the type-aware
+  // completion of the same always-true/false class of bug
+  // `no-self-compare` and `no-constant-binary-expression` already catch by
+  // syntax alone. The rule is type-aware, so it runs under the
+  // `projectService` parser options already configured for `.ts`/`.tsx`
+  // files, and it is why downstream repo `block-no-verify` already re-adds
+  // it by hand on top of the base config.
+  '@typescript-eslint/no-unnecessary-condition': 'error',
+  // Forbid a `private` (TypeScript keyword) or `#hashPrivate` class field or
+  // method that is declared and never read or called anywhere in the class
+  // body. Because the member is private, there is no legitimate external
+  // caller to account for — an unused one is dead code: a leftover from a
+  // refactor that forgot to delete it, or worse, a member the author meant to
+  // wire up but a typo or missed call site left orphaned, silently doing
+  // nothing while the reader assumes it does something.
+  //
+  // The core `no-unused-private-class-members` rule (already enabled via
+  // `eslint:recommended`) only understands ECMAScript `#hashPrivate` fields —
+  // it has no notion of TypeScript's `private` keyword, which is the actual
+  // dead-code surface in a TypeScript-heavy codebase. The typescript-eslint
+  // version is a strict superset (flags both forms) and needs no type
+  // information, so it adds no parser cost. This mirrors how
+  // `@typescript-eslint/no-shadow` and `@typescript-eslint/no-use-before-define`
+  // above already replace their core counterparts. Downstream repo
+  // `ameliso-io/web` already re-adds both the core and typescript-eslint
+  // variants by hand on top of the base config — promoting the
+  // typescript-eslint version into the shared rule set removes that
+  // copy-paste.
+  '@typescript-eslint/no-unused-private-class-members': 'error',
 }
