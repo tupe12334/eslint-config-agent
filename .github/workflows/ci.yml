@@ -56,6 +56,20 @@ jobs:
       - name: Run validation
         run: pnpm validate
 
+      - name: Verify pack integrity
+        run: pnpm test:pack
+
+  linecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run linecheck
+        uses: tupe12334/linecheck@main
+        with:
+          version: "1.1.1"
+
   release:
     needs: test
     runs-on: ubuntu-latest
