@@ -20,7 +20,7 @@ const testCategories = {
       'test/typescript-rules.ts',
       'test/type-assertions/indexed-access-valid.ts',
     ],
-    maxErrors: 11,
+    maxErrors: 12, // main's 11 + 1 for @typescript-eslint/explicit-module-boundary-types
     maxWarnings: 10,
   },
   invalid: {
@@ -52,7 +52,7 @@ const testCategories = {
   hooks: {
     description: 'React hooks rules testing',
     files: ['test/react-hooks-rules.tsx'],
-    maxErrors: 67,
+    maxErrors: 70, // main's 67 + @typescript-eslint/explicit-module-boundary-types
     maxWarnings: 20,
     expectedRules: [
       'react-hooks/exhaustive-deps',
@@ -63,7 +63,7 @@ const testCategories = {
   imports: {
     description: 'Import/export patterns testing',
     files: ['test/import-export-rules.ts'],
-    maxErrors: 33, // import/group-exports + import/no-namespace + import/first + import/no-duplicates + export specifier rules + early-return + @typescript-eslint/no-shadow + unused-imports/no-unused-imports (fixture imports symbols solely to exercise import grouping/ordering, leaving them unused)
+    maxErrors: 42, // import/group-exports + import/no-namespace + import/first + import/no-duplicates + export specifier rules + early-return + @typescript-eslint/no-shadow + unused-imports/no-unused-imports (fixture imports symbols solely to exercise import grouping/ordering, leaving them unused) + @typescript-eslint/explicit-module-boundary-types
     maxWarnings: 0,
     expectedRules: [
       'import/group-exports',
@@ -238,7 +238,7 @@ const testCategories = {
       'test/export/valid/explicit-export-declaration.ts',
       'test/export/valid/export-from-scoped.ts',
     ],
-    maxErrors: 26,
+    maxErrors: 31, // main's 26 + 5 for @typescript-eslint/explicit-module-boundary-types
     maxWarnings: 5,
   },
   'export-invalid': {
@@ -259,7 +259,7 @@ const testCategories = {
       'test/export/invalid/export-of-import.ts',
       'test/export/invalid/export-from-lib.ts',
     ],
-    maxErrors: 24, // class-export/class-export + remaining no-restricted-syntax + export specifier rules + single-export rules + early-return + unicorn rules
+    maxErrors: 37, // class-export/class-export + remaining no-restricted-syntax + export specifier rules + single-export rules + early-return + unicorn rules + @typescript-eslint/explicit-module-boundary-types
     maxWarnings: 0,
     expectedRules: [
       'no-restricted-syntax',
@@ -283,7 +283,9 @@ const testCategories = {
       'test/index-files/invalid/index-multiple-statements.ts',
       'test/index-files/invalid/index-export-specifiers.js',
     ],
-    maxErrors: 7,
+    // +2 for @typescript-eslint/explicit-module-boundary-types on the
+    // fixture's untyped exported functions.
+    maxErrors: 9,
     maxWarnings: 2,
     expectedRules: ['no-restricted-syntax'],
   },
@@ -294,7 +296,9 @@ const testCategories = {
       'test/switch-case/valid/typed-functions.tsx',
       'test/switch-case/valid/function-return-types.tsx',
     ],
-    maxErrors: 31,
+    // +10 for @typescript-eslint/explicit-module-boundary-types on the
+    // fixture's untyped exported functions.
+    maxErrors: 41,
     maxWarnings: 0,
     expectedRules: [
       'switch-case/no-case-curly',
@@ -309,7 +313,7 @@ const testCategories = {
       'test/switch-case/invalid/missing-function-return-types.tsx',
       'test/switch-case/invalid/untyped-functions.tsx',
     ],
-    maxErrors: 94,
+    maxErrors: 111, // main's 94 + @typescript-eslint/explicit-module-boundary-types
     maxWarnings: 0,
     expectedRules: [
       'no-restricted-syntax',
@@ -345,7 +349,7 @@ const testCategories = {
       'test/classname-warning-test.tsx',
       'test/classname-warning-test.jsx',
     ],
-    maxErrors: 62,
+    maxErrors: 65, // main's 62 + 3 for @typescript-eslint/explicit-module-boundary-types
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -357,7 +361,7 @@ const testCategories = {
       'test/classname/valid/forms-fragments-valid.tsx',
       'test/classname/valid/react-components-valid.tsx',
     ],
-    maxErrors: 35,
+    maxErrors: 50, // main's 35 + @typescript-eslint/explicit-module-boundary-types
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -370,7 +374,7 @@ const testCategories = {
       'test/classname/invalid/forms-fragments-invalid.tsx',
       'test/classname/invalid/react-components-invalid.tsx',
     ],
-    maxErrors: 193,
+    maxErrors: 214, // main's 193 + @typescript-eslint/explicit-module-boundary-types
     maxWarnings: 0,
     expectedRules: ['jsx-classname/require-classname'],
   },
@@ -464,6 +468,21 @@ const testCategories = {
     maxErrors: 2,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/consistent-type-exports'],
+  },
+  'explicit-module-boundary-types': {
+    description:
+      'An exported function with an inferred boundary is flagged; a fully annotated boundary passes',
+    files: [
+      'test/explicit-module-boundary-types/invalid-boundary.ts',
+      'test/explicit-module-boundary-types/valid-boundary.ts',
+    ],
+    // 1 @typescript-eslint/explicit-module-boundary-types + 1
+    // @typescript-eslint/explicit-function-return-type (both fire on the
+    // same untyped export) + 1 unicorn/no-manually-wrapped-comments (fixture
+    // comment style, flagged since main enabled unicorn.configs.all).
+    maxErrors: 3,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/explicit-module-boundary-types'],
   },
   'strict-boolean-expressions': {
     description:
@@ -1004,7 +1023,7 @@ function autoCategorizeFiles(allTestFiles) {
             file.includes('export') ||
             file.includes('Export')
         ),
-        maxErrors: 57,
+        maxErrors: 71, // main's 57 + @typescript-eslint/explicit-module-boundary-types
         maxWarnings: 2,
         expectedRules: ['no-restricted-syntax'],
       },
