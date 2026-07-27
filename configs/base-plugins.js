@@ -46,6 +46,27 @@ export const basePluginsConfig = [
       ],
     },
   },
+  // DDD plugin - index/barrel files must only re-export, never define logic.
+  //
+  // `require-spec-file` (above) already exempts `index.js`/`index.ts` from the
+  // "every source file needs a spec" rule, on the assumption that a barrel
+  // file just re-exports the module's public surface and has nothing of its
+  // own to test. That assumption silently breaks the moment someone adds a
+  // real function, class, or non-trivial `const` to the barrel: the logic now
+  // ships with zero test coverage and no rule catches it, because the file's
+  // spec-exempt status was never conditional on it staying re-export-only.
+  // `ddd/no-logic-in-index` closes that gap directly — it flags any
+  // top-level function, class, or function-valued `const` in a file literally
+  // named `index.{js,ts,jsx,tsx}`, while still allowing plain re-exports
+  // (`export { x } from './x'`, `export * from './y'`) and non-function
+  // constants. It ships as part of the `ddd` plugin already bundled here (see
+  // `require-spec-file` above), so enabling it adds no new dependency. The rule
+  // takes no options, so there is nothing to configure beyond turning it on.
+  {
+    rules: {
+      'ddd/no-logic-in-index': 'error',
+    },
+  },
   // Require spec files for .tsx/.jsx source files too.
   //
   // `ddd/require-spec-file` only inspects `.js`/`.ts` files, so React/Preact
@@ -92,6 +113,20 @@ export const basePluginsConfig = [
     rules: {
       'ddd/require-spec-file': 'off',
       'custom/require-spec-file-tsx': 'off',
+    },
+  },
+  // `ddd/no-logic-in-index` assumes `index.{js,ts}` means "barrel file", but
+  // this package's own `rules/<rule-name>/index.js` files follow a different,
+  // repo-specific convention: `index.js` is each rule's *implementation*
+  // entry point (mirroring Node's package-main resolution), not a re-export
+  // barrel — e.g. `rules/error-only-exports/index.js` defines the rule's
+  // helper functions directly. Consumers' own `index.js` files (the rule's
+  // actual target) are unaffected; this exemption only covers this
+  // repository's internal rule sources.
+  {
+    files: ['rules/**/index.js'],
+    rules: {
+      'ddd/no-logic-in-index': 'off',
     },
   },
 ]

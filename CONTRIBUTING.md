@@ -6,7 +6,7 @@ Thank you for your interest in contributing to eslint-config-agent! This documen
 
 ### Prerequisites for Development
 
-- Node.js 18+
+- Node.js 20+
 - pnpm (recommended package manager)
 - Git
 
@@ -14,8 +14,8 @@ Thank you for your interest in contributing to eslint-config-agent! This documen
 
 ```bash
 # Clone the repository
-git clone https://github.com/tupe12334/eslint-config.git
-cd eslint-config
+git clone https://github.com/tupe12334/eslint-config-agent.git
+cd eslint-config-agent
 
 # Install dependencies
 pnpm install
