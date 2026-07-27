@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/tupe12334/linecheck/main/schema/linecheck.schema.json
+
+rules:
+  # Pre-existing files already over the default error threshold, grandfathered
+  # at a ceiling above their current size so they can't grow further unchecked.
+  # Split them below this ceiling in a follow-up rather than blocking adoption.
+  - pattern: "rules/plugin/typescript-eslint/index.js"
+    warn: 400
+    error: 500
+  - pattern: "scripts/test-runner.js"
+    warn: 800
+    error: 1200
+  - pattern: "index.js"
+    warn: 800
+    error: 1200
+
+  - pattern: "**/*.ts"
+    warn: 200
+    warn_message: "Getting long — consider splitting into smaller modules"
+    error: 400
+    error_message: "File exceeds the hard limit — split before merging"
+  - pattern: "**/*.tsx"
+    warn: 200
+    warn_message: "Getting long — consider splitting into smaller modules"
+    error: 400
+    error_message: "File exceeds the hard limit — split before merging"
+  - pattern: "**/*.js"
+    warn: 200
+    warn_message: "Getting long — consider splitting into smaller modules"
+    error: 400
+    error_message: "File exceeds the hard limit — split before merging"
+  - pattern: "**/*.jsx"
+    warn: 200
+    warn_message: "Getting long — consider splitting into smaller modules"
+    error: 400
+    error_message: "File exceeds the hard limit — split before merging"
+  - pattern: "**/*.mjs"
+    warn: 200
+    error: 400
+  - pattern: "**/*.cjs"
+    warn: 200
+    error: 400
+  - pattern: "**/*.mts"
+    warn: 200
+    error: 400
+  - pattern: "**/*.cts"
+    warn: 200
+    error: 400
+
+exclude:
+  - "**/node_modules/**"
+  - "**/dist/**"
+  - "**/*.md"
+  - "pnpm-lock.yaml"
+  - "**/*.lock"

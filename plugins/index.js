@@ -19,6 +19,7 @@ import defaultPlugin from 'eslint-plugin-default'
 import dddPlugin from 'eslint-plugin-ddd'
 import preactPlugin from 'eslint-plugin-preact'
 import unusedImportsPlugin from 'eslint-plugin-unused-imports'
+import unicornPlugin from 'eslint-plugin-unicorn'
 import { noDefaultClassExportRule } from '../rules/no-default-class-export/index.js'
 import { requireSpecFileTsxRule } from '../rules/require-spec-file-tsx/index.js'
 
@@ -38,6 +39,7 @@ export const plugins = {
   ddd: dddPlugin,
   preact: preactPlugin,
   'unused-imports': unusedImportsPlugin,
+  unicorn: unicornPlugin,
   custom: {
     rules: {
       'no-default-class-export': noDefaultClassExportRule,
