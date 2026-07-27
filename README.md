@@ -38,7 +38,7 @@ AI coding assistants often generate code that:
 This configuration enforces patterns that:
 
 - Make null/undefined handling explicit and clear
-- Keep functions at manageable lengths (≤100 lines)
+- Keep functions at manageable lengths (≤70 lines)
 - Require proper file organization and naming
 - Ensure consistent, readable code structure
 
@@ -47,7 +47,7 @@ This configuration enforces patterns that:
 - **🛠️ TypeScript First**: Full TypeScript ESLint integration with advanced type checking
 - **⚛️ React & Preact**: Complete support for both React and Preact projects
 - **🔐 Strict Standards**: Enforces explicit null/undefined checks, requires strict equality (`===`/`!==`), and disallows optional chaining and nullish coalescing for better code clarity
-- **📏 Code Quality**: Function length limits (100 lines), trailing space detection, and consistent formatting
+- **📏 Code Quality**: Function length limits (70 lines), trailing space detection, and consistent formatting
 - **🧪 DDD by Default**: Requires spec files for all source files to ensure comprehensive test coverage
 - **🚀 Modern ESLint**: Uses the latest flat configuration format (ESLint 9)
 - **📋 Comprehensive Testing**: 12+ test categories with automated validation
@@ -189,7 +189,10 @@ stay on, so any JSDoc you do write is still validated),
 `jsx-classname/require-classname` (which otherwise errors on Tailwind-only
 `className`s), and the `no-restricted-syntax` bans on optional chaining /
 nullish coalescing / type assertions), so idiomatic TypeScript and
-React/Preact + Tailwind code passes during incremental adoption.
+React/Preact + Tailwind code passes during incremental adoption. It also
+downgrades the function/file length limits (`max-lines-per-function`,
+`max-lines`) from errors to warnings — the same 70/100-line thresholds, but they
+no longer fail a CI lint run while a long-function backlog is burned down.
 
 ```javascript
 import recommended from 'eslint-config-agent/recommended'
@@ -438,6 +441,12 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   `eqeqeq` and TypeScript already prevent — pure readability tax. The range
   idiom (`0 <= x && x < limit`) is still allowed. Auto-fixable with
   `eslint --fix`.
+- **`no-unreachable-loop`**: Forbids a loop whose body always exits on the
+  first iteration (every path ends in `return`, `break` or `throw`). Such a
+  loop reads as "iterate every element" but runs at most once — the classic
+  "find the first match" bug where a misplaced `return`/`break` silently
+  ignores every element after the first. A correctness check, like
+  `array-callback-return`, not a style preference.
 - **`prefer-template`**: Forbids building strings with `+` concatenation
   (`'Hello ' + name + '!'`) in favor of a template literal
   (`` `Hello ${name}!` ``). Chaining `+` scatters the literal text across
@@ -452,6 +461,14 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   instead of a fresh object — while the literal is unambiguous. The
   object-creation sibling of the bundled wrapper-constructor and coercion bans.
   Auto-fixable with `eslint --fix`.
+- **`no-new-wrappers`**: Forbids `new String(...)`, `new Number(...)`, and `new
+Boolean(...)`. These constructors create objects, not primitives: `typeof new
+String('x')` is `'object'` not `'string'`, and `new String('x') !== 'x'` —
+  so every `===` comparison or `typeof` check silently produces the wrong answer.
+  The wrapper-object sibling of the `no-object-constructor` and `no-new-func`
+  bans: all three reject a `new` call whose only effect is to make a plain value
+  harder to compare or type-check. Use the coercion function (`String(x)`) or
+  a bare literal instead. Auto-fixable with `eslint --fix`.
 - **`prefer-regex-literals`** (`disallowRedundantWrapping: true`): Forbids the
   `RegExp` constructor for a static pattern (`new RegExp('\\d+')`) in favor of a
   regex literal (`/\d+/`). The string form double-escapes every backslash, so a
@@ -545,6 +562,15 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
   keeps the emitted module graph honest and every import's intent legible. Uses
   `fixStyle: 'separate-type-imports'` (a distinct `import type` statement rather
   than the inline `import { type X }` form). Auto-fixable.
+- **`@typescript-eslint/prefer-readonly`**: Requires `readonly` on every private
+  class member that is only ever assigned in its declaration or the constructor
+  (TypeScript files). A field that is fixed after construction but left writable
+  reads as if it might change, so a stray reassignment elsewhere in the class
+  compiles silently; marking it `readonly` turns that accidental write into a
+  compile error and states the immutability contract at the declaration site —
+  the class-state counterpart to `prefer-const` and `no-param-reassign`. Left
+  out of typescript-eslint's `strictTypeChecked` preset, so the config turns it
+  on explicitly. Auto-fixable.
 - **`@typescript-eslint/consistent-type-exports`**: The export-side mirror of
   `consistent-type-imports` — forces `export type { … }` for re-exports that
   only carry types. A type-only name re-exported through a plain `export { … }`
@@ -601,13 +627,14 @@ know what is enforcing each error.
 
 #### Spec-file & size rules
 
-| Rule                           | What it enforces                                                                                                  |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| `custom/require-spec-file-tsx` | Requires a `.spec` sibling for `.tsx`/`.jsx` components, mirroring `ddd/require-spec-file` for React/Preact code. |
-| `error-only-exports`           | Exempts files that export only `Error` subclasses from the spec-file requirement (no testable logic to cover).    |
-| `max-file-lines`               | `max-lines`: warns above 70 lines, errors above 100 (comments and blank lines skipped).                           |
-| `max-function-lines`           | `max-lines-per-function`: warns above 50 lines, errors above 70 (comments and blank lines skipped).               |
-| `no-trailing-spaces`           | Flags trailing whitespace so diffs stay clean and invisible characters never sneak into source.                   |
+| Rule                           | What it enforces                                                                                                                                            |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `custom/require-spec-file-tsx` | Requires a `.spec` sibling for `.tsx`/`.jsx` components, mirroring `ddd/require-spec-file` for React/Preact code.                                           |
+| `ddd/no-logic-in-index`        | Bans real functions/classes in `index.{js,ts,jsx,tsx}` files — they may only re-export, since barrel files are exempt from the spec-file requirement above. |
+| `error-only-exports`           | Exempts files that export only `Error` subclasses from the spec-file requirement (no testable logic to cover).                                              |
+| `max-file-lines`               | `max-lines`: warns above 70 lines, errors above 100 (comments and blank lines skipped).                                                                     |
+| `max-function-lines`           | `max-lines-per-function`: warns above 50 lines, errors above 70 (comments and blank lines skipped).                                                         |
+| `no-trailing-spaces`           | Flags trailing whitespace so diffs stay clean and invisible characters never sneak into source.                                                             |
 
 ### Framework-Specific Features
 
@@ -646,6 +673,12 @@ know what is enforcing each error.
 - Storybook files (`.stories.tsx`)
 - Example files in `examples/` directories
 - Error files (`.error.ts`, `-error.ts`, `errors/`, `exceptions/`)
+
+> Index/barrel files are exempt from `require-spec-file` on the assumption
+> that they only re-export — `ddd/no-logic-in-index` enforces that half of
+> the bargain, flagging any real function or class defined directly in an
+> `index.{js,ts,jsx,tsx}` file so logic can no longer hide in a file that
+> skips spec-file coverage.
 
 **Example structure:**
 
@@ -888,6 +921,10 @@ scripts. Three ways to resolve it, in order of preference:
 - **📋 [Issues & Bug Reports](https://github.com/tupe12334/eslint-config-agent/issues)**
 - **🔄 [Releases & Changelog](https://github.com/tupe12334/eslint-config-agent/releases)**
 - **📖 [ESLint Flat Config Documentation](https://eslint.org/docs/latest/use/configure/configuration-files)**
+
+### Related projects
+
+- **🔁 [moadim](https://moadim.io/)** — loop engineering: build, schedule & run agent loops.
 
 ## Support
 

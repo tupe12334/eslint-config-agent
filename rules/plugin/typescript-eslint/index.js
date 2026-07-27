@@ -189,6 +189,26 @@ export const typescriptEslintRules = {
   // by hand on top of the base config — promoting it into the shared rule set
   // removes that copy-paste.
   '@typescript-eslint/no-shadow': 'error',
+  // Require `readonly` on every private class member that is only ever assigned
+  // in its declaration or the constructor. A field that is conceptually fixed
+  // after construction but left writable reads as if it might change later, so
+  // a stray reassignment elsewhere in the class compiles silently and the
+  // reader can no longer trust the value is settled — the immutability gap is
+  // invisible until something mutates it by accident. Marking it `readonly`
+  // turns that accidental write into a compile error and states the contract at
+  // the declaration site, which is the same explicit-over-clever,
+  // immutability-leaning stance the core `prefer-const` and `no-param-reassign`
+  // rules already set for variables and parameters — this extends it to class
+  // state. It is exactly the annotation an AI assistant omits when it generates
+  // a class, leaving every field mutable by default. The rule is type-aware
+  // (it must see the whole class to prove a member is never reassigned), so it
+  // lives in the TypeScript-only rule set rather than `sharedRules`, and it is
+  // deliberately left out of typescript-eslint's `strictTypeChecked` preset
+  // this config extends, so it must be turned on explicitly — which is why
+  // downstream repos (`block-no-verify`, `tools-view`) already re-add it by
+  // hand on top of the base config. The rule is auto-fixable (`eslint --fix`),
+  // so adoption is cheap.
+  '@typescript-eslint/prefer-readonly': 'error',
   // Forbid referencing a `let`/`const`/`class` binding before its textual
   // declaration. Thanks to the Temporal Dead Zone, an early reference to such
   // a binding does not read `undefined` — it throws a `ReferenceError` at
@@ -277,6 +297,31 @@ export const typescriptEslintRules = {
   // `.tsx`, which is why downstream repos (`tools-view`) re-add it by hand on
   // top of the base config.
   '@typescript-eslint/promise-function-async': 'error',
+  // Forbid an unsafe non-boolean value in a boolean position (an `if`, `while`,
+  // `&&`, `||`, `!`, or ternary test). With this rule's defaults a plain
+  // `string`/`number` truthiness check stays allowed; what it catches is the
+  // genuinely ambiguous coercion: a *nullable* value (`string | undefined`,
+  // `number | null`, a nullable boolean), an `any`, or a bare object in a
+  // condition. `if (maybeStr)` on a `string | undefined` silently folds two
+  // different states into one — an empty string `''` and a missing `undefined`
+  // both take the falsy branch — so the case the author meant to separate ("present
+  // but empty" vs "not there at all") slips through as a branch that quietly
+  // does the wrong thing; `if (maybeNum)` does the same to `0` vs `undefined`,
+  // and `if (obj)` blends a null-check with a truthiness-check. The rule forces
+  // the condition to say which it means: compare against `''`, `0`, or
+  // `null`/`undefined` explicitly. That implicit nullable coercion is exactly
+  // what an AI assistant leans on when it writes `if (value)` against a
+  // `string | undefined` without deciding what the empty string should do, so
+  // it sits squarely in this config's explicit-over-clever, surface-the-edge
+  // -case stance — the same intent behind the already-enabled `eqeqeq` and the
+  // `??` ban, applied to the condition itself. It is deliberately left out of
+  // the `strictTypeChecked` preset this config extends (too opinionated to be a
+  // default), so it must be turned on explicitly — which is why several
+  // downstream repos (`tools-view`, `zod-utils`, `currency-fa`,
+  // `block-no-verify`) already re-add it by hand on top of the base config.
+  // The rule is type-aware and runs under the `projectService` parser options
+  // already configured for `.ts`/`.tsx` files, so it adds no new setup.
+  '@typescript-eslint/strict-boolean-expressions': 'error',
   // Require `return await promise` (never a bare `return promise`) inside a
   // `try`/`catch`, and forbid the redundant `return await` everywhere else.
   // A bare `return promise` from inside a `try` block hands the promise back to
@@ -371,6 +416,30 @@ export const typescriptEslintRules = {
   // explicitly. It is not auto-fixable: only the author knows whether to
   // normalize to numbers or strings.
   '@typescript-eslint/no-mixed-enums': 'error',
+  // Forbid redeclaring a variable, function, class, or type in the same scope.
+  // A redeclaration silently overwrites the earlier binding — the second
+  // `function foo() {}` or `let value` wins, and every reference to the name
+  // above it now resolves to the wrong definition — which is exactly the kind
+  // of "looks like two things, is actually one" mistake that surfaces far from
+  // its source, as a call that no longer does what its nearby declaration
+  // suggests. TypeScript's own re-declaration diagnostics do not cover every
+  // case this rule does (e.g. a `let`/`var` redeclared inside a nested block
+  // that shadows rather than errors), so the type checker alone does not close
+  // this gap.
+  //
+  // The core `no-redeclare` rule is intentionally left `off` for TypeScript
+  // files (see `strictTypeChecked`, which this config extends): it
+  // false-positives on TypeScript-specific merging patterns such as a
+  // `function`/`namespace` pair or an `interface` and a `class` sharing a name
+  // by design. The typescript-eslint version understands those cases, so it is
+  // the documented replacement rather than a second rule fighting the first —
+  // mirroring how `@typescript-eslint/no-shadow` already replaces core
+  // `no-shadow` in this config. It needs no type information, so it adds no
+  // parser cost. `ameliso-io/web` already re-adds this exact replacement by
+  // hand on top of the base config (`"no-redeclare": "off"` with a comment
+  // pointing at the typescript-eslint variant); promoting it here removes that
+  // copy-paste and covers every downstream consumer.
+  '@typescript-eslint/no-redeclare': 'error',
   // Flag a condition, `&&`/`||` operand, or optional-chain (`?.`) link whose
   // type proves it can never be anything but truthy or never be anything but
   // falsy. A guard like `if (value)` where `value`'s type is a non-nullable
