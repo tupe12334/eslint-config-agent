@@ -58,9 +58,6 @@ All releases are handled through GitHub Actions:
 - **Automatic**: Push to main branch triggers a patch release
 - **Manual**: Use "Actions" > "Release" workflow with choice of patch/minor/major
 
-Required GitHub Secrets:
-
-- `NPM_TOKEN`: Token from npmjs.com for publishing packages
-- `GITHUB_TOKEN`: Automatically provided by GitHub Actions
+Publishing uses npm's OIDC trusted publishing (`npm publish --provenance`), so no `NPM_TOKEN` secret is required. The only secret used is the GitHub-provided `GITHUB_TOKEN`.
 
 The release process automatically handles version bumping, changelog generation, git tagging, npm publishing, and GitHub releases.

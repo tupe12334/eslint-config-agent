@@ -54,7 +54,7 @@ pnpm test:ci            # CI-ready linting (zero warnings allowed)
 | ------------------- | -------------------------------------- | ------------------------------------------- |
 | **Valid Code**      | `valid.tsx`, `preact-test.tsx`         | Code that should pass with minimal warnings |
 | **Invalid Code**    | `invalid.tsx`, `jsx-extension-test.js` | Code that should trigger specific errors    |
-| **Function Limits** | `long-function.tsx`                    | Test function length restrictions           |
+| **Function Limits** | `lines/function-lines/long-function-test.tsx` | Test function length restrictions    |
 | **React Hooks**     | `react-hooks-rules.tsx`                | Validate hooks rules and dependency arrays  |
 | **TypeScript**      | `typescript-rules.ts`                  | TypeScript-specific features and rules      |
 | **Imports**         | `import-export-rules.ts`               | Module import/export patterns               |

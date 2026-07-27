@@ -1,42 +1,18 @@
 # Setup Instructions
 
-## Environment Setup for Publishing
-
-To publish this package, you need to set up environment variables for authentication:
-
-1. Copy the example environment file:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Get your NPM authentication token:
-   - Go to https://www.npmjs.com/settings/tokens
-   - Create a new "Automation" token (this bypasses OTP requirements)
-   - Make sure to select "Automation" type, not "Publish"
-   - Copy the token value
-
-3. Edit the `.env` file and replace `your_npm_token_here` with your actual NPM token:
-   ```bash
-   NPM_TOKEN=npm_xxxxxxxxxxxxxxxxxxxxxxxxxx
-   ```
-
 ## Publishing
 
-Once the `.env` file is set up, you can publish using:
+This package is published to npm exclusively through GitHub Actions CI/CD — there is no local `.env` file or manual publish step (see [RELEASING.md](./RELEASING.md) for the full process):
+
+- **Automatic**: Pushing to `main` triggers a patch release
+- **Manual**: Run the "CI/CD" workflow from the Actions tab, choosing `patch`, `minor`, or `major`
+
+Publishing uses npm's OIDC trusted publishing (`npm publish --provenance`), so no `NPM_TOKEN` secret is required. The workflow only needs the GitHub-provided `GITHUB_TOKEN`.
+
+To exercise the `release-it` flow locally without publishing:
 
 ```bash
-# Patch release (1.0.0 -> 1.0.1)
-pnpm release:patch
-
-# Minor release (1.0.0 -> 1.1.0)
-pnpm release:minor
-
-# Major release (1.0.0 -> 2.0.0)
-pnpm release:major
-
-# Dry run to test without publishing
-pnpm release:dry
+pnpm exec release-it --dry-run
 ```
 
 The release process will:
