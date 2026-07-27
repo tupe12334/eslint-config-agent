@@ -58,7 +58,7 @@ export function identity<T>(arg: T): T {
 
 // Class export
 export class TestService {
-  private config: TestConfig;
+  private readonly config: TestConfig;
 
   constructor(config: TestConfig) {
     this.config = config;

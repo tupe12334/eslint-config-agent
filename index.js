@@ -377,6 +377,41 @@ const sharedRules = {
   // explicit-over-clever, AI-safety stance. It is also the foundation the
   // `prefer-const` rule builds on. The rule is auto-fixable.
   'no-var': 'error',
+  // Require rest parameters (`...args`) instead of the `arguments` object.
+  // The `arguments` object is a legacy "array-like" with no type information:
+  // TypeScript types it as `IArguments` — an `any`-element iterable — so every
+  // access is implicitly `any`, silently defeating the type-safety the rest of
+  // the config enforces. Arrow functions compound the hazard: they have no own
+  // `arguments` binding, so `arguments` inside an arrow silently captures the
+  // *outer* function's argument list, a scoping surprise that looks right and
+  // fails at runtime. A rest parameter (`...args`) is an ordinary, explicitly-
+  // typed array (`string[]`, `unknown[]`, whatever the signature declares),
+  // visible to the reader and the type checker alike. This is the argument-list
+  // sibling of `no-var` just above: just as `var` is a legacy declaration whose
+  // hoisting footguns `let`/`const` avoid, `arguments` is a legacy binding
+  // whose type-unsafety and arrow-scoping footguns an explicit rest parameter
+  // avoids. AI assistants trained on older code reach for `arguments` by default,
+  // which puts this squarely in the config's AI-safety scope. The rule is
+  // auto-fixable (`eslint --fix`); it is not in `eslint:recommended` or in
+  // typescript-eslint's `strictTypeChecked` preset, so it must be enabled
+  // explicitly here.
+  'prefer-rest-params': 'error',
+  // Require spread syntax (`fn(...args)`) instead of `fn.apply(ctx, args)`.
+  // The `.apply()` form forces the caller to supply a `this` context even when
+  // the function ignores `this` — the idiomatic `.apply(null, args)` — which is
+  // pure ceremony that obscures the call's intent and signals the code predates
+  // ES6 spread syntax. Spread (`fn(...args)`) states the intent directly —
+  // "call `fn` with these arguments unpacked" — with no spurious `this` slot to
+  // fill. This is the call-site companion to `prefer-rest-params` just above:
+  // that one replaces the legacy `arguments` binding at the declaration, this
+  // one replaces the legacy `.apply()` form at the call site. Together they
+  // close the arguments-as-array footgun that `eslint:recommended` and
+  // typescript-eslint's presets both leave open. AI assistants trained on older
+  // code reach for `.apply(null, args)` when spreading into a call, which puts
+  // this squarely in the config's AI-safety scope. The rule is auto-fixable
+  // (`eslint --fix`); it is not in `eslint:recommended`, so it must be enabled
+  // explicitly here.
+  'prefer-spread': 'error',
   // Disallow explicitly initializing a variable to `undefined` —
   // `let value = undefined` instead of the equivalent, shorter `let value`.
   // Every declared-but-unassigned binding is already `undefined`, so the
@@ -764,6 +799,20 @@ const sharedRules = {
   // runtime, is left untouched. The rule is auto-fixable for the simple cases,
   // so consumers can adopt much of it with `eslint --fix`.
   'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
+  // Require `base ** exponent` over `Math.pow(base, exponent)`. The `Math.pow`
+  // call is two steps removed from the intent — readers must look up the
+  // function, remember that the first argument is the base and the second is the
+  // exponent, and mentally translate the call into the mathematical operation.
+  // The `**` exponentiation operator states that intent directly in one token,
+  // the same way `+`, `-` and `*` do for the other arithmetic operations, and is
+  // consistent with the rest of the arithmetic rules this config already ships
+  // (`operator-assignment`, `no-implicit-coercion`). `Math.pow` is also the form
+  // an AI assistant trained on older code reaches for — `**` was introduced in
+  // ES2016 and is not yet reflexive for a model that learned from ES5/ES6
+  // sources. The rule is auto-fixable, so consumers can adopt it with
+  // `eslint --fix`. It is not in `eslint:recommended`, so it is enabled
+  // explicitly here.
+  'prefer-exponentiation-operator': 'error',
   // Require named capture groups (`(?<year>\d{4})`) instead of positional ones
   // (`(\d{4})`). An unnamed capture group is referenced by a fragile positional
   // index — `match[1]`, `match[2]` — whose meaning evaporates the moment a
@@ -802,6 +851,19 @@ const sharedRules = {
   // auto-fixable because only the author knows whether to split into separate
   // statements or rewrite the expression entirely.
   'no-sequences': 'error',
+  // Require a description string when calling `Symbol()`. An anonymous
+  // `Symbol()` is completely opaque in every debug surface: it prints as
+  // `Symbol()` in `console.log`, in stack traces, and in browser devtools,
+  // giving no clue about the symbol's role or the module that created it. A
+  // description costs nothing at runtime — it is only used by `.toString()` and
+  // `Symbol.for()` look-ups — but it turns `Symbol()` into `Symbol('userId')`
+  // or `Symbol('cache:key')`, which is instantly readable. The anonymous form is
+  // exactly the terse shortcut an AI assistant emits when it scaffolds a symbol
+  // without pausing to name it, which puts it squarely in this config's
+  // explicit-over-clever, AI-safety scope. It is not in `eslint:recommended`,
+  // so it is enabled explicitly here. The rule is not auto-fixable because only
+  // the author knows what the symbol represents.
+  'symbol-description': 'error',
   // Disallow empty constructors (`class Foo { constructor() {} }`) and
   // constructors whose only statement forwards all arguments to `super`
   // (`class Foo extends Bar { constructor(...args) { super(...args); } }`). In

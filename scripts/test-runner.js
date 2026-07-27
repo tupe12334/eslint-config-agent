@@ -328,6 +328,14 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/switch-exhaustiveness-check'],
   },
+  'method-signature-style': {
+    description:
+      'Method-shorthand signatures must be flagged for the property style',
+    files: ['test/method-signature-style/invalid/method-shorthand.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/method-signature-style'],
+  },
   'optional-chaining': {
     description: 'Optional chaining and nullish coalescing tests',
     files: ['test/test-optional.ts', 'test/test-js-optional.js'],
@@ -442,6 +450,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/require-array-sort-compare'],
   },
+  'prefer-readonly': {
+    description:
+      'A private member assigned only in the constructor is flagged; an already-readonly member passes',
+    files: [
+      'test/prefer-readonly/invalid-mutable-member.ts',
+      'test/prefer-readonly/valid-readonly-member.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/prefer-readonly'],
+  },
   'consistent-type-exports': {
     description:
       'A type-only re-export written as a value export must be flagged (use `export type`)',
@@ -465,6 +484,16 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/explicit-module-boundary-types'],
   },
+  'strict-boolean-expressions': {
+    description:
+      'Nullable values in a boolean position are flagged; explicit null/zero checks pass',
+    files: ['test/strict-boolean/invalid.ts', 'test/strict-boolean/valid.ts'],
+    // +2 for unicorn/no-negated-condition + no-restricted-syntax-adjacent
+    // findings main has since added to these fixture files.
+    maxErrors: 5,
+    maxWarnings: 4,
+    expectedRules: ['@typescript-eslint/strict-boolean-expressions'],
+  },
   'return-await': {
     description:
       'A bare return-in-try and a redundant return-await are flagged; an awaited try-return and a bare return outside try pass',
@@ -487,6 +516,17 @@ const testCategories = {
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-loop-func'],
   },
+  'no-redeclare': {
+    description:
+      'Two top-level function declarations sharing a name are flagged; distinctly named declarations pass',
+    files: [
+      'test/no-redeclare/invalid-no-redeclare.ts',
+      'test/no-redeclare/valid-no-redeclare.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-redeclare'],
+  },
   'no-use-before-define': {
     description:
       'A let read before its declaration (TDZ) is flagged; a hoisted function called before its textual definition passes',
@@ -508,6 +548,17 @@ const testCategories = {
     maxErrors: 5,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-misused-promises'],
+  },
+  'no-unused-private-class-members': {
+    description:
+      'A private field only ever assigned, never read, is flagged; the same field read through a public accessor passes',
+    files: [
+      'test/no-unused-private-class-members/invalid-no-unused-private-class-members.ts',
+      'test/no-unused-private-class-members/valid-no-unused-private-class-members.ts',
+    ],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/no-unused-private-class-members'],
   },
   'prefer-enum-initializers-invalid': {
     description:
@@ -552,13 +603,29 @@ const testCategories = {
     maxErrors: 0,
     maxWarnings: 0,
   },
+  'no-logic-in-index-invalid': {
+    description:
+      'A function defined directly in an index.ts barrel file must be flagged',
+    files: ['test/no-logic-in-index/invalid/index.ts'],
+    maxErrors: 1,
+    maxWarnings: 0,
+    expectedRules: ['ddd/no-logic-in-index'],
+  },
+  'no-logic-in-index-valid': {
+    description: 'A pure re-export barrel must not be flagged',
+    files: ['test/no-logic-in-index/valid/index.ts'],
+    maxErrors: 0,
+    maxWarnings: 0,
+  },
   'no-unnecessary-condition-invalid': {
     description:
       'A guard over a non-nullable type (always truthy) must be flagged',
     files: [
       'test/no-unnecessary-condition/invalid-no-unnecessary-condition.ts',
     ],
-    maxErrors: 1,
+    // +1 for @typescript-eslint/strict-boolean-expressions on the same
+    // always-truthy object condition.
+    maxErrors: 2,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/no-unnecessary-condition'],
   },
