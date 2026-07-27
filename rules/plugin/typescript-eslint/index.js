@@ -189,6 +189,25 @@ export const typescriptEslintRules = {
   // by hand on top of the base config — promoting it into the shared rule set
   // removes that copy-paste.
   '@typescript-eslint/no-shadow': 'error',
+  // Forbid a floating promise — a promise that is created but never `await`ed,
+  // returned, `void`-ed, or given a `.then`/`.catch` handler. The call "looks
+  // done" because the statement completes synchronously, but the async work it
+  // kicked off runs detached: a rejection becomes an unhandled rejection
+  // (process-killing under Node's default policy) and the surrounding code races
+  // ahead before the work finishes, so ordering and error handling silently
+  // break far from the call site. This is the single most common async shortcut
+  // an AI assistant emits — calling an `async` helper as a bare statement and
+  // moving on — and exactly the looks-safe, fails-elsewhere mismatch this config
+  // exists to catch. It is the foundational, first side of the async-hygiene
+  // triangle the next two rules complete: `no-floating-promises` makes the
+  // caller handle the promise it gets, `promise-function-async` routes every
+  // failure through that returned promise, and `return-await` keeps the promise
+  // inside the handler that guards it. The rule is type-aware and runs under the
+  // `projectService` parser options already configured for `.ts`/`.tsx`, which
+  // is why downstream repos re-add it by hand on top of the base config.
+  // `ignoreVoid` stays at its default `true`, so an explicit `void fn()` remains
+  // the documented escape hatch for a deliberately fire-and-forget call.
+  '@typescript-eslint/no-floating-promises': 'error',
   // Require `readonly` on every private class member that is only ever assigned
   // in its declaration or the constructor. A field that is conceptually fixed
   // after construction but left writable reads as if it might change later, so
