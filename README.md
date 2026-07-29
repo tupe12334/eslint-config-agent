@@ -435,6 +435,12 @@ This ESLint configuration prioritizes **explicit code** over convenient shortcut
 - **`no-nested-ternary`**: Forbids a ternary inside another ternary, the
   archetypal "clever but unreadable" construct. Use `if`/`else` or an early
   return instead.
+- **`yoda`** (`exceptRange: true`): Forbids "yoda" conditions that put the
+  literal on the left (`0 === count`, `'done' === status`). They reverse the
+  natural reading order and only guard against a typo'd `=` that the bundled
+  `eqeqeq` and TypeScript already prevent — pure readability tax. The range
+  idiom (`0 <= x && x < limit`) is still allowed. Auto-fixable with
+  `eslint --fix`.
 - **`no-unreachable-loop`**: Forbids a loop whose body always exits on the
   first iteration (every path ends in `return`, `break` or `throw`). Such a
   loop reads as "iterate every element" but runs at most once — the classic
