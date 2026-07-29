@@ -4,27 +4,23 @@ This document describes how to release new versions of `eslint-config-agent`.
 
 ## Prerequisites
 
-1. **NPM Access**: Ensure you have publish access to the `eslint-config-agent` package on npm
-2. **Authentication**: Configure your npm authentication token in `.npmrc`:
-   ```
-   //registry.npmjs.org/:_authToken=your-token-here
-   ```
-3. **Clean Working Directory**: Ensure all changes are committed and your working directory is clean
+1. **Clean Working Directory**: Ensure all changes are committed and your working directory is clean
+
+Releases run through GitHub Actions CI/CD only — no local npm authentication is needed. Publishing uses npm's OIDC trusted publishing (`npm publish --provenance`), authenticated via the GitHub-provided `GITHUB_TOKEN` (no `NPM_TOKEN` secret involved).
 
 ## Release Process
 
-The project uses `release-it` for automated releases with manual control at each step.
+The project uses `release-it`, triggered automatically by GitHub Actions (see `.github/workflows/ci.yml`).
 
-### Interactive Release (Recommended)
+### CI/CD Releases
 
-```bash
-pnpm release
-```
+- **Automatic**: Pushing to `main` triggers a patch release (`pnpm release:ci:patch`)
+- **Manual**: Run the "CI/CD" workflow from the Actions tab (`workflow_dispatch`) and choose `patch`, `minor`, or `major`
 
-This will:
+Each run will:
 
 1. Run validation tests (`pnpm validate` and `pnpm test:ci`)
-2. Prompt you to select the version bump (patch, minor, major, or custom)
+2. Bump the version number
 3. Generate a changelog based on conventional commits
 4. Create a git tag
 5. Commit the version bump
@@ -33,25 +29,25 @@ This will:
 
 ### Specific Version Releases
 
-For specific version types:
+The workflow invokes one of these scripts depending on the chosen release type:
 
 ```bash
 # Patch release (1.0.0 → 1.0.1)
-pnpm release:patch
+pnpm release:ci:patch
 
 # Minor release (1.0.0 → 1.1.0)
-pnpm release:minor
+pnpm release:ci:minor
 
 # Major release (1.0.0 → 2.0.0)
-pnpm release:major
+pnpm release:ci:major
 ```
 
 ### Dry Run
 
-To test the release process without actually publishing:
+To test the release process locally without actually publishing:
 
 ```bash
-pnpm release:dry
+pnpm exec release-it --dry-run
 ```
 
 ## Pre-Release Checklist
@@ -100,8 +96,8 @@ Examples:
 
 ### Authentication Issues
 
-- Ensure your `.npmrc` file contains a valid authentication token
-- Verify you have publish access to the package
+- Verify the workflow has `id-token: write` permission (required for OIDC trusted publishing)
+- Verify you have publish access to the package on npm
 
 ### Test Failures
 

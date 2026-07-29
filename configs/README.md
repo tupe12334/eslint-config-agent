@@ -29,12 +29,38 @@ export const [configName]Config = [{
 
 ## Available Configs
 
+### `base-plugins.js`
+
+Shared plugin registrations (imports and instantiates the ESLint plugins used across every other config in this folder).
+
 ### `config-files.js`
 
 Configuration for ESLint/config files themselves.
 
-- **Pattern**: `**/eslint.config.{js,cjs,mjs}`, `**/.eslintrc.{js,cjs}`
+- **Pattern**: `**/*.config.{js,ts,mjs,cjs}`, `**/eslint.config.{js,ts,mjs,cjs}`, `index.js`, `**/configs/**/*.{js,ts,mjs,cjs}`
 - **Purpose**: Relaxed rules for configuration files
+
+### `examples.js`
+
+Configuration for rule example fixtures (e.g. `rules/**/examples/**`).
+
+- **Purpose**: Relaxed rules so example snippets used in rule documentation aren't held to production standards
+
+### `javascript.js`
+
+Handles all JavaScript (`.js`, `.mjs`, `.cjs`) file-specific rules.
+
+### `jsx.js`
+
+Handles all JSX (`.jsx`) file-specific rules.
+
+### `length-rule-scope.js`
+
+Controls which files the `max-lines` / `max-lines-per-function` rules apply to (and which are excluded).
+
+### `overrides.js`
+
+Project-wide rule overrides applied after the base configs are composed.
 
 ### `storybook.js`
 
@@ -49,6 +75,14 @@ Configuration for test and spec files.
 
 - **Pattern**: `**/*.{test,spec}.{js,jsx,ts,tsx}`, `**/test/**`, `**/__tests__/**`
 - **Purpose**: Relaxed rules for test files (allows longer files, multiple exports, etc.)
+
+### `typescript.js`
+
+Handles all TypeScript (`.ts`, `.mts`, `.cts`) file-specific rules.
+
+### `tsx.js`
+
+Handles all TSX (`.tsx`) file-specific rules.
 
 ## Usage
 
