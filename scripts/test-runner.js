@@ -183,14 +183,16 @@ const testCategories = {
     // + 4 no-else-return + 1 each of @typescript-eslint/no-confusing-void-expression,
     // no-constant-binary-expression, @typescript-eslint/no-unnecessary-condition,
     // react/jsx-no-leaked-render, @typescript-eslint/no-shadow and
-    // @typescript-eslint/no-explicit-any + unicorn rules.
-    maxErrors: 47,
+    // @typescript-eslint/no-explicit-any + unicorn rules, +2 for
+    // @typescript-eslint/restrict-plus-operands.
+    maxErrors: 49,
     maxWarnings: 30,
     expectedRules: [
       'no-restricted-syntax',
       'max-lines',
       '@typescript-eslint/no-explicit-any',
       '@typescript-eslint/no-shadow',
+      '@typescript-eslint/restrict-plus-operands',
       'no-else-return',
       'no-lonely-if',
       'guard-clauses/prefer-guard-at-function-start',
@@ -323,6 +325,13 @@ const testCategories = {
     maxErrors: 5,
     maxWarnings: 0,
     expectedRules: ['@typescript-eslint/switch-exhaustiveness-check'],
+  },
+  'restrict-plus-operands-invalid': {
+    description: 'Mixing operand types in a `+` expression must be flagged',
+    files: ['test/restrict-plus-operands/invalid/mixed-plus-operands.tsx'],
+    maxErrors: 5,
+    maxWarnings: 0,
+    expectedRules: ['@typescript-eslint/restrict-plus-operands'],
   },
   'method-signature-style': {
     description:
