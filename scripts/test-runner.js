@@ -52,7 +52,10 @@ const testCategories = {
   hooks: {
     description: 'React hooks rules testing',
     files: ['test/react-hooks-rules.tsx'],
-    maxErrors: 67,
+    // Bumped from 67 to 70: enabling @typescript-eslint/explicit-module-boundary-types
+    // (#218) surfaces 3 legitimate "missing return type" findings on this
+    // fixture's exported components, unrelated to the hooks rules under test.
+    maxErrors: 70,
     maxWarnings: 20,
     expectedRules: [
       'react-hooks/exhaustive-deps',
@@ -240,7 +243,12 @@ const testCategories = {
       'test/export/valid/explicit-export-declaration.ts',
       'test/export/valid/export-from-scoped.ts',
     ],
-    maxErrors: 26,
+    // Bumped from 26 to 28: enabling @typescript-eslint/explicit-module-boundary-types
+    // (#218) surfaces 2 legitimate "missing return type" findings on
+    // tsx-component-with-type.tsx's exported `Modal` component; a JSX return
+    // type can't be written there without importing full React type
+    // definitions, which is out of scope for this fixture.
+    maxErrors: 28,
     maxWarnings: 5,
   },
   'export-invalid': {
