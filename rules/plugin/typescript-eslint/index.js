@@ -296,6 +296,22 @@ export const typescriptEslintRules = {
   // `strictTypeChecked`) must enable it explicitly — and why a downstream repo
   // (`tools-view`) already re-adds it by hand on top of the base config.
   '@typescript-eslint/prefer-optional-chain': 'error',
+  // Forbid a Promise created but never `await`ed, `return`ed, `void`-ed, or
+  // handled with `.catch`/`.then` — a floating promise. It runs detached: a
+  // rejection becomes an unhandled rejection (process-killing under Node's
+  // default policy), and the surrounding code races ahead before the work
+  // settles, so ordering and error handling silently break far from the call
+  // site. Calling an `async` helper as a bare statement and moving on is one
+  // of the most common async shortcuts an AI assistant takes — exactly the
+  // looks-safe, fails-elsewhere mismatch this config exists to catch. This is
+  // the first side of the async-hygiene triangle this config builds together
+  // with `promise-function-async` (route every failure through the returned
+  // promise) and `return-await` (keep that promise inside the handler that
+  // guards it) below. `ignoreVoid` is left at its default `true`, so an
+  // explicit `void fn()` remains the documented fire-and-forget escape hatch.
+  // The rule is type-aware and runs under the `projectService` parser options
+  // already configured for `.ts`/`.tsx` files.
+  '@typescript-eslint/no-floating-promises': 'error',
   // Require any function that returns a `Promise` to be declared `async`. A
   // plain (non-`async`) function that returns a promise can still throw
   // *synchronously* — anything that runs before the promise is constructed (an
