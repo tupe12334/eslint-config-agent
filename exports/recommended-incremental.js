@@ -43,4 +43,4 @@
 import recommended from './recommended.js'
 import { toWarnings } from './to-warnings.js'
 
-export default recommended.map(toWarnings)
+export default recommended.map(item => toWarnings(item))

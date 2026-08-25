@@ -36,4 +36,4 @@
 import config from '../index.js'
 import { toWarnings } from './to-warnings.js'
 
-export default config.map(toWarnings)
+export default config.map(item => toWarnings(item))

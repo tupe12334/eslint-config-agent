@@ -1025,9 +1025,6 @@ const config = defineConfig([
       // Disallows `null` in favor of `undefined`. TypeScript APIs use `null`
       // intentionally (e.g. `null` vs `undefined` in type narrowing).
       'unicorn/no-null': 'off',
-      // Prevents passing a function reference directly to `.map(fn)`. The
-      // direct reference form is idiomatic and readable.
-      'unicorn/no-array-callback-reference': 'off',
       // Enforces specific import styles for some packages (e.g. named vs
       // default). Too opinionated for this config's consumers.
       'unicorn/import-style': 'off',
