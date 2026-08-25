@@ -487,6 +487,10 @@ const sharedRules = {
   // line. Writing each assignment on its own statement keeps the data flow
   // explicit.
   'no-multi-assign': 'error',
+  // Require explicit callback functions for array methods instead of passing a
+  // function reference directly. The explicit form keeps the callback's input
+  // and transformation visible at the call site.
+  'unicorn/no-array-callback-reference': 'error',
   // Disallow `${...}` placeholders inside ordinary string literals
   // (`'Hello ${name}'`, `"total: ${count}"`). Template-literal interpolation
   // only works inside backticks; the moment the quotes are single or double,
