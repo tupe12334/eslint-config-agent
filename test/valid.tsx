@@ -5,7 +5,7 @@ interface Props {
   age?: number;
 }
 
-function ValidComponent({ name, age }: Props) {
+function ValidComponent({ name, age }: Props): React.ReactElement {
   if (age !== undefined && age !== null) {
     const greeting = `Hello, ${name}!`;
     return <div className="greeting">{greeting} You are {age} years old.</div>;

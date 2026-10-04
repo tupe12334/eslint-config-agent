@@ -530,4 +530,25 @@ export const typescriptEslintRules = {
   // typescript-eslint version into the shared rule set removes that
   // copy-paste.
   '@typescript-eslint/no-unused-private-class-members': 'error',
+  // Require an explicit return type and explicit parameter types on every
+  // exported function — a module boundary. The public surface of a module is
+  // a contract: when an exported function's return/parameter types are left
+  // to inference, a refactor deep inside its body can silently widen or
+  // change the type consumers depend on, and the break only surfaces far
+  // away at a call site in another package. Writing the boundary types down
+  // turns the function body into the thing that is checked against its
+  // declared contract, keeps the exported API legible without reading the
+  // implementation, and stops an accidental signature change from leaking
+  // across the module edge.
+  //
+  // The rule only inspects exported (module-boundary) functions — internal,
+  // non-exported helpers are untouched — so it pairs with the boundary
+  // discipline this config already ships (`required-exports`,
+  // `single-export`, jsdoc on exported declarations): those govern *what* a
+  // module exports, this governs the *types* of what it exports. It is
+  // syntactic (no type information required), so it adds no parser cost.
+  // `tools-view`, `zod-utils`, `currency-fa`, and `block-no-verify` already
+  // re-add this rule by hand on top of the base config; promoting it here
+  // removes that copy-paste across every downstream consumer.
+  '@typescript-eslint/explicit-module-boundary-types': 'error',
 }

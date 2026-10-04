@@ -1,4 +1,4 @@
 // Test: Single named export (should be valid)
-export const singleFunction = () => {
+export const singleFunction = (): string => {
   return 'valid single export';
 };

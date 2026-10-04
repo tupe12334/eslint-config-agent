@@ -2,7 +2,7 @@
 export class ValidClass {
   constructor(public value: string) {}
 
-  getValue() {
+  getValue(): string {
     return this.value;
   }
 }
