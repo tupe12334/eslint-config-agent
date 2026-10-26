@@ -44,7 +44,9 @@
     "footguns",
     "bivariantly",
     "contravariantly",
-    "ameliso"
+    "ameliso",
+    "unrs",
+    "moadim"
   ],
   "ignorePaths": [
     "node_modules",

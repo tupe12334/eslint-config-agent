@@ -59,7 +59,7 @@ This configuration enforces patterns that:
 
 - **Node.js**: 20.x or higher
 - **ESLint**: 9.x (see [ESLint version compatibility](#eslint-version-compatibility) below)
-- **TypeScript**: 4.8.4 or higher (optional, only for TypeScript projects — see [TypeScript version compatibility](#typescript-version-compatibility) below)
+- **TypeScript**: 4.8.4 up to (not including) 6.1.0 (optional, only for TypeScript projects — see [TypeScript version compatibility](#typescript-version-compatibility) below)
 
 #### ESLint version compatibility
 
@@ -80,7 +80,7 @@ support lands. Progress is tracked in the project issues.
 #### TypeScript version compatibility
 
 For TypeScript projects, the bundled `@typescript-eslint` parser supports
-**TypeScript 4.8.4 or higher**. TypeScript itself is _not_ bundled — the parser
+**TypeScript `>=4.8.4 <6.1.0`**. TypeScript itself is _not_ bundled — the parser
 loads whatever `typescript` your project already has installed, so it is declared
 as an optional `peerDependency`.
 
@@ -95,6 +95,19 @@ Parsing error: ts9__default.default.isTokenKind is not a function
 If you hit this, upgrade your project's `typescript` to `>=4.8.4` (any recent
 4.9 / 5.x release works). Installing this package will also surface a peer
 dependency warning when the resolved TypeScript is too old.
+
+The bundled `@typescript-eslint` 8.x packages also declare an **upper** bound
+(`typescript <6.1.0`), so TypeScript 7 is not supported yet. Because
+`typescript` is only an optional peer of this package, installing
+`eslint-config-agent` itself succeeds, but npm rejects the install as soon as
+the `@typescript-eslint` packages are resolved alongside TypeScript 7:
+
+```text
+npm error Found: typescript@7.0.2
+npm error peer typescript@">=4.8.4 <6.1.0" from @typescript-eslint/utils@8.72.0
+```
+
+Stay on TypeScript 6.0.x or older until `@typescript-eslint` supports TypeScript 7.
 
 ### Install the package
 
@@ -128,8 +141,52 @@ npm install --save-dev eslint-config-agent
 >
 > The one exception is `typescript`: it is an _optional_ peer dependency (the
 > parser uses your project's own TypeScript), so TypeScript projects must have
-> `typescript >=4.8.4` installed. See
+> `typescript >=4.8.4 <6.1.0` installed. See
 > [TypeScript version compatibility](#typescript-version-compatibility) above.
+
+#### Using pnpm
+
+pnpm needs two extra steps that npm and yarn do not.
+
+1. **Add `eslint` as your own dev dependency.** pnpm only links the binaries
+   of _direct_ dependencies into `node_modules/.bin`, so the bundled `eslint`
+   is not runnable as a command:
+
+   ```text
+   ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command "eslint" not found
+   ```
+
+   Install it next to this package (use a 9.x release, see
+   [ESLint version compatibility](#eslint-version-compatibility)):
+
+   ```bash
+   pnpm add -D eslint-config-agent eslint@9
+   ```
+
+2. **Decide on dependency build scripts.** `unrs-resolver` (pulled in by
+   `eslint-import-resolver-typescript`) builds a native binding in its
+   postinstall script, and `core-js` (pulled in through `eslint-plugin-preact`)
+   runs a postinstall funding banner. pnpm 10+ does not run these scripts
+   without an explicit decision, and newer pnpm releases fail the install with
+   `ERR_PNPM_IGNORED_BUILDS`. Allow `unrs-resolver` and skip `core-js` in
+   `pnpm-workspace.yaml`:
+
+   ```yaml
+   # pnpm 12
+   allowBuilds:
+     unrs-resolver: true
+     core-js: false
+   ```
+
+   On pnpm 10, use the older keys instead (pnpm 12 no longer accepts them for
+   this check):
+
+   ```yaml
+   onlyBuiltDependencies:
+     - unrs-resolver
+   ignoredBuiltDependencies:
+     - core-js
+   ```
 
 ## Usage
 
